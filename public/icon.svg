@@ -1,0 +1,8 @@
+<svg width="360" height="360" viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="171" width="20" height="360" fill="white"/>
+<rect y="191" width="20" height="360" transform="rotate(-90 0 191)" fill="white"/>
+<rect x="91" y="20" width="20" height="180" transform="rotate(-90 91 20)" fill="white"/>
+<rect y="91" width="20" height="180" fill="white"/>
+<rect x="340" y="91" width="20" height="180" fill="white"/>
+<rect x="91" y="360" width="20" height="180" transform="rotate(-90 91 360)" fill="white"/>
+</svg>

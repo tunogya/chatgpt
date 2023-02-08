@@ -1,6 +1,6 @@
 import {Stack, Text} from "@chakra-ui/react";
 
-const Index = () => {
+const Chat = () => {
   return (
     <Stack>
       <Text>Chat</Text>
@@ -8,4 +8,4 @@ const Index = () => {
   )
 }
 
-export default Index
+export default Chat
