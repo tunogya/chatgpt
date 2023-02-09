@@ -5,9 +5,16 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 
 const Button = defineStyleConfig({
   baseStyle: {
-    borderRadius: '6px',
+    borderRadius: '0.375rem',
     fontFamily: montserrat.style.fontFamily,
     cursor: 'pointer',
+  },
+  sizes: {
+    md: {
+      fontSize: 'sm',
+      fontWeight: '500',
+      height: '44px',
+    },
   },
   variants: {
     outline: {
@@ -33,6 +40,9 @@ const Button = defineStyleConfig({
       }
     }
   },
+  defaultProps: {
+    size: 'md',
+  }
 })
 
 export default Button
