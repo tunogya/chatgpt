@@ -5,34 +5,33 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 
 const Button = defineStyleConfig({
   baseStyle: {
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
     borderRadius: '6px',
     fontFamily: montserrat.style.fontFamily,
-  },
-  sizes: {
-    sm: {
-      fontSize: 'sm',
-      px: 4,
-      py: 3,
-    },
-    md: {
-      fontSize: 'sm',
-      px: 6,
-      py: 4,
-    },
+    cursor: 'pointer',
   },
   variants: {
     outline: {
-      border: '2px solid',
+      border: '1px solid',
+      _hover: {
+        bg: "none",
+      },
+      _active: {
+        bg: "none",
+      }
     },
     solid: {
       color: 'white',
     },
-  },
-  defaultProps: {
-    size: 'md',
-    variant: 'outline',
+    ghost: {
+      _hover: {
+        bg: "none",
+        opacity: 0.8,
+      },
+      _active: {
+        bg: "none",
+        opacity: 0.9,
+      }
+    }
   },
 })
 
