@@ -30,6 +30,7 @@ const Button = defineStyleConfig({
       color: 'white',
     },
     ghost: {
+      px: 3,
       _hover: {
         bg: "none",
         opacity: 0.8,
