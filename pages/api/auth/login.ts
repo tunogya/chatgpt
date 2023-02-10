@@ -11,6 +11,10 @@ type Data = {
 
 const ddbClient = new DynamoDBClient({
   region: 'ap-northeast-1',
+  credentials: {
+    accessKeyId: process.env.MY_AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY || '',
+  }
 });
 
 const ddbDocClient = DynamoDBDocumentClient.from(ddbClient, {
@@ -58,6 +62,6 @@ export default async function handler(
     })
     res.status(200).json({ token })
   } catch (e) {
-    res.status(400).json({ error: 'error password!' })
+    res.status(400).json({ error: 'error password!' + e })
   }
 }

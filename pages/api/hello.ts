@@ -9,5 +9,5 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ name: 'John Doe' })
+  res.status(200).json({ name: process.env.MY_AWS_ACCESS_KEY_ID || 'no env' })
 }
