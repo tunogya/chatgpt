@@ -34,7 +34,7 @@ const Login = () => {
     })
     if (res.status === 200) {
       const {token} = await res.json()
-      console.log(token)
+      localStorage.setItem('token', token)
       await router.push('/chat')
     } else {
       const {error} = await res.json()
