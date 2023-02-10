@@ -71,11 +71,11 @@ const Login = () => {
           </InputGroup>
           { isInvalidPassword ? (
             <FormErrorMessage fontSize={'xs'}>
-              Need at last 12 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
+              at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&
             </FormErrorMessage>
           ) : (
             <FormHelperText fontSize={'xs'}>
-              at last 12 chars, 1 upper, 1 lower, 1 number, 1 special char
+              at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&
             </FormHelperText>
           ) }
         </FormControl>
