@@ -37,7 +37,13 @@ const Login = () => {
       console.log(token)
       await router.push('/chat')
     } else {
-      await router.push('/auth/error')
+      const {error} = await res.json()
+      await router.push({
+        pathname: '/auth/error',
+        query: {
+          error
+        }
+      })
     }
   }
 
@@ -69,13 +75,13 @@ const Login = () => {
             </FormErrorMessage>
           ) : (
             <FormHelperText fontSize={'xs'}>
-              Need at last 12 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
+              at last 12 chars, 1 upper, 1 lower, 1 number, 1 special char
             </FormHelperText>
           ) }
         </FormControl>
       </Stack>
       <HStack spacing={3}>
-        <Button isDisabled={!username || !password} onClick={login} isLoading={pending}>
+        <Button isDisabled={!username || !password || isInvalidPassword} onClick={login} isLoading={pending}>
           Login in or Sign up
         </Button>
       </HStack>
