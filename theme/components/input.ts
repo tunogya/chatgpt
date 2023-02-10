@@ -28,8 +28,8 @@ const Input = defineStyleConfig({
         fontFamily: montserrat.style.fontFamily,
         borderRadius: '6px',
         borderWidth: '1px',
-        fontSize: 'md',
-        fontWeight: '600',
+        fontSize: 'sm',
+        fontWeight: '500',
         _focus: {
         },
         _hover: {
@@ -41,9 +41,8 @@ const Input = defineStyleConfig({
         fontFamily: montserrat.style.fontFamily,
         borderRadius: '6px',
         borderWidth: '1px',
-        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-        fontSize: 'md',
-        fontWeight: '600',
+        fontSize: 'sm',
+        fontWeight: '500',
         _focus: {
         },
         _hover: {

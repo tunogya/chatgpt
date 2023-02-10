@@ -27,7 +27,6 @@ const Button = defineStyleConfig({
       }
     },
     solid: {
-      color: 'white',
     },
     ghost: {
       px: 3,
