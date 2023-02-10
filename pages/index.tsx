@@ -1,17 +1,17 @@
 import {Stack, Text} from "@chakra-ui/react";
-import {useEffect} from "react";
 import {useRouter} from "next/router";
+import {useEffect} from "react";
 
 const Index = () => {
   const router = useRouter()
 
   useEffect(() => {
-    router.push("/chat")
+    router.push("/auth/login")
   }, [router])
 
   return (
     <Stack p={2}>
-      <Text>Chat</Text>
+      <Text>This is ChatGPT via WizardingPay Website</Text>
     </Stack>
   )
 }
