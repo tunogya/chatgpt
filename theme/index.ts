@@ -7,6 +7,8 @@ import Input from "./components/input";
 
 
 const overrides = {
+  initialColorMode: 'light',
+  useSystemColorMode: true,
   styles,
   components: {
     Button,

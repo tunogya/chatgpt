@@ -8,13 +8,17 @@ import {
   InputRightElement,
   Spacer,
   Stack,
-  Text
+  Text, useColorMode, useColorModeValue,
 } from "@chakra-ui/react";
 import {FiArrowUpCircle, FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
 import {ChatIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {IoPaperPlaneOutline} from "react-icons/io5";
 
 const Chat = () => {
+  const { colorMode, toggleColorMode } = useColorMode()
+  const conversationBg = useColorModeValue('white', 'rgba(52,53,65)')
+  const fontColor = useColorModeValue('black', '#ECECF1')
+
   const menu = () => {
     return (
       <Stack h={'full'} p={2} spacing={2} bg={'rgba(32,33,35)'} minW={'250px'} w={'250px'}>
@@ -32,16 +36,17 @@ const Chat = () => {
           </Button>
         </Stack>
         <Spacer/>
-        <Divider/>
+        <Divider bg={'white'}/>
         <Stack spacing={0}>
           <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} _hover={{bg: '#2A2B32'}}>
             <Text color={'white'} textAlign={"start"} w={'full'}>
               Clear conversations
             </Text>
           </Button>
-          <Button variant={'ghost'} leftIcon={<MoonIcon color={'white'}/>} _hover={{bg: '#2A2B32'}}>
+          <Button variant={'ghost'} leftIcon={colorMode === 'light' ? <MoonIcon color={'white'}/> : <SunIcon color={'white'}/>}
+                  _hover={{bg: '#2A2B32'}} onClick={toggleColorMode}>
             <Text color={'white'} textAlign={"start"} w={'full'}>
-              Dark mode
+              {colorMode === 'light' ? 'Dark' : 'Light'} mode
             </Text>
           </Button>
           <Button variant={'ghost'} leftIcon={<FiArrowUpCircle color={'white'}/>} _hover={{bg: '#2A2B32'}}>
@@ -61,9 +66,9 @@ const Chat = () => {
 
   const conversation = () => {
     return (
-      <Stack w={'full'} h={'full'} position={"relative"}>
+      <Stack w={'full'} h={'full'} position={"relative"} bg={conversationBg}>
         <Stack align={"center"} justify={'center'} h={'full'}>
-          <Heading fontSize={'3xl'}>ChatGPT</Heading>
+          <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
           <Text fontSize={'xs'}></Text>
         </Stack>
         <Stack position={'absolute'} bottom={0} left={0} w={'full'} align={"center"} px={2} pb={3}
@@ -71,7 +76,7 @@ const Chat = () => {
           <InputGroup maxW={'container.sm'}>
             <Input variant={'outline'} size={['sm', 'md', 'lg']}/>
             <InputRightElement h={'full'} pr={1}>
-              <IconButton aria-label={'send'} icon={<IoPaperPlaneOutline size={'20'}/>} variant={'ghost'}/>
+              <IconButton aria-label={'send'} icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} variant={'ghost'}/>
             </InputRightElement>
           </InputGroup>
 
