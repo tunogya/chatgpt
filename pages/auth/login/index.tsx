@@ -22,7 +22,7 @@ const Login = () => {
 
   const isInvalidPassword = useMemo(() => {
     // need at last 12 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#.:'^])[A-Za-z\d@$!%*?&#.:'^]{12,}$/
     return !!password && !regex.test(password)
   }, [password])
 
@@ -84,11 +84,13 @@ const Login = () => {
           </InputGroup>
           { isInvalidPassword ? (
             <FormErrorMessage fontSize={'xs'}>
-              at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
+              at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&#.:'^
             </FormErrorMessage>
           ) : (
             <FormHelperText fontSize={'xs'}>
-              at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
+              at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&#.:'^
             </FormHelperText>
           ) }
         </FormControl>
