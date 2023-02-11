@@ -65,6 +65,6 @@ export default async function handler(
     })
     res.status(200).json({ token })
   } catch (e) {
-    res.status(400).json({ error: 'error password!' + e })
+    res.status(400).json({ error: 'error password!' })
   }
 }
