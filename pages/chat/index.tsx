@@ -23,12 +23,12 @@ const Chat = () => {
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const [, setJWT] = useRecoilState(jwtAtom)
   const router = useRouter()
-  const [isMobile] = useMediaQuery('(max-width: 768px)')
+  const [isMobile] = useMediaQuery('(max-width: 768px)') // init is false
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const menu = () => {
     return (
-      <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'250px'} w={['full', '250px']}>
+      <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'250px'} w={['full', '250px']} opacity={[isOpen ? 1 : 0, 1]}>
         <Button variant={'outline'} boxShadow={'md'} h={'46px'} borderColor={'whiteAlpha.400'} leftIcon={<FiPlus color={'white'}/>}
                 _hover={{bg: 'bg3'}}>
           <Text color={'white'} textAlign={"start"} w={'full'}>
