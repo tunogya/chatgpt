@@ -6,6 +6,8 @@ import {
 } from "@chakra-ui/react";
 import {useMemo, useState} from "react";
 import {useRouter} from "next/router";
+import {useRecoilState} from "recoil";
+import {jwtAtom} from "@/state";
 
 const Login = () => {
   const router = useRouter()
@@ -13,6 +15,7 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [pending, setPending] = useState(false)
+  const [jwt, setJWT] = useRecoilState(jwtAtom)
 
   const isInvalidPassword = useMemo(() => {
     // need at last 12 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
@@ -34,7 +37,7 @@ const Login = () => {
     })
     if (res.status === 200) {
       const {token} = await res.json()
-      localStorage.setItem('token', token)
+      setJWT(token)
       await router.push('/chat')
     } else {
       const {error} = await res.json()
