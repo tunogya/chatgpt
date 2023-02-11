@@ -21,7 +21,7 @@ const Chat = () => {
 
   const menu = () => {
     return (
-      <Stack h={'full'} p={2} spacing={2} bg={'rgba(32,33,35)'} minW={'250px'} w={'250px'}>
+      <Stack h={'full'} p={2} spacing={2} bg={'#202123'} minW={'250px'} w={'250px'}>
         <Button variant={'outline'} boxShadow={'md'} h={'46px'} borderColor={'whiteAlpha.400'} leftIcon={<FiPlus color={'white'}/>}
                 _hover={{bg: '#2A2B32'}}>
           <Text color={'white'} textAlign={"start"} w={'full'}>
