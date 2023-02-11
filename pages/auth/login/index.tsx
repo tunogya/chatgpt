@@ -75,6 +75,10 @@ const Login = () => {
         <FormControl isInvalid={isInvalidPassword}>
           <InputGroup variant={'outline'}>
             <Input placeholder={'Password'} color={fontColor} type={show ? 'text' : 'password'} value={password}
+                   onInput={(e) => {
+                     // @ts-ignore
+                     e.target.value = e.target.value.replace(/[^a-zA-Z0-9@$!%*?&#.:'^]/g, '')
+                   }}
                    onChange={(e) => setPassword(e.target.value)}/>
             <InputRightElement width='4.5rem'>
               <Button h={'1.75rem'} size={'sm'} color={fontColor} onClick={() => setShow(!show)}>
