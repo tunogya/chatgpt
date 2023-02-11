@@ -1,6 +1,6 @@
 import {
   Button,
-  Divider,
+  Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerOverlay,
   Heading,
   HStack, IconButton,
   Input,
@@ -8,10 +8,10 @@ import {
   InputRightElement,
   Spacer,
   Stack,
-  Text, useColorMode, useColorModeValue,
+  Text, useColorMode, useColorModeValue, useDisclosure, useMediaQuery,
 } from "@chakra-ui/react";
 import {FiArrowUpCircle, FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
-import {ChatIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
+import {AddIcon, ChatIcon, HamburgerIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {IoPaperPlaneOutline} from "react-icons/io5";
 import {useRecoilState} from "recoil";
 import {jwtAtom} from "@/state";
@@ -23,10 +23,12 @@ const Chat = () => {
   const fontColor = useColorModeValue('black', '#ECECF1')
   const [, setJWT] = useRecoilState(jwtAtom)
   const router = useRouter()
+  const [isMobile] = useMediaQuery('(max-width: 768px)')
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const menu = () => {
     return (
-      <Stack h={'full'} p={2} spacing={2} bg={'#202123'} minW={'250px'} w={'250px'}>
+      <Stack h={'full'} p={2} spacing={2} bg={'#202123'} minW={'250px'} w={['full', '250px']}>
         <Button variant={'outline'} boxShadow={'md'} h={'46px'} borderColor={'whiteAlpha.400'} leftIcon={<FiPlus color={'white'}/>}
                 _hover={{bg: '#2A2B32'}}>
           <Text color={'white'} textAlign={"start"} w={'full'}>
@@ -72,6 +74,28 @@ const Chat = () => {
     )
   }
 
+  const menuMobile = () => {
+    return (
+      <HStack h={'44px'} w={'full'} position={'absolute'} top={0} left={0} zIndex={'docked'} borderBottom={'1px solid'}
+              align={"center"} justify={"space-between"} borderColor={'gray.100'} px={1} boxShadow={'sm'}>
+        <IconButton aria-label={'menu'} icon={<HamburgerIcon fontSize={'sm'}/>} onClick={onOpen} variant={"ghost"}/>
+        <Drawer
+          isOpen={isOpen}
+          placement='left'
+          onClose={onClose}
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton position={'absolute'} border={'1px solid'} color={fontColor} right={'-40px'}/>
+            {menu()}
+          </DrawerContent>
+        </Drawer>
+        <Text color={fontColor}>New chat</Text>
+        <IconButton aria-label={'add'} icon={<AddIcon fontSize={'sm'}/>} variant={"ghost"}/>
+      </HStack>
+    )
+  }
+
   const conversation = () => {
     return (
       <Stack w={'full'} h={'full'} position={"relative"} bg={conversationBg}>
@@ -95,8 +119,8 @@ const Chat = () => {
   }
 
   return (
-    <HStack h={'100vh'} spacing={0}>
-      {menu()}
+    <HStack h={'100vh'} w={'full'} spacing={0}>
+      { isMobile ? menuMobile() : menu()}
       {conversation()}
     </HStack>
   )

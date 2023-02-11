@@ -5,7 +5,7 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 
 const Button = defineStyleConfig({
   baseStyle: {
-    borderRadius: '0.375rem',
+    borderRadius: 'md',
     fontFamily: montserrat.style.fontFamily,
     cursor: 'pointer',
   },
