@@ -106,7 +106,7 @@ const Chat = () => {
         <Stack position={'absolute'} bottom={0} left={0} w={'full'} align={"center"} px={2} pb={3}
                spacing={2}>
           <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
-            <Input variant={'outline'} size={['sm', 'md', 'lg']}/>
+            <Input variant={'outline'} color={fontColor} size={['sm', 'md', 'lg']}/>
             <InputRightElement h={'full'} pr={1}>
               <IconButton aria-label={'send'} icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} variant={'ghost'}/>
             </InputRightElement>
