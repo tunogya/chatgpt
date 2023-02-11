@@ -18,7 +18,7 @@ export default function App({Component, pageProps}: AppProps) {
         <meta content={'yes'} name={"apple-mobile-web-app-capable"}/>
         <meta content={'yes'} name={"mobile-web-app-capable"}/>
         <meta content={'black'} name={"apple-mobile-web-app-status-bar-style"}/>
-        <meta content={'Wizarding Pay'} name={"apple-mobile-web-app-title"}/>
+        <meta content={'ChatGPT'} name={"apple-mobile-web-app-title"}/>
         <meta content={'telephone=no'} name={"format-detection"}/>
         <meta content={'email=no'} name={"format-detection"}/>
         <meta name="theme-color" content="#202123"/>
