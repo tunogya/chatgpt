@@ -47,6 +47,7 @@ export default async function handler(
         SK: `USER#${username}`,
         username,
         password,
+        create_at: Math.floor(new Date().getTime() / 1000),
       },
       // if PK is not exists, insert, otherwise, password must be same
       ConditionExpression: 'attribute_not_exists(PK) OR #password = :password',
