@@ -10,7 +10,7 @@ export default function App({Component, pageProps}: AppProps) {
     <RecoilRoot>
       <ChakraProvider theme={theme}>
         <Head>
-          <title>Wizarding Pay</title>
+          <title>ChatGPT via Wizarding Pay</title>
           <meta
             name="description"
             content="ChatGPT via Wizarding Pay"
