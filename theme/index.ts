@@ -16,6 +16,14 @@ const overrides = {
     heading: montserrat.style.fontFamily,
     mono: montserrat.style.fontFamily,
   },
+  colors: {
+    bg1: '#202123', // menu bg
+    bg3: '#2A2B32', // button hover bg
+    bg2: '#343541', // content bg
+    fontColor1: '#343541', // light font
+    fontColor2: '#ECECF1', // dark font
+    fontColor3: 'gray.500', // secondary font
+  },
   styles,
   components: {
     Button,

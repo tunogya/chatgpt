@@ -17,8 +17,8 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [pending, setPending] = useState(false)
   const [, setJWT] = useRecoilState(jwtAtom)
-  const bg = useColorModeValue('white', '#343541')
-  const fontColor = useColorModeValue('black', '#ECECF1')
+  const bg = useColorModeValue('white', 'bg2')
+  const fontColor = useColorModeValue('fontColor1', 'fontColor2')
 
   const isInvalidPassword = useMemo(() => {
     // need at last 12 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
@@ -92,7 +92,7 @@ const Login = () => {
               at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&#.:'^
             </FormErrorMessage>
           ) : (
-            <FormHelperText fontSize={'xs'}>
+            <FormHelperText fontSize={'xs'} color={'fontColor3'}>
               {/* eslint-disable-next-line react/no-unescaped-entities */}
               at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&#.:'^
             </FormHelperText>

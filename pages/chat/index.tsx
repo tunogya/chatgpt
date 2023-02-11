@@ -19,8 +19,8 @@ import {useRouter} from "next/router";
 
 const Chat = () => {
   const { colorMode, toggleColorMode } = useColorMode()
-  const conversationBg = useColorModeValue('white', '#343541')
-  const fontColor = useColorModeValue('black', '#ECECF1')
+  const conversationBg = useColorModeValue('white', 'bg2')
+  const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const [, setJWT] = useRecoilState(jwtAtom)
   const router = useRouter()
   const [isMobile] = useMediaQuery('(max-width: 768px)')
@@ -28,15 +28,15 @@ const Chat = () => {
 
   const menu = () => {
     return (
-      <Stack h={'full'} p={2} spacing={2} bg={'#202123'} minW={'250px'} w={['full', '250px']}>
+      <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'250px'} w={['full', '250px']}>
         <Button variant={'outline'} boxShadow={'md'} h={'46px'} borderColor={'whiteAlpha.400'} leftIcon={<FiPlus color={'white'}/>}
-                _hover={{bg: '#2A2B32'}}>
+                _hover={{bg: 'bg3'}}>
           <Text color={'white'} textAlign={"start"} w={'full'}>
             New chat
           </Text>
         </Button>
         <Stack pt={2}>
-          <Button variant={"ghost"} leftIcon={<ChatIcon color={'white'}/>} _hover={{bg: '#2A2B32'}}>
+          <Button variant={"ghost"} leftIcon={<ChatIcon color={'white'}/>} _hover={{bg: 'bg3'}}>
             <Text color={'gray.50'} textAlign={"start"} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'} whiteSpace={'nowrap'}>
               What is this? How does it work?
             </Text>
@@ -45,23 +45,23 @@ const Chat = () => {
         <Spacer/>
         <Divider bg={'white'}/>
         <Stack spacing={0}>
-          <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} _hover={{bg: '#2A2B32'}}>
+          <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} _hover={{bg: 'bg3'}}>
             <Text color={'white'} textAlign={"start"} w={'full'}>
               Clear conversations
             </Text>
           </Button>
           <Button variant={'ghost'} leftIcon={colorMode === 'light' ? <MoonIcon color={'white'}/> : <SunIcon color={'white'}/>}
-                  _hover={{bg: '#2A2B32'}} onClick={toggleColorMode}>
+                  _hover={{bg: 'bg3'}} onClick={toggleColorMode}>
             <Text color={'white'} textAlign={"start"} w={'full'}>
               {colorMode === 'light' ? 'Dark' : 'Light'} mode
             </Text>
           </Button>
-          <Button variant={'ghost'} leftIcon={<FiArrowUpCircle color={'white'}/>} _hover={{bg: '#2A2B32'}}>
+          <Button variant={'ghost'} leftIcon={<FiArrowUpCircle color={'white'}/>} _hover={{bg: 'bg3'}}>
             <Text color={'white'} textAlign={"start"} w={'full'}>
               Updates & FAQ
             </Text>
           </Button>
-          <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} _hover={{bg: '#2A2B32'}}>
+          <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} _hover={{bg: 'bg3'}}>
             <Text color={'white'} textAlign={"start"} w={'full'} onClick={() => {
               setJWT('')
               router.push('/auth/login')

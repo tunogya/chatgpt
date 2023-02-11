@@ -4,8 +4,8 @@ import {useRouter} from "next/router";
 const Error = () => {
   const router = useRouter()
   const {error} = router.query
-  const bg = useColorModeValue('white', '#343541')
-  const fontColor = useColorModeValue('black', '#ECECF1')
+  const bg = useColorModeValue('white', 'bg2')
+  const fontColor = useColorModeValue('fontColor1', 'fontColor2')
 
   return (
     <Stack h={'100vh'} w={'full'} bg={bg} align={"center"} justify={"center"}>

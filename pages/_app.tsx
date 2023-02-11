@@ -23,7 +23,7 @@ export default function App({Component, pageProps}: AppProps) {
           <meta content={'ChatGPT'} name={"apple-mobile-web-app-title"}/>
           <meta content={'telephone=no'} name={"format-detection"}/>
           <meta content={'email=no'} name={"format-detection"}/>
-          <meta name="theme-color" content="#202123"/>
+          <meta name="theme-color" content="#343541"/>
           <link rel="icon" href="/favicon.svg"/>
         </Head>
 
