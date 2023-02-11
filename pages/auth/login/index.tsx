@@ -63,7 +63,13 @@ const Login = () => {
       <Stack w={['full', '300px']}>
         <FormControl>
           <InputGroup variant={'outline'}>
-            <Input placeholder={'Username'} color={fontColor} value={username} onChange={(e) => setUsername(e.target.value)}/>
+            <Input placeholder={'Username'} color={fontColor} value={username}
+                   onInput={(e) => {
+                     // only allow alphanumeric characters, underscore, and dash, no space, no special characters, no emoji
+                     // @ts-ignore
+                     e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, '')
+                   }}
+                   onChange={(e) => setUsername(e.target.value)}/>
           </InputGroup>
         </FormControl>
         <FormControl isInvalid={isInvalidPassword}>
