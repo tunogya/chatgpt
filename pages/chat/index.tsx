@@ -119,7 +119,7 @@ const Chat = () => {
   }
 
   return (
-    <HStack h={'100vh'} w={'full'} spacing={0}>
+    <HStack h={'full'} w={'full'} spacing={0}>
       { isMobile ? menuMobile() : menu()}
       {conversation()}
     </HStack>

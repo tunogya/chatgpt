@@ -55,7 +55,7 @@ const Login = () => {
   }
 
   return (
-    <Stack h={'100vh'} w={'full'} bg={bg} justify={"center"} align={"center"} spacing={8} px={2}>
+    <Stack h={'full'} w={'full'} bg={bg} justify={"center"} align={"center"} spacing={8} px={2}>
       <Text textAlign={"center"} fontSize={'sm'} color={fontColor}>
         Welcome to ChatGPT via WizardingPay<br/>
         Log in with your account to continue

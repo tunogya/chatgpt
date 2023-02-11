@@ -8,7 +8,7 @@ const Error = () => {
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
 
   return (
-    <Stack h={'100vh'} w={'full'} bg={bg} align={"center"} justify={"center"}>
+    <Stack h={'full'} w={'full'} bg={bg} align={"center"} justify={"center"}>
       <Text fontSize={'sm'} color={fontColor}>Error</Text>
       <Text fontSize={'sm'} color={fontColor}>Oops! {error}</Text>
       <Button color={fontColor} onClick={() => router.back()}>Go back</Button>
