@@ -19,7 +19,7 @@ import {useRouter} from "next/router";
 
 const Chat = () => {
   const { colorMode, toggleColorMode } = useColorMode()
-  const conversationBg = useColorModeValue('white', 'rgba(52,53,65)')
+  const conversationBg = useColorModeValue('white', '#343541')
   const fontColor = useColorModeValue('black', '#ECECF1')
   const [, setJWT] = useRecoilState(jwtAtom)
   const router = useRouter()
