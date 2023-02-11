@@ -81,7 +81,7 @@ const Login = () => {
               at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&
             </FormErrorMessage>
           ) : (
-            <FormHelperText fontSize={'xs'} color={fontColor}>
+            <FormHelperText fontSize={'xs'}>
               at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&
             </FormHelperText>
           ) }
