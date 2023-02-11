@@ -1,6 +1,6 @@
 import {
   Button, FormControl, FormErrorMessage, FormHelperText,
-  HStack, Input, InputGroup, InputRightElement,
+  Input, InputGroup, InputRightElement,
   Stack,
   Text
 } from "@chakra-ui/react";
@@ -15,7 +15,7 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [pending, setPending] = useState(false)
-  const [jwt, setJWT] = useRecoilState(jwtAtom)
+  const [, setJWT] = useRecoilState(jwtAtom)
 
   const isInvalidPassword = useMemo(() => {
     // need at last 12 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
@@ -51,12 +51,12 @@ const Login = () => {
   }
 
   return (
-    <Stack h={'100vh'} w={'full'} justify={"center"} align={"center"} spacing={3}>
+    <Stack h={'100vh'} w={'full'} justify={"center"} align={"center"} spacing={8} px={3}>
       <Text textAlign={"center"} fontSize={'sm'}>
         Welcome to ChatGPT via WizardingPay<br/>
         Log in with your account to continue
       </Text>
-      <Stack w={'280px'}>
+      <Stack w={['full', '300px']}>
         <FormControl>
           <InputGroup variant={'outline'}>
             <Input placeholder={'Username'} value={username} onChange={(e) => setUsername(e.target.value)}/>
@@ -82,12 +82,10 @@ const Login = () => {
             </FormHelperText>
           ) }
         </FormControl>
-      </Stack>
-      <HStack spacing={3}>
-        <Button isDisabled={!username || !password || isInvalidPassword} onClick={login} isLoading={pending}>
+        <Button w={['full', '300px']} isDisabled={!username || !password || isInvalidPassword} onClick={login} isLoading={pending}>
           Login in or Sign up
         </Button>
-      </HStack>
+      </Stack>
     </Stack>
   )
 }

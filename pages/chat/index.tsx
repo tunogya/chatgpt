@@ -13,11 +13,16 @@ import {
 import {FiArrowUpCircle, FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
 import {ChatIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {IoPaperPlaneOutline} from "react-icons/io5";
+import {useRecoilState} from "recoil";
+import {jwtAtom} from "@/state";
+import {useRouter} from "next/router";
 
 const Chat = () => {
   const { colorMode, toggleColorMode } = useColorMode()
   const conversationBg = useColorModeValue('white', 'rgba(52,53,65)')
   const fontColor = useColorModeValue('black', '#ECECF1')
+  const [, setJWT] = useRecoilState(jwtAtom)
+  const router = useRouter()
 
   const menu = () => {
     return (
@@ -55,7 +60,10 @@ const Chat = () => {
             </Text>
           </Button>
           <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} _hover={{bg: '#2A2B32'}}>
-            <Text color={'white'} textAlign={"start"} w={'full'}>
+            <Text color={'white'} textAlign={"start"} w={'full'} onClick={() => {
+              setJWT('')
+              router.push('/auth/login')
+            }}>
               Log out
             </Text>
           </Button>
@@ -79,7 +87,6 @@ const Chat = () => {
               <IconButton aria-label={'send'} icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} variant={'ghost'}/>
             </InputRightElement>
           </InputGroup>
-
           <Text fontSize={'xs'} maxW={'container.sm'} textAlign={"center"} px={1} color={'gray.500'}>OpenAI ChatGPT via
             WizardingPay.</Text>
         </Stack>
