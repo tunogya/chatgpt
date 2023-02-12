@@ -21,9 +21,7 @@ const Login = () => {
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
 
   const isInvalidPassword = useMemo(() => {
-    // need at last 12 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#.:'^])[A-Za-z\d@$!%*?&#.:'^]{12,}$/
-    return !!password && !regex.test(password)
+    return password.length < 16
   }, [password])
 
   const login = async () => {
@@ -67,7 +65,7 @@ const Login = () => {
                    onInput={(e) => {
                      // only allow alphanumeric characters, underscore, and dash, no space, no special characters, no emoji
                      // @ts-ignore
-                     e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, '')
+                     e.target.value = e.target.value.replace(/[^a-zA-Z0-9-_]/g, '')
                    }}
                    onChange={(e) => setUsername(e.target.value)}/>
           </InputGroup>
@@ -76,8 +74,9 @@ const Login = () => {
           <InputGroup variant={'outline'}>
             <Input placeholder={'Password'} color={fontColor} type={show ? 'text' : 'password'} value={password}
                    onInput={(e) => {
-                     // @ts-ignore
-                     e.target.value = e.target.value.replace(/[^a-zA-Z0-9@$!%*?&#.:'^]/g, '')
+                      // no space, no chinese characters, no emoji, no full-width symbols
+                      // @ts-ignore
+                      e.target.value = e.target.value.replace(/[\s\u4e00-\u9fa5\u3000-\u303f\uff00-\uffef]/g, '')
                    }}
                    onChange={(e) => setPassword(e.target.value)}/>
             <InputRightElement width='4.5rem'>
@@ -89,12 +88,12 @@ const Login = () => {
           { isInvalidPassword ? (
             <FormErrorMessage fontSize={'xs'}>
               {/* eslint-disable-next-line react/no-unescaped-entities */}
-              at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&#.:'^
+              at last 16 characters
             </FormErrorMessage>
           ) : (
             <FormHelperText fontSize={'xs'} color={'fontColor3'}>
               {/* eslint-disable-next-line react/no-unescaped-entities */}
-              at last 12 chars, contains A-Z, a-z, 0-9, @$!%*?&#.:'^
+              at last 16 characters
             </FormHelperText>
           ) }
         </FormControl>
