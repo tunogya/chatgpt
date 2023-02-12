@@ -10,12 +10,13 @@ import {
   Stack,
   Text, useColorMode, useColorModeValue, useDisclosure, useMediaQuery,
 } from "@chakra-ui/react";
-import {FiArrowUpCircle, FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
+import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
 import {AddIcon, ChatIcon, HamburgerIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
-import {IoPaperPlaneOutline} from "react-icons/io5";
+import {IoPaperPlaneOutline, IoWalletOutline} from "react-icons/io5";
 import {useRecoilState} from "recoil";
 import {jwtAtom} from "@/state";
 import {useRouter} from "next/router";
+import {RiVipCrown2Line} from "react-icons/ri";
 
 const Chat = () => {
   const { colorMode, toggleColorMode } = useColorMode()
@@ -28,7 +29,7 @@ const Chat = () => {
 
   const menu = () => {
     return (
-      <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'250px'} w={['full', '250px']} opacity={[isOpen ? 1 : 0, 1]}>
+      <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'250px'} w={['full', 'full', '250px']} opacity={[isOpen ? 1 : 0, 1]}>
         <Button variant={'outline'} boxShadow={'md'} h={'46px'} borderColor={'whiteAlpha.400'} leftIcon={<FiPlus color={'white'}/>}
                 _hover={{bg: 'bg3'}}>
           <Text color={'white'} textAlign={"start"} w={'full'}>
@@ -50,17 +51,33 @@ const Chat = () => {
               Clear conversations
             </Text>
           </Button>
+          <Button variant={'ghost'} leftIcon={<IoWalletOutline color={'white'}/>} _hover={{bg: 'bg3'}}>
+            <Text color={'white'} textAlign={"start"} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'} pr={'2px'}>
+              Balance
+            </Text>
+            <Text color={'white'} textAlign={"end"} fontSize={'xs'}>
+              {(1000).toLocaleString()} Coins
+            </Text>
+          </Button>
+          <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}}>
+            <Text color={'white'} textAlign={"start"} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'} pr={'2px'}>
+              Priority Pass
+            </Text>
+            <Text color={'white'} textAlign={"end"} fontSize={'xs'}>
+              {(3650).toLocaleString()} Days
+            </Text>
+          </Button>
           <Button variant={'ghost'} leftIcon={colorMode === 'light' ? <MoonIcon color={'white'}/> : <SunIcon color={'white'}/>}
                   _hover={{bg: 'bg3'}} onClick={toggleColorMode}>
             <Text color={'white'} textAlign={"start"} w={'full'}>
               {colorMode === 'light' ? 'Dark' : 'Light'} mode
             </Text>
           </Button>
-          <Button variant={'ghost'} leftIcon={<FiArrowUpCircle color={'white'}/>} _hover={{bg: 'bg3'}}>
-            <Text color={'white'} textAlign={"start"} w={'full'}>
-              Updates & FAQ
-            </Text>
-          </Button>
+          {/*<Button variant={'ghost'} leftIcon={<FiArrowUpCircle color={'white'}/>} _hover={{bg: 'bg3'}}>*/}
+          {/*  <Text color={'white'} textAlign={"start"} w={'full'}>*/}
+          {/*    Updates & FAQ*/}
+          {/*  </Text>*/}
+          {/*</Button>*/}
           <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} _hover={{bg: 'bg3'}}>
             <Text color={'white'} textAlign={"start"} w={'full'} onClick={() => {
               setJWT('')
