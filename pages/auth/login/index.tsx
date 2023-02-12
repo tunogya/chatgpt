@@ -21,8 +21,17 @@ const Login = () => {
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
 
   const isInvalidPassword = useMemo(() => {
-    return password.length < 16
+    return password.length < 10 && password.length > 0
   }, [password])
+
+  const hashPassword = (password: string) => {
+    // add salt and hash 1000 times
+    let pwd = password
+    for (let i = 0; i < 1000; i++) {
+      pwd = crypto.createHash('sha256').update(pwd + process.env.SALT).digest('base64')
+    }
+    return pwd
+  }
 
   const login = async () => {
     setPending(true)
@@ -33,8 +42,7 @@ const Login = () => {
       },
       body: JSON.stringify({
         username,
-        // add salt to password, and hash it
-        password: crypto.createHash('sha256').update(password + process.env.NEXT_PUBLIC_SALT).digest('base64')
+        password: hashPassword(password)
       }),
     })
     if (res.status === 200) {
@@ -88,12 +96,12 @@ const Login = () => {
           { isInvalidPassword ? (
             <FormErrorMessage fontSize={'xs'}>
               {/* eslint-disable-next-line react/no-unescaped-entities */}
-              at last 16 characters
+              at last 10 characters
             </FormErrorMessage>
           ) : (
-            <FormHelperText fontSize={'xs'} color={'fontColor3'}>
+            <FormHelperText fontSize={'xs'}>
               {/* eslint-disable-next-line react/no-unescaped-entities */}
-              at last 16 characters
+              at last 10 characters
             </FormHelperText>
           ) }
         </FormControl>
