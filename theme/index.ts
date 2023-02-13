@@ -20,6 +20,7 @@ const overrides = {
     bg1: '#202123', // menu bg
     bg3: '#2A2B32', // button hover bg
     bg2: '#343541', // content bg
+    bg6: '#40414F',
     bg4: '#444654',
     bg5: '#7B8F9A',
     fontColor1: '#343541', // light font

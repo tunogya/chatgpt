@@ -22,7 +22,7 @@ const Chat = () => {
   const { colorMode, toggleColorMode } = useColorMode()
   const conversationBg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
-  const inputBgColor = useColorModeValue('white', 'bg1')
+  const inputBgColor = useColorModeValue('white', 'bg6')
   const chatBgColor = useColorModeValue('#F7F7F8', 'bg4')
   const [, setJWT] = useRecoilState(jwtAtom)
   const router = useRouter()
