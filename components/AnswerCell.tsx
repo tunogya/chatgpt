@@ -15,7 +15,7 @@ const AnswerCell: FC<AnswerCellProps> = ({text}) => {
         <Stack bg={'rgb(16, 163, 127)'} minW={'30px'} w={'30px'} h={'30px'} p={1} borderRadius={'2px'}>
           <chakra.img src={'/openai.svg'}/>
         </Stack>
-        <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>{text}</Text>
+        <Text color={fontColor} fontSize={'sm'} fontWeight={'500'} lineHeight={'30px'}>{text}</Text>
       </HStack>
     </Stack>
   )
