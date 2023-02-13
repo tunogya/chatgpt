@@ -61,7 +61,7 @@ const Chat = () => {
               {(1000).toLocaleString()} Coins
             </Text>
           </Button>
-          <Modal isOpen={isOpenCoins} onClose={onCLoseCoins} isCentered size={['sm', 'md']}>
+          <Modal isOpen={isOpenCoins} onClose={onCLoseCoins} isCentered size={['xs', 'sm', 'md']}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader color={fontColor} px={[2, 4]}>Recharge Coins</ModalHeader>
@@ -94,7 +94,7 @@ const Chat = () => {
               {(3650).toLocaleString()} Days
             </Text>
           </Button>
-          <Modal isOpen={isOpenPass} onClose={onCLosePass} isCentered size={['sm', 'md']}>
+          <Modal isOpen={isOpenPass} onClose={onCLosePass} isCentered size={['xs', 'sm', 'md']}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader color={fontColor} px={[2, 4]}>Pass</ModalHeader>
