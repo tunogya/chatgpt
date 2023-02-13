@@ -191,7 +191,7 @@ const Chat = () => {
 
   const menuMobile = () => {
     return (
-      <HStack h={'44px'} w={'full'} position={'sticky'} top={0} left={0} zIndex={'docked'} borderBottom={'1px solid'}
+      <HStack h={'44px'} w={'full'} position={'absolute'} top={0} left={0} zIndex={'docked'} borderBottom={'1px solid'}
               align={"center"} justify={"space-between"} bg={conversationBg} borderColor={'gray.100'} px={1} boxShadow={'sm'}>
         <IconButton aria-label={'menu'} icon={<HamburgerIcon fontSize={'sm'}/>} onClick={onOpenMobileMenu}
                     variant={"ghost"}/>
@@ -214,7 +214,7 @@ const Chat = () => {
 
   const conversation = () => {
     return (
-      <Stack w={'full'} h={'full'} position={"relative"} bg={conversationBg}>
+      <Stack w={'full'} h={'full'} position={"relative"} bg={conversationBg} pt={['44px', '44px', 0]}>
         <Stack h={'full'} w={'full'} pb={'120px'} overflow={"scroll"}>
           <QuestionCell name={'t'} text={'List some risk of software company, contains employees and business'}/>
           <AnswerCell text={`Employee Turnover: High employee turnover can disrupt the workflow and productivity of a software company and lead to increased hiring and training costs.
@@ -260,7 +260,7 @@ Funding and Cash Flow Challenges: Many software companies are heavily reliant on
   }
 
   return (
-    <Stack direction={['column', 'column', 'row']} h={'100%'} w={'full'} spacing={0}>
+    <Stack direction={['column', 'column', 'row']} h={'100vh'} w={'full'} spacing={0}>
       {isMobile ? menuMobile() : menu()}
       {conversation()}
     </Stack>
