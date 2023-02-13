@@ -1,13 +1,13 @@
 import {
+  Avatar, Box,
   Button, Card,
-  Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerOverlay,
-  Heading,
+  Drawer, DrawerCloseButton, DrawerContent, DrawerOverlay,
   HStack, IconButton,
   Input,
   InputGroup,
   InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay,
   Spacer,
-  Stack,
+  Stack, chakra,
   Text, useColorMode, useColorModeValue, useDisclosure, useMediaQuery, Wrap, WrapItem,
 } from "@chakra-ui/react";
 import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
@@ -22,6 +22,8 @@ const Chat = () => {
   const { colorMode, toggleColorMode } = useColorMode()
   const conversationBg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
+  const inputBgColor = useColorModeValue('white', 'bg1')
+  const chatBgColor = useColorModeValue('#F7F7F8', 'bg4')
   const [, setJWT] = useRecoilState(jwtAtom)
   const router = useRouter()
   const [isMobile] = useMediaQuery('(max-width: 768px)') // init is false
@@ -31,7 +33,7 @@ const Chat = () => {
 
   const menu = () => {
     return (
-      <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'250px'} w={['full', 'full', '250px']} opacity={[isOpenMobileMenu ? 1 : 0, 1]}>
+      <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']} opacity={[isOpenMobileMenu ? 1 : 0, 1]}>
         <Button variant={'outline'} boxShadow={'md'} h={'46px'} borderColor={'whiteAlpha.400'} leftIcon={<FiPlus color={'white'}/>}
                 _hover={{bg: 'bg3'}}>
           <Text color={'white'} textAlign={"start"} w={'full'}>
@@ -46,8 +48,8 @@ const Chat = () => {
           </Button>
         </Stack>
         <Spacer/>
-        <Divider bg={'white'}/>
-        <Stack spacing={0}>
+        <Stack spacing={1}>
+          <Box w={'full'} h={'1px'} bg={"whiteAlpha.400"}/>
           <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} _hover={{bg: 'bg3'}}>
             <Text color={'white'} textAlign={"start"} w={'full'}>
               Clear conversations
@@ -180,7 +182,7 @@ const Chat = () => {
   const menuMobile = () => {
     return (
       <HStack h={'44px'} w={'full'} position={'sticky'} top={0} left={0} zIndex={'docked'} borderBottom={'1px solid'}
-              align={"center"} justify={"space-between"} borderColor={'gray.100'} px={1} boxShadow={'sm'}>
+              align={"center"} justify={"space-between"} bg={conversationBg} borderColor={'gray.100'} px={1} boxShadow={'sm'}>
         <IconButton aria-label={'menu'} icon={<HamburgerIcon fontSize={'sm'}/>} onClick={onOpenMobileMenu} variant={"ghost"}/>
         <Drawer
           isOpen={isOpenMobileMenu}
@@ -202,20 +204,46 @@ const Chat = () => {
   const conversation = () => {
     return (
       <Stack w={'full'} h={'full'} position={"relative"} bg={conversationBg}>
-        <Stack align={"center"} justify={'center'} h={'full'}>
-          <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
-          <Text fontSize={'xs'}></Text>
+        <Stack h={'full'} w={'full'}>
+          <Stack w={'full'} py={6} px={4} align={"center"}>
+            <HStack maxW={['full', 'container.md']} w={'full'} h={'full'} spacing={6}>
+              <Avatar borderRadius={'2px'} w={'30px'} h={'30px'} iconLabel={'icon'} size={'md'} name={'t'} textTransform={'none'}
+                      bg={'bg5'}/>
+              <Text color={fontColor} fontWeight={'500'}>Hello</Text>
+            </HStack>
+          </Stack>
+          <Stack bg={chatBgColor} border={'1px solid'} borderColor={'rgba(0,0,0,0.1)'} w={'full'} py={6} px={4} align={"center"}>
+            <HStack maxW={['full', 'container.md']} w={'full'} h={'full'} spacing={6}>
+              <Stack bg={'rgb(16, 163, 127)'} w={'30px'} h={'30px'} p={1} borderRadius={'2px'}>
+                <chakra.img src={'/openai.svg'}/>
+              </Stack>
+              <Text color={fontColor} fontWeight={'500'}>Hello</Text>
+            </HStack>
+          </Stack>
+
+
+
+
         </Stack>
-        <Stack position={'absolute'} bottom={0} left={0} w={'full'} align={"center"} px={2} pb={3}
-               spacing={2}>
-          <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
-            <Input variant={'outline'} color={fontColor} size={['sm', 'md', 'lg']}/>
-            <InputRightElement h={'full'} pr={1}>
-              <IconButton aria-label={'send'} icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} variant={'ghost'}/>
-            </InputRightElement>
-          </InputGroup>
-          <Text fontSize={'xs'} maxW={'container.sm'} textAlign={"center"} px={1} color={'gray.500'}>OpenAI ChatGPT via
-            WizardingPay.</Text>
+
+
+        {/*<Stack align={"center"} justify={'center'} h={'full'}>*/}
+        {/*  <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>*/}
+        {/*  <Text fontSize={'xs'}></Text>*/}
+        {/*</Stack>*/}
+        <Stack position={'absolute'} bottom={0} left={0} w={'full'} spacing={0}>
+          <Stack px={2} w={'full'} align={"center"}>
+            <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
+              <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md', 'lg']}/>
+              <InputRightElement h={'full'} pr={1}>
+                <IconButton aria-label={'send'} icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} variant={'ghost'}/>
+              </InputRightElement>
+            </InputGroup>
+          </Stack>
+          <Stack w={'full'} bg={conversationBg} align={"center"} pt={2} pb={4}>
+            <Text fontSize={'xs'} maxW={'container.sm'} textAlign={"center"} px={1} color={'gray.500'}>OpenAI ChatGPT via
+              WizardingPay.</Text>
+          </Stack>
         </Stack>
       </Stack>
     )
