@@ -46,7 +46,7 @@ const Chat = () => {
         <Stack pt={2}>
           <Button variant={"ghost"} leftIcon={<ChatIcon color={'white'}/>} _hover={{bg: 'bg3'}}>
             <Text color={'gray.50'} textAlign={"start"} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
-                  whiteSpace={'nowrap'}>
+                  whiteSpace={'nowrap'} fontSize={'sm'}>
               What is this? How does it work?
             </Text>
           </Button>
@@ -217,10 +217,24 @@ const Chat = () => {
     return (
       <Stack w={'full'} h={'full'} position={"relative"} bg={conversationBg}>
         <Stack h={'full'} w={'full'}>
-          <QuestionCell name={'t'} text={'Hello~'}/>
-          <AnswerCell text={'Hello'}/>
-          <QuestionCell name={'t'} text={'How are you?'}/>
-          <AnswerCell text={'I am fine, and you?'}/>
+          <QuestionCell name={'t'} text={'List some risk of software company, contains employees and business'}/>
+          <AnswerCell text={`Employee Turnover: High employee turnover can disrupt the workflow and productivity of a software company and lead to increased hiring and training costs.
+
+Competition: The software industry is highly competitive, and companies may face challenges from new entrants and established players alike.
+
+Technological Obsolescence: Rapid changes in technology can make a company's products and services obsolete, leading to lost revenue and decreased competitiveness.
+
+Intellectual Property Disputes: Software companies may face lawsuits or other disputes over the ownership of their products and the technology they use.
+
+Dependence on Key Personnel: Many software companies are heavily dependent on key employees who possess specialized knowledge and skills, and the loss of these employees can have a significant impact on the company's operations.
+
+Cybersecurity Threats: Software companies may face a range of cyber threats, including hacking, data breaches, and cyber-attacks, which can result in the loss of sensitive data, decreased reputation, and financial losses.
+
+Economic Downturns: Economic downturns can lead to decreased demand for software products and services, which can impact a company's revenue and profitability.
+
+Market Adoption: The success of a software company often depends on the rate at which its products and services are adopted by the market, and slow adoption can result in decreased revenue and profitability.
+
+Funding and Cash Flow Challenges: Many software companies are heavily reliant on external funding and cash flow, and any challenges in this area can impact the company's ability to invest in new products, services, and personnel.`}/>
         </Stack>
 
 
