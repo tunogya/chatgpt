@@ -192,8 +192,7 @@ const Chat = () => {
   const menuMobile = () => {
     return (
       <HStack h={'44px'} w={'full'} position={'sticky'} top={0} left={0} zIndex={'docked'} borderBottom={'1px solid'}
-              align={"center"} justify={"space-between"} bg={conversationBg} borderColor={'gray.100'} px={1}
-              boxShadow={'sm'}>
+              align={"center"} justify={"space-between"} bg={conversationBg} borderColor={'gray.100'} px={1} boxShadow={'sm'}>
         <IconButton aria-label={'menu'} icon={<HamburgerIcon fontSize={'sm'}/>} onClick={onOpenMobileMenu}
                     variant={"ghost"}/>
         <Drawer
@@ -216,7 +215,7 @@ const Chat = () => {
   const conversation = () => {
     return (
       <Stack w={'full'} h={'full'} position={"relative"} bg={conversationBg}>
-        <Stack h={'full'} w={'full'}>
+        <Stack h={'full'} w={'full'} pb={'120px'} overflow={"scroll"}>
           <QuestionCell name={'t'} text={'List some risk of software company, contains employees and business'}/>
           <AnswerCell text={`Employee Turnover: High employee turnover can disrupt the workflow and productivity of a software company and lead to increased hiring and training costs.
 
@@ -236,8 +235,6 @@ Market Adoption: The success of a software company often depends on the rate at 
 
 Funding and Cash Flow Challenges: Many software companies are heavily reliant on external funding and cash flow, and any challenges in this area can impact the company's ability to invest in new products, services, and personnel.`}/>
         </Stack>
-
-
         {/*<Stack align={"center"} justify={'center'} h={'full'}>*/}
         {/*  <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>*/}
         {/*  <Text fontSize={'xs'}></Text>*/}
@@ -263,7 +260,7 @@ Funding and Cash Flow Challenges: Many software companies are heavily reliant on
   }
 
   return (
-    <Stack direction={['column', 'column', 'row']} h={'full'} w={'full'} spacing={0}>
+    <Stack direction={['column', 'column', 'row']} h={'100%'} w={'full'} spacing={0}>
       {isMobile ? menuMobile() : menu()}
       {conversation()}
     </Stack>
