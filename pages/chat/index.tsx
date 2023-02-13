@@ -179,7 +179,7 @@ const Chat = () => {
 
   const menuMobile = () => {
     return (
-      <HStack h={'44px'} w={'full'} position={'absolute'} top={0} left={0} zIndex={'docked'} borderBottom={'1px solid'}
+      <HStack h={'44px'} w={'full'} position={'sticky'} top={0} left={0} zIndex={'docked'} borderBottom={'1px solid'}
               align={"center"} justify={"space-between"} borderColor={'gray.100'} px={1} boxShadow={'sm'}>
         <IconButton aria-label={'menu'} icon={<HamburgerIcon fontSize={'sm'}/>} onClick={onOpenMobileMenu} variant={"ghost"}/>
         <Drawer
@@ -222,10 +222,10 @@ const Chat = () => {
   }
 
   return (
-    <HStack h={'full'} w={'full'} spacing={0}>
+    <Stack direction={['column', 'column', 'row']} h={'full'} w={'full'} spacing={0}>
       { isMobile ? menuMobile() : menu()}
       {conversation()}
-    </HStack>
+    </Stack>
   )
 }
 
