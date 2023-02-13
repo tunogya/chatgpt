@@ -61,17 +61,17 @@ const Chat = () => {
               {(1000).toLocaleString()} Coins
             </Text>
           </Button>
-          <Modal isOpen={isOpenCoins} onClose={onCLoseCoins} isCentered>
+          <Modal isOpen={isOpenCoins} onClose={onCLoseCoins} isCentered size={['sm', 'md']}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader color={fontColor}>Recharge Coins</ModalHeader>
+              <ModalHeader color={fontColor} px={[2, 4]}>Recharge Coins</ModalHeader>
               <ModalCloseButton color={fontColor}/>
-              <ModalBody pt={0} pb={3}>
+              <ModalBody pt={0} pb={3} px={[2, 4]}>
                 <Stack spacing={3} minH={'300px'}>
                   <Wrap justify={"space-between"} spacing={3}>
                     { [3, 6, 12, 30, 50, 98].map((item) => (
                       <WrapItem key={item}>
-                        <Button minW={'120px'} variant={'outline'} _hover={{ boxShadow: 'md' }}>
+                        <Button minW={['100px', '120px']} variant={'outline'} _hover={{ boxShadow: 'md' }}>
                           {item} Coins
                         </Button>
                       </WrapItem>
@@ -94,12 +94,12 @@ const Chat = () => {
               {(3650).toLocaleString()} Days
             </Text>
           </Button>
-          <Modal isOpen={isOpenPass} onClose={onCLosePass} isCentered>
+          <Modal isOpen={isOpenPass} onClose={onCLosePass} isCentered size={['sm', 'md']}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader color={fontColor}>Pass</ModalHeader>
+              <ModalHeader color={fontColor} px={[2, 4]}>Pass</ModalHeader>
               <ModalCloseButton color={fontColor}/>
-              <ModalBody pt={0} pb={3}>
+              <ModalBody pt={0} pb={3} px={[2, 4]}>
                 <Stack spacing={3} minH={'300px'}>
                   <Card p={3} variant={'outline'} cursor={"pointer"}>
                     <Stack>
@@ -140,7 +140,7 @@ const Chat = () => {
                   <Wrap justify={"space-between"} spacing={3}>
                     { ['Annual','Quarter', 'Monthly'].map((item) => (
                       <WrapItem key={item}>
-                        <Button w={'120px'} variant={'outline'} _hover={{ boxShadow: 'md' }} h={'60px'}>
+                        <Button w={['100px', '120px']} variant={'outline'} _hover={{ boxShadow: 'md' }} h={'60px'}>
                           <Stack w={'full'}>
                             <Text textAlign={"start"} fontSize={'xs'} color={fontColor} fontWeight={'semibold'}>{item}</Text>
                             <Text textAlign={"start"} color={fontColor}>200</Text>
