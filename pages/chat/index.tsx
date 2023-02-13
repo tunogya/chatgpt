@@ -79,7 +79,7 @@ const Chat = () => {
                   <Wrap justify={"space-between"} spacing={3}>
                     {[3, 6, 12, 30, 50, 98].map((item) => (
                       <WrapItem key={item}>
-                        <Button minW={['100px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}>
+                        <Button minW={['140px', '140px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}>
                           {item} Coins
                         </Button>
                       </WrapItem>
@@ -107,22 +107,22 @@ const Chat = () => {
           <Modal isOpen={isOpenPass} onClose={onCLosePass} isCentered size={['xs', 'sm', 'md']}>
             <ModalOverlay/>
             <ModalContent>
-              <ModalHeader color={fontColor} px={[2, 4]}>Pass</ModalHeader>
+              <ModalHeader color={fontColor} px={[2, 4]}>Recharge Pass</ModalHeader>
               <ModalCloseButton color={fontColor}/>
               <ModalBody pt={0} pb={3} px={[2, 4]}>
                 <Stack spacing={3} minH={'300px'}>
                   <Card p={3} variant={'outline'} cursor={"pointer"}>
                     <Stack>
-                      <Text color={fontColor} fontSize={'sm'} fontWeight={"semibold"}>Free Pass</Text>
+                      <Text color={fontColor} fontSize={'sm'} fontWeight={"500"}>Free Pass</Text>
                       <Text fontSize={'xx-small'} color={fontColor}>
                         The Free Pass presents experience benefits for the ChatGPT.
                       </Text>
                       <br/>
                       <HStack spacing={1} align={"baseline"}>
-                        <Text color={fontColor} fontSize={'xs'} fontWeight={'semibold'}>
+                        <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>
                           365 days
                         </Text>
-                        <Text color={fontColor} fontSize={'xs'} fontWeight={'semibold'}>
+                        <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>
                           · expired on 3.19
                         </Text>
                       </HStack>
@@ -132,29 +132,29 @@ const Chat = () => {
                   {/*  <Stack h={'full'}>*/}
                   {/*    <HStack>*/}
                   {/*      <RiVipCrown2Line color={'gold'}/>*/}
-                  {/*      <Text color={fontColor} fontSize={'sm'} fontWeight={"semibold"}>Priority Pass</Text>*/}
+                  {/*      <Text color={fontColor} fontSize={'sm'} fontWeight={"500"}>Priority Pass</Text>*/}
                   {/*    </HStack>*/}
                   {/*    <br/>*/}
                   {/*    <HStack spacing={1} align={"baseline"}>*/}
-                  {/*      <Text color={fontColor} fontSize={'xs'} fontWeight={'semibold'}>*/}
+                  {/*      <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>*/}
                   {/*        365 days*/}
                   {/*      </Text>*/}
-                  {/*      <Text color={fontColor} fontSize={'xx-small'} fontWeight={'semibold'}>*/}
+                  {/*      <Text color={fontColor} fontSize={'xx-small'} fontWeight={'500'}>*/}
                   {/*        · expired on 3.19*/}
                   {/*      </Text>*/}
                   {/*    </HStack>*/}
                   {/*  </Stack>*/}
                   {/*</Card>*/}
                   <br/>
-                  <Text fontSize={'sm'} fontWeight={'semibold'} color={fontColor}>Join Priority Pass</Text>
+                  <Text fontSize={'sm'} fontWeight={'500'} color={fontColor}>Join Priority Pass</Text>
                   <Wrap justify={"space-between"} spacing={3}>
                     {['Annual', 'Quarter', 'Monthly'].map((item) => (
                       <WrapItem key={item}>
-                        <Button w={['100px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}} h={'60px'}>
+                        <Button w={['140px', '140px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}} h={'60px'}>
                           <Stack w={'full'}>
                             <Text textAlign={"start"} fontSize={'xs'} color={fontColor}
-                                  fontWeight={'semibold'}>{item}</Text>
-                            <Text textAlign={"start"} color={fontColor}>200</Text>
+                                  fontWeight={'500'}>{item}</Text>
+                            <Text textAlign={"start"} fontSize={'sm'} color={fontColor}>200</Text>
                           </Stack>
                         </Button>
                       </WrapItem>
@@ -206,7 +206,7 @@ const Chat = () => {
             {menu()}
           </DrawerContent>
         </Drawer>
-        <Text color={fontColor}>New chat</Text>
+        <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>New chat</Text>
         <IconButton aria-label={'add'} icon={<AddIcon fontSize={'sm'}/>} variant={"ghost"}/>
       </HStack>
     )
