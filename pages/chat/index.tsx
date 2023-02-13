@@ -11,8 +11,8 @@ import {
   Text, useColorMode, useColorModeValue, useDisclosure, useMediaQuery, Wrap, WrapItem,
 } from "@chakra-ui/react";
 import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
-import {AddIcon, ChatIcon, HamburgerIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
-import {IoPaperPlaneOutline, IoWalletOutline} from "react-icons/io5";
+import {AddIcon, HamburgerIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
+import {IoPaperPlaneOutline, IoWalletOutline, IoChatboxOutline} from "react-icons/io5";
 import {useRecoilState} from "recoil";
 import {jwtAtom} from "@/state";
 import {useRouter} from "next/router";
@@ -44,7 +44,7 @@ const Chat = () => {
           </Text>
         </Button>
         <Stack pt={2}>
-          <Button variant={"ghost"} leftIcon={<ChatIcon color={'white'}/>} _hover={{bg: 'bg3'}}>
+          <Button variant={"ghost"} leftIcon={<IoChatboxOutline color={'white'}/>} _hover={{bg: 'bg3'}}>
             <Text color={'gray.50'} textAlign={"start"} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
                   whiteSpace={'nowrap'} fontSize={'sm'}>
               What is this? How does it work?
