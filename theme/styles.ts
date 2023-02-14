@@ -4,6 +4,8 @@ const styles = {
     body: {
       bg: 'gray.50',
       color: 'gray.800',
+      scroll: 'no',
+      overflowY: 'hidden',
     },
     '*': {
       '-webkit-overflow-scrolling': 'touch',
@@ -12,8 +14,6 @@ const styles = {
     'div,a,img': {
       '-webkit-tap-highlight-color': 'transparent',
       '-webkit-touch-callout': 'none',
-      '-webkit-user-select': 'none',
-      'user-select': 'none',
     },
   }
 

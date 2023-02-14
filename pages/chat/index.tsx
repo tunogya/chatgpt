@@ -34,12 +34,10 @@ const Chat = () => {
   const [conversations, setConversations] = useState<ConversionCellProps[]>([]);
 
   const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [output, setOutput] = useState('');
+  const [status, setStatus] = useState('IDLE');
 
   const complete = async (input: string) => {
-    setOutput('');
-    setLoading(true);
+    setStatus('LOADING');
     const response = await fetch('/api/openai/completions', {
       method: 'POST',
       headers: {
@@ -51,6 +49,10 @@ const Chat = () => {
     });
 
     if (!response.ok) {
+      setStatus('ERROR')
+      setTimeout(() => {
+        setStatus('IDLE')
+      }, 3_000)
       throw new Error(response.statusText);
     }
 
@@ -62,14 +64,14 @@ const Chat = () => {
     const decoder = new TextDecoder();
     let done = false;
 
+    let chunkValue = '';
     while (!done) {
       const {value, done: doneReading} = await reader.read();
       done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setOutput((prev) => prev + chunkValue);
+      chunkValue = decoder.decode(value);
+      // setOutput((prev) => prev + chunkValue);
     }
-
-    setLoading(false);
+    setStatus('IDLE');
   };
 
   const moderate = async (input: string) => {
@@ -276,33 +278,36 @@ const Chat = () => {
         <Stack h={'full'} w={'full'} pb={'120px'} overflow={'scroll'} spacing={0}>
           {
             conversations.length > 0 ? conversations.map((item, index) => (
-                <ConversionCell name={item.name} text={item.text} key={index}/>
-              )) : (
-                <Stack align={'center'} justify={'center'} h={'full'}>
-                  <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
-                  <Text fontSize={'xs'}></Text>
-                </Stack>
-              )}
+              <ConversionCell name={item.name} text={item.text} key={index}/>
+            )) : (
+              <Stack align={'center'} justify={'center'} h={'full'}>
+                <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
+                <Text fontSize={'xs'} color={fontColor}>Power by OpenAI</Text>
+              </Stack>
+            )}
         </Stack>
         <Stack position={'absolute'} bottom={0} left={0} w={'full'} spacing={0}>
           <Stack px={2} w={'full'} align={'center'}>
             <chakra.form w={'full'} justifyContent={'center'} display={'flex'}
-                         onSubmit={(e) => {
+                         onSubmit={async (e) => {
                            e.preventDefault();
-                           setConversations([...conversations, {name: 't', text: input}])
-                           // moderate(input)
-                           // complete(input)
+                           if (input === '') return;
+                           const text = input;
                            setInput('')
+                           setConversations([...conversations, {name: 't', text}])
+                           // moderate(input)
+                           await complete(text)
                          }}
             >
               <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
                 <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md', 'lg']} value={input}
+                       isDisabled={status === 'LOADING'}
                        onChange={(e) => {
                          setInput(e.target.value)
                        }}
                 />
                 <InputRightElement h={'full'} pr={1}>
-                  <IconButton aria-label={'send'} isLoading={loading}
+                  <IconButton aria-label={'send'} isLoading={status === 'LOADING'}
                               icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>}
                               type={'submit'}
                               variant={'ghost'}/>

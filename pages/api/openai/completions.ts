@@ -1,12 +1,13 @@
 import {OpenAIStream} from '@/utils/OpenAIStream';
-import {NextApiRequest} from 'next';
 
 export const config = {
   runtime: 'edge',
 };
 
-const handler = async (req: NextApiRequest): Promise<Response> => {
-  const {prompt} = req.body;
+const handler = async (req: Request): Promise<Response> => {
+  const {prompt} = (await req.json()) as {
+    prompt?: string;
+  };
 
   const payload = {
     model: 'text-davinci-003',
@@ -21,7 +22,6 @@ const handler = async (req: NextApiRequest): Promise<Response> => {
     best_of: 1, // 1 is default
     user: '',
   };
-
   const stream = await OpenAIStream(payload);
   return new Response(stream);
 };

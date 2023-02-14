@@ -22,7 +22,7 @@ const ConversionCell: FC<ConversionCellProps> = ({name, text}) => {
           <Avatar borderRadius={'2px'} minW={'30px'} w={'30px'} h={'30px'} iconLabel={'icon'} size={'md'} name={name}
                   textTransform={'none'} bg={'bg5'}/>
         )}
-        <Text color={fontColor} fontSize={'md'} fontWeight={'500'} lineHeight={'30px'}>{text}</Text>
+        <Text color={fontColor} fontSize={'md'} fontWeight={'500'}>{text}</Text>
       </HStack>
     </Stack>
   )
