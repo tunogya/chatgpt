@@ -1,4 +1,4 @@
-import {NextApiRequest, NextApiResponse} from "next";
+import {NextApiRequest, NextApiResponse} from 'next';
 
 // GET conversations?offset=0&limit=20
 export default async function handler(
@@ -19,8 +19,8 @@ export default async function handler(
 
 }
 
-// {"items":[
-// {"id":"edfc6efa-9816-4730-98f5-82a26d088eb0",
-// "title":"Hello, how can I assist you? - Assistance Requested",
-// "create_time":"2023-02-14T07:49:04.579497"}],
-// "total":8,"limit":20,"offset":0}
+// {'items':[
+// {'id':'edfc6efa-9816-4730-98f5-82a26d088eb0',
+// 'title':'Hello, how can I assist you? - Assistance Requested',
+// 'create_time':'2023-02-14T07:49:04.579497'}],
+// 'total':8,'limit':20,'offset':0}

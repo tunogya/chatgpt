@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import crypto from "crypto";
-import fs from "fs";
+import crypto from 'crypto';
+import fs from 'fs';
 //
 // type Data = {
 //   name: string
@@ -17,10 +17,10 @@ function createSign(method: string, url: string, timestamp: number, nonce_str: s
   let signStr = `${method}\n${url}\n${timestamp}\n${nonce_str}\n${JSON.stringify(
     order
   )}\n`;
-  let cert = fs.readFileSync("./apiclient_key.pem", "utf-8");
-  let sign = crypto.createSign("RSA-SHA256");
+  let cert = fs.readFileSync('./apiclient_key.pem', 'utf-8');
+  let sign = crypto.createSign('RSA-SHA256');
   sign.update(signStr);
-  return sign.sign(cert, "base64");
+  return sign.sign(cert, 'base64');
 }
 
 export default async function handler(
@@ -31,15 +31,15 @@ export default async function handler(
   let timestamp = Math.floor(new Date().getTime() / 1000);
   let nonce_str = createRandomString(32);
   let signature = createSign(
-    "POST",
-    "/v3/pay/transactions/native",
+    'POST',
+    '/v3/pay/transactions/native',
     timestamp,
     nonce_str,
     order
   );
-  let Authorization = `WECHATPAY2-SHA256-RSA2048 mchid="xxxx",nonce_str="${nonce_str}",timestamp="${timestamp}",signature="${signature}",serial_no="${serial_no}"`;
+  let Authorization = `WECHATPAY2-SHA256-RSA2048 mchid='xxxx',nonce_str='${nonce_str}',timestamp='${timestamp}',signature='${signature}',serial_no='${serial_no}'`;
   try {
-    const requestRes = await fetch("https://api.mch.weixin.qq.com/v3/pay/transactions/native", {
+    const requestRes = await fetch('https://api.mch.weixin.qq.com/v3/pay/transactions/native', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,4 +1,4 @@
-import {createParser, ParsedEvent, ReconnectInterval} from "eventsource-parser";
+import {createParser, ParsedEvent, ReconnectInterval} from 'eventsource-parser';
 
 export async function OpenAIStream(payload: any) {
   const encoder = new TextEncoder();
@@ -6,21 +6,21 @@ export async function OpenAIStream(payload: any) {
 
   let counter = 0;
 
-  const res = await fetch("https://api.openai.com/v1/completions", {
+  const res = await fetch('https://api.openai.com/v1/completions', {
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ""}`,
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
     },
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(payload),
   });
 
   return new ReadableStream({
     async start(controller) {
       function onParse(event: ParsedEvent | ReconnectInterval) {
-        if (event.type === "event") {
+        if (event.type === 'event') {
           const data = event.data;
-          if (data === "[DONE]") {
+          if (data === '[DONE]') {
             controller.close();
             return;
           }

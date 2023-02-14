@@ -1,4 +1,4 @@
-import {NextApiRequest, NextApiResponse} from "next";
+import {NextApiRequest, NextApiResponse} from 'next';
 
 // GET conversations?offset=0&limit=20
 export default async function handler(

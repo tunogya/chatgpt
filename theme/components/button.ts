@@ -1,5 +1,5 @@
 import { defineStyleConfig } from '@chakra-ui/react'
-import {Montserrat} from "@next/font/google";
+import {Montserrat} from '@next/font/google';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -20,10 +20,10 @@ const Button = defineStyleConfig({
     outline: {
       border: '1px solid',
       _hover: {
-        bg: "none",
+        bg: 'none',
       },
       _active: {
-        bg: "none",
+        bg: 'none',
       }
     },
     solid: {
@@ -31,11 +31,11 @@ const Button = defineStyleConfig({
     ghost: {
       px: 3,
       _hover: {
-        bg: "none",
+        bg: 'none',
         opacity: 0.8,
       },
       _active: {
-        bg: "none",
+        bg: 'none',
         opacity: 0.9,
       }
     }

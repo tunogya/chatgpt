@@ -1,15 +1,15 @@
-import {OpenAIStream} from "@/utils/OpenAIStream";
-import {NextApiRequest} from "next";
+import {OpenAIStream} from '@/utils/OpenAIStream';
+import {NextApiRequest} from 'next';
 
 export const config = {
-  runtime: "edge",
+  runtime: 'edge',
 };
 
 const handler = async (req: NextApiRequest): Promise<Response> => {
   const {prompt} = req.body;
 
   const payload = {
-    model: "text-davinci-003",
+    model: 'text-davinci-003',
     prompt,
     temperature: 0.7,
     top_p: 1,

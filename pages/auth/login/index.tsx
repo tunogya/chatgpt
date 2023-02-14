@@ -3,12 +3,12 @@ import {
   Input, InputGroup, InputRightElement,
   Stack,
   Text, useColorModeValue
-} from "@chakra-ui/react";
-import {useMemo, useState} from "react";
-import {useRouter} from "next/router";
-import {useRecoilState} from "recoil";
-import {jwtAtom} from "@/state";
-import * as crypto from "crypto";
+} from '@chakra-ui/react';
+import {useMemo, useState} from 'react';
+import {useRouter} from 'next/router';
+import {useRecoilState} from 'recoil';
+import {jwtAtom} from '@/state';
+import * as crypto from 'crypto';
 
 const Login = () => {
   const router = useRouter()
@@ -61,8 +61,8 @@ const Login = () => {
   }
 
   return (
-    <Stack h={'full'} w={'full'} bg={bg} justify={"center"} align={"center"} spacing={8} px={2}>
-      <Text textAlign={"center"} fontSize={'sm'} color={fontColor}>
+    <Stack h={'full'} w={'full'} bg={bg} justify={'center'} align={'center'} spacing={8} px={2}>
+      <Text textAlign={'center'} fontSize={'sm'} color={fontColor}>
         Welcome to ChatGPT via WizardingPay<br/>
         Log in with your account to continue
       </Text>

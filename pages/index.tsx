@@ -1,7 +1,7 @@
-import {useRouter} from "next/router";
-import {useCallback, useEffect} from "react";
-import {useRecoilValue} from "recoil";
-import {jwtAtom} from "@/state";
+import {useRouter} from 'next/router';
+import {useCallback, useEffect} from 'react';
+import {useRecoilValue} from 'recoil';
+import {jwtAtom} from '@/state';
 
 const Index = () => {
   const router = useRouter()
@@ -24,7 +24,7 @@ const Index = () => {
         await router.push('/auth/login')
       }
     } else {
-      await router.push("/auth/login")
+      await router.push('/auth/login')
     }
   }, [jwt, router])
 
