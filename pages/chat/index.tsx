@@ -7,7 +7,7 @@ import {
   InputGroup,
   InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay,
   Spacer,
-  Stack, chakra,
+  Stack,
   Text, useColorMode, useColorModeValue, useDisclosure, useMediaQuery, Wrap, WrapItem, Heading,
 } from '@chakra-ui/react';
 import {FiLogOut, FiPlus, FiTrash2} from 'react-icons/fi';
@@ -17,7 +17,7 @@ import {useRecoilState} from 'recoil';
 import {jwtAtom} from '@/state';
 import {useRouter} from 'next/router';
 import {RiVipCrown2Line} from 'react-icons/ri';
-import ConversionCell, {ConversionCellProps} from '@/components/ConversionCell';
+import ConversionCell, {Message} from '@/components/ConversionCell';
 import {useEffect, useRef, useState} from 'react';
 
 const Chat = () => {
@@ -31,7 +31,7 @@ const Chat = () => {
   const {isOpen: isOpenMobileMenu, onOpen: onOpenMobileMenu, onClose: onCLoseMobileMenu} = useDisclosure()
   const {isOpen: isOpenCoins, onOpen: onOpenCoins, onClose: onCLoseCoins} = useDisclosure()
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onCLosePass} = useDisclosure()
-  const [messages, setMessages] = useState<ConversionCellProps[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const bottomRef = useRef(null);
 
   const [input, setInput] = useState('');
@@ -45,17 +45,61 @@ const Chat = () => {
 
   const complete = async (input: string) => {
     setStatus('LOADING');
-    const response = await fetch('/api/conversation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    // const response = await fetch('/api/conversation', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     action: "next",
+    //     messages: [
+    //       {
+    //         id: "83cc9d48-c6f3-4b1d-94a2-6603331a5df9",
+    //         role: "user",
+    //         content: {
+    //           content_type: "text",
+    //           parts: ["ay occasionally generate incorrect information"]
+    //         }
+    //       }
+    //     ],
+    //     model: "",
+    //     parent_message_id: "",
+    //   }),
+    // });
+    //
+    // if (!response.ok) {
+    //   setStatus('ERROR')
+    //   setTimeout(() => {
+    //     setStatus('IDLE')
+    //   }, 3_000)
+    //   throw new Error(response.statusText);
+    // }
+    //
+    // const data = response.body;
+    // if (!data) {
+    //   return;
+    // }
+    // const reader = data.getReader();
+    // const decoder = new TextDecoder();
+    // let done = false;
+    //
+    // let chunkValue = '';
+    // while (!done) {
+    //   const {value, done: doneReading} = await reader.read();
+    //   done = doneReading;
+    //   chunkValue = decoder.decode(value);
+    //   // setOutput((prev) => prev + chunkValue);
+    // }
+
+    // FOR TEST
+    setMessages((prev) => [...prev, {
+      id: '83cc9d48-c6f3-4b1d-94a2-6603331a5df9',
+      role: 'bot',
+      content: {
+        content_type: 'text',
+        parts: ["Demo Data"],
       },
-      body: JSON.stringify({
-        prompt: input,
-      }),
-    });
-    const {text} = await response.json();
-    setMessages((prev) => [...prev, {text: text, name: 'chatgpt'}]);
+    }]);
     setStatus('IDLE');
   };
 
@@ -263,7 +307,7 @@ const Chat = () => {
         <Stack h={'full'} w={'full'} pb={'120px'} overflow={'scroll'} spacing={0}>
           {
             messages.length > 0 ? messages.map((item, index) => (
-              <ConversionCell name={item.name} text={item.text} key={index}/>
+              <ConversionCell message={item} key={index}/>
             )) : (
               <Stack align={'center'} justify={'center'} h={'full'}>
                 <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
@@ -274,19 +318,8 @@ const Chat = () => {
         </Stack>
         <Stack position={'absolute'} bottom={0} left={0} w={'full'} spacing={0}>
           <Stack px={2} w={'full'} align={'center'}>
-            <chakra.form w={'full'} justifyContent={'center'} display={'flex'}
-                         onSubmit={async (e) => {
-                           e.preventDefault();
-                           if (input === '') return;
-                           const text = input;
-                           setInput('')
-                           setMessages([...messages, {name: 't', text}])
-                           // moderate(input)
-                           await complete(text)
-                         }}
-            >
               <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
-                <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md', 'lg']} value={input}
+                <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md']} value={input}
                        isDisabled={status === 'LOADING'}
                        onChange={(e) => {
                          setInput(e.target.value)
@@ -294,12 +327,26 @@ const Chat = () => {
                 />
                 <InputRightElement h={'full'} pr={1}>
                   <IconButton aria-label={'send'} isLoading={status === 'LOADING'}
-                              icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>}
-                              type={'submit'}
-                              variant={'ghost'}/>
+                              icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} variant={'ghost'}
+                              onClick={async (e) => {
+                                e.preventDefault();
+                                if (input === '') return;
+                                const text = input;
+                                setInput('')
+                                setMessages([...messages, {
+                                  id: '1',
+                                  role: 'user',
+                                  content: {
+                                    content_type: 'text',
+                                    parts: [text]
+                                  }
+                                }])
+                                // moderate(input)
+                                await complete(text)
+                              }}
+                  />
                 </InputRightElement>
               </InputGroup>
-            </chakra.form>
           </Stack>
           <Stack w={'full'} bg={conversationBg} align={'center'} pt={2} pb={4}>
             <Text fontSize={'xs'} maxW={'container.sm'} textAlign={'center'} px={1} color={'gray.500'}>OpenAI ChatGPT
