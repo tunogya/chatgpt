@@ -8,16 +8,19 @@ const Input = defineStyleConfig({
   sizes: {
     sm: {
       field: {
+        fontSize: 'sm',
         height: '40px',
       }
     },
     md: {
       field: {
+        fontSize: 'md',
         height: '44px',
       }
     },
     lg: {
       field: {
+        fontSize: 'md',
         height: '50px',
       }
     }
