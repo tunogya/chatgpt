@@ -32,14 +32,14 @@ const Chat = () => {
   const {isOpen: isOpenMobileMenu, onOpen: onOpenMobileMenu, onClose: onCLoseMobileMenu} = useDisclosure()
   const {isOpen: isOpenCoins, onOpen: onOpenCoins, onClose: onCLoseCoins} = useDisclosure()
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onCLosePass} = useDisclosure()
+  const [conversations, setConversations] = useState([]);
 
-  const [question, setQuestion] = useState("");
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState("");
+  const [output, setOutput] = useState("");
 
-  const generateAnswer = async (e: any) => {
-    e.preventDefault();
-    setResult("");
+  const complete = async (input: string) => {
+    setOutput("");
     setLoading(true);
     const response = await fetch("/api/openai/completions", {
       method: "POST",
@@ -47,7 +47,7 @@ const Chat = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: question,
+        prompt: input,
       }),
     });
 
@@ -64,14 +64,30 @@ const Chat = () => {
     let done = false;
 
     while (!done) {
-      const { value, done: doneReading } = await reader.read();
+      const {value, done: doneReading} = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setResult((prev) => prev + chunkValue);
+      setOutput((prev) => prev + chunkValue);
     }
 
     setLoading(false);
   };
+
+  const moderate = async (input: string) => {
+    if (!input) {
+      return
+    }
+    const res = await fetch("/moderations", {
+      method: "POST",
+      body: JSON.stringify({
+        input: input,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(res.json())
+  }
 
   const menu = () => {
     return (
@@ -259,8 +275,8 @@ const Chat = () => {
     return (
       <Stack w={'full'} h={'full'} position={"relative"} bg={conversationBg} pt={['44px', '44px', 0]}>
         <Stack h={'full'} w={'full'} pb={'120px'} overflow={"scroll"}>
-          <QuestionCell name={'t'} text={question}/>
-          <AnswerCell text={result}/>
+          <QuestionCell name={'t'} text={input}/>
+          <AnswerCell text={output}/>
         </Stack>
         {/*<Stack align={"center"} justify={'center'} h={'full'}>*/}
         {/*  <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>*/}
@@ -269,11 +285,17 @@ const Chat = () => {
         <Stack position={'absolute'} bottom={0} left={0} w={'full'} spacing={0}>
           <Stack px={2} w={'full'} align={"center"}>
             <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
-              <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md', 'lg']} onChange={(e) => {
-                setQuestion(e.target.value)
-              }}/>
+              <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md', 'lg']}
+                     onChange={(e) => {
+                       setInput(e.target.value)
+                     }}/>
               <InputRightElement h={'full'} pr={1}>
-                <IconButton aria-label={'send'} isLoading={loading} icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} onClick={(e) => generateAnswer(e)}
+                <IconButton aria-label={'send'} isLoading={loading}
+                            icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>}
+                            onClick={() => {
+                              moderate(input)
+                              complete(input)
+                            }}
                             variant={'ghost'}/>
               </InputRightElement>
             </InputGroup>
