@@ -77,7 +77,7 @@ const Chat = () => {
     if (!input) {
       return
     }
-    const res = await fetch("/moderations", {
+    const res = await fetch("/api/openai/moderations", {
       method: "POST",
       body: JSON.stringify({
         input: input,
