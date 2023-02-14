@@ -19,6 +19,7 @@ import {useRouter} from "next/router";
 import {RiVipCrown2Line} from "react-icons/ri";
 import QuestionCell from "@/components/QuestionCell";
 import AnswerCell from "@/components/AnswerCell";
+import {useState} from "react";
 
 const Chat = () => {
   const {colorMode, toggleColorMode} = useColorMode()
@@ -31,6 +32,46 @@ const Chat = () => {
   const {isOpen: isOpenMobileMenu, onOpen: onOpenMobileMenu, onClose: onCLoseMobileMenu} = useDisclosure()
   const {isOpen: isOpenCoins, onOpen: onOpenCoins, onClose: onCLoseCoins} = useDisclosure()
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onCLosePass} = useDisclosure()
+
+  const [question, setQuestion] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState("");
+
+  const generateAnswer = async (e: any) => {
+    e.preventDefault();
+    setResult("");
+    setLoading(true);
+    const response = await fetch("/api/openai/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: question,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      setResult((prev) => prev + chunkValue);
+    }
+
+    setLoading(false);
+  };
 
   const menu = () => {
     return (
@@ -150,7 +191,8 @@ const Chat = () => {
                   <Wrap justify={"space-between"} spacing={3}>
                     {['Annual', 'Quarter', 'Monthly'].map((item) => (
                       <WrapItem key={item}>
-                        <Button w={['140px', '140px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}} h={'60px'}>
+                        <Button w={['140px', '140px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}
+                                h={'60px'}>
                           <Stack w={'full'}>
                             <Text textAlign={"start"} fontSize={'xs'} color={fontColor}
                                   fontWeight={'500'}>{item}</Text>
@@ -192,7 +234,8 @@ const Chat = () => {
   const menuMobile = () => {
     return (
       <HStack h={'44px'} w={'full'} position={'absolute'} top={0} left={0} zIndex={'docked'} borderBottom={'1px solid'}
-              align={"center"} justify={"space-between"} bg={conversationBg} borderColor={'gray.100'} px={1} boxShadow={'sm'}>
+              align={"center"} justify={"space-between"} bg={conversationBg} borderColor={'gray.100'} px={1}
+              boxShadow={'sm'}>
         <IconButton aria-label={'menu'} icon={<HamburgerIcon fontSize={'sm'}/>} onClick={onOpenMobileMenu}
                     variant={"ghost"}/>
         <Drawer
@@ -216,24 +259,8 @@ const Chat = () => {
     return (
       <Stack w={'full'} h={'full'} position={"relative"} bg={conversationBg} pt={['44px', '44px', 0]}>
         <Stack h={'full'} w={'full'} pb={'120px'} overflow={"scroll"}>
-          <QuestionCell name={'t'} text={'List some risk of software company, contains employees and business'}/>
-          <AnswerCell text={`Employee Turnover: High employee turnover can disrupt the workflow and productivity of a software company and lead to increased hiring and training costs.
-
-Competition: The software industry is highly competitive, and companies may face challenges from new entrants and established players alike.
-
-Technological Obsolescence: Rapid changes in technology can make a company's products and services obsolete, leading to lost revenue and decreased competitiveness.
-
-Intellectual Property Disputes: Software companies may face lawsuits or other disputes over the ownership of their products and the technology they use.
-
-Dependence on Key Personnel: Many software companies are heavily dependent on key employees who possess specialized knowledge and skills, and the loss of these employees can have a significant impact on the company's operations.
-
-Cybersecurity Threats: Software companies may face a range of cyber threats, including hacking, data breaches, and cyber-attacks, which can result in the loss of sensitive data, decreased reputation, and financial losses.
-
-Economic Downturns: Economic downturns can lead to decreased demand for software products and services, which can impact a company's revenue and profitability.
-
-Market Adoption: The success of a software company often depends on the rate at which its products and services are adopted by the market, and slow adoption can result in decreased revenue and profitability.
-
-Funding and Cash Flow Challenges: Many software companies are heavily reliant on external funding and cash flow, and any challenges in this area can impact the company's ability to invest in new products, services, and personnel.`}/>
+          <QuestionCell name={'t'} text={question}/>
+          <AnswerCell text={result}/>
         </Stack>
         {/*<Stack align={"center"} justify={'center'} h={'full'}>*/}
         {/*  <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>*/}
@@ -242,9 +269,11 @@ Funding and Cash Flow Challenges: Many software companies are heavily reliant on
         <Stack position={'absolute'} bottom={0} left={0} w={'full'} spacing={0}>
           <Stack px={2} w={'full'} align={"center"}>
             <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
-              <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md', 'lg']}/>
+              <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md', 'lg']} onChange={(e) => {
+                setQuestion(e.target.value)
+              }}/>
               <InputRightElement h={'full'} pr={1}>
-                <IconButton aria-label={'send'} icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>}
+                <IconButton aria-label={'send'} isLoading={loading} icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} onClick={(e) => generateAnswer(e)}
                             variant={'ghost'}/>
               </InputRightElement>
             </InputGroup>

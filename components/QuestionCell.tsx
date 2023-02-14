@@ -14,7 +14,7 @@ const QuestionCell: FC<QuestionCellProps> = ({name, text}) => {
       <HStack maxW={['full', 'container.md']} w={'full'} h={'full'} spacing={6} align={"start"}>
         <Avatar borderRadius={'2px'} minW={'30px'} w={'30px'} h={'30px'} iconLabel={'icon'} size={'md'} name={name}
                 textTransform={'none'} bg={'bg5'}/>
-        <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>{text}</Text>
+        <Text color={fontColor} fontSize={'md'} fontWeight={'500'}>{text}</Text>
       </HStack>
     </Stack>
   )
