@@ -249,7 +249,7 @@ const Chat = () => {
             {menu()}
           </DrawerContent>
         </Drawer>
-        <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>New chat</Text>
+        <Text color={fontColor} fontSize={'md'} fontWeight={'500'}>New chat</Text>
         <IconButton aria-label={'add'} icon={<AddIcon fontSize={'sm'}/>} variant={"ghost"}/>
       </HStack>
     )
