@@ -18,7 +18,7 @@ import {jwtAtom} from '@/state';
 import {useRouter} from 'next/router';
 import {RiVipCrown2Line} from 'react-icons/ri';
 import ConversionCell, {ConversionCellProps} from '@/components/ConversionCell';
-import {useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 const Chat = () => {
   const {colorMode, toggleColorMode} = useColorMode()
@@ -31,14 +31,21 @@ const Chat = () => {
   const {isOpen: isOpenMobileMenu, onOpen: onOpenMobileMenu, onClose: onCLoseMobileMenu} = useDisclosure()
   const {isOpen: isOpenCoins, onOpen: onOpenCoins, onClose: onCLoseCoins} = useDisclosure()
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onCLosePass} = useDisclosure()
-  const [conversations, setConversations] = useState<ConversionCellProps[]>([]);
+  const [messages, setMessages] = useState<ConversionCellProps[]>([]);
+  const bottomRef = useRef(null);
 
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('IDLE');
 
+  useEffect(() => {
+    // @ts-ignore
+    bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+  }, [messages]);
+
+
   const complete = async (input: string) => {
     setStatus('LOADING');
-    const response = await fetch('/api/openai/completions', {
+    const response = await fetch('/api/conversation', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -47,30 +54,8 @@ const Chat = () => {
         prompt: input,
       }),
     });
-
-    if (!response.ok) {
-      setStatus('ERROR')
-      setTimeout(() => {
-        setStatus('IDLE')
-      }, 3_000)
-      throw new Error(response.statusText);
-    }
-
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-
-    let chunkValue = '';
-    while (!done) {
-      const {value, done: doneReading} = await reader.read();
-      done = doneReading;
-      chunkValue = decoder.decode(value);
-      // setOutput((prev) => prev + chunkValue);
-    }
+    const {text} = await response.json();
+    setMessages((prev) => [...prev, {text: text, name: 'chatgpt'}]);
     setStatus('IDLE');
   };
 
@@ -277,7 +262,7 @@ const Chat = () => {
       <Stack w={'full'} h={'full'} position={'relative'} bg={conversationBg} pt={['44px', '44px', 0]}>
         <Stack h={'full'} w={'full'} pb={'120px'} overflow={'scroll'} spacing={0}>
           {
-            conversations.length > 0 ? conversations.map((item, index) => (
+            messages.length > 0 ? messages.map((item, index) => (
               <ConversionCell name={item.name} text={item.text} key={index}/>
             )) : (
               <Stack align={'center'} justify={'center'} h={'full'}>
@@ -285,6 +270,7 @@ const Chat = () => {
                 <Text fontSize={'xs'} color={fontColor}>Power by OpenAI</Text>
               </Stack>
             )}
+          <div ref={bottomRef} />
         </Stack>
         <Stack position={'absolute'} bottom={0} left={0} w={'full'} spacing={0}>
           <Stack px={2} w={'full'} align={'center'}>
@@ -294,7 +280,7 @@ const Chat = () => {
                            if (input === '') return;
                            const text = input;
                            setInput('')
-                           setConversations([...conversations, {name: 't', text}])
+                           setMessages([...messages, {name: 't', text}])
                            // moderate(input)
                            await complete(text)
                          }}

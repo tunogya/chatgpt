@@ -1,6 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 
-// GET conversations?offset=0&limit=20
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -14,9 +13,10 @@ export default async function handler(
   else if (req.method === 'POST') {
     const {action, conversation_id, messages, model, parent_message_id} = req.body;
 
-    return;
+    res.status(200).json({
+      text: 'Hello, test data'
+    })
   }
-
 }
 
 // {'items':[
