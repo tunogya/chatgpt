@@ -159,9 +159,9 @@ const Chat = () => {
           <Modal isOpen={isOpenCoins} onClose={onCLoseCoins} isCentered size={['xs', 'sm', 'md']}>
             <ModalOverlay/>
             <ModalContent>
-              <ModalHeader color={fontColor} px={[2, 4]}>Recharge Coins</ModalHeader>
+              <ModalHeader color={fontColor} px={[3, 4]}>Recharge Coins</ModalHeader>
               <ModalCloseButton color={fontColor}/>
-              <ModalBody pt={0} pb={3} px={[2, 4]}>
+              <ModalBody pt={0} pb={3} px={[3, 4]}>
                 <Stack spacing={3} minH={'300px'}>
                   <Wrap justify={'space-between'} spacing={3}>
                     {[3, 6, 12, 30, 50, 98].map((item) => (
@@ -194,9 +194,9 @@ const Chat = () => {
           <Modal isOpen={isOpenPass} onClose={onCLosePass} isCentered size={['xs', 'sm', 'md']}>
             <ModalOverlay/>
             <ModalContent>
-              <ModalHeader color={fontColor} px={[2, 4]}>Recharge Pass</ModalHeader>
+              <ModalHeader color={fontColor} px={[3, 4]}>Recharge Pass</ModalHeader>
               <ModalCloseButton color={fontColor}/>
-              <ModalBody pt={0} pb={3} px={[2, 4]}>
+              <ModalBody pt={0} pb={3} px={[3, 4]}>
                 <Stack spacing={3} minH={'300px'}>
                   <Card p={3} variant={'outline'} cursor={'pointer'}>
                     <Stack>

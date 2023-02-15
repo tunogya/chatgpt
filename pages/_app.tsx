@@ -4,11 +4,8 @@ import type {AppProps} from 'next/app'
 import Script from 'next/script';
 import Head from 'next/head';
 import {RecoilRoot} from 'recoil';
-import useWindowSize from '@/hooks/useWindowSize';
 
 export default function App({Component, pageProps}: AppProps) {
-  const size = useWindowSize()
-
   return (
     <RecoilRoot>
       <ChakraProvider theme={theme}>
@@ -49,7 +46,7 @@ export default function App({Component, pageProps}: AppProps) {
                 gtag('config', 'G-EDPQ3K7EN8');
               `}
         </Script>
-        <Stack w={size.width || 'full'} h={size.height || 'full'} spacing={0}>
+        <Stack h={'100vh'} w={'100vw'} spacing={0}>
           <Component {...pageProps} />
         </Stack>
       </ChakraProvider>
