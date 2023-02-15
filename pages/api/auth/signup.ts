@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {ddbDocClient} from "@/utils/DynamoDB";
-import {GetCommand} from '@aws-sdk/lib-dynamodb';
+import {PutCommand} from '@aws-sdk/lib-dynamodb';
 import jwt from 'jsonwebtoken';
 
 type Data = {
@@ -25,21 +25,20 @@ export default async function handler(
     return
   }
   try {
-    const { Item } = await ddbDocClient.send(new GetCommand({
+    await ddbDocClient.send(new PutCommand({
       TableName: 'wizardingpay',
-      Key: {
+      Item: {
         PK: `USER#${username}`,
         SK: `USER#${username}`,
+        username,
+        password,
+        create_at: Math.floor(new Date().getTime() / 1000),
+      },
+      ConditionExpression: 'attribute_not_exists(#PK)',
+      ExpressionAttributeNames: {
+        '#PK': 'PK',
       },
     }));
-    if (!Item) {
-      res.status(400).json({ error: 'no user found!' })
-      return
-    }
-    if (Item.password !== password) {
-      res.status(400).json({ error: 'error password!' })
-      return
-    }
     const token = jwt.sign({
       username,
       iat: Math.floor(Date.now() / 1000) - 3, // 3 seconds before

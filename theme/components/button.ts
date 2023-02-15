@@ -15,18 +15,25 @@ const Button = defineStyleConfig({
       fontWeight: '500',
       height: '44px',
     },
+    lg: {
+      fontSize: 'sm',
+      fontWeight: '500',
+      height: '48px',
+    }
   },
   variants: {
     outline: {
       border: '1px solid',
-      _hover: {
-        bg: 'none',
-      },
-      _active: {
-        bg: 'none',
-      }
+      // @ts-ignore
+      _hover: null,
+      // @ts-ignore
+      _active: null,
     },
     solid: {
+      // @ts-ignore
+      _hover: null,
+      // @ts-ignore
+      _active: null,
     },
     ghost: {
       px: 3,

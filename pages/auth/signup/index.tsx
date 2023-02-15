@@ -1,6 +1,6 @@
 import {
-  Button, Divider, FormControl, FormErrorMessage, FormHelperText, HStack, IconButton,
-  Input, InputGroup, InputRightElement,
+  Button, FormControl, FormErrorMessage, FormHelperText, HStack,
+  Input, InputGroup, InputRightElement, Spacer,
   Stack,
   Text, useColorModeValue
 } from '@chakra-ui/react';
@@ -9,8 +9,6 @@ import {useRouter} from 'next/router';
 import {useRecoilState} from 'recoil';
 import {jwtAtom} from '@/state';
 import * as crypto from 'crypto';
-import {FaTelegramPlane} from "react-icons/fa";
-import Link from "next/link";
 
 const Login = () => {
   const router = useRouter()
@@ -22,6 +20,10 @@ const Login = () => {
   const bg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
 
+  const isInvalidPassword = useMemo(() => {
+    return password.length < 10 && password.length > 0
+  }, [password])
+
   const hashPassword = (password: string) => {
     // add salt and hash 1000 times
     let pwd = password
@@ -32,11 +34,8 @@ const Login = () => {
   }
 
   const login = async () => {
-    if (username.length === 0 || password.length === 0) {
-      return
-    }
     setPending(true)
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -61,17 +60,14 @@ const Login = () => {
     }
   }
 
-  const loginWithTelegram = () => {
-    // @ts-ignore
-    window?.Telegram.Login.auth({ bot_id: process.env.BOT_TOKEN || '', request_access: 'write', embed: 1 }, (data) => {
-      console.log(data);
-      if (!data) {
-      }
-    });
-  };
-
   return (
     <Stack h={'full'} w={'full'} bg={bg} justify={'center'} align={'center'} spacing={8} px={2}>
+      <HStack w={['full', '300px']}>
+        <Button size={'xs'} onClick={() => {
+          router.back()
+        }}>Back</Button>
+        <Spacer/>
+      </HStack>
       <Text textAlign={'center'} fontSize={'sm'} fontWeight={'500'} color={fontColor}>
         Welcome to ChatGPT via WizardingPay
       </Text>
@@ -87,7 +83,7 @@ const Login = () => {
                    onChange={(e) => setUsername(e.target.value)}/>
           </InputGroup>
         </FormControl>
-        <FormControl>
+        <FormControl isInvalid={isInvalidPassword}>
           <InputGroup variant={'outline'}>
             <Input placeholder={'Password'} color={fontColor} type={show ? 'text' : 'password'} value={password}
                    onInput={(e) => {
@@ -97,25 +93,25 @@ const Login = () => {
                    }}
                    onChange={(e) => setPassword(e.target.value)}/>
             <InputRightElement width='4.5rem'>
-              <Button h={'1.75rem'} size={'xs'} color={fontColor} onClick={() => setShow(!show)}>
+              <Button h={'1.75rem'} size={'sm'} color={fontColor} onClick={() => setShow(!show)}>
                 {show ? 'Hide' : 'Show'}
               </Button>
             </InputRightElement>
           </InputGroup>
+          { isInvalidPassword ? (
+            <FormErrorMessage fontSize={'xs'}>
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
+              at last 10 characters
+            </FormErrorMessage>
+          ) : (
+            <FormHelperText fontSize={'xs'}>
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
+              at last 10 characters
+            </FormHelperText>
+          ) }
         </FormControl>
         <Button w={['full', '300px']} size={'lg'} color={"white"} bg={'#10A37F'} onClick={login} isLoading={pending}>
-          Continue
-        </Button>
-        <Stack alignSelf={"center"}>
-          <Text fontSize={'xs'} fontWeight={'500'}>Don&apos;t have an account? <Link href={'/auth/signup'} style={{ color: '#10A37F' }} >Sign up</Link></Text>
-        </Stack>
-        <HStack>
-          <Divider/>
-          <Text fontSize={'xx-small'} color={fontColor}>OR</Text>
-          <Divider/>
-        </HStack>
-        <Button w={['full', '300px']} px={3} gap={3} size={'lg'} justifyContent={"start"} leftIcon={<FaTelegramPlane fontSize={'20px'}/>} variant={'outline'} borderColor={'fontColor2'} color={fontColor} onClick={loginWithTelegram}>
-          Continue with Telegram
+          Sign up
         </Button>
       </Stack>
     </Stack>

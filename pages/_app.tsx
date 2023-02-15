@@ -39,7 +39,8 @@ export default function App({Component, pageProps}: AppProps) {
         </Head>
         <Script src={'https://telegram.org/js/games.js'}/>
         <Script id={'telegram-web-app'} src={'https://telegram.org/js/telegram-web-app.js'}/>
-        <Script src={'https://www.googletagmanager.com/gtag/js?id=G-EDPQ3K7EN8'}></Script>
+        <Script src={'https://www.googletagmanager.com/gtag/js?id=G-EDPQ3K7EN8'}/>
+        <Script id={'telegram'} src={'https://telegram.org/js/telegram-widget.js'}/>
         <Script id='google-tag-manager' strategy='afterInteractive'>
           {`
                 window.dataLayer = window.dataLayer || [];

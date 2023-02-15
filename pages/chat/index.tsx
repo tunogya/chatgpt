@@ -124,14 +124,12 @@ const Chat = () => {
       <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}
              opacity={[isOpenMobileMenu ? 1 : 0, 1]}>
         <Button variant={'outline'} boxShadow={'md'} h={'46px'} borderColor={'whiteAlpha.400'}
-                leftIcon={<FiPlus color={'white'}/>}
+                leftIcon={<FiPlus color={'white'}/>} justifyContent={"start"} gap={1} color={"white"}
                 _hover={{bg: 'bg3'}}>
-          <Text color={'white'} textAlign={'start'} w={'full'}>
-            New chat
-          </Text>
+          New chat
         </Button>
         <Stack pt={2}>
-          <Button variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} _hover={{bg: 'bg3'}}>
+          <Button variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1} _hover={{bg: 'bg3'}}>
             <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
                   whiteSpace={'nowrap'} fontSize={'sm'}>
               What is this? How does it work?
@@ -141,12 +139,11 @@ const Chat = () => {
         <Spacer/>
         <Stack spacing={1}>
           <Box w={'full'} h={'1px'} bg={'whiteAlpha.400'}/>
-          <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} _hover={{bg: 'bg3'}}>
-            <Text color={'white'} textAlign={'start'} w={'full'}>
-              Clear conversations
-            </Text>
+          <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} gap={1} justifyContent={"start"} color={'white'}
+                  _hover={{bg: 'bg3'}}>
+            Clear conversations
           </Button>
-          <Button variant={'ghost'} leftIcon={<IoWalletOutline color={'white'}/>} _hover={{bg: 'bg3'}}
+          <Button variant={'ghost'} leftIcon={<IoWalletOutline color={'white'}/>} _hover={{bg: 'bg3'}} gap={1}
                   onClick={onOpenCoins}>
             <Text color={'white'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
                   pr={'2px'}>
@@ -181,7 +178,7 @@ const Chat = () => {
               </ModalBody>
             </ModalContent>
           </Modal>
-          <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}}
+          <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1}
                   onClick={onOpenPass}>
             <Text color={'white'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
                   pr={'2px'}>
@@ -252,25 +249,18 @@ const Chat = () => {
               </ModalBody>
             </ModalContent>
           </Modal>
-          <Button variant={'ghost'}
+          <Button variant={'ghost'} gap={1} justifyContent={'start'} color={"white"}
                   leftIcon={colorMode === 'light' ? <MoonIcon color={'white'}/> : <SunIcon color={'white'}/>}
                   _hover={{bg: 'bg3'}} onClick={toggleColorMode}>
-            <Text color={'white'} textAlign={'start'} w={'full'}>
-              {colorMode === 'light' ? 'Dark' : 'Light'} mode
-            </Text>
+            {colorMode === 'light' ? 'Dark' : 'Light'} mode
           </Button>
-          {/*<Button variant={'ghost'} leftIcon={<FiArrowUpCircle color={'white'}/>} _hover={{bg: 'bg3'}}>*/}
-          {/*  <Text color={'white'} textAlign={'start'} w={'full'}>*/}
-          {/*    Updates & FAQ*/}
-          {/*  </Text>*/}
-          {/*</Button>*/}
-          <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} _hover={{bg: 'bg3'}}>
-            <Text color={'white'} textAlign={'start'} w={'full'} onClick={() => {
-              setJWT('')
-              router.push('/auth/login')
-            }}>
-              Log out
-            </Text>
+          <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} justifyContent={"start"} gap={1} color={'white'}
+                  _hover={{bg: 'bg3'}}
+                  onClick={() => {
+                    setJWT('')
+                    router.push('/auth/login')
+                  }}>
+            Log out
           </Button>
         </Stack>
       </Stack>
@@ -314,39 +304,39 @@ const Chat = () => {
                 <Text fontSize={'xs'} color={fontColor}>Power by OpenAI</Text>
               </Stack>
             )}
-          <div ref={bottomRef} />
+          <div ref={bottomRef}/>
         </Stack>
         <Stack position={'absolute'} bottom={0} left={0} w={'full'} spacing={0}>
           <Stack px={2} w={'full'} align={'center'}>
-              <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
-                <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md']} value={input}
-                       isDisabled={status === 'LOADING'}
-                       onChange={(e) => {
-                         setInput(e.target.value)
-                       }}
+            <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
+              <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md']} value={input}
+                     isDisabled={status === 'LOADING'}
+                     onChange={(e) => {
+                       setInput(e.target.value)
+                     }}
+              />
+              <InputRightElement h={'full'} pr={1}>
+                <IconButton aria-label={'send'} isLoading={status === 'LOADING'}
+                            icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} variant={'ghost'}
+                            onClick={async (e) => {
+                              e.preventDefault();
+                              if (input === '') return;
+                              const text = input;
+                              setInput('')
+                              setMessages([...messages, {
+                                id: '1',
+                                role: 'user',
+                                content: {
+                                  content_type: 'text',
+                                  parts: [text]
+                                }
+                              }])
+                              // moderate(input)
+                              await complete(text)
+                            }}
                 />
-                <InputRightElement h={'full'} pr={1}>
-                  <IconButton aria-label={'send'} isLoading={status === 'LOADING'}
-                              icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} variant={'ghost'}
-                              onClick={async (e) => {
-                                e.preventDefault();
-                                if (input === '') return;
-                                const text = input;
-                                setInput('')
-                                setMessages([...messages, {
-                                  id: '1',
-                                  role: 'user',
-                                  content: {
-                                    content_type: 'text',
-                                    parts: [text]
-                                  }
-                                }])
-                                // moderate(input)
-                                await complete(text)
-                              }}
-                  />
-                </InputRightElement>
-              </InputGroup>
+              </InputRightElement>
+            </InputGroup>
           </Stack>
           <Stack w={'full'} bg={conversationBg} align={'center'} pt={2} pb={4}>
             <Text fontSize={'xs'} maxW={'container.sm'} textAlign={'center'} px={1} color={'gray.500'}>OpenAI ChatGPT
