@@ -114,7 +114,7 @@ const Login = () => {
           <Text fontSize={'xx-small'} color={fontColor}>OR</Text>
           <Divider/>
         </HStack>
-        <Button w={['full', '300px']} px={3} gap={3} size={'lg'} justifyContent={"start"} leftIcon={<FaTelegramPlane fontSize={'20px'}/>} variant={'outline'} borderColor={'fontColor2'} color={fontColor} onClick={loginWithTelegram}>
+        <Button w={['full', '300px']} px={3} gap={1} size={'lg'} justifyContent={"start"} leftIcon={<FaTelegramPlane fontSize={'20px'}/>} variant={'outline'} borderColor={'fontColor2'} color={fontColor} onClick={loginWithTelegram}>
           Continue with Telegram
         </Button>
       </Stack>
