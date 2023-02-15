@@ -1,12 +1,55 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {ddbDocClient} from "@/utils/DynamoDB";
-import {GetCommand, UpdateCommand} from '@aws-sdk/lib-dynamodb';
+import {UpdateCommand} from '@aws-sdk/lib-dynamodb';
 import jwt from 'jsonwebtoken';
+const { subtle } = require("crypto").webcrypto;
 
 type Data = {
   error?: string
   token?: string
+}
+
+type TransformInitData = {
+  [k: string]: string;
+};
+
+async function validate(data: TransformInitData, botToken: string) {
+  const encoder = new TextEncoder();
+
+  const checkString = Object.keys(data)
+    .filter((key) => key !== "hash")
+    .map((key) => `${key}=${data[key]}`)
+    .sort()
+    .join("\n");
+
+  const secretKey = await subtle.importKey(
+    "raw",
+    encoder.encode("WebAppData"),
+    { name: "HMAC", hash: "SHA-256" },
+    true,
+    ["sign"]
+  );
+  const secret = await subtle.sign("HMAC", secretKey, encoder.encode(botToken));
+  const signatureKey = await subtle.importKey(
+    "raw",
+    secret,
+    { name: "HMAC", hash: "SHA-256" },
+    true,
+    ["sign"]
+  );
+  const signature = await subtle.sign(
+    "HMAC",
+    signatureKey,
+    encoder.encode(checkString)
+  );
+
+  // @ts-ignore
+  const hex = [...new Uint8Array(signature)]
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  return data.hash === hex;
 }
 
 export default async function handler(
@@ -20,7 +63,14 @@ export default async function handler(
     return
   }
 
-  const { id, first_name, username, photo_url, auth_date, hash } = req.body
+  const valid = await validate(req.body, process.env.BOT_TOKEN || '')
+
+  if (!valid) {
+    res.status(400).json({ error: 'invalid telegram user!' })
+    return
+  }
+
+  const { id, first_name, username, photo_url, auth_date } = req.body
 
   try {
     await ddbDocClient.send(new UpdateCommand({
@@ -31,6 +81,7 @@ export default async function handler(
         first_name,
         photo_url,
         auth_date,
+        update_at: Math.floor(new Date().getTime() / 1000),
       },
     }));
     const token = jwt.sign({
