@@ -359,7 +359,7 @@ const Chat = () => {
   };
 
   return (
-    <Stack direction={['column', 'column', 'row']} h={'100vh'} w={'full'} spacing={0}>
+    <Stack direction={['column', 'column', 'row']} h={'full'} w={'full'} spacing={0}>
       {isMobile ? menuMobile() : menu()}
       {conversation()}
     </Stack>
