@@ -1,10 +1,10 @@
 import {
-  Button, Divider, FormControl, FormErrorMessage, FormHelperText, HStack, IconButton,
+  Button, Divider, FormControl, HStack,
   Input, InputGroup, InputRightElement,
   Stack,
   Text, useColorModeValue
 } from '@chakra-ui/react';
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 import {useRouter} from 'next/router';
 import {useRecoilState} from 'recoil';
 import {jwtAtom} from '@/state';
@@ -18,6 +18,7 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [pending, setPending] = useState(false)
+  const [telegramPending, setTelegramPending] = useState(false)
   const [, setJWT] = useRecoilState(jwtAtom)
   const bg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
@@ -61,11 +62,40 @@ const Login = () => {
     }
   }
 
-  const loginWithTelegram = () => {
+  const loginWithTelegram = async () => {
+    setTelegramPending(true)
     // @ts-ignore
-    window?.Telegram.Login.auth({ bot_id: process.env.BOT_TOKEN || '', request_access: 'write', embed: 1 }, (data) => {
-      console.log(data);
+    window?.Telegram.Login.auth({ bot_id: process.env.BOT_TOKEN || '', request_access: 'write', embed: 1 }, async (data) => {
       if (!data) {
+        // setTelegramPending(false)
+        // return
+        router.push({
+          pathname: '/auth/error',
+          query: {
+            error: 'Telegram login failed'
+          }
+        })
+        return
+      }
+      const res = await fetch('/api/auth/login/telegram', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      })
+      if (res.status === 200) {
+        const {token} = await res.json()
+        setJWT(token)
+        await router.push('/chat')
+      } else {
+        const {error} = await res.json()
+        await router.push({
+          pathname: '/auth/error',
+          query: {
+            error
+          }
+        })
       }
     });
   };
@@ -114,7 +144,9 @@ const Login = () => {
           <Text fontSize={'xx-small'} color={fontColor}>OR</Text>
           <Divider/>
         </HStack>
-        <Button w={['full', '300px']} px={3} gap={1} size={'lg'} justifyContent={"start"} leftIcon={<FaTelegramPlane fontSize={'20px'}/>} variant={'outline'} borderColor={'fontColor2'} color={fontColor} onClick={loginWithTelegram}>
+        <Button w={['full', '300px']} px={3} gap={1} size={'lg'} justifyContent={"start"} isLoading={telegramPending}
+                leftIcon={<FaTelegramPlane fontSize={'20px'}/>} variant={'outline'} borderColor={'fontColor2'}
+                color={fontColor} onClick={loginWithTelegram}>
           Continue with Telegram
         </Button>
       </Stack>
