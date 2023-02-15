@@ -135,7 +135,7 @@ const Login = () => {
           Continue
         </Button>
         <Stack alignSelf={"center"}>
-          <Text fontSize={'xs'} fontWeight={'500'}>Don&apos;t have an account? <Link href={'/auth/signup'} style={{ color: '#10A37F' }} >Sign up</Link></Text>
+          <Text fontSize={'xs'} fontWeight={'500'} color={fontColor}>Don&apos;t have an account? <Link href={'/auth/signup'} style={{ color: '#10A37F' }} >Sign up</Link></Text>
         </Stack>
         <HStack>
           <Divider/>

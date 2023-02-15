@@ -1,55 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type {NextApiRequest, NextApiResponse} from 'next';
 import {ddbDocClient} from "@/utils/DynamoDB";
 import {UpdateCommand} from '@aws-sdk/lib-dynamodb';
 import jwt from 'jsonwebtoken';
-const { subtle } = require("crypto").webcrypto;
+import {createHash, createHmac} from 'crypto';
 
 type Data = {
   error?: string
   token?: string
-}
-
-type TransformInitData = {
-  [k: string]: string;
-};
-
-async function validate(data: TransformInitData, botToken: string) {
-  const encoder = new TextEncoder();
-
-  const checkString = Object.keys(data)
-    .filter((key) => key !== "hash")
-    .map((key) => `${key}=${data[key]}`)
-    .sort()
-    .join("\n");
-
-  const secretKey = await subtle.importKey(
-    "raw",
-    encoder.encode("WebAppData"),
-    { name: "HMAC", hash: "SHA-256" },
-    true,
-    ["sign"]
-  );
-  const secret = await subtle.sign("HMAC", secretKey, encoder.encode(botToken));
-  const signatureKey = await subtle.importKey(
-    "raw",
-    secret,
-    { name: "HMAC", hash: "SHA-256" },
-    true,
-    ["sign"]
-  );
-  const signature = await subtle.sign(
-    "HMAC",
-    signatureKey,
-    encoder.encode(checkString)
-  );
-
-  // @ts-ignore
-  const hex = [...new Uint8Array(signature)]
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-
-  return data.hash === hex;
 }
 
 export default async function handler(
@@ -63,14 +21,35 @@ export default async function handler(
     return
   }
 
-  const valid = await validate(req.body, process.env.BOT_TOKEN || '')
+  const {id, first_name, username, photo_url, auth_date} = req.body
 
-  if (!valid) {
-    res.status(400).json({ error: 'invalid telegram user!' })
+  // // auth_date must be less than 5 minutes
+  if (Math.floor(new Date().getTime() / 1000) - auth_date > 300) {
+    res.status(400).json({ error: 'timeout, try again later!' })
     return
   }
 
-  const { id, first_name, username, photo_url, auth_date } = req.body
+  const secret = createHash('sha256')
+    .update(process.env.BOT_TOKEN || '')
+    .digest()
+
+  // @ts-ignore
+  function checkSignature({hash, ...data}) {
+    const checkString = Object.keys(data)
+      .sort()
+      .filter((k) => data[k])
+      .map(k => (`${k}=${data[k]}`))
+      .join('\n');
+    const hmac = createHmac('sha256', secret)
+      .update(checkString)
+      .digest('hex');
+    return hmac === hash;
+  }
+
+  if (!checkSignature(req.body)) {
+    res.status(400).json({error: 'invalid telegram user!'})
+    return
+  }
 
   try {
     await ddbDocClient.send(new UpdateCommand({
@@ -78,11 +57,20 @@ export default async function handler(
       Key: {
         PK: `TG-USER#${id}`,
         SK: `TG-USER#${id}`,
-        first_name,
-        photo_url,
-        auth_date,
-        update_at: Math.floor(new Date().getTime() / 1000),
       },
+      UpdateExpression: 'SET #username = :username, #first_name = :first_name, #photo_url = :photo_url, #update_at = :update_at',
+      ExpressionAttributeNames: {
+        '#username': 'username',
+        '#first_name': 'first_name',
+        '#photo_url': 'photo_url',
+        '#update_at': 'update_at',
+      },
+      ExpressionAttributeValues: {
+        ':username': username,
+        ':first_name': first_name,
+        ':photo_url': photo_url,
+        ':update_at': Math.floor(new Date().getTime() / 1000),
+      }
     }));
     const token = jwt.sign({
       id: `TG-USER#${id}`,
@@ -91,8 +79,8 @@ export default async function handler(
     }, process.env.JWT_SECRET || '', {
       expiresIn: '7d',
     })
-    res.status(200).json({ token })
+    res.status(200).json({token})
   } catch (e) {
-    res.status(400).json({ error: 'try again later!' })
+    res.status(400).json({error: 'try again later!'})
   }
 }
