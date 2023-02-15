@@ -41,7 +41,7 @@ export default async function handler(
       return
     }
     const token = jwt.sign({
-      username,
+      id: `USER#${username}`,
       iat: Math.floor(Date.now() / 1000) - 3, // 3 seconds before
     }, process.env.JWT_SECRET || '', {
       expiresIn: '7d',

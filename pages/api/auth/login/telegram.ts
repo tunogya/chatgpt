@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {ddbDocClient} from "@/utils/DynamoDB";
-import {GetCommand} from '@aws-sdk/lib-dynamodb';
+import {GetCommand, UpdateCommand} from '@aws-sdk/lib-dynamodb';
 import jwt from 'jsonwebtoken';
 
 type Data = {
@@ -19,29 +19,23 @@ export default async function handler(
     res.status(405).end(`Method ${req.method} Not Allowed`)
     return
   }
-  const { username, password } = req.body
-  if (!username || !password) {
-    res.status(400).json({ error: 'Username and password is required' })
-    return
-  }
+
+  const { id, first_name, username, photo_url, auth_date, hash } = req.body
+
   try {
-    const { Item } = await ddbDocClient.send(new GetCommand({
+    await ddbDocClient.send(new UpdateCommand({
       TableName: 'wizardingpay',
       Key: {
-        PK: `USER#${username}`,
-        SK: `USER#${username}`,
+        PK: `TG-USER#${id}`,
+        SK: `TG-USER#${id}`,
+        first_name,
+        photo_url,
+        auth_date,
       },
     }));
-    if (!Item) {
-      res.status(400).json({ error: 'no user found!' })
-      return
-    }
-    if (Item.password !== password) {
-      res.status(400).json({ error: 'error password!' })
-      return
-    }
     const token = jwt.sign({
-      username,
+      id: `TG-USER#${id}`,
+      username: username,
       iat: Math.floor(Date.now() / 1000) - 3, // 3 seconds before
     }, process.env.JWT_SECRET || '', {
       expiresIn: '7d',

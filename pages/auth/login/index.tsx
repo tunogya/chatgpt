@@ -67,9 +67,7 @@ const Login = () => {
     // @ts-ignore
     window?.Telegram.Login.auth({ bot_id: process.env.BOT_TOKEN || '', request_access: 'write', embed: 1 }, async (data) => {
       if (!data) {
-        // setTelegramPending(false)
-        // return
-        router.push({
+        await router.push({
           pathname: '/auth/error',
           query: {
             error: 'Telegram login failed'
