@@ -8,3 +8,9 @@ export const jwtAtom = atom({
   default: '',
   effects_UNSTABLE: [persistAtom],
 })
+
+export const conversationListAtom = atom({
+  key: 'conversationList',
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+})

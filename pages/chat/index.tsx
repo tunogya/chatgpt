@@ -32,7 +32,7 @@ import {FiLogOut, FiPlus, FiTrash2} from 'react-icons/fi';
 import {AddIcon, HamburgerIcon, MoonIcon, SunIcon} from '@chakra-ui/icons';
 import {IoPaperPlaneOutline, IoWalletOutline, IoChatboxOutline} from 'react-icons/io5';
 import {useRecoilState} from 'recoil';
-import {jwtAtom} from '@/state';
+import {conversationListAtom, jwtAtom} from '@/state';
 import {useRouter} from 'next/router';
 import {RiVipCrown2Line} from 'react-icons/ri';
 import ConversionCell, {Message} from '@/components/ConversionCell';
@@ -59,6 +59,7 @@ const Chat = () => {
   const bottomRef = useRef(null);
   const [currentConversation, setCurrentConversation] = useState<Conversation | undefined>(undefined);
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversationList, setConversationList] = useRecoilState(conversationListAtom);
 
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('IDLE');
@@ -67,6 +68,14 @@ const Chat = () => {
     // @ts-ignore
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
+
+  const updateConversationList = useCallback(async () => {
+    setConversations(conversationList)
+  }, [conversationList])
+
+  useEffect(() => {
+    updateConversationList()
+  }, [updateConversationList])
 
   const getConversationList = useCallback(async () => {
     const response = await fetch('/api/conversation', {
@@ -77,8 +86,50 @@ const Chat = () => {
       },
     });
     const data = await response.json();
-    setConversations(data.items);
+    setConversationList(data.items);
   }, [jwt]);
+
+  const clearConversationList = async () => {
+    if (!conversations.length) {
+      return;
+    }
+    const response = await fetch('/api/conversation', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify({
+          ids: conversations.map((c) => c.id),
+        })
+      }
+    );
+    if (!response.ok) {
+      return
+    }
+    setConversationList([]);
+    setMessages([]);
+  }
+
+  const getMessages = useCallback(async () => {
+    if (currentConversation) {
+      const response = await fetch(`/api/conversation/${currentConversation.id.split('#')[1]}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      const data = await response.json();
+      if (data.messages) {
+        setMessages(data.messages);
+      }
+    }
+  }, [jwt, currentConversation])
+
+  useEffect(() => {
+    getMessages()
+  }, [getMessages])
 
   useEffect(() => {
     getConversationList()
@@ -93,7 +144,7 @@ const Chat = () => {
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify({
-        conversation_id: undefined,
+        conversation_id: currentConversation?.id || undefined,
         action: "next",
         messages: [
           {
@@ -151,6 +202,7 @@ const Chat = () => {
       },
     }]);
     setStatus('IDLE');
+    await getConversationList();
   };
 
   const moderate = async (input: string) => {
@@ -302,15 +354,17 @@ const Chat = () => {
     return (
       <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}
              opacity={[isOpenMobileMenu ? 1 : 0, 1]}>
-        <Button variant={'outline'} boxShadow={'md'} minH={'46px'} borderColor={'whiteAlpha.400'}
+        <Button variant={'outline'} boxShadow={'md'} minH={'46px'} borderColor={'whiteAlpha.400'} _hover={{bg: 'bg3'}}
                 leftIcon={<FiPlus color={'white'}/>} justifyContent={"start"} gap={1} color={"white"}
-                _hover={{bg: 'bg3'}}>
+                onClick={() => {
+                  setCurrentConversation(undefined)
+                }}>
           New chat
         </Button>
         <Stack pt={2} h={'full'} overflow={"scroll"}>
           {conversations.map((item) => (
             <Button key={item.id} variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
-                    _hover={{bg: 'bg3'}}>
+                    _hover={{bg: 'bg3'}} onClick={() => { setCurrentConversation(item) }}>
               <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
                     whiteSpace={'nowrap'} fontSize={'sm'}>
                 {item.title}
@@ -322,8 +376,7 @@ const Chat = () => {
         <Stack spacing={1}>
           <Box w={'full'} h={'1px'} bg={'whiteAlpha.400'}/>
           <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} gap={1} justifyContent={"start"}
-                  color={'white'}
-                  _hover={{bg: 'bg3'}}>
+                  color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
             Clear conversations
           </Button>
           <Button variant={'ghost'} leftIcon={<IoWalletOutline color={'white'}/>} _hover={{bg: 'bg3'}} gap={1}

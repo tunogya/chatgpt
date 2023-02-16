@@ -97,5 +97,27 @@ export default async function handler(
       })
       // return a stream
     }
+    else if (req.method === 'DELETE') {
+      const {ids} = req.body;
+      console.log(ids)
+      try {
+        await ddbDocClient.send(new BatchWriteCommand({
+          RequestItems: {
+            'wizardingpay': ids.map((id: string) => ({
+              DeleteRequest: {
+                Key: {
+                  PK: user_id,
+                  SK: id,
+                }
+              }
+            }))
+          }
+        }));
+        res.status(200).json({success: true})
+      } catch (e) {
+        res.status(500).json({error: e})
+        return
+      }
+    }
   })
 }

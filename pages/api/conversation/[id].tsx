@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {ddbDocClient} from "@/utils/DynamoDB";
-import {GetCommand, QueryCommand, UpdateCommand} from "@aws-sdk/lib-dynamodb";
+import {DeleteCommand, GetCommand, QueryCommand, UpdateCommand} from "@aws-sdk/lib-dynamodb";
 import jwt from "jsonwebtoken";
 
 export default async function handler(
@@ -24,8 +24,8 @@ export default async function handler(
         const conversationRes = await ddbDocClient.send(new GetCommand({
           TableName: 'wizardingpay',
           Key: {
-            pk: user_id,
-            sk: id,
+            PK: user_id,
+            SK: `CONVERSATION#${id}`,
           },
         }))
         // get all message from this conversation
@@ -38,7 +38,7 @@ export default async function handler(
             TableName: 'wizardingpay',
             KeyConditionExpression: '#pk = :pk and begins_with(#sk, :sk)',
             ExpressionAttributeValues: {
-              ':pk': conversationRes.Item.id,
+              ':pk': conversationRes.Item.SK,
               ':sk': 'MESSAGE#',
             },
             ExpressionAttributeNames: {
@@ -47,12 +47,15 @@ export default async function handler(
             }
           }))
           conversationRes.Item.messages = messagesRes.Items
-          res.status(200).json({data: conversationRes.Item})
+          res.status(200).json(conversationRes.Item)
+        } else {
+          res.status(404).json({error: 'No conversation found'})
         }
       } catch (e) {
         res.status(500).json({error: 'No conversation found'})
       }
-    } else if (req.method === 'PATCH') {
+    }
+    else if (req.method === 'PATCH') {
       const {id} = req.query
       const needToUpdateObject = req.body
       const UpdateExpression = Object.keys(needToUpdateObject).map(key => `#${key} = :${key}`).join(', ')
@@ -68,12 +71,27 @@ export default async function handler(
         await ddbDocClient.send(new UpdateCommand({
           TableName: 'wizardingpay',
           Key: {
-            pk: id,
-            sk: id,
+            PK: user_id,
+            SK: id,
           },
           UpdateExpression,
           ExpressionAttributeNames,
           ExpressionAttributeValues,
+        }))
+        res.status(200).json({success: true})
+      } catch (e) {
+        res.status(500).json({success: false})
+      }
+    }
+    else if (req.method === 'DELETE') {
+      const {id} = req.query
+      try {
+        await ddbDocClient.send(new DeleteCommand({
+          TableName: 'wizardingpay',
+          Key: {
+            PK: user_id,
+            SK: id,
+          },
         }))
         res.status(200).json({success: true})
       } catch (e) {
