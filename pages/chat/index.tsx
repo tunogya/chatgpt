@@ -24,11 +24,9 @@ import {
   useColorModeValue,
   useDisclosure,
   useMediaQuery,
-  Wrap,
-  WrapItem,
   Heading,
   DrawerBody,
-  DrawerHeader,
+  DrawerHeader, SimpleGrid,
 } from '@chakra-ui/react';
 import {FiLogOut, FiPlus, FiTrash2} from 'react-icons/fi';
 import {AddIcon, HamburgerIcon, MoonIcon, SunIcon} from '@chakra-ui/icons';
@@ -142,15 +140,13 @@ const Chat = () => {
   const coinsBody = () => {
     return (
       <Stack spacing={3} minH={'300px'}>
-        <Wrap justify={'space-between'} spacing={3}>
+        <SimpleGrid columns={[2, null, 3]} spacing={3}>
           {[3, 6, 12, 30, 50, 98].map((item) => (
-            <WrapItem key={item}>
-              <Button minW={['140px', '140px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}>
-                {item} Coins
-              </Button>
-            </WrapItem>
+            <Button key={item} w={['full', 'full', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}>
+              {item} Coins
+            </Button>
           ))}
-        </Wrap>
+        </SimpleGrid>
         <Text fontSize={'xs'} color={fontColor}>
           Tips: recharge is valid forever.
         </Text>
@@ -227,20 +223,17 @@ const Chat = () => {
         {/*</Card>*/}
         <br/>
         <Text fontSize={'sm'} fontWeight={'500'} color={fontColor}>Join Priority Pass</Text>
-        <Wrap justify={'space-between'} spacing={3}>
+        <SimpleGrid columns={[2, null, 3]} spacing={3}>
           {['Annual', 'Quarter', 'Monthly'].map((item) => (
-            <WrapItem key={item}>
-              <Button w={['140px', '140px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}
-                      h={'60px'}>
-                <Stack w={'full'}>
-                  <Text textAlign={'start'} fontSize={'xs'} color={fontColor}
-                        fontWeight={'500'}>{item}</Text>
-                  <Text textAlign={'start'} fontSize={'sm'} color={fontColor}>200</Text>
-                </Stack>
-              </Button>
-            </WrapItem>
+            <Button key={item} w={['full', 'full', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}>
+              <HStack w={'full'} justify={"space-between"}>
+                <Text textAlign={'start'} fontSize={'xs'} color={fontColor}
+                      fontWeight={'500'}>{item}</Text>
+                <Text textAlign={'start'} fontSize={'sm'} color={fontColor}>200</Text>
+              </HStack>
+            </Button>
           ))}
-        </Wrap>
+        </SimpleGrid>
       </Stack>
     )
   }
