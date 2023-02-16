@@ -112,8 +112,8 @@ const Chat = () => {
   }
 
   const getMessages = useCallback(async () => {
-    if (currentConversation) {
-      const response = await fetch(`/api/conversation/${currentConversation.id.split('#')[1]}`, {
+    if (currentConversation?.id && !messages.length) {
+      const response = await fetch(`/api/conversation/${currentConversation?.id?.split('#')[1]}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -121,11 +121,9 @@ const Chat = () => {
         },
       });
       const data = await response.json();
-      if (data.messages) {
-        setMessages(data.messages);
-      }
+      setMessages(data.messages);
     }
-  }, [jwt, currentConversation])
+  }, [jwt, currentConversation, messages])
 
   useEffect(() => {
     getMessages()
@@ -358,6 +356,7 @@ const Chat = () => {
                 leftIcon={<FiPlus color={'white'}/>} justifyContent={"start"} gap={1} color={"white"}
                 onClick={() => {
                   setCurrentConversation(undefined)
+                  setMessages([])
                 }}>
           New chat
         </Button>
