@@ -1,14 +1,34 @@
 import {
   Box,
-  Button, Card,
-  Drawer, DrawerCloseButton, DrawerContent, DrawerOverlay,
-  HStack, IconButton,
+  Button,
+  Card,
+  Drawer,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerOverlay,
+  HStack,
+  IconButton,
   Input,
   InputGroup,
-  InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay,
+  InputRightElement,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Spacer,
   Stack,
-  Text, useColorMode, useColorModeValue, useDisclosure, useMediaQuery, Wrap, WrapItem, Heading,
+  Text,
+  useColorMode,
+  useColorModeValue,
+  useDisclosure,
+  useMediaQuery,
+  Wrap,
+  WrapItem,
+  Heading,
+  DrawerBody,
+  DrawerHeader,
 } from '@chakra-ui/react';
 import {FiLogOut, FiPlus, FiTrash2} from 'react-icons/fi';
 import {AddIcon, HamburgerIcon, MoonIcon, SunIcon} from '@chakra-ui/icons';
@@ -30,7 +50,7 @@ const Chat = () => {
   const [isMobile] = useMediaQuery('(max-width: 768px)') // init is false
   const {isOpen: isOpenMobileMenu, onOpen: onOpenMobileMenu, onClose: onCLoseMobileMenu} = useDisclosure()
   const {isOpen: isOpenCoins, onOpen: onOpenCoins, onClose: onCLoseCoins} = useDisclosure()
-  const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onCLosePass} = useDisclosure()
+  const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const [messages, setMessages] = useState<Message[]>([]);
   const bottomRef = useRef(null);
 
@@ -119,6 +139,140 @@ const Chat = () => {
     console.log(res.json())
   };
 
+  const coinsBody = () => {
+    return (
+      <Stack spacing={3} minH={'300px'}>
+        <Wrap justify={'space-between'} spacing={3}>
+          {[3, 6, 12, 30, 50, 98].map((item) => (
+            <WrapItem key={item}>
+              <Button minW={['140px', '140px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}>
+                {item} Coins
+              </Button>
+            </WrapItem>
+          ))}
+        </Wrap>
+        <Text fontSize={'xs'} color={fontColor}>
+          Tips: recharge is valid forever.
+        </Text>
+        <Spacer/>
+        <Text fontSize={'sm'} color={fontColor}>My balance: 1000 Coins</Text>
+      </Stack>
+    )
+  }
+
+  const coinsModalAndDrawer = () => {
+    if (isMobile) {
+      return (
+        <Drawer placement={'bottom'} onClose={onCLoseCoins} isOpen={isOpenCoins}>
+          <DrawerContent borderTopRadius={'20px'} overflow={'hidden'}>
+            <DrawerHeader color={fontColor} px={[3, 4]}>Recharge Coins</DrawerHeader>
+            <DrawerBody pt={0} pb={3} px={[3, 4]}>
+              {coinsBody()}
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      )
+    } else {
+      return (
+        <Modal isOpen={isOpenCoins} onClose={onCLoseCoins} isCentered>
+          <ModalOverlay/>
+          <ModalContent>
+            <ModalHeader color={fontColor} px={[3, 4]}>Recharge Coins</ModalHeader>
+            <ModalCloseButton color={fontColor}/>
+            <ModalBody pt={0} pb={3} px={[3, 4]}>
+              {coinsBody()}
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )
+    }
+  }
+
+  const passBody = () => {
+    return (
+      <Stack spacing={3} minH={'300px'}>
+        <Card p={3} variant={'outline'} cursor={'pointer'}>
+          <Stack>
+            <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>Free Pass</Text>
+            <Text fontSize={'xx-small'} color={fontColor}>
+              The Free Pass presents experience benefits for the ChatGPT.
+            </Text>
+            <br/>
+            <HStack spacing={1} align={'baseline'}>
+              <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>
+                365 days
+              </Text>
+              <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>
+                · expired on 3.19
+              </Text>
+            </HStack>
+          </Stack>
+        </Card>
+        {/*<Card p={3} variant={'outline'} cursor={'pointer'}>*/}
+        {/*  <Stack h={'full'}>*/}
+        {/*    <HStack>*/}
+        {/*      <RiVipCrown2Line color={'gold'}/>*/}
+        {/*      <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>Priority Pass</Text>*/}
+        {/*    </HStack>*/}
+        {/*    <br/>*/}
+        {/*    <HStack spacing={1} align={'baseline'}>*/}
+        {/*      <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>*/}
+        {/*        365 days*/}
+        {/*      </Text>*/}
+        {/*      <Text color={fontColor} fontSize={'xx-small'} fontWeight={'500'}>*/}
+        {/*        · expired on 3.19*/}
+        {/*      </Text>*/}
+        {/*    </HStack>*/}
+        {/*  </Stack>*/}
+        {/*</Card>*/}
+        <br/>
+        <Text fontSize={'sm'} fontWeight={'500'} color={fontColor}>Join Priority Pass</Text>
+        <Wrap justify={'space-between'} spacing={3}>
+          {['Annual', 'Quarter', 'Monthly'].map((item) => (
+            <WrapItem key={item}>
+              <Button w={['140px', '140px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}
+                      h={'60px'}>
+                <Stack w={'full'}>
+                  <Text textAlign={'start'} fontSize={'xs'} color={fontColor}
+                        fontWeight={'500'}>{item}</Text>
+                  <Text textAlign={'start'} fontSize={'sm'} color={fontColor}>200</Text>
+                </Stack>
+              </Button>
+            </WrapItem>
+          ))}
+        </Wrap>
+      </Stack>
+    )
+  }
+
+  const passModalAndDrawer = () => {
+    if (isMobile) {
+      return (
+        <Drawer placement={'bottom'} onClose={onClosePass} isOpen={isOpenPass}>
+          <DrawerContent borderTopRadius={'20px'} overflow={'hidden'}>
+            <DrawerHeader color={fontColor} px={[3, 4]}>Recharge Pass</DrawerHeader>
+            <DrawerBody pt={0} pb={3} px={[3, 4]}>
+              {passBody()}
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      )
+    } else {
+      return (
+        <Modal isOpen={isOpenPass} onClose={onClosePass} isCentered size={['xs', 'sm', 'md']}>
+          <ModalOverlay/>
+          <ModalContent>
+            <ModalHeader color={fontColor} px={[3, 4]}>Recharge Pass</ModalHeader>
+            <ModalCloseButton color={fontColor}/>
+            <ModalBody pt={0} pb={3} px={[3, 4]}>
+              {passBody()}
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )
+    }
+  }
+
   const menu = () => {
     return (
       <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}
@@ -139,7 +293,8 @@ const Chat = () => {
         <Spacer/>
         <Stack spacing={1}>
           <Box w={'full'} h={'1px'} bg={'whiteAlpha.400'}/>
-          <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} gap={1} justifyContent={"start"} color={'white'}
+          <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} gap={1} justifyContent={"start"}
+                  color={'white'}
                   _hover={{bg: 'bg3'}}>
             Clear conversations
           </Button>
@@ -153,31 +308,7 @@ const Chat = () => {
               {(1000).toLocaleString()} Coins
             </Text>
           </Button>
-          <Modal isOpen={isOpenCoins} onClose={onCLoseCoins} isCentered size={['xs', 'sm', 'md']}>
-            <ModalOverlay/>
-            <ModalContent>
-              <ModalHeader color={fontColor} px={[3, 4]}>Recharge Coins</ModalHeader>
-              <ModalCloseButton color={fontColor}/>
-              <ModalBody pt={0} pb={3} px={[3, 4]}>
-                <Stack spacing={3} minH={'300px'}>
-                  <Wrap justify={'space-between'} spacing={3}>
-                    {[3, 6, 12, 30, 50, 98].map((item) => (
-                      <WrapItem key={item}>
-                        <Button minW={['140px', '140px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}>
-                          {item} Coins
-                        </Button>
-                      </WrapItem>
-                    ))}
-                  </Wrap>
-                  <Text fontSize={'xs'} color={fontColor}>
-                    Tips: recharge is valid forever.
-                  </Text>
-                  <Spacer/>
-                  <Text fontSize={'sm'} color={fontColor}>My balance: 1000 Coins</Text>
-                </Stack>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
+          {coinsModalAndDrawer()}
           <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1}
                   onClick={onOpenPass}>
             <Text color={'white'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
@@ -188,77 +319,20 @@ const Chat = () => {
               {(3650).toLocaleString()} Days
             </Text>
           </Button>
-          <Modal isOpen={isOpenPass} onClose={onCLosePass} isCentered size={['xs', 'sm', 'md']}>
-            <ModalOverlay/>
-            <ModalContent>
-              <ModalHeader color={fontColor} px={[3, 4]}>Recharge Pass</ModalHeader>
-              <ModalCloseButton color={fontColor}/>
-              <ModalBody pt={0} pb={3} px={[3, 4]}>
-                <Stack spacing={3} minH={'300px'}>
-                  <Card p={3} variant={'outline'} cursor={'pointer'}>
-                    <Stack>
-                      <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>Free Pass</Text>
-                      <Text fontSize={'xx-small'} color={fontColor}>
-                        The Free Pass presents experience benefits for the ChatGPT.
-                      </Text>
-                      <br/>
-                      <HStack spacing={1} align={'baseline'}>
-                        <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>
-                          365 days
-                        </Text>
-                        <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>
-                          · expired on 3.19
-                        </Text>
-                      </HStack>
-                    </Stack>
-                  </Card>
-                  {/*<Card p={3} variant={'outline'} cursor={'pointer'}>*/}
-                  {/*  <Stack h={'full'}>*/}
-                  {/*    <HStack>*/}
-                  {/*      <RiVipCrown2Line color={'gold'}/>*/}
-                  {/*      <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>Priority Pass</Text>*/}
-                  {/*    </HStack>*/}
-                  {/*    <br/>*/}
-                  {/*    <HStack spacing={1} align={'baseline'}>*/}
-                  {/*      <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>*/}
-                  {/*        365 days*/}
-                  {/*      </Text>*/}
-                  {/*      <Text color={fontColor} fontSize={'xx-small'} fontWeight={'500'}>*/}
-                  {/*        · expired on 3.19*/}
-                  {/*      </Text>*/}
-                  {/*    </HStack>*/}
-                  {/*  </Stack>*/}
-                  {/*</Card>*/}
-                  <br/>
-                  <Text fontSize={'sm'} fontWeight={'500'} color={fontColor}>Join Priority Pass</Text>
-                  <Wrap justify={'space-between'} spacing={3}>
-                    {['Annual', 'Quarter', 'Monthly'].map((item) => (
-                      <WrapItem key={item}>
-                        <Button w={['140px', '140px', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}
-                                h={'60px'}>
-                          <Stack w={'full'}>
-                            <Text textAlign={'start'} fontSize={'xs'} color={fontColor}
-                                  fontWeight={'500'}>{item}</Text>
-                            <Text textAlign={'start'} fontSize={'sm'} color={fontColor}>200</Text>
-                          </Stack>
-                        </Button>
-                      </WrapItem>
-                    ))}
-                  </Wrap>
-                </Stack>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
+          {passModalAndDrawer()}
           <Button variant={'ghost'} gap={1} justifyContent={'start'} color={"white"}
                   leftIcon={colorMode === 'light' ? <MoonIcon color={'white'}/> : <SunIcon color={'white'}/>}
                   _hover={{bg: 'bg3'}} onClick={toggleColorMode}>
             {colorMode === 'light' ? 'Dark' : 'Light'} mode
           </Button>
-          <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} justifyContent={"start"} gap={1} color={'white'}
+          <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} justifyContent={"start"} gap={1}
+                  color={'white'}
                   _hover={{bg: 'bg3'}}
                   onClick={() => {
-                    setJWT('')
                     router.push('/auth/login')
+                      .then(() => {
+                        setJWT('')
+                      })
                   }}>
             Log out
           </Button>
