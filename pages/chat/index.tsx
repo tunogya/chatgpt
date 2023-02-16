@@ -302,7 +302,7 @@ const Chat = () => {
     return (
       <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}
              opacity={[isOpenMobileMenu ? 1 : 0, 1]}>
-        <Button variant={'outline'} boxShadow={'md'} h={'46px'} borderColor={'whiteAlpha.400'}
+        <Button variant={'outline'} boxShadow={'md'} minH={'46px'} borderColor={'whiteAlpha.400'}
                 leftIcon={<FiPlus color={'white'}/>} justifyContent={"start"} gap={1} color={"white"}
                 _hover={{bg: 'bg3'}}>
           New chat
