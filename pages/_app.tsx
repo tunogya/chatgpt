@@ -50,9 +50,13 @@ export default function App({Component, pageProps}: AppProps) {
                 gtag('config', 'G-EDPQ3K7EN8');
               `}
         </Script>
-        <Stack h={height} spacing={0}>
-          <Component {...pageProps} />
-        </Stack>
+        {
+          height && (
+            <Stack h={height} spacing={0}>
+              <Component {...pageProps} />
+            </Stack>
+          )
+        }
       </ChakraProvider>
     </RecoilRoot>
   )
