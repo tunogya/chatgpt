@@ -36,14 +36,20 @@ import {jwtAtom} from '@/state';
 import {useRouter} from 'next/router';
 import {RiVipCrown2Line} from 'react-icons/ri';
 import ConversionCell, {Message} from '@/components/ConversionCell';
-import {useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {v4 as uuidv4} from 'uuid';
+
+type Conversation = {
+  id: string,
+  title: string,
+}
 
 const Chat = () => {
   const {colorMode, toggleColorMode} = useColorMode()
   const conversationBg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const inputBgColor = useColorModeValue('white', 'bg6')
-  const [, setJWT] = useRecoilState(jwtAtom)
+  const [jwt, setJWT] = useRecoilState(jwtAtom)
   const router = useRouter()
   const [isMobile] = useMediaQuery('(max-width: 768px)') // init is false
   const {isOpen: isOpenMobileMenu, onOpen: onOpenMobileMenu, onClose: onCLoseMobileMenu} = useDisclosure()
@@ -51,6 +57,8 @@ const Chat = () => {
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const [messages, setMessages] = useState<Message[]>([]);
   const bottomRef = useRef(null);
+  const [currentConversation, setCurrentConversation] = useState<Conversation | undefined>(undefined);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
 
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('IDLE');
@@ -60,31 +68,55 @@ const Chat = () => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
 
+  const getConversationList = useCallback(async () => {
+    const response = await fetch('/api/conversation', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    const data = await response.json();
+    setConversations(data.items);
+  }, [jwt]);
+
+  useEffect(() => {
+    getConversationList()
+  }, [getConversationList])
 
   const complete = async (input: string) => {
     setStatus('LOADING');
-    // const response = await fetch('/api/conversation', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     action: "next",
-    //     messages: [
-    //       {
-    //         id: "83cc9d48-c6f3-4b1d-94a2-6603331a5df9",
-    //         role: "user",
-    //         content: {
-    //           content_type: "text",
-    //           parts: ["ay occasionally generate incorrect information"]
-    //         }
-    //       }
-    //     ],
-    //     model: "",
-    //     parent_message_id: "",
-    //   }),
-    // });
-    //
+    const response = await fetch('/api/conversation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
+        conversation_id: undefined,
+        action: "next",
+        messages: [
+          {
+            id: `MESSAGE#${uuidv4()}`,
+            role: "user",
+            content: {
+              content_type: "text",
+              parts: [input]
+            }
+          }
+        ],
+        model: "text-davinci-003",
+        parent_message_id: "",
+      }),
+    });
+
+    // test
+    const {id, title} = await response.json()
+    setCurrentConversation({
+      id,
+      title,
+    });
+
     // if (!response.ok) {
     //   setStatus('ERROR')
     //   setTimeout(() => {
@@ -275,13 +307,16 @@ const Chat = () => {
                 _hover={{bg: 'bg3'}}>
           New chat
         </Button>
-        <Stack pt={2}>
-          <Button variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1} _hover={{bg: 'bg3'}}>
-            <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
-                  whiteSpace={'nowrap'} fontSize={'sm'}>
-              What is this? How does it work?
-            </Text>
-          </Button>
+        <Stack pt={2} h={'full'} overflow={"scroll"}>
+          {conversations.map((item) => (
+            <Button key={item.id} variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
+                    _hover={{bg: 'bg3'}}>
+              <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
+                    whiteSpace={'nowrap'} fontSize={'sm'}>
+                {item.title}
+              </Text>
+            </Button>
+          ))}
         </Stack>
         <Spacer/>
         <Stack spacing={1}>

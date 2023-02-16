@@ -9,20 +9,21 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'GET') {
-    const offset = Number(req.query?.offset || 0);
-    const limit = Number(req.query?.limit || 20);
-    const token = req.headers.authorization?.split(' ')?.[1]
-    if (!token) {
+  // get token from header authorization
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    res.status(401).json({error: 'invalid token'})
+    return
+  }
+  jwt.verify(token, process.env.JWT_SECRET || '', async (err: any, decoded: any) => {
+    if (err) {
       res.status(401).json({error: 'invalid token'})
       return
     }
-    jwt.verify(token, process.env.JWT_SECRET || '', async (err: any, decoded: any) => {
-      if (err) {
-        res.status(401).json({error: 'invalid token'})
-        return
-      }
-      const username = decoded.username;
+    const user_id = decoded.id;
+    if (req.method === 'GET') {
+      const offset = Number(req.query?.offset || 0);
+      const limit = Number(req.query?.limit || 20);
       const conversations = await ddbDocClient.send(new QueryCommand({
         TableName: 'wizardingpay',
         KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :sk)',
@@ -33,63 +34,68 @@ export default async function handler(
           '#is_visible': 'is_visible',
         },
         ExpressionAttributeValues: {
-          ':pk': `USER#${username}`,
+          ':pk': user_id,
           ':sk': 'CONVERSATION#',
           ':is_visible': true,
         },
       }));
       res.status(200).json({
         items: conversations.Items?.map((item: any) => ({
-          id: item.SK.split('#')[1],
+          id: item.SK,
           title: item.title,
-          create_time: item.create_time,
+          create_time: new Date(item.create_at * 1000).toLocaleString(),
         })),
         total: conversations.Count,
         limit,
         offset,
-      })
-    })
-  } else if (req.method === 'POST') {
-    const {action, messages, model, parent_message_id} = req.body;
-    let conversation_id = req.body?.conversation_id || undefined;
-
-    if (!conversation_id) {
-      conversation_id = uuidv4();
+      });
+    } else if (req.method === 'POST') {
+      const {action, messages, model, parent_message_id} = req.body;
+      let conversation_id = req.body?.conversation_id || undefined;
+      if (!conversation_id) {
+        conversation_id = `CONVERSATION#${uuidv4()}`;
+        try {
+          await ddbDocClient.send(new PutCommand({
+            TableName: 'wizardingpay',
+            Item: {
+              PK: user_id,
+              SK: conversation_id,
+              title: messages[0].content.parts[0],
+              create_at: Math.floor(Date.now() / 1000),
+              TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+              is_visible: true,
+            },
+          }));
+        } catch (e) {
+          res.status(500).json({error: 'failed to create conversation'})
+          return
+        }
+      }
       try {
-       await ddbDocClient.send(new PutCommand({
-          TableName: 'wizardingpay',
-          Item: {
-            PK: `CONVERSATION#${conversation_id}`,
-            SK: `CONVERSATION#${conversation_id}`,
-            title: '',
-            create_at: Math.floor(Date.now() / 1000),
-            is_visible: true,
+        await ddbDocClient.send(new BatchWriteCommand({
+          RequestItems: {
+            'wizardingpay': messages.map((message: Message) => ({
+              PutRequest: {
+                Item: {
+                  PK: conversation_id,
+                  SK: message.id,
+                  role: message.role,
+                  content: message.content,
+                  TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+                }
+              },
+            }))
           }
-        }))
+        }));
       } catch (e) {
         res.status(500).json({error: 'failed to create conversation'})
         return
       }
+      res.status(200).json({
+        id: conversation_id,
+        title: messages[0].content.parts[0],
+      })
+      // return a stream
     }
-    try {
-      await ddbDocClient.send(new BatchWriteCommand({
-        RequestItems: {
-          'wizardingpay': messages.map((message: Message) => ({
-            PutRequest: {
-              Item: {
-                PK: `CONVERSATION#${conversation_id}`,
-                SK: `MESSAGE#${message.id}`,
-                role: message.role,
-                content: message.content,
-              }
-            },
-          }))
-        }
-      }));
-    } catch (e) {
-      res.status(500).json({error: 'failed to create conversation'})
-      return
-    }
-    // return a stream
-  }
+  })
 }

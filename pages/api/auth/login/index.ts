@@ -28,8 +28,8 @@ export default async function handler(
     const { Item } = await ddbDocClient.send(new GetCommand({
       TableName: 'wizardingpay',
       Key: {
-        PK: `USER#${username}`,
-        SK: `USER#${username}`,
+        PK: `USER#${username.toLowerCase()}`,
+        SK: `USER#${username.toLowerCase()}`,
       },
     }));
     if (!Item) {

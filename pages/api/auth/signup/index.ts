@@ -28,8 +28,8 @@ export default async function handler(
     await ddbDocClient.send(new PutCommand({
       TableName: 'wizardingpay',
       Item: {
-        PK: `USER#${username}`,
-        SK: `USER#${username}`,
+        PK: `USER#${username.toLowerCase()}`,
+        SK: `USER#${username.toLowerCase()}`,
         username,
         password,
         create_at: Math.floor(new Date().getTime() / 1000),
