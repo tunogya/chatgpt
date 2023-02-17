@@ -10,7 +10,7 @@ export type Message = {
   }
 }
 
-const ConversionCell: FC<{message: Message}> = ({message}) => {
+const ConversationCell: FC<{message: Message}> = ({message}) => {
   const chatBgColor = useColorModeValue('#F7F7F8', 'bg4')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const {role, content} = message
@@ -30,4 +30,4 @@ const ConversionCell: FC<{message: Message}> = ({message}) => {
   )
 }
 
-export default ConversionCell
+export default ConversationCell
