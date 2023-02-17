@@ -1,11 +1,10 @@
 import {useRouter} from 'next/router';
 import {useCallback, useEffect} from 'react';
-import {useRecoilValue} from 'recoil';
-import {jwtAtom} from '@/state';
+import {useSelector} from "react-redux";
 
 const Index = () => {
   const router = useRouter()
-  const jwt = useRecoilValue(jwtAtom)
+  const jwt = useSelector((state: any) => state.auth.token)
 
   const checkJWT = useCallback(async () => {
     if (jwt) {

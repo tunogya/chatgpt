@@ -31,13 +31,13 @@ import {
 import {FiLogOut, FiPlus, FiTrash2} from 'react-icons/fi';
 import {AddIcon, HamburgerIcon, MoonIcon, SunIcon} from '@chakra-ui/icons';
 import {IoPaperPlaneOutline, IoWalletOutline, IoChatboxOutline} from 'react-icons/io5';
-import {useRecoilState} from 'recoil';
-import {conversationListAtom, jwtAtom} from '@/state';
 import {useRouter} from 'next/router';
 import {RiVipCrown2Line} from 'react-icons/ri';
 import ConversionCell, {Message} from '@/components/ConversionCell';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {v4 as uuidv4} from 'uuid';
+import {useSelector, useDispatch} from "react-redux";
+import {setUser, setToken} from '@/store/user/authSlice';
 
 type Conversation = {
   id: string,
@@ -49,7 +49,6 @@ const Chat = () => {
   const conversationBg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const inputBgColor = useColorModeValue('white', 'bg6')
-  const [jwt, setJWT] = useRecoilState(jwtAtom)
   const router = useRouter()
   const [isMobile] = useMediaQuery('(max-width: 768px)') // init is false
   const {isOpen: isOpenMobileMenu, onOpen: onOpenMobileMenu, onClose: onCLoseMobileMenu} = useDisclosure()
@@ -59,8 +58,8 @@ const Chat = () => {
   const bottomRef = useRef(null);
   const [currentConversation, setCurrentConversation] = useState<Conversation | undefined>(undefined);
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [conversationList, setConversationList] = useRecoilState(conversationListAtom);
-
+  const jwt = useSelector((state: any) => state.auth.token);
+  const dispatch = useDispatch();
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('IDLE');
 
@@ -68,14 +67,6 @@ const Chat = () => {
     // @ts-ignore
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
-
-  const updateConversationList = useCallback(async () => {
-    setConversations(conversationList)
-  }, [conversationList])
-
-  useEffect(() => {
-    updateConversationList()
-  }, [updateConversationList])
 
   const getConversationList = useCallback(async () => {
     const response = await fetch('/api/conversation', {
@@ -86,7 +77,7 @@ const Chat = () => {
       },
     });
     const data = await response.json();
-    setConversationList(data.items);
+    setConversations(data.items || []);
   }, [jwt]);
 
   const clearConversationList = async () => {
@@ -107,7 +98,7 @@ const Chat = () => {
     if (!response.ok) {
       return
     }
-    setConversationList([]);
+    setConversations([]);
     setMessages([]);
   }
 
@@ -363,7 +354,9 @@ const Chat = () => {
         <Stack pt={2} h={'full'} overflow={"scroll"}>
           {conversations.map((item) => (
             <Button key={item.id} variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
-                    _hover={{bg: 'bg3'}} onClick={() => { setCurrentConversation(item) }}>
+                    _hover={{bg: 'bg3'}} onClick={() => {
+              setCurrentConversation(item)
+            }}>
               <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
                     whiteSpace={'nowrap'} fontSize={'sm'}>
                 {item.title}
@@ -411,7 +404,8 @@ const Chat = () => {
                   onClick={() => {
                     router.push('/auth/login')
                       .then(() => {
-                        setJWT('')
+                        dispatch(setUser(undefined))
+                        dispatch(setToken(undefined))
                       })
                   }}>
             Log out

@@ -6,9 +6,9 @@ import {
 } from '@chakra-ui/react';
 import {useMemo, useState} from 'react';
 import {useRouter} from 'next/router';
-import {useRecoilState} from 'recoil';
-import {jwtAtom} from '@/state';
 import * as crypto from 'crypto';
+import { setUser, setToken } from '@/store/user/authSlice';
+import {useDispatch} from "react-redux";
 
 const Login = () => {
   const router = useRouter()
@@ -16,9 +16,9 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [pending, setPending] = useState(false)
-  const [, setJWT] = useRecoilState(jwtAtom)
   const bg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
+  const dispatch = useDispatch()
 
   const isInvalidPassword = useMemo(() => {
     return password.length < 10 && password.length > 0
@@ -47,7 +47,8 @@ const Login = () => {
     })
     if (res.status === 200) {
       const {token} = await res.json()
-      setJWT(token)
+      dispatch(setToken(token))
+      dispatch(setUser(`USER#${username.toLowerCase()}`))
       await router.push('/chat')
     } else {
       const {error} = await res.json()

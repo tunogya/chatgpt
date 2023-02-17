@@ -6,11 +6,11 @@ import {
 } from '@chakra-ui/react';
 import {useState} from 'react';
 import {useRouter} from 'next/router';
-import {useRecoilState} from 'recoil';
-import {jwtAtom} from '@/state';
 import * as crypto from 'crypto';
 import {FaTelegramPlane} from "react-icons/fa";
 import Link from "next/link";
+import {useDispatch} from "react-redux";
+import { setToken, setUser } from '@/store/user/authSlice';
 
 const Login = () => {
   const router = useRouter()
@@ -19,9 +19,9 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [pending, setPending] = useState(false)
   const [telegramPending, setTelegramPending] = useState(false)
-  const [, setJWT] = useRecoilState(jwtAtom)
   const bg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
+  const dispatch = useDispatch()
 
   const hashPassword = (password: string) => {
     // add salt and hash 1000 times
@@ -49,7 +49,9 @@ const Login = () => {
     })
     if (res.status === 200) {
       const {token} = await res.json()
-      setJWT(token)
+      // set token to store
+      dispatch(setToken(token))
+      dispatch(setUser(`USER#${username.toLowerCase()}`))
       await router.push('/chat')
     } else {
       const {error} = await res.json()
@@ -84,7 +86,9 @@ const Login = () => {
       })
       if (res.status === 200) {
         const {token} = await res.json()
-        setJWT(token)
+        // set token to store
+        dispatch(setToken(token))
+        dispatch(setUser(`TG-USER#${data.id}`))
         await router.push('/chat')
       } else {
         const {error} = await res.json()
