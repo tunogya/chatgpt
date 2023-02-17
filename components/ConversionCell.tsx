@@ -1,17 +1,13 @@
-import {Avatar, chakra, HStack, Stack, Text, useColorModeValue} from '@chakra-ui/react';
+import {chakra, HStack, Stack, Text, useColorModeValue} from '@chakra-ui/react';
 import {FC} from 'react';
 
-type Role = 'user' | 'bot'
-
-type ContentType = 'text'
-
 export type Message = {
-  id: string,
-  role: Role,
+  id: string
+  role: 'bot' | 'user'
   content: {
-    content_type: ContentType,
-    parts: any[],
-  },
+    type: 'text' | 'image' | 'video' | 'audio' | 'file' | 'conversion'
+    parts: string[]
+  }
 }
 
 const ConversionCell: FC<{message: Message}> = ({message}) => {
