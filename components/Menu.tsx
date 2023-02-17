@@ -61,7 +61,7 @@ const Menu = () => {
   }, [getConversationList])
 
   return (
-    <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']} opacity={[0, 0, 1]}>
+    <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}>
       <Button variant={'outline'} boxShadow={'md'} minH={'46px'} borderColor={'whiteAlpha.400'} _hover={{bg: 'bg3'}}
               leftIcon={<FiPlus color={'white'}/>} justifyContent={"start"} gap={1} color={"white"}
               onClick={() => {
