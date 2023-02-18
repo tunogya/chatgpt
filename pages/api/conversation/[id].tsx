@@ -36,14 +36,12 @@ export default async function handler(
           }
           const messagesRes = await ddbDocClient.send(new QueryCommand({
             TableName: 'wizardingpay',
-            KeyConditionExpression: '#pk = :pk and begins_with(#sk, :sk)',
+            KeyConditionExpression: '#pk = :pk',
             ExpressionAttributeValues: {
               ':pk': conversationRes.Item.SK,
-              ':sk': 'MESSAGE#',
             },
             ExpressionAttributeNames: {
               '#pk': 'PK',
-              '#sk': 'SK',
             }
           }))
           conversationRes.Item.messages = messagesRes.Items

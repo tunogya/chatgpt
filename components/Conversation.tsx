@@ -6,17 +6,19 @@ import {
   InputRightElement,
   Stack,
   Text,
-  useColorMode,
-  useColorModeValue, useDisclosure, useMediaQuery
+  useColorModeValue,
 } from "@chakra-ui/react";
 import {IoPaperPlaneOutline} from "react-icons/io5";
-import {useRouter} from "next/router";
-import {useEffect, useRef, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {FC, useCallback, useEffect, useRef, useState} from "react";
+import {useSelector} from "react-redux";
 import {v4 as uuidv4} from 'uuid';
 import ConversationCell, {Message} from "@/components/ConversationCell";
 
-const Conversation = () => {
+type ConversationProps = {
+  conversation_id?: string | undefined
+}
+
+const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const conversationBg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const inputBgColor = useColorModeValue('white', 'bg6')
@@ -25,19 +27,49 @@ const Conversation = () => {
   const [status, setStatus] = useState('IDLE');
   const jwt = useSelector((state: any) => state.auth.token);
   const [session, setSession] = useState({
-    id: undefined,
+    id: conversation_id,
     title: 'New Chat',
     messages: [] as Message[],
   });
+
+  const getMessageHistory = useCallback(async () => {
+    if (!conversation_id) {
+      return
+    }
+    let res = await fetch(`/api/conversation/${conversation_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`,
+      },
+    })
+    res = await res.json()
+    setSession({
+      // @ts-ignore
+      id: res.SK,
+      // @ts-ignore
+      title: res.title,
+      // @ts-ignore
+      messages: res.messages,
+    })
+  }, [jwt, conversation_id])
+
+  useEffect(() => {
+    getMessageHistory()
+  }, [getMessageHistory])
 
   useEffect(() => {
     // @ts-ignore
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
   }, []);
 
-  // const {action, messages, model, parent_message_id} = req.body;
-  //       let conversation_id = req.body?.conversation_id || undefined;
-  const complete = async () => {
+  const complete = async (message: Message) => {
+    setStatus('LOADING')
+    // append message to session
+    setSession((prev) => ({
+      ...prev,
+      messages: [...prev.messages, message]
+    }))
     const res = await fetch('/api/conversation', {
       method: 'POST',
       headers: {
@@ -48,10 +80,18 @@ const Conversation = () => {
         conversation_id: session.id,
         action: 'next',
         model: 'text-davinci-003',
-        messages: [session.messages.pop()],
-        parent_message_id: session.messages.length > 0 ? session.messages[session.messages.length - 1]?.id : undefined,
+        messages: [message],
+        parent_message_id: session.messages.length > 0 ? session.messages[session.messages.length - 1].id : undefined,
       }),
     })
+    setSession((prev) => ({
+      ...prev,
+      messages: [...prev.messages, {
+        ...message,
+        role: 'bot'
+      }]
+    }))
+    setStatus('IDLE')
   }
 
   return (
@@ -83,18 +123,16 @@ const Conversation = () => {
                           onClick={async (e) => {
                             e.preventDefault();
                             if (input === '') return;
-                            setSession({
-                              ...session,
-                              messages: [...session.messages, {
-                                id: uuidv4(),
-                                role: 'user',
-                                content: {
-                                  type: 'text',
-                                  parts: [input],
-                                }
-                              }]
-                            })
+                            const message: Message = {
+                              id: uuidv4(),
+                              role: 'user',
+                              content: {
+                                type: 'text',
+                                parts: [input],
+                              }
+                            }
                             setInput('');
+                            await complete(message);
                           }}
               />
             </InputRightElement>

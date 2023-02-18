@@ -5,7 +5,7 @@ export type Message = {
   id: string
   role: 'bot' | 'user'
   content: {
-    type: 'text' | 'image' | 'video' | 'audio' | 'file' | 'conversion'
+    type: 'text' | 'image' | 'video' | 'audio' | 'file'
     parts: string[]
   }
 }

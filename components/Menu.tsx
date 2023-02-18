@@ -67,15 +67,21 @@ const Menu = () => {
       <Button variant={'outline'} boxShadow={'md'} minH={'46px'} borderColor={'whiteAlpha.400'} _hover={{bg: 'bg3'}}
               leftIcon={<FiPlus color={'white'}/>} justifyContent={"start"} gap={1} color={"white"}
               onClick={() => {
+                router.push({
+                  pathname: `/chat`,
+                })
               }}>
         New chat
       </Button>
       <Stack pt={2} h={'full'} overflow={"scroll"}>
         {conversation.map((item: any) => (
           <Button key={item.id} variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
-                  _hover={{bg: 'bg3'}} onClick={() => {
-
-          }}
+                  _hover={{bg: 'bg3'}}
+                  onClick={() => {
+                    router.push({
+                      pathname: `/chat/${item.id.split('#').pop()}`,
+                    })
+                  }}
           >
             <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
                   whiteSpace={'nowrap'} fontSize={'sm'}>
@@ -92,25 +98,30 @@ const Menu = () => {
           Clear conversations
         </Button>
         <Button variant={'ghost'} leftIcon={<IoWalletOutline color={'white'}/>} _hover={{bg: 'bg3'}} gap={1}
+                justifyContent={"start"}
                 onClick={onOpenCoins}>
-          <Text color={'white'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
-                pr={'2px'}>
-            Balance
-          </Text>
-          <Text color={'white'} textAlign={'end'} fontSize={'sm'}>
-            {(1000).toLocaleString()} Coins
-          </Text>
+          <Stack align={"start"} spacing={0}>
+            <Text color={'white'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
+                  pr={'2px'}>
+              Balance
+            </Text>
+            <Text color={'white'} textAlign={'end'} fontSize={'xx-small'}>
+              {(1000).toLocaleString()} Coins
+            </Text>
+          </Stack>
         </Button>
         <CoinsModalAndDrawer isOpen={isOpenCoins} onClose={onCloseCoins}/>
         <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1}
-                onClick={onOpenPass}>
-          <Text color={'white'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
-                pr={'2px'}>
-            Priority Pass
-          </Text>
-          <Text color={'white'} textAlign={'end'} fontSize={'sm'}>
-            {(3650).toLocaleString()} Days
-          </Text>
+                justifyContent={"start"} onClick={onOpenPass}>
+          <Stack align={"start"} spacing={0}>
+            <Text color={'white'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
+                  pr={'2px'}>
+              Priority Pass
+            </Text>
+            <Text color={'white'} textAlign={'end'} fontSize={'xx-small'}>
+              {(3650).toLocaleString()} Days
+            </Text>
+          </Stack>
         </Button>
         <PassModalAndDrawer isOpen={isOpenPass} onClose={onClosePass}/>
         <Button variant={'ghost'} gap={1} justifyContent={'start'} color={"white"}
