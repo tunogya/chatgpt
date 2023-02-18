@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {v4 as uuidv4} from 'uuid';
 import ConversationCell, {Message} from "@/components/ConversationCell";
 import {setStatus} from "@/store/user";
+import {useRouter} from "next/router";
 
 type ConversationProps = {
   conversation_id?: string | undefined
@@ -32,7 +33,20 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
     title: 'New Chat',
     messages: [] as Message[],
   });
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const jumpToConversation = useCallback(() => {
+    if (session.id && router.pathname === '/chat') {
+      router.push({
+        pathname: `/chat/${session.id.split('#')[1]}`,
+      })
+    }
+  }, [router, session.id])
+
+  useEffect(() => {
+    jumpToConversation()
+  }, [jumpToConversation])
 
   const getMessageHistory = useCallback(async () => {
     if (!conversation_id) {
@@ -89,6 +103,8 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
     const result = await res.json()
     setSession((prev) => ({
       ...prev,
+      id: result.id,
+      title: result.title,
       messages: [...prev.messages, result.messages[0]]
     }))
     dispatch(setStatus('IDLE'))

@@ -112,22 +112,37 @@ export default async function handler(
         }),
       });
       const response = await result.json();
-
+      const aiMessages = [
+        {
+          id: uuidv4(),
+          role: 'ai',
+          content: {
+            type: 'text',
+            parts: [
+              response.choices[0].text,
+            ],
+          }
+        }
+      ]
+      await ddbDocClient.send(new BatchWriteCommand({
+        RequestItems: {
+          'wizardingpay': aiMessages.map((message: any) => ({
+            PutRequest: {
+              Item: {
+                PK: conversation_id,
+                SK: message.id,
+                role: message.role,
+                content: message.content,
+                TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+              }
+            },
+          }))
+        }
+      }));
       res.status(200).json({
         id: conversation_id,
         title: messages[0].content.parts[0],
-        messages: [
-          {
-            id: uuidv4(),
-            role: 'ai',
-            content: {
-              type: 'text',
-              parts: [
-                response.choices[0].text,
-              ],
-            }
-          }
-        ]
+        messages: aiMessages,
       });
     }
     else if (req.method === 'DELETE') {

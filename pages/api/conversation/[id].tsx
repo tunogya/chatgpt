@@ -28,7 +28,6 @@ export default async function handler(
             SK: `CONVERSATION#${id}`,
           },
         }))
-        // get all message from this conversation
         if (conversationRes.Item) {
           if (conversationRes.Item.is_visible === false) {
             res.status(401).json({error: 'You are not allowed to view this conversation'})
@@ -42,7 +41,8 @@ export default async function handler(
             },
             ExpressionAttributeNames: {
               '#pk': 'PK',
-            }
+            },
+            ScanIndexForward: false,
           }))
           conversationRes.Item.messages = messagesRes.Items
           res.status(200).json(conversationRes.Item)
