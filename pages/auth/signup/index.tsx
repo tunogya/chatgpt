@@ -7,7 +7,7 @@ import {
 import {useMemo, useState} from 'react';
 import {useRouter} from 'next/router';
 import * as crypto from 'crypto';
-import { setUser, setToken } from '@/store/user/authSlice';
+import { setUser, setToken } from '@/store/user';
 import {useDispatch} from "react-redux";
 
 const Login = () => {

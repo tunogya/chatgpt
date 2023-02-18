@@ -11,13 +11,12 @@ import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
 import {IoChatboxOutline, IoWalletOutline} from "react-icons/io5";
 import {RiVipCrown2Line} from "react-icons/ri";
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
-import {setToken, setUser} from "@/store/user/authSlice";
+import {logout, setConversation} from "@/store/user";
 import CoinsModalAndDrawer from "@/components/CoinsModalAndDrawer";
 import PassModalAndDrawer from "@/components/PassModalAndDrawer";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {useCallback, useEffect} from "react";
-import {setConversation} from "@/store/user/conversationSlice";
 
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
@@ -25,8 +24,8 @@ const Menu = () => {
   const {isOpen: isOpenCoins, onOpen: onOpenCoins, onClose: onCloseCoins} = useDisclosure()
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const dispatch = useDispatch();
-  const jwt = useSelector((state: any) => state.auth.token);
-  const conversation = useSelector((state: any) => state.conversation);
+  const jwt = useSelector((state: any) => state.user.token);
+  const conversation = useSelector((state: any) => state.user.conversation);
 
   const clearConversationList = async () => {
     if (conversation.length) {
@@ -141,8 +140,7 @@ const Menu = () => {
                 onClick={() => {
                   router.push('/auth/login')
                     .then(() => {
-                      dispatch(setUser(undefined))
-                      dispatch(setToken(undefined))
+                      dispatch(logout())
                     })
                 }}>
           Log out

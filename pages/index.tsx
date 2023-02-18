@@ -4,7 +4,7 @@ import {useSelector} from "react-redux";
 
 const Index = () => {
   const router = useRouter()
-  const jwt = useSelector((state: any) => state.auth.token)
+  const jwt = useSelector((state: any) => state.user.token)
 
   const checkJWT = useCallback(async () => {
     if (jwt) {

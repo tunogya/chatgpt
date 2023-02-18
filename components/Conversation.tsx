@@ -25,7 +25,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const bottomRef = useRef(null);
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('IDLE');
-  const jwt = useSelector((state: any) => state.auth.token);
+  const jwt = useSelector((state: any) => state.user.token);
   const [session, setSession] = useState({
     id: conversation_id,
     title: 'New Chat',

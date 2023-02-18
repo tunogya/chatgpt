@@ -10,7 +10,7 @@ import * as crypto from 'crypto';
 import {FaTelegramPlane} from "react-icons/fa";
 import Link from "next/link";
 import {useDispatch} from "react-redux";
-import { setToken, setUser } from '@/store/user/authSlice';
+import { setToken, setUser } from '@/store/user';
 
 const Login = () => {
   const router = useRouter()
