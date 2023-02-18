@@ -37,7 +37,7 @@ export const index = createSlice({
       const {id, title, messages} = action.payload
       state.session.id = id
       state.session.title = title
-      state.session.messages = messages.sort((a: Message, b: Message) => a.create_at - b.create_at)
+      state.session.messages = messages ? messages.sort((a: Message, b: Message) => a.create_at - b.create_at) : []
     },
     addMessageToSession: (state, action) => {
       state.session.messages.push(action.payload)
