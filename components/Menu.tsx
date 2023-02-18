@@ -26,10 +26,10 @@ const Menu = () => {
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const dispatch = useDispatch();
   const jwt = useSelector((state: any) => state.auth.token);
-  const conversationList = useSelector((state: any) => state.conversation);
+  const conversation = useSelector((state: any) => state.conversation);
 
   const clearConversationList = async () => {
-    if (conversationList.length) {
+    if (conversation.length) {
       const response = await fetch('/api/conversation', {
           method: 'DELETE',
           headers: {
@@ -37,14 +37,14 @@ const Menu = () => {
             Authorization: `Bearer ${jwt}`,
           },
           body: JSON.stringify({
-            ids: conversationList.map((c: any) => c.id),
+            ids: conversation.map((c: any) => c.id),
           })
         }
       );
       if (!response.ok) {
         return
       }
-      await getConversationList()
+      await getConversation()
     }
     await router.push({
       pathname: `/chat`,
@@ -52,7 +52,7 @@ const Menu = () => {
   }
 
   // only run once
-  const getConversationList = useCallback(async () => {
+  const getConversation = useCallback(async () => {
     const response = await fetch('/api/conversation', {
       method: 'GET',
       headers: {
@@ -65,8 +65,8 @@ const Menu = () => {
   }, [jwt]);
 
   useEffect(() => {
-    getConversationList()
-  }, [getConversationList])
+    getConversation()
+  }, [getConversation])
 
   return (
     <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}>
@@ -80,7 +80,7 @@ const Menu = () => {
         New chat
       </Button>
       <Stack pt={2} h={'full'} overflow={"scroll"}>
-        {conversationList.map((item: any) => (
+        {conversation.map((item: any) => (
           <Button key={item.id} variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
                   _hover={{bg: 'bg3'}}
                   onClick={() => {
