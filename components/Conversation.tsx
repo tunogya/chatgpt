@@ -86,12 +86,10 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
         parent_message_id: session.messages.length > 0 ? session.messages[session.messages.length - 1].id : undefined,
       }),
     })
+    const result = await res.json()
     setSession((prev) => ({
       ...prev,
-      messages: [...prev.messages, {
-        ...message,
-        role: 'bot'
-      }]
+      messages: [...prev.messages, result.messages[0]]
     }))
     dispatch(setStatus('IDLE'))
   }

@@ -91,11 +91,44 @@ export default async function handler(
         res.status(500).json({error: 'failed to create conversation'})
         return
       }
+      let result = await fetch('https://api.openai.com/v1/completions', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          model: 'text-davinci-003',
+          prompt: `Human: ${messages[0].content.parts[0]}\nAI: `,
+          temperature: 0.7,
+          top_p: 1,
+          frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
+          presence_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
+          max_tokens: 200,
+          // stream: true, // false is default
+          n: 1,
+          best_of: 1, // 1 is default
+          user: user_id,
+        }),
+      });
+      const response = await result.json();
+
       res.status(200).json({
         id: conversation_id,
         title: messages[0].content.parts[0],
-      })
-      // return a stream
+        messages: [
+          {
+            id: uuidv4(),
+            role: 'ai',
+            content: {
+              type: 'text',
+              parts: [
+                response.choices[0].text,
+              ],
+            }
+          }
+        ]
+      });
     }
     else if (req.method === 'DELETE') {
       const {ids} = req.body;
