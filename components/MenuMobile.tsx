@@ -10,11 +10,13 @@ import {
 } from "@chakra-ui/react";
 import {AddIcon, HamburgerIcon} from "@chakra-ui/icons";
 import Menu from "@/components/Menu";
+import {useRouter} from "next/router";
 
 const MenuMobile = () => {
   const conversationBg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const {isOpen: isOpenMobileMenu, onOpen: onOpenMobileMenu, onClose: onCLoseMobileMenu} = useDisclosure()
+  const router = useRouter()
 
   return (
     <HStack h={'44px'} w={'full'} position={'absolute'} top={0} left={0} zIndex={'docked'} borderBottom={'1px solid'}
@@ -34,7 +36,11 @@ const MenuMobile = () => {
         </DrawerContent>
       </Drawer>
       <Text color={fontColor} fontSize={'md'} fontWeight={'500'}>New chat</Text>
-      <IconButton aria-label={'add'} icon={<AddIcon fontSize={'sm'}/>} variant={'ghost'}/>
+      <IconButton aria-label={'add'} icon={<AddIcon fontSize={'sm'}/>} variant={'ghost'} onClick={() => {
+        router.push({
+          pathname: '/chat',
+        })
+      }}/>
     </HStack>
   )
 }
