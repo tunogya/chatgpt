@@ -16,7 +16,8 @@ import CoinsModalAndDrawer from "@/components/CoinsModalAndDrawer";
 import PassModalAndDrawer from "@/components/PassModalAndDrawer";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect} from "react";
+import {setConversation} from "@/store/user/conversationSlice";
 
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
@@ -25,24 +26,29 @@ const Menu = () => {
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const dispatch = useDispatch();
   const jwt = useSelector((state: any) => state.auth.token);
-  const [conversation, setConversation] = useState([])
+  const conversationList = useSelector((state: any) => state.conversation);
 
   const clearConversationList = async () => {
-    const response = await fetch('/api/conversation', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`,
-        },
-        body: JSON.stringify({
-          ids: conversation.map((c: any) => c.id),
-        })
+    if (conversationList.length) {
+      const response = await fetch('/api/conversation', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify({
+            ids: conversationList.map((c: any) => c.id),
+          })
+        }
+      );
+      if (!response.ok) {
+        return
       }
-    );
-    if (!response.ok) {
-      return
+      await getConversationList()
     }
-    await getConversationList()
+    await router.push({
+      pathname: `/chat`,
+    })
   }
 
   // only run once
@@ -55,7 +61,7 @@ const Menu = () => {
       },
     });
     const data = await response.json();
-    setConversation(data.items || []);
+    dispatch(setConversation(data.items || []));
   }, [jwt]);
 
   useEffect(() => {
@@ -74,7 +80,7 @@ const Menu = () => {
         New chat
       </Button>
       <Stack pt={2} h={'full'} overflow={"scroll"}>
-        {conversation.map((item: any) => (
+        {conversationList.map((item: any) => (
           <Button key={item.id} variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
                   _hover={{bg: 'bg3'}}
                   onClick={() => {
