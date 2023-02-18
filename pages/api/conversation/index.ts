@@ -37,7 +37,6 @@ export default async function handler(
           ':sk': 'CONVERSATION#',
           ':is_visible': true,
         },
-        ScanIndexForward: false,
       }));
       res.status(200).json({
         items: conversations.Items?.map((item: any) => ({
@@ -82,7 +81,6 @@ export default async function handler(
                   role: message.role,
                   content: message.content,
                   TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
-                  create_at: Math.floor(Date.now() / 1000),
                 }
               },
             }))
@@ -115,7 +113,7 @@ export default async function handler(
       const response = await result.json();
       const aiMessages = [
         {
-          id: uuidv4(),
+          id: Math.floor(Date.now() / 1000).toString(),
           role: 'ai',
           content: {
             type: 'text',

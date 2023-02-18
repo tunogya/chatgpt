@@ -42,7 +42,6 @@ export default async function handler(
             ExpressionAttributeNames: {
               '#pk': 'PK',
             },
-            ScanIndexForward: false,
           }))
           conversationRes.Item.messages = messagesRes.Items
           res.status(200).json(conversationRes.Item)

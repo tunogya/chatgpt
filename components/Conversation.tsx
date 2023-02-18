@@ -11,7 +11,6 @@ import {
 import {IoPaperPlaneOutline} from "react-icons/io5";
 import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {v4 as uuidv4} from 'uuid';
 import ConversationCell, {Message} from "@/components/ConversationCell";
 import {addMessageToSession, setSession, updateMessageAndIdAndTitleToSession} from "@/store/user";
 import {useRouter} from "next/router";
@@ -131,7 +130,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
                             e.preventDefault();
                             if (input === '') return;
                             const message: Message = {
-                              id: uuidv4(),
+                              id: Math.floor( Date.now() / 1000).toString(),
                               role: 'user',
                               content: {
                                 type: 'text',
