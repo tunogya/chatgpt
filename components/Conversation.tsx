@@ -20,7 +20,7 @@ const Conversation = () => {
   const bottomRef = useRef(null);
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('IDLE');
-  const [conversation, setConversation] = useState({
+  const [session, setSession] = useState({
     id: undefined,
     title: 'New Chat',
     messages: [],

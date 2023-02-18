@@ -8,7 +8,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
-import {IoWalletOutline} from "react-icons/io5";
+import {IoChatboxOutline, IoWalletOutline} from "react-icons/io5";
 import {RiVipCrown2Line} from "react-icons/ri";
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {setToken, setUser} from "@/store/user/authSlice";
@@ -16,7 +16,7 @@ import CoinsModalAndDrawer from "@/components/CoinsModalAndDrawer";
 import PassModalAndDrawer from "@/components/PassModalAndDrawer";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
-import {useCallback, useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
@@ -25,23 +25,24 @@ const Menu = () => {
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const dispatch = useDispatch();
   const jwt = useSelector((state: any) => state.auth.token);
+  const [conversation, setConversation] = useState([])
 
   const clearConversationList = async () => {
-    // const response = await fetch('/api/conversation', {
-    //     method: 'DELETE',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${jwt}`,
-    //     },
-    //     body: JSON.stringify({
-    //       ids: conversations.map((c) => c.id),
-    //     })
-    //   }
-    // );
-    // if (!response.ok) {
-    //   return
-    // }
-    // TODO clear current conversation
+    const response = await fetch('/api/conversation', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify({
+          ids: conversation.map((c: any) => c.id),
+        })
+      }
+    );
+    if (!response.ok) {
+      return
+    }
+    await getConversationList()
   }
 
   // only run once
@@ -54,6 +55,7 @@ const Menu = () => {
       },
     });
     const data = await response.json();
+    setConversation(data.items || []);
   }, [jwt]);
 
   useEffect(() => {
@@ -68,19 +70,20 @@ const Menu = () => {
               }}>
         New chat
       </Button>
-      {/*<Stack pt={2} h={'full'} overflow={"scroll"}>*/}
-      {/*  {conversations.map((item) => (*/}
-      {/*    <Button key={item.id} variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}*/}
-      {/*            _hover={{bg: 'bg3'}} onClick={() => {*/}
+      <Stack pt={2} h={'full'} overflow={"scroll"}>
+        {conversation.map((item: any) => (
+          <Button key={item.id} variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
+                  _hover={{bg: 'bg3'}} onClick={() => {
 
-      {/*    }}>*/}
-      {/*      <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}*/}
-      {/*            whiteSpace={'nowrap'} fontSize={'sm'}>*/}
-      {/*        {item.title}*/}
-      {/*      </Text>*/}
-      {/*    </Button>*/}
-      {/*  ))}*/}
-      {/*</Stack>*/}
+          }}
+          >
+            <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
+                  whiteSpace={'nowrap'} fontSize={'sm'}>
+              {item.title}
+            </Text>
+          </Button>
+        ))}
+      </Stack>
       <Spacer/>
       <Stack spacing={1}>
         <Box w={'full'} h={'1px'} bg={'whiteAlpha.400'}/>
@@ -98,7 +101,7 @@ const Menu = () => {
             {(1000).toLocaleString()} Coins
           </Text>
         </Button>
-        <CoinsModalAndDrawer isOpen={isOpenCoins} onClose={onCloseCoins} />
+        <CoinsModalAndDrawer isOpen={isOpenCoins} onClose={onCloseCoins}/>
         <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1}
                 onClick={onOpenPass}>
           <Text color={'white'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
@@ -109,7 +112,7 @@ const Menu = () => {
             {(3650).toLocaleString()} Days
           </Text>
         </Button>
-        <PassModalAndDrawer isOpen={isOpenPass} onClose={onClosePass} />
+        <PassModalAndDrawer isOpen={isOpenPass} onClose={onClosePass}/>
         <Button variant={'ghost'} gap={1} justifyContent={'start'} color={"white"}
                 leftIcon={colorMode === 'light' ? <MoonIcon color={'white'}/> : <SunIcon color={'white'}/>}
                 _hover={{bg: 'bg3'}} onClick={toggleColorMode}>

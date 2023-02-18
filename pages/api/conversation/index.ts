@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import {ddbDocClient} from "@/utils/DynamoDB";
 import {BatchWriteCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {v4 as uuidv4} from 'uuid';
-import {Message} from "@/components/ConversionCell";
 
 export default async function handler(
   req: NextApiRequest,
@@ -74,7 +73,7 @@ export default async function handler(
       try {
         await ddbDocClient.send(new BatchWriteCommand({
           RequestItems: {
-            'wizardingpay': messages.map((message: Message) => ({
+            'wizardingpay': messages.map((message: any) => ({
               PutRequest: {
                 Item: {
                   PK: conversation_id,
