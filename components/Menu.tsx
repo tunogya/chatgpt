@@ -11,7 +11,7 @@ import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
 import {IoChatboxOutline, IoWalletOutline} from "react-icons/io5";
 import {RiVipCrown2Line} from "react-icons/ri";
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
-import {logout, setConversation} from "@/store/user";
+import {clearSession, logout, setConversation} from "@/store/user";
 import CoinsModalAndDrawer from "@/components/CoinsModalAndDrawer";
 import PassModalAndDrawer from "@/components/PassModalAndDrawer";
 import {useRouter} from "next/router";
@@ -25,7 +25,7 @@ const Menu = () => {
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const dispatch = useDispatch();
   const jwt = useSelector((state: any) => state.user.token);
-  const status = useSelector((state: any) => state.user.status);
+  const session = useSelector((state: any) => state.user.session);
   const conversation = useSelector((state: any) => state.user.conversation);
 
   const clearConversationList = async () => {
@@ -46,6 +46,7 @@ const Menu = () => {
       }
       await getConversation()
     }
+    dispatch(clearSession())
     await router.push({
       pathname: `/chat`,
     })
@@ -64,10 +65,10 @@ const Menu = () => {
   }, [jwt]);
 
   useEffect(() => {
-    if (status === 'IDLE') {
+    if (session?.id) {
       getConversation()
     }
-  }, [status, getConversation])
+  }, [session, getConversation])
 
   return (
     <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}>

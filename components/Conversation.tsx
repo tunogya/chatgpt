@@ -13,7 +13,7 @@ import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {v4 as uuidv4} from 'uuid';
 import ConversationCell, {Message} from "@/components/ConversationCell";
-import {setStatus} from "@/store/user";
+import {addMessageToSession, setSession, updateMessageAndIdAndTitleToSession} from "@/store/user";
 import {useRouter} from "next/router";
 
 type ConversationProps = {
@@ -27,22 +27,18 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const bottomRef = useRef(null);
   const [input, setInput] = useState('');
   const jwt = useSelector((state: any) => state.user.token);
-  const status = useSelector((state: any) => state.user.status);
-  const [session, setSession] = useState({
-    id: conversation_id,
-    title: 'New Chat',
-    messages: [] as Message[],
-  });
+  const session = useSelector((state: any) => state.user.session);
+  const [status, setStatus] = useState('IDLE')
   const dispatch = useDispatch();
   const router = useRouter();
 
   const jumpToConversation = useCallback(() => {
-    if (session.id && router.pathname === '/chat') {
+    if (session?.id && router.pathname === '/chat') {
       router.push({
         pathname: `/chat/${session.id.split('#')[1]}`,
       })
     }
-  }, [router, session.id])
+  }, [router, session?.id])
 
   useEffect(() => {
     jumpToConversation()
@@ -60,14 +56,14 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       },
     })
     res = await res.json()
-    setSession({
+    dispatch(setSession({
       // @ts-ignore
       id: res.SK,
       // @ts-ignore
       title: res.title,
       // @ts-ignore
       messages: res.messages,
-    })
+    }))
   }, [jwt, conversation_id])
 
   useEffect(() => {
@@ -80,12 +76,8 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   }, []);
 
   const complete = async (message: Message) => {
-    dispatch(setStatus('LOADING'))
-    // append message to session
-    setSession((prev) => ({
-      ...prev,
-      messages: [...prev.messages, message]
-    }))
+    setStatus('LOADING')
+    dispatch(addMessageToSession(message))
     const res = await fetch('/api/conversation', {
       method: 'POST',
       headers: {
@@ -101,20 +93,19 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       }),
     })
     const result = await res.json()
-    setSession((prev) => ({
-      ...prev,
+    dispatch(updateMessageAndIdAndTitleToSession({
       id: result.id,
       title: result.title,
-      messages: [...prev.messages, result.messages[0]]
+      message: result.messages[0],
     }))
-    dispatch(setStatus('IDLE'))
+    setStatus('IDLE');
   }
 
   return (
     <Stack w={'full'} h={'full'} position={'relative'} bg={conversationBg} pt={['44px', '44px', 0]}>
       <Stack h={'full'} w={'full'} pb={'120px'} overflow={'scroll'} spacing={0}>
         {
-          session.messages && session.messages?.length > 0 ? session.messages.map((item, index) => (
+          session.messages && session.messages?.length > 0 ? session.messages.map((item: any, index: number) => (
             <ConversationCell message={item} key={index}/>
           )) : (
             <Stack align={'center'} justify={'center'} h={'full'}>

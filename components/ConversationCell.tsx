@@ -7,7 +7,8 @@ export type Message = {
   content: {
     type: 'text' | 'image' | 'video' | 'audio' | 'file'
     parts: string[]
-  }
+  },
+  create_at: number,
 }
 
 const ConversationCell: FC<{message: Message}> = ({message}) => {

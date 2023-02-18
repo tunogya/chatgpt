@@ -82,6 +82,7 @@ export default async function handler(
                   role: message.role,
                   content: message.content,
                   TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+                  create_at: Math.floor(Date.now() / 1000),
                 }
               },
             }))
@@ -121,7 +122,8 @@ export default async function handler(
             parts: [
               response.choices[0].text,
             ],
-          }
+          },
+          create_at: Math.floor(Date.now() / 1000),
         }
       ]
       await ddbDocClient.send(new BatchWriteCommand({
@@ -134,6 +136,7 @@ export default async function handler(
                 role: message.role,
                 content: message.content,
                 TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+                create_at: Math.floor(Date.now() / 1000),
               }
             },
           }))
