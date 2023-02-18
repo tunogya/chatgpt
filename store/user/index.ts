@@ -5,7 +5,8 @@ export const index = createSlice({
   initialState: {
     user: null,
     token: null,
-    conversation: []
+    conversation: [],
+    status: 'IDLE',
   },
   reducers: {
     setUser: (state, action) => {
@@ -21,10 +22,13 @@ export const index = createSlice({
       state.user = null
       state.token = null
       state.conversation = []
+    },
+    setStatus: (state, action) => {
+      state.status = action.payload
     }
   }
 })
 
-export const { setUser, setToken, logout, setConversation } = index.actions
+export const { setUser, setToken, logout, setConversation, setStatus } = index.actions
 
 export default index.reducer

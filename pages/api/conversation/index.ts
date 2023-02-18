@@ -37,6 +37,7 @@ export default async function handler(
           ':sk': 'CONVERSATION#',
           ':is_visible': true,
         },
+        ScanIndexForward: false,
       }));
       res.status(200).json({
         items: conversations.Items?.map((item: any) => ({

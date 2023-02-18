@@ -25,6 +25,7 @@ const Menu = () => {
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const dispatch = useDispatch();
   const jwt = useSelector((state: any) => state.user.token);
+  const status = useSelector((state: any) => state.user.status);
   const conversation = useSelector((state: any) => state.user.conversation);
 
   const clearConversationList = async () => {
@@ -50,7 +51,6 @@ const Menu = () => {
     })
   }
 
-  // only run once
   const getConversation = useCallback(async () => {
     const response = await fetch('/api/conversation', {
       method: 'GET',
@@ -64,8 +64,10 @@ const Menu = () => {
   }, [jwt]);
 
   useEffect(() => {
-    getConversation()
-  }, [getConversation])
+    if (status === 'IDLE') {
+      getConversation()
+    }
+  }, [status, getConversation])
 
   return (
     <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}>

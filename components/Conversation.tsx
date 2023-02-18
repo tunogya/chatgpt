@@ -10,9 +10,10 @@ import {
 } from "@chakra-ui/react";
 import {IoPaperPlaneOutline} from "react-icons/io5";
 import {FC, useCallback, useEffect, useRef, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {v4 as uuidv4} from 'uuid';
 import ConversationCell, {Message} from "@/components/ConversationCell";
+import {setStatus} from "@/store/user";
 
 type ConversationProps = {
   conversation_id?: string | undefined
@@ -24,13 +25,14 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const inputBgColor = useColorModeValue('white', 'bg6')
   const bottomRef = useRef(null);
   const [input, setInput] = useState('');
-  const [status, setStatus] = useState('IDLE');
   const jwt = useSelector((state: any) => state.user.token);
+  const status = useSelector((state: any) => state.user.status);
   const [session, setSession] = useState({
     id: conversation_id,
     title: 'New Chat',
     messages: [] as Message[],
   });
+  const dispatch = useDispatch()
 
   const getMessageHistory = useCallback(async () => {
     if (!conversation_id) {
@@ -64,7 +66,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   }, []);
 
   const complete = async (message: Message) => {
-    setStatus('LOADING')
+    dispatch(setStatus('LOADING'))
     // append message to session
     setSession((prev) => ({
       ...prev,
@@ -91,7 +93,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
         role: 'bot'
       }]
     }))
-    setStatus('IDLE')
+    dispatch(setStatus('IDLE'))
   }
 
   return (
