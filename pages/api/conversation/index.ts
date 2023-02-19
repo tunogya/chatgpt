@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import jwt from "jsonwebtoken";
 import {ddbDocClient} from "@/utils/DynamoDB";
-import {BatchWriteCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
+import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {v4 as uuidv4} from 'uuid';
 
 export default async function handler(
@@ -90,6 +90,26 @@ export default async function handler(
         res.status(500).json({error: 'failed to create conversation'})
         return
       }
+      // define init prompt of openai
+      let prompt = '';
+      if (parent_message_id) {
+        try {
+          const parent_message = await ddbDocClient.send(new GetCommand({
+            TableName: 'wizardingpay',
+            Key: {
+              PK: conversation_id,
+              SK: parent_message_id,
+            }
+          }));
+          const parent_message_role = parent_message.Item?.role;
+          const parent_message_content = parent_message.Item?.content.parts[0];
+          prompt = prompt + `${parent_message_role}: ${parent_message_content}\n`;
+        } catch (e) {
+          res.status(500).json({error: 'failed to create conversation'})
+        }
+      }
+      prompt = prompt + `user: ${messages[0].content.parts[0]}\nai: `;
+      console.log(prompt);
       let result = await fetch('https://api.openai.com/v1/completions', {
         headers: {
           'Content-Type': 'application/json',
@@ -97,8 +117,8 @@ export default async function handler(
         },
         method: 'POST',
         body: JSON.stringify({
-          model: 'text-davinci-003',
-          prompt: `Human: ${messages[0].content.parts[0]}\nAI: `,
+          model,
+          prompt,
           temperature: 0.7,
           top_p: 1,
           frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
@@ -148,7 +168,6 @@ export default async function handler(
     }
     else if (req.method === 'DELETE') {
       const {ids} = req.body;
-      console.log(ids)
       try {
         await ddbDocClient.send(new BatchWriteCommand({
           RequestItems: {

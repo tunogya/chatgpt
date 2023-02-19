@@ -11,12 +11,15 @@ import {
 import {AddIcon, HamburgerIcon} from "@chakra-ui/icons";
 import Menu from "@/components/Menu";
 import {useRouter} from "next/router";
+import {clearSession} from "@/store/user";
+import {useDispatch} from "react-redux";
 
 const MenuMobile = () => {
   const conversationBg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const {isOpen: isOpenMobileMenu, onOpen: onOpenMobileMenu, onClose: onCLoseMobileMenu} = useDisclosure()
   const router = useRouter()
+  const dispatch = useDispatch()
 
   return (
     <HStack h={'44px'} w={'full'} position={'absolute'} top={0} left={0} zIndex={'docked'} borderBottom={'1px solid'}
@@ -37,6 +40,7 @@ const MenuMobile = () => {
       </Drawer>
       <Text color={fontColor} fontSize={'md'} fontWeight={'500'}>New chat</Text>
       <IconButton aria-label={'add'} icon={<AddIcon fontSize={'sm'}/>} variant={'ghost'} onClick={() => {
+        dispatch(clearSession());
         router.push({
           pathname: '/chat',
         })

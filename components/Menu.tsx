@@ -75,6 +75,7 @@ const Menu = () => {
       <Button variant={'outline'} boxShadow={'md'} minH={'46px'} borderColor={'whiteAlpha.400'} _hover={{bg: 'bg3'}}
               leftIcon={<FiPlus color={'white'}/>} justifyContent={"start"} gap={1} color={"white"}
               onClick={() => {
+                dispatch(clearSession());
                 router.push({
                   pathname: `/chat`,
                 })
