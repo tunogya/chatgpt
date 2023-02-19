@@ -43,7 +43,7 @@ const Menu = () => {
   const priorityPassDays = Math.ceil(priorityPass / 86400);
 
   const clearConversationList = async () => {
-    if (conversation.length) {
+    if (conversation && conversation.length) {
       setIsWaitClear(true);
       const response = await fetch('/api/conversation', {
           method: 'DELETE',
@@ -119,7 +119,7 @@ const Menu = () => {
         New chat
       </Button>
       <Stack pt={2} h={'full'} overflow={"scroll"}>
-        {conversation.map((item: any) => (
+        {conversation && conversation?.map((item: any) => (
           <Button key={item.id} variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
                   _hover={{bg: 'bg3'}}
                   onClick={() => {
