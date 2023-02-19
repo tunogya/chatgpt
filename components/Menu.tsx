@@ -16,7 +16,7 @@ import CoinsModalAndDrawer from "@/components/CoinsModalAndDrawer";
 import PassModalAndDrawer from "@/components/PassModalAndDrawer";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
-import {useCallback, useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
@@ -27,9 +27,11 @@ const Menu = () => {
   const jwt = useSelector((state: any) => state.user.token);
   const session = useSelector((state: any) => state.user.session);
   const conversation = useSelector((state: any) => state.user.conversation);
+  const [isWaitClear, setIsWaitClear] = useState(false);
 
   const clearConversationList = async () => {
     if (conversation.length) {
+      setIsWaitClear(true);
       const response = await fetch('/api/conversation', {
           method: 'DELETE',
           headers: {
@@ -47,6 +49,7 @@ const Menu = () => {
       await getConversationHistory()
     }
     dispatch(clearSession())
+    setIsWaitClear(false);
     await router.push({
       pathname: `/chat`,
     })
@@ -102,7 +105,7 @@ const Menu = () => {
       <Spacer/>
       <Stack spacing={1}>
         <Box w={'full'} h={'1px'} bg={'whiteAlpha.400'}/>
-        <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} gap={1} justifyContent={"start"}
+        <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} gap={1} justifyContent={"start"} isLoading={isWaitClear} loadingText={'Clearing...'}
                 color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
           Clear conversations
         </Button>
@@ -139,13 +142,10 @@ const Menu = () => {
           {colorMode === 'light' ? 'Dark' : 'Light'} mode
         </Button>
         <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} justifyContent={"start"} gap={1}
-                color={'white'}
-                _hover={{bg: 'bg3'}}
+                color={'white'} _hover={{bg: 'bg3'}}
                 onClick={() => {
+                  dispatch(logout())
                   router.push('/auth/login')
-                    .then(() => {
-                      dispatch(logout())
-                    })
                 }}>
           Log out
         </Button>
