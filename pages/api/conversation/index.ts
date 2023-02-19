@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import jwt from "jsonwebtoken";
 import {ddbDocClient} from "@/utils/DynamoDB";
-import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
+import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand, UpdateCommand} from "@aws-sdk/lib-dynamodb";
 import {v4 as uuidv4} from 'uuid';
 
 export default async function handler(
@@ -50,6 +50,51 @@ export default async function handler(
       });
     } else if (req.method === 'POST') {
       const {action, messages, model, parent_message_id} = req.body;
+      // get user info
+      const user = await ddbDocClient.send(new GetCommand({
+        TableName: 'wizardingpay',
+        Key: {
+          PK: user_id,
+          SK: user_id,
+        },
+      }));
+      if (!user.Item) {
+        res.status(500).json({error: 'user not found'})
+        return
+      }
+      const balance = user.Item.balance || 0;
+      let max_cost;
+      if (model === 'text-davinci-003') {
+        max_cost = 0.0200 * 4000 / 1000;
+      } else if (model === 'text-curie-001') {
+        max_cost = 0.0020 * 2048 / 1000;
+      } else if (model === 'text-babbage-001') {
+        max_cost = 0.0005 * 2048 / 1000;
+      } else if (model === 'text-ada-001') {
+        max_cost = 0.0004 * 2048 / 1000;
+      } else {
+        res.status(400).json({error: 'invalid model'})
+        return
+      }
+      if (balance < max_cost) {
+        res.status(200).json({
+          id: 'insufficient_balance',
+          title: messages[0].content.parts[0],
+          messages: [
+            {
+              id: 'insufficient_balance',
+              role: 'ai',
+              content: {
+                type: 'error',
+                parts: [
+                  'Sorry, you do not have enough balance to use this model. Please top up your balance and try again.',
+                ],
+              }
+            }
+          ],
+        })
+        return
+      }
       let conversation_id = req.body?.conversation_id || undefined;
       if (!conversation_id) {
         conversation_id = `CONVERSATION#${uuidv4()}`;
@@ -109,6 +154,15 @@ export default async function handler(
         }
       }
       prompt = prompt + `user: ${messages[0].content.parts[0]}\nai: `;
+      /** https://platform.openai.com/docs/models/gpt-3
+       text-davinci-003 max 4000 tokens, others max 2048 tokens
+       **/
+      let max_tokens
+      if (model === 'text-davinci-003') {
+        max_tokens = 4000;
+      } else {
+        max_tokens = 2048;
+      }
       let result = await fetch('https://api.openai.com/v1/completions', {
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +176,7 @@ export default async function handler(
           top_p: 1,
           frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
           presence_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
-          max_tokens: 200,
+          max_tokens,
           // stream: true, // false is default
           n: 1,
           best_of: 1, // 1 is default
@@ -130,7 +184,24 @@ export default async function handler(
           stop: ['user:'],
         }),
       });
-      const response = await result.json();
+      /** response example from openai
+       {
+        id: 'cmpl-6lYpny527dT8FWkDWwdPuDnsLCRsW',
+        object: 'text_completion',
+        created: 1676793339,
+        model: 'text-davinci-003',
+        choices: [
+          {
+            text: '\nThe current price of Bitcoin is $7,346.54.',
+            index: 0,
+            logprobs: null,
+            finish_reason: 'stop'
+          }
+        ],
+        usage: { prompt_tokens: 9, completion_tokens: 14, total_tokens: 23 }
+      }
+       **/
+      const {choices, usage} = await result.json();
       const aiMessages = [
         {
           id: Math.floor(Date.now() / 1000).toString(),
@@ -138,12 +209,41 @@ export default async function handler(
           content: {
             type: 'text',
             parts: [
-              response.choices[0].text,
+              choices[0].text,
             ],
           },
           create_at: Math.floor(Date.now() / 1000),
         }
       ]
+      const total_tokens = usage.total_tokens;
+      let price;
+      if (model === 'text-davinci-003') {
+        price = 0.02 / 1000 * total_tokens;
+      } else if (model === 'text-curie-001') {
+        price = 0.002 / 1000 * total_tokens;
+      } else if (model === 'text-babbage-001') {
+        price = 0.0005 / 1000 * total_tokens;
+      } else if (model === 'text-ada-001') {
+        price = 0.0004 / 1000 * total_tokens;
+      }
+      // update user balance
+      await ddbDocClient.send(new UpdateCommand({
+        TableName: 'wizardingpay',
+        Key: {
+          PK: user_id,
+          SK: user_id,
+        },
+        // PK should exist, and balance should gte price
+        ConditionExpression: 'attribute_exists(PK) AND #balance >= :price',
+        UpdateExpression: 'set #balance = if_not_exists(#balance, :initBalance) - :price',
+        ExpressionAttributeValues: {
+          ':price': price,
+          ':initBalance': 0,
+        },
+        ExpressionAttributeNames: {
+          '#balance': 'balance',
+        }
+      }))
       await ddbDocClient.send(new BatchWriteCommand({
         RequestItems: {
           'wizardingpay': aiMessages.map((message: any) => ({
@@ -165,8 +265,7 @@ export default async function handler(
         title: messages[0].content.parts[0],
         messages: aiMessages,
       });
-    }
-    else if (req.method === 'DELETE') {
+    } else if (req.method === 'DELETE') {
       const {ids} = req.body;
       try {
         await ddbDocClient.send(new BatchWriteCommand({

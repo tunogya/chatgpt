@@ -33,6 +33,9 @@ export default async function handler(
         username,
         password,
         create_at: Math.floor(new Date().getTime() / 1000),
+        balance: 0,
+        free_pass: Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24, // 1 day
+        priority_pass: 0,
       },
       ConditionExpression: 'attribute_not_exists(#PK)',
       ExpressionAttributeNames: {
