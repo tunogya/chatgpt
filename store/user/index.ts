@@ -5,6 +5,8 @@ export const index = createSlice({
   name: 'user',
   initialState: {
     user: null,
+    username: null,
+    photo_url: null,
     token: null,
     balance: 0,
     priority_pass: 0,
@@ -18,6 +20,12 @@ export const index = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload
+    },
+    setUsername: (state, action) => {
+      state.username = action.payload
+    },
+    setPhotoUrl: (state, action) => {
+      state.photo_url = action.payload
     },
     setToken: (state, action) => {
       state.token = action.payload
@@ -65,6 +73,8 @@ export const index = createSlice({
 
 export const {
   setUser,
+  setUsername,
+  setPhotoUrl,
   setToken,
   setBalance,
   setPriorityPass,

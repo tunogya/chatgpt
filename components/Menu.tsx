@@ -11,7 +11,16 @@ import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
 import {IoChatboxOutline, IoWalletOutline} from "react-icons/io5";
 import {RiVipCrown2Line} from "react-icons/ri";
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
-import {clearSession, logout, setBalance, setConversation, setPriorityPass, setToken} from "@/store/user";
+import {
+  clearSession,
+  logout,
+  setBalance,
+  setConversation,
+  setPhotoUrl,
+  setPriorityPass,
+  setToken,
+  setUsername
+} from "@/store/user";
 import CoinsModalAndDrawer from "@/components/CoinsModalAndDrawer";
 import PassModalAndDrawer from "@/components/PassModalAndDrawer";
 import {useRouter} from "next/router";
@@ -83,6 +92,8 @@ const Menu = () => {
     dispatch(setToken(data.token));
     dispatch(setBalance(data.balance));
     dispatch(setPriorityPass(data.priority_pass));
+    dispatch(setUsername(data.username));
+    dispatch(setPhotoUrl(data.photo_url));
   }, [jwt])
 
   useEffect(() => {

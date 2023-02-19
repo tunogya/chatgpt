@@ -43,6 +43,7 @@ export default async function handler(
       },
     }));
     const token = jwt.sign({
+      id: `USER#${username.toLowerCase()}`,
       username,
       iat: Math.floor(Date.now() / 1000) - 3, // 3 seconds before
     }, process.env.JWT_SECRET || '', {

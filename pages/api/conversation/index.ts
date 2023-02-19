@@ -83,14 +83,14 @@ export default async function handler(
         }
         if (balance < max_cost) {
           res.status(200).json({
-            id: 'insufficient_balance',
+            id: undefined,
             title: messages[0].content.parts[0],
             messages: [
               {
-                id: 'insufficient_balance',
-                role: 'ai',
+                id: Math.floor(Date.now() / 1000).toString(),
+                role: 'pay',
                 content: {
-                  type: 'error',
+                  type: 'text',
                   parts: [
                     'Sorry, you do not have enough balance to use this model. Please top up your balance and try again.',
                   ],

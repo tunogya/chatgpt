@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type {NextApiRequest, NextApiResponse} from 'next';
 import {ddbDocClient} from "@/utils/DynamoDB";
 import {GetCommand} from '@aws-sdk/lib-dynamodb';
 import jwt from 'jsonwebtoken';
@@ -31,7 +31,7 @@ export default async function handler(
     }
     const user_id = decoded.id;
     // get user info
-    const { Item } = await ddbDocClient.send(new GetCommand({
+    const {Item} = await ddbDocClient.send(new GetCommand({
       TableName: 'wizardingpay',
       Key: {
         PK: user_id,
@@ -45,6 +45,7 @@ export default async function handler(
     // generate new token
     const token = jwt.sign({
       id: Item.PK,
+      username: Item.username,
       iat: Math.floor(Date.now() / 1000) - 3, // 3 seconds before
     }, process.env.JWT_SECRET || '', {
       expiresIn: '7d',
@@ -52,8 +53,10 @@ export default async function handler(
     res.status(200).json({
       // @ts-ignore
       id: Item.PK,
+      username: Item.username || undefined,
       balance: Item.balance || 0,
       priority_pass: Item.priority_pass || 0,
+      photo_url: Item.photo_url || undefined,
       token,
     })
   })
