@@ -25,7 +25,7 @@ const CoinsBody = () => {
         Tips: recharge is valid forever.
       </Text>
       <Spacer/>
-      <Text fontSize={'sm'} color={fontColor}>My balance: {balance.toLocaleString()} Coins</Text>
+      <Text fontSize={'sm'} color={fontColor}>My balance: {balance?.toLocaleString()} Coins</Text>
     </Stack>
   )
 }

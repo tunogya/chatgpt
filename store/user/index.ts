@@ -41,7 +41,11 @@ export const index = createSlice({
     },
     logout: (state) => {
       state.user = null
+      state.username = null
       state.token = null
+      state.balance = 0
+      state.priority_pass = 0
+      state.photo_url = null
       state.conversation = []
       state.session = {
         id: null,
