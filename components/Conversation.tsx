@@ -3,7 +3,7 @@ import {
   IconButton,
   Input,
   InputGroup,
-  InputRightElement,
+  InputRightElement, Spinner,
   Stack,
   Text,
   useColorModeValue,
@@ -27,10 +27,12 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const [input, setInput] = useState('');
   const jwt = useSelector((state: any) => state.user.token);
   const session = useSelector((state: any) => state.user.session);
-  const [status, setStatus] = useState('IDLE')
+  const [isWaitComplete, setIsWaitComplete] = useState(false);
+  const [isWaitHistory, setIsWaitHistory] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
 
+  // if session have id, jump to conversation
   const jumpToConversation = useCallback(() => {
     if (session?.id && router.pathname === '/chat') {
       router.push({
@@ -43,10 +45,12 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
     jumpToConversation()
   }, [jumpToConversation])
 
-  const getMessageHistory = useCallback(async () => {
+  // get current conversation history
+  const getHistoryMessageOfSession = useCallback(async () => {
     if (!conversation_id) {
       return
     }
+    setIsWaitHistory(true);
     let res = await fetch(`/api/conversation/${conversation_id}`, {
       method: 'GET',
       headers: {
@@ -63,19 +67,22 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       // @ts-ignore
       messages: res.messages,
     }))
+    setIsWaitHistory(false);
   }, [jwt, conversation_id])
 
   useEffect(() => {
-    getMessageHistory()
-  }, [getMessageHistory])
+    getHistoryMessageOfSession()
+  }, [getHistoryMessageOfSession])
 
+  // scroll to bottom when new message
   useEffect(() => {
     // @ts-ignore
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
-  }, []);
+  }, [session.messages]);
 
+  // request message to ai and complete conversation
   const complete = async (message: Message) => {
-    setStatus('LOADING')
+    setIsWaitComplete(true)
     dispatch(addMessageToSession(message))
     const res = await fetch('/api/conversation', {
       method: 'POST',
@@ -97,7 +104,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       title: result.title,
       message: result.messages[0],
     }))
-    setStatus('IDLE');
+    setIsWaitComplete(false);
   }
 
   return (
@@ -107,10 +114,16 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
           session.messages && session.messages?.length > 0 ? session.messages.map((item: any, index: number) => (
             <ConversationCell message={item} key={index}/>
           )) : (
-            <Stack align={'center'} justify={'center'} h={'full'}>
-              <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
-              <Text fontSize={'xs'} color={fontColor}>Power by OpenAI</Text>
-            </Stack>
+            isWaitHistory ? (
+              <Stack p={4}>
+                <Spinner color={fontColor}/>
+              </Stack>
+              ) : (
+              <Stack align={'center'} justify={'center'} h={'full'}>
+                <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
+                <Text fontSize={'xs'} color={fontColor}>Power by OpenAI</Text>
+              </Stack>
+            )
           )}
         <div ref={bottomRef}/>
       </Stack>
@@ -118,13 +131,13 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
         <Stack px={2} w={'full'} align={'center'}>
           <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
             <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md']} value={input}
-                   isDisabled={status === 'LOADING'}
+                   isDisabled={isWaitComplete}
                    onChange={(e) => {
                      setInput(e.target.value)
                    }}
             />
             <InputRightElement h={'full'} pr={1}>
-              <IconButton aria-label={'send'} isLoading={status === 'LOADING'}
+              <IconButton aria-label={'send'} isLoading={isWaitComplete}
                           icon={<IoPaperPlaneOutline color={fontColor} size={'20'}/>} variant={'ghost'}
                           onClick={async (e) => {
                             e.preventDefault();

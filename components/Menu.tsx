@@ -44,7 +44,7 @@ const Menu = () => {
       if (!response.ok) {
         return
       }
-      await getConversation()
+      await getConversationHistory()
     }
     dispatch(clearSession())
     await router.push({
@@ -52,7 +52,7 @@ const Menu = () => {
     })
   }
 
-  const getConversation = useCallback(async () => {
+  const getConversationHistory = useCallback(async () => {
     const response = await fetch('/api/conversation', {
       method: 'GET',
       headers: {
@@ -66,9 +66,9 @@ const Menu = () => {
 
   useEffect(() => {
     if (session?.id) {
-      getConversation()
+      getConversationHistory()
     }
-  }, [session, getConversation])
+  }, [session, getConversationHistory])
 
   return (
     <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}>
