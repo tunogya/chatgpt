@@ -108,7 +108,7 @@ export default async function handler(
           res.status(500).json({error: 'failed to create conversation'})
         }
       }
-      prompt = prompt + `\nuser: ${messages[0].content.parts[0]}\nai: `;
+      prompt = prompt + `user: ${messages[0].content.parts[0]}\nai: `;
       let result = await fetch('https://api.openai.com/v1/completions', {
         headers: {
           'Content-Type': 'application/json',
@@ -127,6 +127,7 @@ export default async function handler(
           n: 1,
           best_of: 1, // 1 is default
           user: user_id,
+          stop: ['user:'],
         }),
       });
       const response = await result.json();
