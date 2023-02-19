@@ -142,13 +142,13 @@ const Menu = () => {
                 color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
           Clear conversations
         </Button>
-        <Button variant={'ghost'} leftIcon={<IoWalletOutline color={'white'}/>} _hover={{bg: 'bg3'}} gap={1}
+        <Button variant={'ghost'} leftIcon={<IoWalletOutline color={'white'}/>} _hover={{bg: 'bg3'}} gap={1} color={'white'}
                 justifyContent={"start"}
                 onClick={onOpenCoins}>
           Balance
         </Button>
         <CoinsModalAndDrawer isOpen={isOpenCoins} onClose={onCloseCoins}/>
-        <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1}
+        <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1} color={'white'}
                 justifyContent={"start"} onClick={onOpenPass}>
           Priority Pass
         </Button>
