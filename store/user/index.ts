@@ -6,6 +6,8 @@ export const index = createSlice({
   initialState: {
     user: null,
     token: null,
+    balance: 0,
+    priority_pass: 0,
     conversation: [],
     session: {
       id: null,
@@ -19,6 +21,12 @@ export const index = createSlice({
     },
     setToken: (state, action) => {
       state.token = action.payload
+    },
+    setBalance: (state, action) => {
+      state.balance = action.payload
+    },
+    setPriorityPass: (state, action) => {
+      state.priority_pass = action.payload
     },
     setConversation: (state, action) => {
       state.conversation = action.payload || [];
@@ -58,6 +66,8 @@ export const index = createSlice({
 export const {
   setUser,
   setToken,
+  setBalance,
+  setPriorityPass,
   logout,
   setConversation,
   setSession,

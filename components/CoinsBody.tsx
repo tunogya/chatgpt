@@ -6,9 +6,11 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import {useSelector} from "react-redux";
 
 const CoinsBody = () => {
-  const fontColor = useColorModeValue('fontColor1', 'fontColor2')
+  const fontColor = useColorModeValue('fontColor1', 'fontColor2');
+  const balance = useSelector((state: any) => state.user.balance);
 
   return (
     <Stack spacing={3} minH={'300px'}>
@@ -23,7 +25,7 @@ const CoinsBody = () => {
         Tips: recharge is valid forever.
       </Text>
       <Spacer/>
-      <Text fontSize={'sm'} color={fontColor}>My balance: 1000 Coins</Text>
+      <Text fontSize={'sm'} color={fontColor}>My balance: {balance.toLocaleString()} Coins</Text>
     </Stack>
   )
 }

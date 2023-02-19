@@ -11,7 +11,7 @@ import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
 import {IoChatboxOutline, IoWalletOutline} from "react-icons/io5";
 import {RiVipCrown2Line} from "react-icons/ri";
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
-import {clearSession, logout, setConversation} from "@/store/user";
+import {clearSession, logout, setBalance, setConversation, setPriorityPass, setToken} from "@/store/user";
 import CoinsModalAndDrawer from "@/components/CoinsModalAndDrawer";
 import PassModalAndDrawer from "@/components/PassModalAndDrawer";
 import {useRouter} from "next/router";
@@ -25,9 +25,13 @@ const Menu = () => {
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const dispatch = useDispatch();
   const jwt = useSelector((state: any) => state.user.token);
+  const balance = useSelector((state: any) => state.user.balance);
+  const priorityPass = useSelector((state: any) => state.user.priority_pass);
   const session = useSelector((state: any) => state.user.session);
   const conversation = useSelector((state: any) => state.user.conversation);
   const [isWaitClear, setIsWaitClear] = useState(false);
+
+  const priorityPassDays = Math.ceil(priorityPass / 86400);
 
   const clearConversationList = async () => {
     if (conversation.length) {
@@ -66,6 +70,24 @@ const Menu = () => {
     const data = await response.json();
     dispatch(setConversation(data.items || []));
   }, [jwt]);
+
+  const getUserSession = useCallback(async () => {
+    const response = await fetch('/api/session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    const data = await response.json();
+    dispatch(setToken(data.token));
+    dispatch(setBalance(data.balance));
+    dispatch(setPriorityPass(data.priority_pass));
+  }, [jwt])
+
+  useEffect(() => {
+    getUserSession()
+  }, [getUserSession])
 
   useEffect(() => {
     if (session?.id) {
@@ -112,28 +134,12 @@ const Menu = () => {
         <Button variant={'ghost'} leftIcon={<IoWalletOutline color={'white'}/>} _hover={{bg: 'bg3'}} gap={1}
                 justifyContent={"start"}
                 onClick={onOpenCoins}>
-          <Stack align={"start"} spacing={0}>
-            <Text color={'white'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
-                  pr={'2px'}>
-              Balance
-            </Text>
-            <Text color={'white'} textAlign={'end'} fontSize={'xx-small'}>
-              {(1000).toLocaleString()} Coins
-            </Text>
-          </Stack>
+          Balance
         </Button>
         <CoinsModalAndDrawer isOpen={isOpenCoins} onClose={onCloseCoins}/>
         <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1}
                 justifyContent={"start"} onClick={onOpenPass}>
-          <Stack align={"start"} spacing={0}>
-            <Text color={'white'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
-                  pr={'2px'}>
-              Priority Pass
-            </Text>
-            <Text color={'white'} textAlign={'end'} fontSize={'xx-small'}>
-              {(3650).toLocaleString()} Days
-            </Text>
-          </Stack>
+          Priority Pass
         </Button>
         <PassModalAndDrawer isOpen={isOpenPass} onClose={onClosePass}/>
         <Button variant={'ghost'} gap={1} justifyContent={'start'} color={"white"}

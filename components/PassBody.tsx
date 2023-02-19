@@ -7,46 +7,40 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import {RiVipCrown2Line} from "react-icons/ri";
+import {useSelector} from "react-redux";
 
 const PassBody = () => {
-  const fontColor = useColorModeValue('fontColor1', 'fontColor2')
+  const fontColor = useColorModeValue('fontColor1', 'fontColor2');
+  const priorityPass = useSelector((state: any) => state.user.priority_pass);
+
+  const priorityPassDays = Math.ceil(priorityPass / 86400);
+
+  const expireDate = new Date(priorityPass * 1000).toLocaleString();
 
   return (
     <Stack spacing={3} minH={'300px'}>
       <Card p={3} variant={'outline'} cursor={'pointer'}>
-        <Stack>
-          <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>Free Pass</Text>
-          <Text fontSize={'xx-small'} color={fontColor}>
-            The Free Pass presents experience benefits for the ChatGPT.
-          </Text>
+        <Stack h={'full'}>
+          <HStack>
+            <RiVipCrown2Line color={'gold'}/>
+            <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>Priority Pass</Text>
+          </HStack>
           <br/>
           <HStack spacing={1} align={'baseline'}>
             <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>
-              365 days
+              {priorityPassDays.toLocaleString()} days
             </Text>
-            <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>
-              · expired on 3.19
-            </Text>
+            {
+              priorityPassDays > 1 && (
+                <Text color={fontColor} fontSize={'xx-small'} fontWeight={'500'}>
+                  · expired on {expireDate}
+                </Text>
+              )
+            }
           </HStack>
         </Stack>
       </Card>
-      {/*<Card p={3} variant={'outline'} cursor={'pointer'}>*/}
-      {/*  <Stack h={'full'}>*/}
-      {/*    <HStack>*/}
-      {/*      <RiVipCrown2Line color={'gold'}/>*/}
-      {/*      <Text color={fontColor} fontSize={'sm'} fontWeight={'500'}>Priority Pass</Text>*/}
-      {/*    </HStack>*/}
-      {/*    <br/>*/}
-      {/*    <HStack spacing={1} align={'baseline'}>*/}
-      {/*      <Text color={fontColor} fontSize={'xs'} fontWeight={'500'}>*/}
-      {/*        365 days*/}
-      {/*      </Text>*/}
-      {/*      <Text color={fontColor} fontSize={'xx-small'} fontWeight={'500'}>*/}
-      {/*        · expired on 3.19*/}
-      {/*      </Text>*/}
-      {/*    </HStack>*/}
-      {/*  </Stack>*/}
-      {/*</Card>*/}
       <br/>
       <Text fontSize={'sm'} fontWeight={'500'} color={fontColor}>Join Priority Pass</Text>
       <SimpleGrid columns={[2, null, 3]} spacing={3}>
