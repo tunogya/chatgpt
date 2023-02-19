@@ -125,18 +125,6 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
               </Stack>
             )
           )}
-        {
-          isWaitComplete && (
-            <ConversationCell message={{
-              id: Math.floor( Date.now() / 1000).toString(),
-              role: 'ai',
-              content: {
-                type: 'text',
-                parts: [''],
-              }
-            }}/>
-          )
-        }
         <div ref={bottomRef}/>
       </Stack>
       <Stack position={'absolute'} bottom={0} left={0} w={'full'} spacing={0}>
