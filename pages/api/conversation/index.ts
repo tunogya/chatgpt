@@ -4,6 +4,14 @@ import {ddbDocClient} from "@/utils/DynamoDB";
 import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {v4 as uuidv4} from 'uuid';
 
+export const config = {
+  runtime: "edge",
+  api: {
+    bodyParser: false,
+    responseLimit: false,
+  },
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -50,7 +58,7 @@ export default async function handler(
       });
     } else if (req.method === 'POST') {
       const {action, messages, model, parent_message_id} = req.body;
-      // get user info
+      // get user priority pass
       const user = await ddbDocClient.send(new GetCommand({
         TableName: 'wizardingpay',
         Key: {
@@ -130,33 +138,33 @@ export default async function handler(
       /** https://platform.openai.com/docs/models/gpt-3
        text-davinci-003 max 4000 tokens, others max 2048 tokens
        **/
-      let max_tokens
-      if (model === 'text-davinci-003') {
-        max_tokens = 4000;
-      } else {
-        max_tokens = 2048;
-      }
-      let result = await fetch('https://api.openai.com/v1/completions', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          model,
-          prompt,
-          temperature: 0.7,
-          top_p: 1,
-          frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
-          presence_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
-          max_tokens,
-          // stream: true, // false is default
-          n: 1,
-          best_of: 1, // 1 is default
-          user: user_id,
-          stop: ['user:'],
-        }),
-      });
+      // let max_tokens
+      // if (model === 'text-davinci-003') {
+      //   max_tokens = 4000;
+      // } else {
+      //   max_tokens = 2048;
+      // }
+      // let result = await fetch('https://api.openai.com/v1/completions', {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
+      //   },
+      //   method: 'POST',
+      //   body: JSON.stringify({
+      //     model,
+      //     prompt,
+      //     temperature: 0.7,
+      //     top_p: 1,
+      //     frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
+      //     presence_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
+      //     max_tokens,
+      //     // stream: true, // false is default
+      //     n: 1,
+      //     best_of: 1, // 1 is default
+      //     user: user_id,
+      //     stop: ['user:'],
+      //   }),
+      // });
       /** response example from openai
        {
         id: 'cmpl-6lYpny527dT8FWkDWwdPuDnsLCRsW',
@@ -174,40 +182,84 @@ export default async function handler(
         usage: { prompt_tokens: 9, completion_tokens: 14, total_tokens: 23 }
       }
        **/
-      const {choices} = await result.json();
-      const aiMessages = [
+      // const {choices} = await result.json();
+      // const aiMessages = [
+      //   {
+      //     id: Math.floor(Date.now() / 1000).toString(),
+      //     role: 'ai',
+      //     content: {
+      //       type: 'text',
+      //       parts: [
+      //         choices[0].text,
+      //       ],
+      //     },
+      //     create_at: Math.floor(Date.now() / 1000),
+      //   }
+      // ];
+      // await ddbDocClient.send(new BatchWriteCommand({
+      //   RequestItems: {
+      //     'wizardingpay': aiMessages.map((message: any) => ({
+      //       PutRequest: {
+      //         Item: {
+      //           PK: conversation_id,
+      //           SK: message.id,
+      //           role: message.role,
+      //           content: message.content,
+      //           TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+      //           create_at: Math.floor(Date.now() / 1000),
+      //         }
+      //       },
+      //     }))
+      //   }
+      // }));
+      // res.status(200).json({
+      //   id: conversation_id,
+      //   title: messages[0].content.parts[0],
+      //   messages: aiMessages,
+      // });
+      const encoder = new TextEncoder();
+      let count = 0;
+
+      const resultStream = new ReadableStream(
         {
-          id: Math.floor(Date.now() / 1000).toString(),
-          role: 'ai',
-          content: {
-            type: 'text',
-            parts: [
-              choices[0].text,
-            ],
+          pull(controller) {
+            if (count < 100) {
+              controller.enqueue(encoder.encode(JSON.stringify({
+                id: conversation_id,
+                title: messages[0].content.parts[0].slice(0, 20),
+                messages: [
+                  {
+                    id: Math.floor(Date.now() / 1000).toString(),
+                    role: 'ai',
+                    content: {
+                      type: 'text',
+                      parts: [
+                        `${count}`,
+                      ],
+                    }
+                  }
+                ],
+              }) + "\n"));
+              count++;
+            } else {
+              controller.close();
+            }
           },
-          create_at: Math.floor(Date.now() / 1000),
+        },
+        {
+          highWaterMark: 1,
+          size(chunk) {
+            return 1;
+          },
         }
-      ];
-      await ddbDocClient.send(new BatchWriteCommand({
-        RequestItems: {
-          'wizardingpay': aiMessages.map((message: any) => ({
-            PutRequest: {
-              Item: {
-                PK: conversation_id,
-                SK: message.id,
-                role: message.role,
-                content: message.content,
-                TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
-                create_at: Math.floor(Date.now() / 1000),
-              }
-            },
-          }))
-        }
-      }));
-      res.status(200).json({
-        id: conversation_id,
-        title: messages[0].content.parts[0],
-        messages: aiMessages,
+      );
+
+      return new Response(resultStream, {
+        status: 200,
+        headers: {
+          "content-type": "text/plain",
+          "Cache-Control": "no-cache",
+        },
       });
     } else if (req.method === 'DELETE') {
       const {ids} = req.body;
