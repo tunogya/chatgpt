@@ -8,20 +8,18 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
-import {IoChatboxOutline, IoWalletOutline} from "react-icons/io5";
+import {IoChatboxOutline} from "react-icons/io5";
 import {RiVipCrown2Line} from "react-icons/ri";
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {
   clearSession,
   logout,
-  setBalance,
   setConversation,
   setPhotoUrl,
   setPriorityPass,
   setToken,
   setUsername
 } from "@/store/user";
-import CoinsModalAndDrawer from "@/components/CoinsModalAndDrawer";
 import PassModalAndDrawer from "@/components/PassModalAndDrawer";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
@@ -30,17 +28,12 @@ import {useCallback, useEffect, useState} from "react";
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
   const router = useRouter()
-  const {isOpen: isOpenCoins, onOpen: onOpenCoins, onClose: onCloseCoins} = useDisclosure()
   const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const dispatch = useDispatch();
   const jwt = useSelector((state: any) => state.user.token);
-  const balance = useSelector((state: any) => state.user.balance);
-  const priorityPass = useSelector((state: any) => state.user.priority_pass);
   const session = useSelector((state: any) => state.user.session);
   const conversation = useSelector((state: any) => state.user.conversation);
   const [isWaitClear, setIsWaitClear] = useState(false);
-
-  const priorityPassDays = Math.ceil(priorityPass / 86400);
 
   const clearConversationList = async () => {
     if (conversation && conversation.length) {
@@ -90,7 +83,6 @@ const Menu = () => {
     });
     const data = await response.json();
     dispatch(setToken(data.token));
-    dispatch(setBalance(data.balance));
     dispatch(setPriorityPass(data.priority_pass));
     dispatch(setUsername(data.username));
     dispatch(setPhotoUrl(data.photo_url));
@@ -142,12 +134,6 @@ const Menu = () => {
                 color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
           Clear conversations
         </Button>
-        <Button variant={'ghost'} leftIcon={<IoWalletOutline color={'white'}/>} _hover={{bg: 'bg3'}} gap={1} color={'white'}
-                justifyContent={"start"}
-                onClick={onOpenCoins}>
-          Balance
-        </Button>
-        <CoinsModalAndDrawer isOpen={isOpenCoins} onClose={onCloseCoins}/>
         <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1} color={'white'}
                 justifyContent={"start"} onClick={onOpenPass}>
           Priority Pass

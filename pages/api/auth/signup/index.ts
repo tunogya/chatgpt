@@ -13,7 +13,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  // check method, only POST is allowed
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST'])
     res.status(405).end(`Method ${req.method} Not Allowed`)
@@ -33,9 +32,7 @@ export default async function handler(
         username,
         password,
         create_at: Math.floor(new Date().getTime() / 1000),
-        balance: 0,
-        free_pass: Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24, // 1 day
-        priority_pass: 0,
+        priority_pass: Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24,
       },
       ConditionExpression: 'attribute_not_exists(#PK)',
       ExpressionAttributeNames: {

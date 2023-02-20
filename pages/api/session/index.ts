@@ -54,7 +54,6 @@ export default async function handler(
       // @ts-ignore
       id: Item.PK,
       username: Item.username || undefined,
-      balance: Item.balance || 0,
       priority_pass: Item.priority_pass || 0,
       photo_url: Item.photo_url || undefined,
       token,
