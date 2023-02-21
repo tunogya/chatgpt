@@ -85,6 +85,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const complete = async (message: Message) => {
     setIsWaitComplete(true)
     dispatch(addMessageToSession(message))
+
     const res = await fetch('/api/conversation', {
       method: 'POST',
       headers: {
@@ -107,16 +108,14 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       return reader.read().then(({ value, done }) => {
         if (!done) {
           const dataString = decoder.decode(value);
-          const line = dataString.slice('data: '.length);
-          if (line === '[DONE]\n\n') {
-            setIsWaitComplete(false)
-          } else {
-            try {
+          // split data by line, and remove empty line
+          const lines = dataString.split('\n\n').filter((line) => line !== '').map((line) => line.trim().replace('data: ', ''));
+          for (const line of lines) {
+            if (line === '[DONE]') {
+              setIsWaitComplete(false)
+            } else {
               const data = JSON.parse(line);
-              console.log(data)
-            } catch (e) {
-              console.log("error line", line)
-              console.log(e)
+              console.log(data.messages[0].content.parts[0])
             }
           }
           return readChunk()
