@@ -115,7 +115,6 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
               setIsWaitComplete(false)
             } else {
               const data = JSON.parse(line);
-              console.log(data.messages[0].content.parts[0])
               dispatch(updateMessageAndIdAndTitleToSession({
                 message: data.messages[0],
                 id: data.SK,

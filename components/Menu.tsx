@@ -93,9 +93,7 @@ const Menu = () => {
   }, [getUserSession])
 
   useEffect(() => {
-    if (session?.id) {
-      getConversationHistory()
-    }
+    getConversationHistory()
   }, [session, getConversationHistory])
 
   return (
@@ -112,7 +110,7 @@ const Menu = () => {
       </Button>
       <Stack pt={2} h={'full'} overflow={"scroll"}>
         {conversation && conversation?.map((item: any) => (
-          <Button key={item.id} variant={'ghost'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
+          <Button key={item.id} variant={'ghost'} minH={'40px'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
                   _hover={{bg: 'bg3'}}
                   onClick={() => {
                     router.push({
