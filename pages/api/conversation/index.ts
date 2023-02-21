@@ -4,13 +4,13 @@ import {ddbDocClient} from "@/utils/DynamoDB";
 import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {v4 as uuidv4} from 'uuid';
 
-export const config = {
-  runtime: "edge",
-  api: {
-    bodyParser: false,
-    responseLimit: false,
-  },
-};
+// export const config = {
+//   runtime: "edge",
+//   api: {
+//     bodyParser: false,
+//     responseLimit: false,
+//   },
+// };
 
 export default async function handler(
   req: NextApiRequest,
@@ -138,128 +138,85 @@ export default async function handler(
       /** https://platform.openai.com/docs/models/gpt-3
        text-davinci-003 max 4000 tokens, others max 2048 tokens
        **/
-      // let max_tokens
-      // if (model === 'text-davinci-003') {
-      //   max_tokens = 4000;
-      // } else {
-      //   max_tokens = 2048;
-      // }
-      // let result = await fetch('https://api.openai.com/v1/completions', {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
-      //   },
-      //   method: 'POST',
-      //   body: JSON.stringify({
-      //     model,
-      //     prompt,
-      //     temperature: 0.7,
-      //     top_p: 1,
-      //     frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
-      //     presence_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
-      //     max_tokens,
-      //     // stream: true, // false is default
-      //     n: 1,
-      //     best_of: 1, // 1 is default
-      //     user: user_id,
-      //     stop: ['user:'],
-      //   }),
-      // });
-      /** response example from openai
-       {
-        id: 'cmpl-6lYpny527dT8FWkDWwdPuDnsLCRsW',
-        object: 'text_completion',
-        created: 1676793339,
-        model: 'text-davinci-003',
-        choices: [
-          {
-            text: '\nThe current price of Bitcoin is $7,346.54.',
-            index: 0,
-            logprobs: null,
-            finish_reason: 'stop'
-          }
-        ],
-        usage: { prompt_tokens: 9, completion_tokens: 14, total_tokens: 23 }
+      let max_tokens
+      if (model === 'text-davinci-003') {
+        max_tokens = 4000;
+      } else {
+        max_tokens = 2048;
       }
-       **/
-      // const {choices} = await result.json();
-      // const aiMessages = [
-      //   {
-      //     id: Math.floor(Date.now() / 1000).toString(),
-      //     role: 'ai',
-      //     content: {
-      //       type: 'text',
-      //       parts: [
-      //         choices[0].text,
-      //       ],
-      //     },
-      //     create_at: Math.floor(Date.now() / 1000),
-      //   }
-      // ];
-      // await ddbDocClient.send(new BatchWriteCommand({
-      //   RequestItems: {
-      //     'wizardingpay': aiMessages.map((message: any) => ({
-      //       PutRequest: {
-      //         Item: {
-      //           PK: conversation_id,
-      //           SK: message.id,
-      //           role: message.role,
-      //           content: message.content,
-      //           TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
-      //           create_at: Math.floor(Date.now() / 1000),
-      //         }
-      //       },
-      //     }))
-      //   }
-      // }));
-      // res.status(200).json({
-      //   id: conversation_id,
-      //   title: messages[0].content.parts[0],
-      //   messages: aiMessages,
-      // });
-      const encoder = new TextEncoder();
-      let count = 0;
-
-      const resultStream = new ReadableStream(
-        {
-          pull(controller) {
-            if (count < 100) {
-              controller.enqueue(encoder.encode(JSON.stringify({
-                id: conversation_id,
-                title: messages[0].content.parts[0].slice(0, 20),
-                messages: [
-                  {
-                    id: Math.floor(Date.now() / 1000).toString(),
-                    role: 'ai',
-                    content: {
-                      type: 'text',
-                      parts: [
-                        `${count}`,
-                      ],
-                    }
-                  }
-                ],
-              }) + "\n"));
-              count++;
-            } else {
-              controller.close();
-            }
-          },
-        },
-        {
-          highWaterMark: 1,
-          size(chunk) {
-            return 1;
-          },
-        }
-      );
-
-      return new Response(resultStream, {
-        status: 200,
+      let result = await fetch('https://api.openai.com/v1/completions', {
         headers: {
-          "content-type": "text/plain",
-          "Cache-Control": "no-cache",
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
         },
+        method: 'POST',
+        body: JSON.stringify({
+          model,
+          prompt,
+          temperature: 0.7,
+          top_p: 1,
+          frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
+          presence_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
+          max_tokens,
+          stream: true, // false is default
+          n: 1,
+          best_of: 1, // 1 is default
+          user: user_id,
+          stop: ['user:'],
+        }),
+      });
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache, no-transform');
+      res.setHeader('X-Accel-Buffering', 'no');
+
+      const message_id = Math.floor(Date.now() / 1000).toString();
+      let full_message = '';
+      // @ts-ignore
+      result.body.on('data', (chunk: any) => {
+        // when chunk is [DONE], the stream is finished
+        const line = chunk.toString().slice('data: '.length);
+        if (line === '[DONE]\n\n') {
+          res.write('data: [DONE]\n\n');
+          ddbDocClient.send(new PutCommand({
+            TableName: 'wizardingpay',
+            Item: {
+              PK: conversation_id,
+              SK: message_id,
+              role: 'ai',
+              content: {
+                type: 'text',
+                parts: [full_message],
+              },
+              TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+              create_at: Math.floor(Date.now() / 1000),
+            },
+          })).then(() => {
+            res.end();
+          });
+        } else {
+          const data = JSON.parse(line);
+          const part = data.choices[0].text
+          // append the chunk to the full message
+          full_message += part;
+          res.write(`data: ${JSON.stringify({
+            id: conversation_id,
+            title: messages[0].content.parts[0],
+            messages: [
+              {
+                id: message_id,
+                role: 'ai',
+                content: {
+                  type: 'text',
+                  parts: [
+                    part,
+                  ],
+                }
+              }
+            ],
+          })}\n\n`);
+        }
       });
     } else if (req.method === 'DELETE') {
       const {ids} = req.body;
