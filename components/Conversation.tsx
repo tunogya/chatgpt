@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from "react-redux";
 import ConversationCell, {Message} from "@/components/ConversationCell";
 import {addMessageToSession, setSession, updateMessageAndIdAndTitleToSession} from "@/store/user";
 import {useRouter} from "next/router";
+import {createParser, ParsedEvent, ReconnectInterval} from "eventsource-parser";
 
 type ConversationProps = {
   conversation_id?: string | undefined
@@ -98,13 +99,34 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
         parent_message_id: session.messages.length > 0 ? session.messages[session.messages.length - 1].id : undefined,
       }),
     })
-    const result = await res.json()
-    dispatch(updateMessageAndIdAndTitleToSession({
-      id: result.id,
-      title: result.title,
-      message: result.messages[0],
-    }))
-    setIsWaitComplete(false);
+    // @ts-ignore
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    // @ts-ignore
+    const readChunk = async () => {
+      return reader.read().then(({ value, done }) => {
+        if (!done) {
+          const dataString = decoder.decode(value);
+          const line = dataString.slice('data: '.length);
+          if (line === '[DONE]\n\n') {
+            setIsWaitComplete(false)
+          } else {
+            try {
+              const data = JSON.parse(line);
+              console.log(data)
+            } catch (e) {
+              console.log("error line", line)
+              console.log(e)
+            }
+          }
+          return readChunk()
+        } else {
+          setIsWaitComplete(false)
+        }
+      });
+    };
+
+    await readChunk();
   }
 
   return (
@@ -118,7 +140,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
               <Stack p={4}>
                 <Spinner color={fontColor}/>
               </Stack>
-              ) : (
+            ) : (
               <Stack align={'center'} justify={'center'} h={'full'}>
                 <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
                 <Text fontSize={'xs'} color={fontColor}>Power by OpenAI</Text>
@@ -143,7 +165,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
                             e.preventDefault();
                             if (input === '') return;
                             const message: Message = {
-                              id: Math.floor( Date.now() / 1000).toString(),
+                              id: Math.floor(Date.now() / 1000).toString(),
                               role: 'user',
                               content: {
                                 type: 'text',
