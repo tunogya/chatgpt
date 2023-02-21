@@ -116,6 +116,11 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
             } else {
               const data = JSON.parse(line);
               console.log(data.messages[0].content.parts[0])
+              dispatch(updateMessageAndIdAndTitleToSession({
+                message: data.messages[0],
+                id: data.SK,
+                title: data.title,
+              }))
             }
           }
           return readChunk()

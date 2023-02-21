@@ -58,7 +58,12 @@ export const index = createSlice({
       const {id, title, message} = action.payload
       state.session.id = id
       state.session.title = title
-      state.session.messages.push(message)
+      const index = state.session.messages.findIndex((m) => m.id === message.id)
+      if (index !== -1) {
+        state.session.messages[index].content.parts[0] += message.content.parts[0]
+      } else {
+        state.session.messages.push(message)
+      }
     },
     clearSession: (state) => {
       state.session = {
