@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import {ddbDocClient} from "@/utils/DynamoDB";
 import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {v4 as uuidv4} from 'uuid';
+import {Readable} from "stream";
 
 // export const config = {
 //   runtime: "edge",
@@ -173,8 +174,8 @@ export default async function handler(
 
       const message_id = Math.floor(Date.now() / 1000).toString();
       let full_message = '';
-      // @ts-ignore
-      result.body.on('data', (chunk: any) => {
+      const stream = result.body as any as Readable;
+      stream.on('data', (chunk: any) => {
         // when chunk is [DONE], the stream is finished
         const line = chunk.toString().slice('data: '.length);
         if (line === '[DONE]\n\n') {
@@ -217,6 +218,12 @@ export default async function handler(
             ],
           })}\n\n`);
         }
+      });
+      stream.on('end', () => {
+        res.end();
+      });
+      stream.on('error', (error: any) => {
+        res.end(`data: ${JSON.stringify({error})}\n\n`);
       });
     } else if (req.method === 'DELETE') {
       const {ids} = req.body;
