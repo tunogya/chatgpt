@@ -230,7 +230,7 @@ export default async function handler(
       try {
         await ddbDocClient.send(new BatchWriteCommand({
           RequestItems: {
-            'wizardingpay': ids.map((id: string) => ({
+            'wizardingpay': ids.slice(0,25).map((id: string) => ({
               DeleteRequest: {
                 Key: {
                   PK: user_id,
