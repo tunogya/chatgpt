@@ -5,14 +5,6 @@ import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/
 import {v4 as uuidv4} from 'uuid';
 import {Readable} from "stream";
 
-// export const config = {
-//   runtime: "edge",
-//   api: {
-//     bodyParser: false,
-//     responseLimit: false,
-//   },
-// };
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
