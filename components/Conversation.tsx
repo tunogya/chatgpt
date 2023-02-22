@@ -73,7 +73,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
 
   useEffect(() => {
     getHistoryMessageOfSession()
-  }, [])
+  })
 
   // scroll to bottom when new message
   useEffect(() => {

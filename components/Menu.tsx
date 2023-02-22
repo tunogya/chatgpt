@@ -90,10 +90,11 @@ const Menu = () => {
 
   useEffect(() => {
     getUserSession()
-  }, [])
+  })
 
   useEffect(() => {
     getConversationHistory()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.id])
 
   return (

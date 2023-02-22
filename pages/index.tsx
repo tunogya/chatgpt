@@ -29,7 +29,7 @@ const Index = () => {
 
   useEffect(() => {
     checkJWT()
-  }, [])
+  })
 
   return (
     <></>
