@@ -174,32 +174,19 @@ export default async function handler(
 
       const message_id = Math.floor(Date.now() / 1000).toString();
       let full_message = '';
+      let counter = 0;
       const stream = result.body as any as Readable;
       stream.on('data', (chunk: any) => {
         // when chunk is [DONE], the stream is finished
         const line = chunk.toString().slice('data: '.length);
         if (line === '[DONE]\n\n') {
           res.write('data: [DONE]\n\n');
-          ddbDocClient.send(new PutCommand({
-            TableName: 'wizardingpay',
-            Item: {
-              PK: conversation_id,
-              SK: message_id,
-              role: 'ai',
-              content: {
-                type: 'text',
-                parts: [full_message],
-              },
-              TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
-              create_at: Math.floor(Date.now() / 1000),
-            },
-          })).then(() => {
-            res.end();
-          });
         } else {
           const data = JSON.parse(line);
           const part = data.choices[0].text
-          // append the chunk to the full message
+          if (counter < 2 && (part.match(/\n/) || []).length) {
+            return;
+          }
           full_message += part;
           res.write(`data: ${JSON.stringify({
             id: conversation_id,
@@ -217,9 +204,24 @@ export default async function handler(
               }
             ],
           })}\n\n`);
+          counter++;
         }
       });
-      stream.on('end', () => {
+      stream.on('end', async () => {
+        await ddbDocClient.send(new PutCommand({
+          TableName: 'wizardingpay',
+          Item: {
+            PK: conversation_id,
+            SK: message_id,
+            role: 'ai',
+            content: {
+              type: 'text',
+              parts: [full_message],
+            },
+            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+            create_at: Math.floor(Date.now() / 1000),
+          },
+        }))
         res.end();
       });
       stream.on('error', (error: any) => {
