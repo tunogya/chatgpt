@@ -116,9 +116,9 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
             } else {
               const data = JSON.parse(line);
               dispatch(updateMessageAndIdAndTitleToSession({
-                message: data.messages[0],
-                id: data.SK,
+                id: data.id,
                 title: data.title,
+                message: data.messages[0],
               }))
             }
           }
