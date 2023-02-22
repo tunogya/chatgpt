@@ -39,9 +39,9 @@ const MenuMobile = () => {
         </DrawerContent>
       </Drawer>
       <Text color={fontColor} fontSize={'md'} fontWeight={'500'}>New chat</Text>
-      <IconButton aria-label={'add'} icon={<AddIcon fontSize={'sm'}/>} variant={'ghost'} onClick={() => {
-        dispatch(clearSession());
-        router.push({
+      <IconButton aria-label={'add'} icon={<AddIcon fontSize={'sm'}/>} variant={'ghost'} onClick={async () => {
+        await dispatch(clearSession());
+        await router.push({
           pathname: '/chat',
         })
       }}/>

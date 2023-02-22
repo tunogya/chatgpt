@@ -23,7 +23,7 @@ import {
 import PassModalAndDrawer from "@/components/PassModalAndDrawer";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
@@ -61,7 +61,7 @@ const Menu = () => {
     })
   }
 
-  const getConversationHistory = useCallback(async () => {
+  const getConversationHistory = async () => {
     const response = await fetch('/api/conversation', {
       method: 'GET',
       headers: {
@@ -71,9 +71,9 @@ const Menu = () => {
     });
     const data = await response.json();
     dispatch(setConversation(data.items || []));
-  }, [jwt]);
+  }
 
-  const getUserSession = useCallback(async () => {
+  const getUserSession = async () => {
     const response = await fetch('/api/session', {
       method: 'POST',
       headers: {
@@ -86,23 +86,23 @@ const Menu = () => {
     dispatch(setPriorityPass(data.priority_pass));
     dispatch(setUsername(data.username));
     dispatch(setPhotoUrl(data.photo_url));
-  }, [jwt])
+  }
 
   useEffect(() => {
     getUserSession()
-  }, [getUserSession])
+  }, [])
 
   useEffect(() => {
     getConversationHistory()
-  }, [session, getConversationHistory])
+  }, [session?.id])
 
   return (
     <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}>
       <Button variant={'outline'} boxShadow={'md'} minH={'46px'} borderColor={'whiteAlpha.400'} _hover={{bg: 'bg3'}}
               leftIcon={<FiPlus color={'white'}/>} justifyContent={"start"} gap={1} color={"white"}
-              onClick={() => {
-                dispatch(clearSession());
-                router.push({
+              onClick={async () => {
+                await dispatch(clearSession());
+                await router.push({
                   pathname: `/chat`,
                 })
               }}>
@@ -144,9 +144,9 @@ const Menu = () => {
         </Button>
         <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} justifyContent={"start"} gap={1}
                 color={'white'} _hover={{bg: 'bg3'}}
-                onClick={() => {
-                  dispatch(logout())
-                  router.push('/auth/login')
+                onClick={async () => {
+                  await dispatch(logout())
+                  await router.push('/auth/login')
                 }}>
           Log out
         </Button>

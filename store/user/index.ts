@@ -68,7 +68,7 @@ export const index = createSlice({
     clearSession: (state) => {
       state.session = {
         id: null,
-        title: 'New Chat',
+        title: 'New chat',
         messages: [] as Message[]
       }
     }

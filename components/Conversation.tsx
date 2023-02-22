@@ -13,8 +13,8 @@ import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import ConversationCell, {Message} from "@/components/ConversationCell";
 import {addMessageToSession, setSession, updateMessageAndIdAndTitleToSession} from "@/store/user";
+import Head from "next/head";
 import {useRouter} from "next/router";
-import {createParser, ParsedEvent, ReconnectInterval} from "eventsource-parser";
 
 type ConversationProps = {
   conversation_id?: string | undefined
@@ -47,8 +47,8 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   }, [jumpToConversation])
 
   // get current conversation history
-  const getHistoryMessageOfSession = useCallback(async () => {
-    if (!conversation_id) {
+  const getHistoryMessageOfSession = async () => {
+    if (!conversation_id || isWaitHistory) {
       return
     }
     setIsWaitHistory(true);
@@ -69,11 +69,11 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       messages: res.messages,
     }))
     setIsWaitHistory(false);
-  }, [jwt, conversation_id])
+  }
 
   useEffect(() => {
     getHistoryMessageOfSession()
-  }, [getHistoryMessageOfSession])
+  }, [])
 
   // scroll to bottom when new message
   useEffect(() => {
@@ -134,6 +134,11 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
 
   return (
     <Stack w={'full'} h={'full'} position={'relative'} bg={conversationBg} pt={['44px', '44px', 0]}>
+      <Head>
+        <title>
+          {session?.title ? session.title : 'ChatGPT'}
+        </title>
+      </Head>
       <Stack h={'full'} w={'full'} pb={'120px'} overflow={'scroll'} spacing={0}>
         {
           session && session?.messages && session.messages?.length > 0 ? session.messages.map((item: any, index: number) => (
