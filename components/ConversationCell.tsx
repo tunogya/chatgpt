@@ -33,7 +33,7 @@ const ConversationCell: FC<{message: Message}> = ({message}) => {
             </Stack>
           )
         }
-        <Text color={fontColor} fontSize={'md'} fontWeight={'500'}>{content.parts[0]}</Text>
+        <Text color={fontColor} fontSize={'md'} fontWeight={'500'} whiteSpace={'pre-wrap'}>{content.parts[0]}</Text>
       </HStack>
     </Stack>
   )
