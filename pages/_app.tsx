@@ -9,6 +9,7 @@ import store from "@/store";
 import {PersistGate} from "redux-persist/integration/react";
 import {persistStore} from "redux-persist";
 import { Spinner } from '@chakra-ui/react'
+import '@/pages/styles/github-markdown-light.css';
 
 const persistor = persistStore(store);
 
