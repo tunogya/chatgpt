@@ -15,7 +15,7 @@ const PassBody = () => {
   const fontColor = useColorModeValue('fontColor1', 'fontColor2');
   const priorityPass = useSelector((state: any) => state.user.priority_pass);
   const priorityPassDays = Math.ceil((priorityPass - Date.now() / 1000) / 86400);
-  const expireDate = new Date(priorityPass * 1000).toLocaleString();
+  const expireDate = new Date(priorityPass  * 1000 - 1).toLocaleString().slice(0, 10);
   const user = useSelector((state: any) => state.user.user);
   const { setValue, hasCopied, onCopy } = useClipboard('');
 
