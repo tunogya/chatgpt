@@ -2,21 +2,30 @@ import {
   Button,
   Card,
   HStack,
-  SimpleGrid,
+  Spacer,
   Stack,
-  Text,
+  Text, useClipboard,
   useColorModeValue,
 } from "@chakra-ui/react";
 import {RiVipCrown2Line} from "react-icons/ri";
 import {useSelector} from "react-redux";
+import {useEffect} from "react";
 
 const PassBody = () => {
   const fontColor = useColorModeValue('fontColor1', 'fontColor2');
   const priorityPass = useSelector((state: any) => state.user.priority_pass);
-
   const priorityPassDays = Math.ceil((priorityPass - Date.now() / 1000) / 86400);
-
   const expireDate = new Date(priorityPass * 1000).toLocaleString();
+  const user = useSelector((state: any) => state.user.user);
+  const { setValue, hasCopied, onCopy } = useClipboard('');
+
+  useEffect(() => {
+    if (user) {
+      // replace # with - to avoid hashtag in url
+      const userWithoutHash = user.replace('#', '-')
+      setValue(`https://chat.wizardingpay.com/auth/signup?ref=${userWithoutHash}`)
+    }
+  }, [user])
 
   return (
     <Stack spacing={3} minH={'300px'}>
@@ -41,19 +50,14 @@ const PassBody = () => {
           </HStack>
         </Stack>
       </Card>
-      <br/>
-      <Text fontSize={'sm'} fontWeight={'500'} color={fontColor}>Join Priority Pass</Text>
-      <SimpleGrid columns={[2, null, 3]} spacing={3}>
-        {['Annual', 'Quarter', 'Monthly'].map((item) => (
-          <Button key={item} w={['full', 'full', '120px']} variant={'outline'} _hover={{boxShadow: 'md'}}>
-            <HStack w={'full'} justify={"space-between"}>
-              <Text textAlign={'start'} fontSize={'xs'} color={fontColor}
-                    fontWeight={'500'}>{item}</Text>
-              <Text textAlign={'start'} fontSize={'sm'} color={fontColor}>200</Text>
-            </HStack>
-          </Button>
-        ))}
-      </SimpleGrid>
+      <Spacer/>
+      <Button borderRadius={'full'} color={fontColor} onClick={onCopy} fontWeight={'semibold'}>
+        { hasCopied ? 'Copied!' : 'Copy referral link' }
+      </Button>
+      <Spacer/>
+      <Text fontSize={'xs'} fontWeight={'semibold'} color={fontColor}>
+        Share your referral link—when someone signs up, you both get 3 days FREE!
+      </Text>
     </Stack>
   )
 }

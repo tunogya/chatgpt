@@ -20,6 +20,14 @@ const Login = () => {
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const dispatch = useDispatch()
 
+  const ref = useMemo(() => {
+    if (router.query.ref) {
+      const ref = router.query.ref as string
+      return ref.replace('-', '#')
+    }
+    return undefined
+  }, [router])
+
   const isInvalidPassword = useMemo(() => {
     return password.length < 10 && password.length > 0
   }, [password])
@@ -42,7 +50,8 @@ const Login = () => {
       },
       body: JSON.stringify({
         username,
-        password: hashPassword(password)
+        password: hashPassword(password),
+        ref
       }),
     })
     if (res.status === 200) {
@@ -64,7 +73,7 @@ const Login = () => {
   return (
     <Stack h={'full'} w={'full'} bg={bg} justify={'center'} align={'center'} spacing={8} px={2}>
       <HStack w={['full', '300px']}>
-        <Button size={'xs'} onClick={() => {
+        <Button size={'xs'} color={fontColor} onClick={() => {
           router.back()
         }}>Back</Button>
         <Spacer/>
@@ -72,6 +81,7 @@ const Login = () => {
       <Text textAlign={'center'} fontSize={'sm'} fontWeight={'500'} color={fontColor}>
         Welcome to ChatGPT via WizardingPay
       </Text>
+      <Text color={fontColor} fontWeight={'500'} fontSize={'xs'}>{ref ? `Ref: ${ref}` : ''}</Text>
       <Stack w={['full', '300px']} spacing={4}>
         <FormControl>
           <InputGroup variant={'outline'}>

@@ -25,7 +25,7 @@ const PassModalAndDrawer: FC<Props> = ({isOpen, onClose}) => {
     return (
       <Drawer placement={'bottom'} onClose={onClose} isOpen={isOpen}>
         <DrawerContent borderTopRadius={'20px'} overflow={'hidden'}>
-          <DrawerHeader color={fontColor} px={[3, 4]}>Recharge Pass</DrawerHeader>
+          <DrawerHeader color={fontColor} px={[3, 4]}>Balance</DrawerHeader>
           <DrawerBody pt={0} pb={3} px={[3, 4]}>
             {passBody()}
           </DrawerBody>
@@ -37,7 +37,7 @@ const PassModalAndDrawer: FC<Props> = ({isOpen, onClose}) => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered size={['xs', 'sm', 'md']}>
         <ModalOverlay/>
         <ModalContent>
-          <ModalHeader color={fontColor} px={[3, 4]}>Recharge Pass</ModalHeader>
+          <ModalHeader color={fontColor} px={[3, 4]}>Balance</ModalHeader>
           <ModalCloseButton color={fontColor}/>
           <ModalBody pt={0} pb={3} px={[3, 4]}>
             {PassBody()}

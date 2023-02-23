@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {ddbDocClient} from "@/utils/DynamoDB";
-import {PutCommand} from '@aws-sdk/lib-dynamodb';
+import {PutCommand, UpdateCommand} from '@aws-sdk/lib-dynamodb';
 import jwt from 'jsonwebtoken';
 
 type Data = {
@@ -18,7 +18,7 @@ export default async function handler(
     res.status(405).end(`Method ${req.method} Not Allowed`)
     return
   }
-  const { username, password } = req.body
+  const { username, password, ref } = req.body
   if (!username || !password) {
     res.status(400).json({ error: 'Username and password is required' })
     return
@@ -32,13 +32,28 @@ export default async function handler(
         username,
         password,
         create_at: Math.floor(new Date().getTime() / 1000),
-        priority_pass: Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24,
+        priority_pass: Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24 * 3,
       },
       ConditionExpression: 'attribute_not_exists(#PK)',
       ExpressionAttributeNames: {
         '#PK': 'PK',
       },
     }));
+    if (ref) {
+      // update referrer priority pass + 3 days
+      await ddbDocClient.send(new UpdateCommand({
+        TableName: 'wizardingpay',
+        Key: {
+          PK: ref,
+          SK: ref,
+        },
+        UpdateExpression: 'SET priority_pass = priority_pass + :days',
+        ExpressionAttributeValues: {
+          ':days': 60 * 60 * 24 * 3,
+        },
+        ConditionExpression: 'attribute_exists(#PK)',
+      }))
+    }
     const token = jwt.sign({
       id: `USER#${username.toLowerCase()}`,
       username,
