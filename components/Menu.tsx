@@ -90,7 +90,7 @@ const Menu = () => {
 
   useEffect(() => {
     getUserSession()
-  })
+  }, [])
 
   useEffect(() => {
     getConversationHistory()
