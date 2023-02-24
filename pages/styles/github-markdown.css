@@ -83,7 +83,7 @@
         --color-fg-muted: #57606a;
         --color-fg-subtle: #6e7781;
         --color-canvas-default: #ffffff;
-        --color-canvas-subtle: #f6f8fa;
+        --color-canvas-subtle: #161b22;
         --color-border-default: #d0d7de;
         --color-border-muted: hsla(210,18%,87%,1);
         --color-neutral-muted: rgba(175,184,193,0.2);
@@ -826,8 +826,8 @@
     overflow: auto;
     font-size: 85%;
     line-height: 1.45;
-    color: var(--color-fg-default);
-    background-color: var(--color-canvas-subtle);
+    color: #ffffff;
+    background-color: #161b22;
     border-radius: 6px;
 }
 
