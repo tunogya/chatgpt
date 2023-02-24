@@ -47,8 +47,9 @@ export default async function handler(
           PK: ref,
           SK: ref,
         },
-        UpdateExpression: 'SET priority_pass = priority_pass + :days',
+        UpdateExpression: 'SET priority_pass = max(:now, if_not_exists(priority_pass, :now)) + :days',
         ExpressionAttributeValues: {
+          ':now': Math.floor(new Date().getTime() / 1000),
           ':days': 60 * 60 * 24 * 3,
         },
         ConditionExpression: 'attribute_exists(#PK)',
