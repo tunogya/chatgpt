@@ -23,7 +23,7 @@ const PassBody = () => {
     if (user) {
       // replace # with - to avoid hashtag in url
       const userWithoutHash = user.replace('#', '-')
-      setValue(`https://chat.wizardingpay.com/auth/signup?ref=${userWithoutHash}`)
+      setValue(`https://chat.wizardingpay.com/auth/login?ref=${userWithoutHash}`)
     }
   }, [user])
 

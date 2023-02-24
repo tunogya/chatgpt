@@ -4,7 +4,7 @@ import {
   Stack,
   Text, useColorModeValue
 } from '@chakra-ui/react';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {useRouter} from 'next/router';
 import * as crypto from 'crypto';
 import {FaTelegramPlane} from "react-icons/fa";
@@ -22,6 +22,14 @@ const Login = () => {
   const bg = useColorModeValue('white', 'bg2')
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const dispatch = useDispatch()
+
+  const ref = useMemo(() => {
+    if (router.query.ref) {
+      const ref = router.query.ref as string
+      return ref.replace('-', '#')
+    }
+    return undefined
+  }, [router])
 
   const hashPassword = (password: string) => {
     // add salt and hash 1000 times
@@ -44,7 +52,8 @@ const Login = () => {
       },
       body: JSON.stringify({
         username,
-        password: hashPassword(password)
+        password: hashPassword(password),
+        ref,
       }),
     })
     if (res.status === 200) {
@@ -82,7 +91,10 @@ const Login = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          data,
+          ref,
+        }),
       })
       if (res.status === 200) {
         const {token} = await res.json()
@@ -139,7 +151,7 @@ const Login = () => {
           Continue
         </Button>
         <Stack alignSelf={"center"}>
-          <Text fontSize={'xs'} fontWeight={'500'} color={fontColor}>Don&apos;t have an account? <Link href={'/auth/signup'} style={{ color: '#10A37F' }} >Sign up</Link></Text>
+          <Text fontSize={'xs'} fontWeight={'500'} color={fontColor}>Don&apos;t have an account? <Link href={`/auth/signup${router.query?.ref ? `?ref=${router.query?.ref}` : ''}`} style={{ color: '#10A37F' }} >Sign up</Link></Text>
         </Stack>
         <HStack>
           <Divider/>

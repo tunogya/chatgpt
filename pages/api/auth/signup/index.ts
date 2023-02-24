@@ -40,7 +40,7 @@ export default async function handler(
       },
     }));
     if (ref) {
-      // update referrer priority pass + 3 days
+      // update referrer priority pass + 1 day
       await ddbDocClient.send(new UpdateCommand({
         TableName: 'wizardingpay',
         Key: {
@@ -50,7 +50,7 @@ export default async function handler(
         UpdateExpression: 'SET priority_pass = max(:now, if_not_exists(priority_pass, :now)) + :days',
         ExpressionAttributeValues: {
           ':now': Math.floor(new Date().getTime() / 1000),
-          ':days': 60 * 60 * 24 * 3,
+          ':days': 60 * 60 * 24,
         },
         ConditionExpression: 'attribute_exists(#PK)',
       }))

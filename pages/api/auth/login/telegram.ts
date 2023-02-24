@@ -20,8 +20,8 @@ export default async function handler(
     res.status(405).end(`Method ${req.method} Not Allowed`)
     return
   }
-
-  const {id, first_name, username, photo_url, auth_date} = req.body
+  const { data, ref } = req.body
+  const {id, first_name, username, photo_url, auth_date} = data
 
   // // auth_date must be less than 5 minutes
   if (Math.floor(new Date().getTime() / 1000) - auth_date > 300) {
