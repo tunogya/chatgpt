@@ -24,6 +24,7 @@ export default async function handler(
     return
   }
   try {
+    // update priority pass + 1 day
     await ddbDocClient.send(new PutCommand({
       TableName: 'wizardingpay',
       Item: {
@@ -32,7 +33,7 @@ export default async function handler(
         username,
         password,
         create_at: Math.floor(new Date().getTime() / 1000),
-        priority_pass: Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24 * 3,
+        priority_pass: Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24,
       },
       ConditionExpression: 'attribute_not_exists(#PK)',
       ExpressionAttributeNames: {

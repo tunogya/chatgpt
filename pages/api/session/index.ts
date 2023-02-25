@@ -42,14 +42,6 @@ export default async function handler(
       res.status(404).json({error: 'no user found!'})
       return
     }
-    // generate new token
-    const token = jwt.sign({
-      id: Item.PK,
-      username: Item.username,
-      iat: Math.floor(Date.now() / 1000) - 3, // 3 seconds before
-    }, process.env.JWT_SECRET || '', {
-      expiresIn: '7d',
-    })
     res.status(200).json({
       // @ts-ignore
       id: Item.PK,

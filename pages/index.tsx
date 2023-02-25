@@ -18,12 +18,21 @@ const Index = () => {
         }),
       })
       if (res.status === 200) {
-        await router.push('/chat')
+        await router.push({
+          pathname: '/chat',
+          query: {...router.query}
+        })
       } else {
-        await router.push('/auth/login')
+        await router.push({
+          pathname: '/auth/login',
+          query: {...router.query}
+        })
       }
     } else {
-      await router.push('/auth/login')
+      await router.push({
+        pathname: '/auth/login',
+        query: {...router.query}
+      })
     }
   }
 

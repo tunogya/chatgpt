@@ -23,7 +23,7 @@ const PassBody = () => {
     if (user) {
       // replace # with - to avoid hashtag in url
       const userWithoutHash = user.replace('#', '-')
-      setValue(`https://chat.wizardingpay.com/auth/login?ref=${userWithoutHash}`)
+      setValue(`https://chat.wizardingpay.com/?ref=${userWithoutHash}`)
     }
   }, [user])
 
@@ -56,7 +56,7 @@ const PassBody = () => {
       </Button>
       <Spacer/>
       <Text fontSize={'xs'} fontWeight={'semibold'} color={fontColor}>
-        Share your referral link—when someone signs up, you both get 3 days FREE!
+        Share your referral link—when someone signs up, you both get one day FREE!
       </Text>
     </Stack>
   )
