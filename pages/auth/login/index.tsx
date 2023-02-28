@@ -23,6 +23,8 @@ const Login = () => {
   const fontColor = useColorModeValue('fontColor1', 'fontColor2')
   const dispatch = useDispatch()
 
+  const via = router.query.via || 'WizardingPay'
+
   const ref = useMemo(() => {
     if (router.query.ref) {
       const ref = router.query.ref as string
@@ -61,13 +63,19 @@ const Login = () => {
       // set token to store
       dispatch(setToken(token))
       dispatch(setUser(`USER#${username.toLowerCase()}`))
-      await router.push('/chat')
+      await router.push({
+        pathname: '/chat',
+        query: {
+          ...router.query,
+        }
+      })
     } else {
       const {error} = await res.json()
       await router.push({
         pathname: '/auth/error',
         query: {
-          error
+          ...router.query,
+          error,
         }
       })
     }
@@ -81,6 +89,7 @@ const Login = () => {
         await router.push({
           pathname: '/auth/error',
           query: {
+            ...router.query,
             error: 'Telegram login failed'
           }
         })
@@ -107,6 +116,7 @@ const Login = () => {
         await router.push({
           pathname: '/auth/error',
           query: {
+            ...router.query,
             error
           }
         })
@@ -117,7 +127,7 @@ const Login = () => {
   return (
     <Stack h={'full'} w={'full'} bg={bg} justify={'center'} align={'center'} spacing={8} px={2}>
       <Text textAlign={'center'} fontSize={'sm'} fontWeight={'500'} color={fontColor}>
-        Welcome to ChatGPT via WizardingPay
+        Welcome to ChatGPT via {via}
       </Text>
       <Stack w={['full', '300px']} spacing={4}>
         <FormControl>
@@ -151,18 +161,31 @@ const Login = () => {
           Continue
         </Button>
         <Stack alignSelf={"center"}>
-          <Text fontSize={'xs'} fontWeight={'500'} color={fontColor}>Don&apos;t have an account? <Link href={`/auth/signup${router.query?.ref ? `?ref=${router.query?.ref}` : ''}`} style={{ color: '#10A37F' }} >Sign up</Link></Text>
+          <Text fontSize={'xs'} fontWeight={'500'} color={fontColor}>Don&apos;t have an account? <Text cursor={'pointer'} onClick={() => {
+            router.push({
+              pathname: '/auth/signup',
+              query: {
+                ...router.query,
+              }
+            })
+          }} style={{ color: '#10A37F' }}>Sign up</Text></Text>
         </Stack>
-        <HStack>
-          <Divider/>
-          <Text fontSize={'xx-small'} color={fontColor}>OR</Text>
-          <Divider/>
-        </HStack>
-        <Button w={['full', '300px']} px={3} gap={1} size={'lg'} justifyContent={"start"} isLoading={telegramPending}
-                leftIcon={<FaTelegramPlane fontSize={'20px'}/>} variant={'outline'} borderColor={'fontColor2'}
-                color={fontColor} onClick={loginWithTelegram}>
-          Continue with Telegram
-        </Button>
+        {
+          !via && (
+            <>
+              <HStack>
+                <Divider/>
+                <Text fontSize={'xx-small'} color={fontColor}>OR</Text>
+                <Divider/>
+              </HStack>
+              <Button w={['full', '300px']} px={3} gap={1} size={'lg'} justifyContent={"start"} isLoading={telegramPending}
+                      leftIcon={<FaTelegramPlane fontSize={'20px'}/>} variant={'outline'} borderColor={'fontColor2'}
+                      color={fontColor} onClick={loginWithTelegram}>
+                Continue with Telegram
+              </Button>
+            </>
+          )
+        }
       </Stack>
     </Stack>
   )

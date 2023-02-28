@@ -51,24 +51,25 @@ export default async function handler(
       });
     } else if (req.method === 'POST') {
       const {action, messages, model, parent_message_id} = req.body;
+      // @dev: priority pass is disabled now
       // get user priority pass
-      const user = await ddbDocClient.send(new GetCommand({
-        TableName: 'wizardingpay',
-        Key: {
-          PK: user_id,
-          SK: user_id,
-        },
-      }));
-      if (!user.Item) {
-        res.status(500).json({error: 'user not found'})
-        return
-      }
-      const priority_pass = user.Item.priority_pass || 0;
+      // const user = await ddbDocClient.send(new GetCommand({
+      //   TableName: 'wizardingpay',
+      //   Key: {
+      //     PK: user_id,
+      //     SK: user_id,
+      //   },
+      // }));
+      // if (!user.Item) {
+      //   res.status(500).json({error: 'user not found'})
+      //   return
+      // }
+      // const priority_pass = user.Item.priority_pass || 0;
 
-      if (priority_pass < Math.floor(Date.now() / 1000)) {
-        res.status(401).json({error: 'priority pass expired'})
-        return
-      }
+      // if (priority_pass < Math.floor(Date.now() / 1000)) {
+      //   res.status(401).json({error: 'priority pass expired'})
+      //   return
+      // }
       let conversation_id = req.body?.conversation_id || undefined;
       if (!conversation_id) {
         conversation_id = `CONVERSATION#${uuidv4()}`;

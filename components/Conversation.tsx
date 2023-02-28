@@ -33,6 +33,8 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const via = router.query.via || 'WizardingPay'
+
   // if session have id, jump to conversation
   const jumpToConversation = useCallback(() => {
     if (session?.id && router.pathname === '/chat') {
@@ -189,8 +191,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
         </Stack>
         <Stack w={'full'} bg={conversationBg} align={'center'} pt={2} pb={4}>
           <Text fontSize={'xs'} maxW={'container.sm'} textAlign={'center'} px={1} color={'gray.500'}>OpenAI ChatGPT
-            via
-            WizardingPay.</Text>
+            via {via}.</Text>
         </Stack>
       </Stack>
     </Stack>

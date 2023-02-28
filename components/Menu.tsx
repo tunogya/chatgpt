@@ -133,10 +133,10 @@ const Menu = () => {
                 color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
           Clear conversations
         </Button>
-        <Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1} color={'white'}
-                justifyContent={"start"} onClick={onOpenPass}>
-          Priority Pass
-        </Button>
+        {/*<Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1} color={'white'}*/}
+        {/*        justifyContent={"start"} onClick={onOpenPass}>*/}
+        {/*  Priority Pass*/}
+        {/*</Button>*/}
         <PassModalAndDrawer isOpen={isOpenPass} onClose={onClosePass}/>
         <Button variant={'ghost'} gap={1} justifyContent={'start'} color={"white"}
                 leftIcon={colorMode === 'light' ? <MoonIcon color={'white'}/> : <SunIcon color={'white'}/>}
