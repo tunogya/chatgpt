@@ -8,7 +8,6 @@ import {useMemo, useState} from 'react';
 import {useRouter} from 'next/router';
 import * as crypto from 'crypto';
 import {FaTelegramPlane} from "react-icons/fa";
-import Link from "next/link";
 import {useDispatch} from "react-redux";
 import { setToken, setUser } from '@/store/user';
 
@@ -171,7 +170,7 @@ const Login = () => {
           }} style={{ color: '#10A37F' }}>Sign up</Text></Text>
         </Stack>
         {
-          !via && (
+          via === 'WizardingPay' && (
             <>
               <HStack>
                 <Divider/>
