@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
 import {IoChatboxOutline} from "react-icons/io5";
-import {RiVipCrown2Line} from "react-icons/ri";
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {
   clearSession,
@@ -17,7 +16,6 @@ import {
   setConversation,
   setPhotoUrl,
   setPriorityPass,
-  setToken,
   setUsername
 } from "@/store/user";
 import PassModalAndDrawer from "@/components/PassModalAndDrawer";
@@ -82,7 +80,6 @@ const Menu = () => {
       },
     });
     const data = await response.json();
-    dispatch(setToken(data.token));
     dispatch(setPriorityPass(data.priority_pass));
     dispatch(setUsername(data.username));
     dispatch(setPhotoUrl(data.photo_url));
