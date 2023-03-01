@@ -47,7 +47,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   }, [jumpToConversation])
 
   // get current conversation history
-  const getHistoryMessageOfSession = async () => {
+  const getHistoryMessageOfSession = useCallback(async () => {
     if (!conversation_id || isWaitHistory) {
       return
     }
@@ -69,11 +69,11 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       messages: res.messages,
     }))
     setIsWaitHistory(false);
-  }
+  }, [conversation_id])
 
   useEffect(() => {
     getHistoryMessageOfSession()
-  }, [])
+  }, [getHistoryMessageOfSession])
 
   // scroll to bottom when new message
   useEffect(() => {
