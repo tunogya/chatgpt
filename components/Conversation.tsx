@@ -14,7 +14,6 @@ import {useDispatch, useSelector} from "react-redux";
 import ConversationCell, {Message} from "@/components/ConversationCell";
 import {addMessageToSession, setSession, updateMessageAndIdAndTitleToSession} from "@/store/user";
 import Head from "next/head";
-import {useRouter} from "next/router";
 
 type ConversationProps = {
   conversation_id?: string | undefined
@@ -31,20 +30,6 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const [isWaitComplete, setIsWaitComplete] = useState(false);
   const [isWaitHistory, setIsWaitHistory] = useState(false);
   const dispatch = useDispatch();
-  const router = useRouter();
-
-  // if session have id, jump to conversation
-  const jumpToConversation = useCallback(() => {
-    if (session?.id && router.pathname === '/chat') {
-      router.push({
-        pathname: `/chat/${session.id.split('#')[1]}`,
-      })
-    }
-  }, [router, session?.id])
-
-  useEffect(() => {
-    jumpToConversation()
-  }, [jumpToConversation])
 
   // get current conversation history
   const getHistoryMessageOfSession = useCallback(async () => {
