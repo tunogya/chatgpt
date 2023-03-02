@@ -96,7 +96,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
           // split data by line, and remove empty line
           const lines = dataString.split('\n\n').filter((line) => line !== '').map((line) => line.trim().replace('data: ', ''));
           for (const line of lines) {
-            if (line === '[DONE]') {
+            if (line.startsWith('[DONE]')) {
               setIsWaitComplete(false)
             } else {
               const data = JSON.parse(line);

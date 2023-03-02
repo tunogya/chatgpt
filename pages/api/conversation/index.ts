@@ -43,7 +43,7 @@ export default async function handler(
         items: conversations.Items?.map((item: any) => ({
           id: item.SK,
           title: item.title,
-          create_time: new Date(item.create_at * 1000).toLocaleString(),
+          create_time: new Date(item.created * 1000).toLocaleString(),
         })),
         total: conversations.Count,
         limit,
@@ -57,25 +57,6 @@ export default async function handler(
         res.status(400).json({error: 'Currently, only gpt-3.5-turbo and gpt-3.5-turbo-0301 are supported.'})
         return
       }
-      // @dev: priority pass is disabled now
-      // get user priority pass
-      // const user = await ddbDocClient.send(new GetCommand({
-      //   TableName: 'wizardingpay',
-      //   Key: {
-      //     PK: user_id,
-      //     SK: user_id,
-      //   },
-      // }));
-      // if (!user.Item) {
-      //   res.status(500).json({error: 'user not found'})
-      //   return
-      // }
-      // const priority_pass = user.Item.priority_pass || 0;
-
-      // if (priority_pass < Math.floor(Date.now() / 1000)) {
-      //   res.status(401).json({error: 'priority pass expired'})
-      //   return
-      // }
       let conversation_id = req.body?.conversation_id || undefined;
       if (!conversation_id) {
         conversation_id = `CONVERSATION#${uuidv4()}`;
@@ -86,7 +67,7 @@ export default async function handler(
               PK: user_id,
               SK: conversation_id,
               title: messages[0].content.parts[0],
-              create_at: Math.floor(Date.now() / 1000),
+              created: Math.floor(Date.now() / 1000),
               TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
               is_visible: true,
             },
@@ -142,9 +123,6 @@ export default async function handler(
           content: message.content.parts[0],
         })
       ))
-      /** https://platform.openai.com/docs/models/gpt-3
-       text-davinci-003 max 4000 tokens, others max 2048 tokens
-       **/
       const result = await fetch('https://api.openai.com/v1/chat/completions', {
         headers: {
           'Content-Type': 'application/json',
@@ -182,7 +160,7 @@ export default async function handler(
           .map((line: string) => line.trim().replace('data: ', ''));
         for (const line of lines) {
           // when chunk is [DONE], the stream is finished
-          if (line === '[DONE]\n\n') {
+          if (line === '[DONE]') {
             res.write('data: [DONE]\n\n');
           } else {
             try {
@@ -216,7 +194,7 @@ export default async function handler(
               })}\n\n`);
               counter++;
             } catch (e) {
-              console.log(e)
+              console.log(`line parse error:`, line)
             }
           }
         }
@@ -233,7 +211,7 @@ export default async function handler(
               parts: [full_content],
             },
             TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
-            create_at: Math.floor(Date.now() / 1000),
+            created: Math.floor(Date.now() / 1000),
           },
         }))
         res.end();

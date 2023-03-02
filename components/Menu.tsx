@@ -5,7 +5,6 @@ import {
   Stack,
   Text,
   useColorMode,
-  useDisclosure,
 } from "@chakra-ui/react";
 import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
 import {IoChatboxOutline} from "react-icons/io5";
@@ -15,10 +14,8 @@ import {
   logout,
   setConversation,
   setPhotoUrl,
-  setPriorityPass,
   setUsername
 } from "@/store/user";
-import PassModalAndDrawer from "@/components/PassModalAndDrawer";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
@@ -26,7 +23,6 @@ import {useEffect, useState} from "react";
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
   const router = useRouter()
-  const {isOpen: isOpenPass, onOpen: onOpenPass, onClose: onClosePass} = useDisclosure()
   const dispatch = useDispatch();
   const jwt = useSelector((state: any) => state.user.token);
   const session = useSelector((state: any) => state.user.session);
@@ -80,7 +76,6 @@ const Menu = () => {
       },
     });
     const data = await response.json();
-    dispatch(setPriorityPass(data.priority_pass));
     dispatch(setUsername(data.username));
     dispatch(setPhotoUrl(data.photo_url));
   }
@@ -130,11 +125,6 @@ const Menu = () => {
                 color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
           Clear conversations
         </Button>
-        {/*<Button variant={'ghost'} leftIcon={<RiVipCrown2Line color={'gold'}/>} _hover={{bg: 'bg3'}} gap={1} color={'white'}*/}
-        {/*        justifyContent={"start"} onClick={onOpenPass}>*/}
-        {/*  Priority Pass*/}
-        {/*</Button>*/}
-        <PassModalAndDrawer isOpen={isOpenPass} onClose={onClosePass}/>
         <Button variant={'ghost'} gap={1} justifyContent={'start'} color={"white"}
                 leftIcon={colorMode === 'light' ? <MoonIcon color={'white'}/> : <SunIcon color={'white'}/>}
                 _hover={{bg: 'bg3'}} onClick={toggleColorMode}>

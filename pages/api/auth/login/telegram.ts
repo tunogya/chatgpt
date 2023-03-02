@@ -20,7 +20,7 @@ export default async function handler(
     res.status(405).end(`Method ${req.method} Not Allowed`)
     return
   }
-  const {data, ref} = req.body
+  const {data} = req.body
   const {id, first_name, username, photo_url, auth_date} = data
 
   // // auth_date must be less than 5 minutes
@@ -58,39 +58,20 @@ export default async function handler(
         PK: `TG-USER#${id}`,
         SK: `TG-USER#${id}`,
       },
-      UpdateExpression: 'SET #username = :username, #first_name = :first_name, #photo_url = :photo_url, #update_at = :update_at, #priority_pass = if_not_exists(#priority_pass, :priority_pass)',
+      UpdateExpression: 'SET #username = :username, #first_name = :first_name, #photo_url = :photo_url, #updated = :updated',
       ExpressionAttributeNames: {
         '#username': 'username',
         '#first_name': 'first_name',
         '#photo_url': 'photo_url',
-        '#update_at': 'update_at',
-        '#priority_pass': 'priority_pass',
+        '#updated': 'updated',
       },
       ExpressionAttributeValues: {
         ':username': username,
         ':first_name': first_name,
         ':photo_url': photo_url,
-        ':update_at': Math.floor(new Date().getTime() / 1000),
-        ':priority_pass': Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24,
+        ':updated': Math.floor(new Date().getTime() / 1000),
       }
     }));
-
-    if (ref) {
-      // update referrer priority pass + 1 day
-      await ddbDocClient.send(new UpdateCommand({
-        TableName: 'wizardingpay',
-        Key: {
-          PK: ref,
-          SK: ref,
-        },
-        UpdateExpression: 'SET priority_pass = max(:now, if_not_exists(priority_pass, :now)) + :days',
-        ExpressionAttributeValues: {
-          ':now': Math.floor(new Date().getTime() / 1000),
-          ':days': 60 * 60 * 24,
-        },
-        ConditionExpression: 'attribute_exists(#PK)',
-      }))
-    }
 
     const token = jwt.sign({
       id: `TG-USER#${id}`,
