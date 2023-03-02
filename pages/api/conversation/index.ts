@@ -172,9 +172,6 @@ export default async function handler(
                 return;
               }
               const part = data.choices[0].delta.content
-              if (counter < 2 && (part.match(/\n/) || []).length) {
-                return;
-              }
               full_content += part;
               res.write(`data: ${JSON.stringify({
                 id: conversation_id,
