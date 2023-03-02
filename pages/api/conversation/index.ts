@@ -149,7 +149,6 @@ export default async function handler(
 
       const message_id = Math.floor(Date.now() / 1000).toString();
       let full_content = '';
-      let counter = 0;
       let role = 'assistant';
       const stream = result.body as any as Readable;
       stream.on('data', (chunk: any) => {
@@ -189,7 +188,6 @@ export default async function handler(
                   }
                 ],
               })}\n\n`);
-              counter++;
             } catch (e) {
               console.log(`line parse error:`, line)
             }
