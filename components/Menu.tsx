@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
 import {IoChatboxOutline} from "react-icons/io5";
-import {MoonIcon, SunIcon} from "@chakra-ui/icons";
+import {CheckIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {
   clearSession,
   logout,
@@ -28,28 +28,32 @@ const Menu = () => {
   const session = useSelector((state: any) => state.user.session);
   const conversation = useSelector((state: any) => state.user.conversation);
   const [isWaitClear, setIsWaitClear] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   const clearConversationList = async () => {
-    if (conversation && conversation.length) {
-      setIsWaitClear(true);
-      const response = await fetch('/api/conversation', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${jwt}`,
-          },
-          body: JSON.stringify({
-            ids: conversation.map((c: any) => c.id),
-          })
-        }
-      );
-      if (!response.ok) {
-        return
-      }
-      await getConversationHistory()
+    if (!deleteConfirm) {
+      setDeleteConfirm(true);
+      return
     }
+    setIsWaitClear(true);
+    const response = await fetch('/api/conversation', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify({
+          ids: conversation.map((c: any) => c.id),
+        })
+      }
+    );
+    if (!response.ok) {
+      return
+    }
+    await getConversationHistory()
     dispatch(clearSession())
     setIsWaitClear(false);
+    setDeleteConfirm(false);
     await router.push({
       pathname: `/chat`,
     })
@@ -121,10 +125,15 @@ const Menu = () => {
       <Spacer/>
       <Stack spacing={1}>
         <Box w={'full'} h={'1px'} bg={'whiteAlpha.400'}/>
-        <Button variant={'ghost'} leftIcon={<FiTrash2 color={'white'}/>} gap={1} justifyContent={"start"} isLoading={isWaitClear} loadingText={'Clearing...'}
-                color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
-          Clear conversations
-        </Button>
+        {
+          conversation && conversation.length && (
+            <Button variant={'ghost'} leftIcon={deleteConfirm ? <CheckIcon color={'white'}/> : <FiTrash2 color={'white'}/>}
+                    gap={1} justifyContent={"start"} isLoading={isWaitClear} loadingText={'Clearing...'}
+                    color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
+              {deleteConfirm ? 'Confirm clear' : 'Clear conversations'}
+            </Button>
+          )
+        }
         <Button variant={'ghost'} gap={1} justifyContent={'start'} color={"white"}
                 leftIcon={colorMode === 'light' ? <MoonIcon color={'white'}/> : <SunIcon color={'white'}/>}
                 _hover={{bg: 'bg3'}} onClick={toggleColorMode}>
