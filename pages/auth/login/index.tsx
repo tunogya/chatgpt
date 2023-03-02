@@ -159,16 +159,17 @@ const Login = () => {
         <Button w={['full', '300px']} size={'lg'} color={"white"} bg={'#10A37F'} onClick={login} isLoading={pending}>
           Continue
         </Button>
-        <Stack alignSelf={"center"}>
-          <Text fontSize={'xs'} fontWeight={'500'} color={fontColor}>Don&apos;t have an account? <Text cursor={'pointer'} onClick={() => {
+        <HStack alignSelf={"center"} fontSize={'xs'} fontWeight={'500'}>
+          <Text color={fontColor}>Don&apos;t have an account?</Text>
+          <Text cursor={'pointer'} onClick={() => {
             router.push({
               pathname: '/auth/signup',
               query: {
                 ...router.query,
               }
             })
-          }} style={{ color: '#10A37F' }}>Sign up</Text></Text>
-        </Stack>
+          }} style={{ color: '#10A37F' }}>Sign up</Text>
+        </HStack>
         {
           via === 'WizardingPay' && (
             <>
