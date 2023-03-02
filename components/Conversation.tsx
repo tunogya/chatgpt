@@ -66,7 +66,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [session.messages]);
 
-  // request message to ai and complete conversation
+  // request message to assistant and complete conversation
   const complete = async (message: Message) => {
     setIsWaitComplete(true)
     dispatch(addMessageToSession(message))
@@ -80,7 +80,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       body: JSON.stringify({
         conversation_id: session.id,
         action: 'next',
-        model: 'text-davinci-003',
+        model: 'gpt-3.5-turbo',
         messages: [message],
         parent_message_id: session.messages.length > 0 ? session.messages[session.messages.length - 1].id : undefined,
       }),

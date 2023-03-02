@@ -7,7 +7,7 @@ import remarkGfm from 'remark-gfm';
 
 export type Message = {
   id: string
-  role: 'ai' | 'user' | 'pay'
+  role: 'assistant' | 'user' | 'system'
   content: {
     type: 'text' | 'image' | 'video' | 'audio' | 'file'
     parts: string[]
@@ -32,9 +32,9 @@ const ConversationCell: FC<{ message: Message }> = ({message}) => {
           role === 'user' ? (
             <Avatar w={'30px'} bg={"gray.200"} h={'30px'} borderRadius={'2px'} name={username} src={photo_url}/>
           ) : (
-            <Stack bg={role === 'ai' ? '#10A37F' : 'bg5'} minW={'30px'} w={'30px'} h={'30px'} p={1} borderRadius={'2px'}
+            <Stack bg={role === 'assistant' ? '#10A37F' : 'bg5'} minW={'30px'} w={'30px'} h={'30px'} p={1} borderRadius={'2px'}
                    userSelect={"none"}>
-              <chakra.img src={role === 'ai' ? '/openai.svg' : '/icon.svg'}/>
+              <chakra.img src={role === 'assistant' ? '/openai.svg' : '/icon.svg'}/>
             </Stack>
           )
         }

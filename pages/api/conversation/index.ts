@@ -51,6 +51,12 @@ export default async function handler(
       });
     } else if (req.method === 'POST') {
       const {action, messages, model, parent_message_id} = req.body;
+      // Currently, only gpt-3.5-turbo and gpt-3.5-turbo-0301 are supported.
+      // https://platform.openai.com/docs/api-reference/chat
+      if (model !== 'gpt-3.5-turbo' && model !== 'gpt-3.5-turbo-0301') {
+        res.status(400).json({error: 'Currently, only gpt-3.5-turbo and gpt-3.5-turbo-0301 are supported.'})
+        return
+      }
       // @dev: priority pass is disabled now
       // get user priority pass
       // const user = await ddbDocClient.send(new GetCommand({
@@ -110,8 +116,7 @@ export default async function handler(
         res.status(500).json({error: 'failed to create conversation'})
         return
       }
-      // define init prompt of openai
-      let prompt = '';
+      const full_messages = [] as { role: string, content: string }[];
       if (parent_message_id) {
         try {
           const parent_message = await ddbDocClient.send(new GetCommand({
@@ -123,22 +128,24 @@ export default async function handler(
           }));
           const parent_message_role = parent_message.Item?.role;
           const parent_message_content = parent_message.Item?.content.parts[0];
-          prompt = prompt + `${parent_message_role}: ${parent_message_content}\n`;
+          full_messages.push({
+            role: parent_message_role,
+            content: parent_message_content,
+          });
         } catch (e) {
           res.status(500).json({error: 'failed to create conversation'})
         }
       }
-      prompt = prompt + `user: ${messages[0].content.parts[0]}\nai: `;
+      // put current messages to full_messages
+      full_messages.push(...messages.map((message: any) => ({
+          role: message.role,
+          content: message.content.parts[0],
+        })
+      ))
       /** https://platform.openai.com/docs/models/gpt-3
        text-davinci-003 max 4000 tokens, others max 2048 tokens
        **/
-      let max_tokens
-      if (model === 'text-davinci-003') {
-        max_tokens = 4000;
-      } else {
-        max_tokens = 2048;
-      }
-      let result = await fetch('https://api.openai.com/v1/completions', {
+      const result = await fetch('https://api.openai.com/v1/chat/completions', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
@@ -146,17 +153,14 @@ export default async function handler(
         method: 'POST',
         body: JSON.stringify({
           model,
-          prompt,
-          temperature: 0.7,
+          messages: full_messages,
+          temperature: 1,
           top_p: 1,
           frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
           presence_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
-          max_tokens,
           stream: true, // false is default
           n: 1,
-          best_of: 1, // 1 is default
           user: user_id,
-          stop: ['user:'],
         }),
       });
 
@@ -166,38 +170,55 @@ export default async function handler(
       res.setHeader('X-Accel-Buffering', 'no');
 
       const message_id = Math.floor(Date.now() / 1000).toString();
-      let full_message = '';
+      let full_content = '';
       let counter = 0;
+      let role = 'assistant';
       const stream = result.body as any as Readable;
       stream.on('data', (chunk: any) => {
-        // when chunk is [DONE], the stream is finished
-        const line = chunk.toString().slice('data: '.length);
-        if (line === '[DONE]\n\n') {
-          res.write('data: [DONE]\n\n');
-        } else {
-          const data = JSON.parse(line);
-          const part = data.choices[0].text
-          if (counter < 2 && (part.match(/\n/) || []).length) {
-            return;
-          }
-          full_message += part;
-          res.write(`data: ${JSON.stringify({
-            id: conversation_id,
-            title: messages[0].content.parts[0],
-            messages: [
-              {
-                id: message_id,
-                role: 'ai',
-                content: {
-                  type: 'text',
-                  parts: [
-                    part,
-                  ],
-                }
+        const lines = chunk
+          .toString()
+          .split('\n\n')
+          .filter((line: string) => line !== '')
+          .map((line: string) => line.trim().replace('data: ', ''));
+        for (const line of lines) {
+          // when chunk is [DONE], the stream is finished
+          if (line === '[DONE]\n\n') {
+            res.write('data: [DONE]\n\n');
+          } else {
+            try {
+              const data = JSON.parse(line);
+              if (data.choices[0].delta?.role) {
+                role = data.choices[0].delta.role;
               }
-            ],
-          })}\n\n`);
-          counter++;
+              if (!data.choices[0].delta?.content) {
+                return;
+              }
+              const part = data.choices[0].delta.content
+              if (counter < 2 && (part.match(/\n/) || []).length) {
+                return;
+              }
+              full_content += part;
+              res.write(`data: ${JSON.stringify({
+                id: conversation_id,
+                title: messages[0].content.parts[0],
+                messages: [
+                  {
+                    id: message_id,
+                    role,
+                    content: {
+                      type: 'text',
+                      parts: [
+                        part,
+                      ],
+                    }
+                  }
+                ],
+              })}\n\n`);
+              counter++;
+            } catch (e) {
+              console.log(e)
+            }
+          }
         }
       });
       stream.on('end', async () => {
@@ -206,10 +227,10 @@ export default async function handler(
           Item: {
             PK: conversation_id,
             SK: message_id,
-            role: 'ai',
+            role: role,
             content: {
               type: 'text',
-              parts: [full_message],
+              parts: [full_content],
             },
             TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
             create_at: Math.floor(Date.now() / 1000),
@@ -225,7 +246,7 @@ export default async function handler(
       try {
         await ddbDocClient.send(new BatchWriteCommand({
           RequestItems: {
-            'wizardingpay': ids.slice(0,25).map((id: string) => ({
+            'wizardingpay': ids.slice(0, 25).map((id: string) => ({
               DeleteRequest: {
                 Key: {
                   PK: user_id,
