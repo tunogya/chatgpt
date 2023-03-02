@@ -21,6 +21,22 @@ const styles = {
     'div,a,img': {
       '-webkit-tap-highlight-color': 'transparent',
     },
+    '::-webkit-scrollbar': {
+      width: '0px',
+      background: 'transparent',
+    },
+    '::-webkit-scrollbar-thumb': {
+      background: 'transparent',
+    },
+    '::-webkit-scrollbar-track': {
+      background: 'transparent',
+    },
+    '::-webkit-scrollbar-button': {
+      display: 'none',
+    },
+    '::-webkit-scrollbar-corner': {
+      background: 'transparent',
+    }
   }
 
 }
