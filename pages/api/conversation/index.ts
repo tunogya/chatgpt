@@ -52,6 +52,10 @@ export default async function handler(
       });
     } else if (req.method === 'POST') {
       const {action, messages, model, parent_message_id} = req.body;
+      if (action !== 'next') {
+        res.status(400).json({error: 'Currently, only next action is supported.'})
+        return
+      }
       // Currently, only gpt-3.5-turbo and gpt-3.5-turbo-0301 are supported.
       // https://platform.openai.com/docs/api-reference/chat
       if (model !== 'gpt-3.5-turbo' && model !== 'gpt-3.5-turbo-0301') {
@@ -67,7 +71,7 @@ export default async function handler(
             Item: {
               PK: user_id,
               SK: conversation_id,
-              title: messages[0].content.parts[0],
+              title: messages[0].content.parts[0].slice(0, 20),
               created: Math.floor(Date.now() / 1000),
               TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
               is_visible: true,

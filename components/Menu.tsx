@@ -103,7 +103,7 @@ const Menu = () => {
                   pathname: `/chat`,
                 })
               }}>
-        New chat
+        新建回话
       </Button>
       <Stack pt={2} h={'full'} overflow={"scroll"}>
         {conversation && conversation?.map((item: any) => (
@@ -128,16 +128,16 @@ const Menu = () => {
         {
           conversation && conversation.length && (
             <Button variant={'ghost'} leftIcon={deleteConfirm ? <CheckIcon color={'white'}/> : <FiTrash2 color={'white'}/>}
-                    gap={1} justifyContent={"start"} isLoading={isWaitClear} loadingText={'Clearing...'}
+                    gap={1} justifyContent={"start"} isLoading={isWaitClear} loadingText={'清除中...'}
                     color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
-              {deleteConfirm ? 'Confirm clear' : 'Clear conversations'}
+              {deleteConfirm ? '确认清空' : '清空记录'}
             </Button>
           )
         }
         <Button variant={'ghost'} gap={1} justifyContent={'start'} color={"white"}
                 leftIcon={colorMode === 'light' ? <MoonIcon color={'white'}/> : <SunIcon color={'white'}/>}
                 _hover={{bg: 'bg3'}} onClick={toggleColorMode}>
-          {colorMode === 'light' ? 'Dark' : 'Light'} mode
+          {colorMode === 'light' ? '深色' : '浅色'}模式
         </Button>
         <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} justifyContent={"start"} gap={1}
                 color={'white'} _hover={{bg: 'bg3'}}
@@ -145,7 +145,7 @@ const Menu = () => {
                   await dispatch(logout())
                   await router.push('/auth/login')
                 }}>
-          Log out
+          注销
         </Button>
       </Stack>
     </Stack>

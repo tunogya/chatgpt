@@ -136,7 +136,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
             ) : (
               <Stack align={'center'} justify={'center'} h={'full'}>
                 <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
-                <Text fontSize={'xs'} color={fontColor}>Power by OpenAI</Text>
+                <Text fontSize={'xs'} color={fontColor}>OpenAI 提供技术支持</Text>
               </Stack>
             )
           )}

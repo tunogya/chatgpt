@@ -9,9 +9,9 @@ const Error = () => {
 
   return (
     <Stack h={'full'} w={'full'} bg={bg} align={'center'} justify={'center'}>
-      <Text fontSize={'sm'} color={fontColor}>Error</Text>
-      <Text fontSize={'sm'} color={fontColor}>Oops! {error}</Text>
-      <Button color={fontColor} onClick={() => router.back()}>Go back</Button>
+      <Text fontSize={'sm'} color={fontColor}>错误</Text>
+      <Text fontSize={'sm'} color={fontColor}>啊呀！{error}</Text>
+      <Button color={fontColor} onClick={() => router.back()}>返回</Button>
     </Stack>
   )
 }
