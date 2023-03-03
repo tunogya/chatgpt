@@ -38,7 +38,7 @@ const MenuMobile = () => {
           <Menu />
         </DrawerContent>
       </Drawer>
-      <Text color={fontColor} fontSize={'md'} fontWeight={'500'}>新建回话</Text>
+      <Text color={fontColor} fontSize={'md'} fontWeight={'500'}>新会话</Text>
       <IconButton aria-label={'add'} icon={<AddIcon fontSize={'sm'}/>} variant={'ghost'} onClick={async () => {
         await dispatch(clearSession());
         await router.push({

@@ -103,7 +103,7 @@ const Menu = () => {
                   pathname: `/chat`,
                 })
               }}>
-        新建回话
+        新会话
       </Button>
       <Stack pt={2} h={'full'} overflow={"scroll"}>
         {conversation && conversation?.map((item: any) => (
