@@ -21,7 +21,7 @@ export default function App({Component, pageProps}: AppProps) {
       <PersistGate persistor={persistor} loading={<Spinner color='#10A37F'/>}>
         <ChakraProvider theme={theme}>
           <Head>
-            <title>ChatGPT via WizardingPay</title>
+            <title>ChatGPT</title>
             <meta
               name='description'
               content='A free conversational AI system that listens, learns, and challenges'
@@ -36,7 +36,7 @@ export default function App({Component, pageProps}: AppProps) {
             <meta name={'format-detection'} content={'email=no'}/>
             <meta name='theme-color' content='#343541'/>
             <meta property='og:image' content='/apple-touch-icon.png'/>
-            <meta property='og:title' content='ChatGPT via WizardingPay'/>
+            <meta property='og:title' content='ChatGPT'/>
             <meta property='og:description'
                   content='A free conversational AI system that listens, learns, and challenges'/>
             <meta property='og:url' content='https://chatgpt.wizardingpay.com'/>
