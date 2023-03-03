@@ -11,7 +11,7 @@ export const index = createSlice({
     conversation: [],
     session: {
       id: null,
-      title: 'New Chat',
+      title: '新会话',
       messages: [] as Message[]
     },
   },
@@ -39,7 +39,7 @@ export const index = createSlice({
       state.conversation = []
       state.session = {
         id: null,
-        title: 'New Chat',
+        title: '新会话',
         messages: [] as Message[]
       }
     },
@@ -63,7 +63,7 @@ export const index = createSlice({
     clearSession: (state) => {
       state.session = {
         id: null,
-        title: 'New chat',
+        title: '新会话',
         messages: [] as Message[]
       }
     }
