@@ -126,16 +126,17 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       </Head>
       <Stack h={'full'} w={'full'} pb={'120px'} overflow={'scroll'} spacing={0}>
         {
-          session.id && session.id?.split('#').pop() === conversation_id && session?.messages && session.messages?.length > 0 ? session.messages.map((item: any, index: number) => (
-            <ConversationCell message={item} key={index}/>
-          )) : (
-            !isWaitHistory && (
-              <Stack align={'center'} justify={'center'} h={'full'}>
-                <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
-                <Text fontSize={'xs'} color={fontColor}>OpenAI 提供技术支持</Text>
-              </Stack>
-            )
-          )}
+          session?.messages?.length > 0 && ((session?.id && conversation_id) ? session.id?.split('#').pop() === conversation_id : true)
+            ? session.messages.map((item: any, index: number) => (
+              <ConversationCell message={item} key={index}/>
+            )) : (
+              !isWaitHistory && (
+                <Stack align={'center'} justify={'center'} h={'full'}>
+                  <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
+                  <Text fontSize={'xs'} color={fontColor}>OpenAI 提供技术支持</Text>
+                </Stack>
+              )
+            )}
         <div ref={bottomRef}/>
       </Stack>
       <Stack position={'absolute'} bottom={0} left={0} w={'full'} spacing={0}>
