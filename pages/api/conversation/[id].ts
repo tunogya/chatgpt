@@ -71,7 +71,7 @@ export default async function handler(
             PK: user_id,
             SK: `CONVERSATION#${id}`,
           },
-          UpdateExpression,
+          UpdateExpression: `SET ${UpdateExpression}`,
           ExpressionAttributeNames,
           ExpressionAttributeValues,
         }))

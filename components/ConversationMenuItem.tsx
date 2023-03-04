@@ -1,4 +1,4 @@
-import {Box, HStack, IconButton, Text} from "@chakra-ui/react";
+import {Box, HStack, IconButton, Input, Text} from "@chakra-ui/react";
 import {ChatIcon, CheckIcon, CloseIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useRouter} from "next/router";
 import {FC, useState} from "react";
@@ -20,30 +20,43 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
   const [title, setTitle] = useState(item.title);
   const router = useRouter();
 
-  const deleteConversation = async () => {
-    await fetch(`/api/conversation/${item.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`,
-      }
-    })
+  const deleteConversationItem = async () => {
+    try {
+      await fetch(`/api/conversation/${item.id.split('#').pop()}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
+        }
+      })
+      // TODO
+      // delete conversation in redux
+    } catch (e) {
+      console.log(e)
+    }
   }
 
-  const updateConversationTitle = async () => {
+  const updateConversationItemTitle = async () => {
     if (!title) {
       return
     }
-    await fetch(`/api/conversation/${item.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`,
-      },
-      body: JSON.stringify({
-        title: title,
+    try {
+      await fetch(`/api/conversation/${item.id.split('#').pop()}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify({
+          title: title,
+        })
       })
-    })
+      setUpdateConfirm(false)
+      // TODO
+      // update title in redux
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
@@ -65,18 +78,25 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
         }
 
       </Box>
-      <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
-            fontWeight={'500'}
-            whiteSpace={'nowrap'} fontSize={'sm'}>
-        {item.title}
-      </Text>
+      {
+        updateConfirm ? (
+          <Input defaultValue={title} size={'sm'} height={'24px'} px={0} variant={'outline'} color={'white'}
+                 onChange={(e) => setTitle(e.target.value)}
+          />
+        ) : (
+          <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
+                fontWeight={'500'} whiteSpace={'nowrap'} fontSize={'sm'}>
+            {item.title}
+          </Text>
+        )
+      }
       {
         item.id.split('#').pop() === router.query.id && item.id === session.id && (
           <>
             {deleteConfirm && (
               <HStack spacing={0}>
                 <IconButton aria-label={'yes'} icon={<CheckIcon/>} color={'gray.50'} size={'xs'} variant={'ghost'}
-                            onClick={deleteConversation}
+                            onClick={deleteConversationItem}
                 />
                 <IconButton aria-label={'no'} icon={<CloseIcon/>} color={'gray.50'} size={'xs'} variant={'ghost'}
                             onClick={() => {
@@ -88,7 +108,7 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
             {updateConfirm && (
               <HStack spacing={0}>
                 <IconButton aria-label={'yes'} icon={<CheckIcon/>} color={'gray.50'} size={'xs'} variant={'ghost'}
-                            onClick={updateConversationTitle}
+                            onClick={updateConversationItemTitle}
                 />
                 <IconButton aria-label={'no'} icon={<CloseIcon/>} color={'gray.50'} size={'xs'} variant={'ghost'}
                             onClick={() => {
