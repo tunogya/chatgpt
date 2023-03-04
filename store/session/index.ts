@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 import {Message} from "@/components/ConversationCell";
 
 export const index = createSlice({
-  name: 'user',
+  name: 'session',
   initialState: {
     conversation: [],
     session: {
@@ -14,6 +14,32 @@ export const index = createSlice({
   reducers: {
     setConversation: (state, action) => {
       state.conversation = action.payload || [];
+    },
+    updateConversationTitle: (state, action) => {
+      const {id, title} = action.payload
+      const index = state.conversation.findIndex((c: any) => c.id === id)
+      if (index !== -1) {
+        // @ts-ignore
+        state.conversation[index].title = title
+      }
+      if (id === state.session.id) {
+        state.session.title = title
+      }
+    },
+    deleteConversation: (state, action) => {
+      const id = action.payload
+      const index = state.conversation.findIndex((c: any) => c.id === id)
+      if (index !== -1) {
+        // @ts-ignore
+        state.conversation.splice(index, 1)
+      }
+      if (id === state.session.id) {
+        state.session = {
+          id: null,
+          title: '新会话',
+          messages: [] as Message[]
+        }
+      }
     },
     setSession: (state, action) => {
       state.session = action.payload
@@ -46,6 +72,8 @@ export const {
   setConversation,
   setSession,
   addMessageToSession,
+  deleteConversation,
+  updateConversationTitle,
   updateMessageAndIdAndTitleToSession,
   clearSession
 } = index.actions
