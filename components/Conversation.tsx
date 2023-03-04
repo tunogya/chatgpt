@@ -126,7 +126,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       </Head>
       <Stack h={'full'} w={'full'} pb={'120px'} overflow={'scroll'} spacing={0}>
         {
-          session && session.id.split('#').pop() === conversation_id && session?.messages && session.messages?.length > 0 ? session.messages.map((item: any, index: number) => (
+          session.id && session.id?.split('#').pop() === conversation_id && session?.messages && session.messages?.length > 0 ? session.messages.map((item: any, index: number) => (
             <ConversationCell message={item} key={index}/>
           )) : (
             !isWaitHistory && (

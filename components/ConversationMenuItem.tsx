@@ -1,6 +1,5 @@
 import {Box, HStack, IconButton, Text} from "@chakra-ui/react";
-import {IoChatboxOutline} from "react-icons/io5";
-import {CheckIcon, CloseIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
+import {ChatIcon, CheckIcon, CloseIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useRouter} from "next/router";
 import {FC, useState} from "react";
 import {useSelector} from "react-redux";
@@ -48,7 +47,7 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
   }
 
   return (
-    <HStack minH={'40px'} p={3} cursor={'pointer'} bg={item.id === session?.id ? 'bg2' : 'bg1'}
+    <HStack minH={'40px'} p={3} cursor={'pointer'} bg={item.id.split('#').pop() === router.query.id ? 'bg2' : 'bg1'}
             _hover={{bg: 'bg3'}} borderRadius={'0.375rem'} maxH={'44px'}
             onClick={() => {
               router.push({
@@ -57,7 +56,14 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
             }}
     >
       <Box>
-        <IoChatboxOutline size={'16px'} color={'white'}/>
+        {
+          deleteConfirm ? (
+            <DeleteIcon fontSize={'sm'} color={'white'}/>
+          ) : (
+            <ChatIcon fontSize={'sm'} color={'white'}/>
+          )
+        }
+
       </Box>
       <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
             fontWeight={'500'}
@@ -65,7 +71,7 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
         {item.title}
       </Text>
       {
-        item.id === session?.id && (
+        item.id.split('#').pop() === router.query.id && item.id === session.id && (
           <>
             {deleteConfirm && (
               <HStack spacing={0}>

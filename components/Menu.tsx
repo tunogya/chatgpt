@@ -5,8 +5,7 @@ import {
   Stack,
   useColorMode,
 } from "@chakra-ui/react";
-import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
-import {CheckIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
+import {AddIcon, CheckIcon, DeleteIcon, MoonIcon, SunIcon, WarningTwoIcon} from "@chakra-ui/icons";
 import {
   logout,
   setPhotoUrl,
@@ -16,7 +15,7 @@ import {clearSession, setConversation} from "@/store/session";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import ConversationMenuItem, {ConversationMenuItemProps} from "@/components/ConversationMenuItem";
+import ConversationMenuItem from "@/components/ConversationMenuItem";
 
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
@@ -94,7 +93,7 @@ const Menu = () => {
   return (
     <Stack h={'full'} p={2} spacing={2} bg={'bg1'} minW={'260px'} w={['full', 'full', '260px']}>
       <Button variant={'outline'} boxShadow={'md'} minH={'46px'} borderColor={'whiteAlpha.400'} _hover={{bg: 'bg3'}}
-              leftIcon={<FiPlus color={'white'}/>} justifyContent={"start"} gap={1} color={"white"}
+              leftIcon={<AddIcon color={'white'}/>} justifyContent={"start"} gap={1} color={"white"}
               onClick={async () => {
                 await dispatch(clearSession());
                 await router.push({
@@ -118,7 +117,7 @@ const Menu = () => {
         {
           conversation && conversation.length && (
             <Button variant={'ghost'}
-                    leftIcon={deleteConfirm ? <CheckIcon color={'white'}/> : <FiTrash2 color={'white'}/>}
+                    leftIcon={deleteConfirm ? <CheckIcon color={'white'}/> : <DeleteIcon color={'white'}/>}
                     gap={1} justifyContent={"start"} isLoading={isWaitClear} loadingText={'清除中...'}
                     color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
               {deleteConfirm ? '确认清空' : '清空记录'}
@@ -130,7 +129,7 @@ const Menu = () => {
                 _hover={{bg: 'bg3'}} onClick={toggleColorMode}>
           {colorMode === 'light' ? '深色' : '浅色'}模式
         </Button>
-        <Button variant={'ghost'} leftIcon={<FiLogOut color={'white'}/>} justifyContent={"start"} gap={1}
+        <Button variant={'ghost'} leftIcon={<WarningTwoIcon color={'white'}/>} justifyContent={"start"} gap={1}
                 color={'white'} _hover={{bg: 'bg3'}}
                 onClick={async () => {
                   await dispatch(logout())
