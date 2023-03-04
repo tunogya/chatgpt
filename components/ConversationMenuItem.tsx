@@ -94,7 +94,7 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
         ) : (
           <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
                 fontWeight={'500'} whiteSpace={'nowrap'} fontSize={'sm'}>
-            {item.title}
+            {title}
           </Text>
         )
       }
