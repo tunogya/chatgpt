@@ -120,7 +120,7 @@ const Menu = () => {
                     leftIcon={deleteConfirm ? <CheckIcon color={'white'}/> : <DeleteIcon color={'white'}/>}
                     gap={1} justifyContent={"start"} isLoading={isWaitClear} loadingText={'清除中...'}
                     color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
-              {deleteConfirm ? '确认清空' : '清空记录'}
+              {deleteConfirm ? '确认清空（最多25条）' : '清空记录'}
             </Button>
           )
         }
