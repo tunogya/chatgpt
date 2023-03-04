@@ -17,7 +17,7 @@ export const index = createSlice({
     },
     updateConversationTitle: (state, action) => {
       const {id, title} = action.payload
-      const index = state.conversation.findIndex((c: any) => c.id === id)
+      const index = state.conversation?.findIndex((c: any) => c.id === id) || -1
       if (index !== -1) {
         // @ts-ignore
         state.conversation[index].title = title
@@ -45,13 +45,13 @@ export const index = createSlice({
       state.session = action.payload
     },
     addMessageToSession: (state, action) => {
-      state.session.messages.push(action.payload)
+      state.session.messages = [...state.session.messages, action.payload]
     },
     updateMessageAndIdAndTitleToSession: (state, action) => {
       const {id, title, message} = action.payload
       state.session.id = id
       state.session.title = title
-      const index = state.session.messages.findIndex((m) => m.id === message.id)
+      const index = state.session.messages?.findIndex((m) => m.id === message.id) || -1
       if (index !== -1) {
         state.session.messages[index].content.parts[0] += message.content.parts[0]
       } else {

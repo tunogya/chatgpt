@@ -32,6 +32,11 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
         }
       })
       dispatch(deleteConversation(item.id))
+      if (router.query.id === item.id.split('#').pop()) {
+        await router.push({
+          pathname: `/chat`,
+        })
+      }
     } catch (e) {
       console.log(e)
     }
