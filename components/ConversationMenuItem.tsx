@@ -1,7 +1,7 @@
 import {Box, HStack, IconButton, Text} from "@chakra-ui/react";
 import {IoChatboxOutline} from "react-icons/io5";
 import {CheckIcon, CloseIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
-import {router} from "next/client";
+import {useRouter} from "next/router";
 import {FC, useState} from "react";
 import {useSelector} from "react-redux";
 
@@ -19,6 +19,7 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
   const [updateConfirm, setUpdateConfirm] = useState(false);
   const jwt = useSelector((state: any) => state.user.token);
   const [title, setTitle] = useState(item.title);
+  const router = useRouter();
 
   const deleteConversation = async () => {
     await fetch(`/api/conversation/${item.id}`, {
