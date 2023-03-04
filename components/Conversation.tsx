@@ -3,7 +3,7 @@ import {
   IconButton,
   Input,
   InputGroup,
-  InputRightElement, Spinner,
+  InputRightElement,
   Stack,
   Text,
   useColorModeValue,
@@ -90,7 +90,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
     const decoder = new TextDecoder();
     // @ts-ignore
     const readChunk = async () => {
-      return reader.read().then(({ value, done }) => {
+      return reader.read().then(({value, done}) => {
         if (!done) {
           const dataString = decoder.decode(value);
           // split data by line, and remove empty line
@@ -126,14 +126,10 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       </Head>
       <Stack h={'full'} w={'full'} pb={'120px'} overflow={'scroll'} spacing={0}>
         {
-          session && session?.messages && session.messages?.length > 0 ? session.messages.map((item: any, index: number) => (
+          session && session.id.split('#').pop() === conversation_id && session?.messages && session.messages?.length > 0 ? session.messages.map((item: any, index: number) => (
             <ConversationCell message={item} key={index}/>
           )) : (
-            isWaitHistory ? (
-              <Stack p={4}>
-                <Spinner color={fontColor}/>
-              </Stack>
-            ) : (
+            !isWaitHistory && (
               <Stack align={'center'} justify={'center'} h={'full'}>
                 <Heading fontSize={'3xl'} color={fontColor}>ChatGPT</Heading>
                 <Text fontSize={'xs'} color={fontColor}>OpenAI 提供技术支持</Text>
@@ -173,7 +169,8 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
           </InputGroup>
         </Stack>
         <Stack w={'full'} bg={conversationBg} align={'center'} pt={2} pb={4}>
-          <Text fontSize={'xs'} maxW={'container.sm'} textAlign={'center'} px={1} color={'gray.500'}>OpenAI ChatGPT</Text>
+          <Text fontSize={'xs'} maxW={'container.sm'} textAlign={'center'} px={1} color={'gray.500'}>OpenAI
+            ChatGPT</Text>
         </Stack>
       </Stack>
     </Stack>

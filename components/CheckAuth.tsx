@@ -2,11 +2,11 @@ import {useRouter} from 'next/router';
 import {useCallback, useEffect} from 'react';
 import {useSelector} from "react-redux";
 
-const CheckJWT = () => {
+const CheckAuth = () => {
   const router = useRouter()
   const jwt = useSelector((state: any) => state.user.token)
 
-  const checkJWT = useCallback(async () => {
+  const check = useCallback(async () => {
     if (jwt) {
       const res = await fetch('/api/auth/verify', {
         method: 'POST',
@@ -37,12 +37,12 @@ const CheckJWT = () => {
   }, [jwt])
 
   useEffect(() => {
-    checkJWT()
-  }, [checkJWT])
+    check()
+  }, [check])
 
   return (
     <></>
   )
 }
 
-export default CheckJWT
+export default CheckAuth
