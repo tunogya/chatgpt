@@ -44,7 +44,7 @@ export default async function handler(
         items: conversations.Items?.map((item: any) => ({
           id: item.SK,
           title: item.title,
-          create_time: new Date(item.created * 1000).toLocaleString(),
+          create_time: new Date(item.created * 1000).toISOString(),
         })),
         total: conversations.Count,
         limit,

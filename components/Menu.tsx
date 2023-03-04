@@ -16,7 +16,7 @@ import {clearSession, setConversation} from "@/store/session";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import ConversationMenuItem from "@/components/ConversationMenuItem";
+import ConversationMenuItem, {ConversationMenuItemProps} from "@/components/ConversationMenuItem";
 
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
@@ -107,6 +107,7 @@ const Menu = () => {
         {conversation && conversation?.map((item: {
           id: string,
           title: string,
+          create_time: string,
         }) => (
           <ConversationMenuItem key={item.id} item={item}/>
         ))}
