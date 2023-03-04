@@ -12,7 +12,7 @@ import {IoPaperPlaneOutline} from "react-icons/io5";
 import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import ConversationCell, {Message} from "@/components/ConversationCell";
-import {addMessageToSession, setSession, updateMessageAndIdAndTitleToSession} from "@/store/user";
+import {addMessageToSession, setSession, updateMessageAndIdAndTitleToSession} from "@/store/session";
 import Head from "next/head";
 
 type ConversationProps = {
@@ -26,7 +26,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const bottomRef = useRef(null);
   const [input, setInput] = useState('');
   const jwt = useSelector((state: any) => state.user.token);
-  const session = useSelector((state: any) => state.user.session);
+  const session = useSelector((state: any) => state.session.session);
   const [isWaitComplete, setIsWaitComplete] = useState(false);
   const [isWaitHistory, setIsWaitHistory] = useState(false);
   const dispatch = useDispatch();

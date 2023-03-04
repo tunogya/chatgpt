@@ -69,7 +69,7 @@ export default async function handler(
           TableName: 'wizardingpay',
           Key: {
             PK: user_id,
-            SK: id,
+            SK: `CONVERSATION#${id}`,
           },
           UpdateExpression,
           ExpressionAttributeNames,
@@ -87,7 +87,7 @@ export default async function handler(
           TableName: 'wizardingpay',
           Key: {
             PK: user_id,
-            SK: id,
+            SK: `CONVERSATION#${id}`,
           },
         }))
         res.status(200).json({success: true})

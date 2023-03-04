@@ -3,30 +3,28 @@ import {
   Button,
   Spacer,
   Stack,
-  Text,
   useColorMode,
 } from "@chakra-ui/react";
 import {FiLogOut, FiPlus, FiTrash2} from "react-icons/fi";
-import {IoChatboxOutline} from "react-icons/io5";
 import {CheckIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {
-  clearSession,
   logout,
-  setConversation,
   setPhotoUrl,
   setUsername
 } from "@/store/user";
+import {clearSession, setConversation} from "@/store/session";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
+import ConversationMenuItem from "@/components/ConversationMenuItem";
 
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
   const router = useRouter()
   const dispatch = useDispatch();
   const jwt = useSelector((state: any) => state.user.token);
-  const session = useSelector((state: any) => state.user.session);
-  const conversation = useSelector((state: any) => state.user.conversation);
+  const session = useSelector((state: any) => state.session.session);
+  const conversation = useSelector((state: any) => state.session.conversation);
   const [isWaitClear, setIsWaitClear] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
@@ -105,21 +103,12 @@ const Menu = () => {
               }}>
         新会话
       </Button>
-      <Stack pt={2} h={'full'} overflow={"scroll"}>
-        {conversation && conversation?.map((item: any) => (
-          <Button key={item.id} variant={'ghost'} minH={'40px'} leftIcon={<IoChatboxOutline color={'white'}/>} gap={1}
-                  _hover={{bg: 'bg3'}}
-                  onClick={() => {
-                    router.push({
-                      pathname: `/chat/${item.id.split('#').pop()}`,
-                    })
-                  }}
-          >
-            <Text color={'gray.50'} textAlign={'start'} w={'full'} overflow={'hidden'} textOverflow={'ellipsis'}
-                  whiteSpace={'nowrap'} fontSize={'sm'}>
-              {item.title}
-            </Text>
-          </Button>
+      <Stack pt={1} h={'full'} overflow={"scroll"}>
+        {conversation && conversation?.map((item: {
+          id: string,
+          title: string,
+        }) => (
+          <ConversationMenuItem key={item.id} item={item}/>
         ))}
       </Stack>
       <Spacer/>
@@ -127,7 +116,8 @@ const Menu = () => {
         <Box w={'full'} h={'1px'} bg={'whiteAlpha.400'}/>
         {
           conversation && conversation.length && (
-            <Button variant={'ghost'} leftIcon={deleteConfirm ? <CheckIcon color={'white'}/> : <FiTrash2 color={'white'}/>}
+            <Button variant={'ghost'}
+                    leftIcon={deleteConfirm ? <CheckIcon color={'white'}/> : <FiTrash2 color={'white'}/>}
                     gap={1} justifyContent={"start"} isLoading={isWaitClear} loadingText={'清除中...'}
                     color={'white'} _hover={{bg: 'bg3'}} onClick={clearConversationList}>
               {deleteConfirm ? '确认清空' : '清空记录'}

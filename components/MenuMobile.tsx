@@ -11,7 +11,7 @@ import {
 import {AddIcon, HamburgerIcon} from "@chakra-ui/icons";
 import Menu from "@/components/Menu";
 import {useRouter} from "next/router";
-import {clearSession} from "@/store/user";
+import {clearSession} from "@/store/session";
 import {useDispatch} from "react-redux";
 
 const MenuMobile = () => {
