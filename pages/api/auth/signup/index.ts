@@ -47,6 +47,6 @@ export default async function handler(
     })
     res.status(200).json({ token })
   } catch (e) {
-    res.status(400).json({ error: 'try again later!' })
+    res.status(500).json({ error: '该用户名已存在！' })
   }
 }
