@@ -126,7 +126,7 @@ const Login = () => {
   return (
     <Stack h={'full'} w={'full'} bg={bg} justify={'center'} align={'center'} spacing={8} px={2}>
       <Text textAlign={'center'} fontSize={'sm'} fontWeight={'500'} color={fontColor}>
-        欢迎使用{via} ChatGPT
+        欢迎使用 {via} ChatGPT
       </Text>
       <Stack w={['full', '300px']} spacing={4}>
         <FormControl>
