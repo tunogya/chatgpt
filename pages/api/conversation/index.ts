@@ -73,7 +73,7 @@ export default async function handler(
               SK: conversation_id,
               title: messages[0].content.parts[0].slice(0, 20),
               created: Math.floor(Date.now() / 1000),
-              TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+              TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
               is_visible: true,
             },
           }));
@@ -92,7 +92,7 @@ export default async function handler(
                   SK: message.id,
                   role: message.role,
                   content: message.content,
-                  TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+                  TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
                 }
               },
             }))
@@ -210,7 +210,7 @@ export default async function handler(
               type: 'text',
               parts: [full_content],
             },
-            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
             created: Math.floor(Date.now() / 1000),
           },
         }))
