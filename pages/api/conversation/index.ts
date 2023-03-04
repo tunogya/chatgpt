@@ -2,8 +2,8 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import jwt from "jsonwebtoken";
 import {ddbDocClient} from "@/utils/DynamoDB";
 import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
-import {v4 as uuidv4} from 'uuid';
 import {Readable} from "stream";
+import uid from "@/utils/uid";
 
 export default async function handler(
   req: NextApiRequest,
@@ -64,7 +64,7 @@ export default async function handler(
       }
       let conversation_id = req.body?.conversation_id || undefined;
       if (!conversation_id) {
-        conversation_id = `CONVERSATION#${uuidv4()}`;
+        conversation_id = `CONVERSATION#${uid.getUniqueID().toString()}`;
         try {
           await ddbDocClient.send(new PutCommand({
             TableName: 'wizardingpay',
@@ -152,7 +152,7 @@ export default async function handler(
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
 
-      const message_id = Math.floor(Date.now() / 1000).toString();
+      const message_id = uid.getUniqueID().toString();
       let full_content = '';
       let role = 'assistant';
       const stream = result.body as any as Readable;
