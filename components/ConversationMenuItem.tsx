@@ -2,7 +2,8 @@ import {Box, HStack, IconButton, Input, Text} from "@chakra-ui/react";
 import {ChatIcon, CheckIcon, CloseIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {useRouter} from "next/router";
 import {FC, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {deleteConversation, updateConversationTitle} from "@/store/session";
 
 export type ConversationMenuItemProps = {
   item: {
@@ -19,6 +20,7 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
   const jwt = useSelector((state: any) => state.user.token);
   const [title, setTitle] = useState(item.title);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const deleteConversationItem = async () => {
     try {
@@ -29,8 +31,7 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
           Authorization: `Bearer ${jwt}`,
         }
       })
-      // TODO
-      // delete conversation in redux
+      dispatch(deleteConversation(item.id))
     } catch (e) {
       console.log(e)
     }
@@ -52,8 +53,10 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
         })
       })
       setUpdateConfirm(false)
-      // TODO
-      // update title in redux
+      dispatch(updateConversationTitle({
+        id: item.id,
+        title: title,
+      }))
     } catch (e) {
       console.log(e)
     }
