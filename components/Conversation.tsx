@@ -147,6 +147,22 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
                    onChange={(e) => {
                      setInput(e.target.value)
                    }}
+                    onKeyDown={async (e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (input === '') return;
+                        const message: Message = {
+                          id: Math.floor(Date.now() / 1000).toString(),
+                          role: 'user',
+                          content: {
+                            type: 'text',
+                            parts: [input],
+                          }
+                        }
+                        setInput('');
+                        await complete(message);
+                      }
+                    }}
             />
             <InputRightElement h={'full'} pr={1}>
               <IconButton aria-label={'send'} isLoading={isWaitComplete}
