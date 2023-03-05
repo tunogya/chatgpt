@@ -152,7 +152,7 @@ export default async function handler(
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
 
-      const message_id = uid.getUniqueID().toString();
+      const message_id = Math.floor(Date.now() / 1000).toString();
       let full_content = '';
       let role = 'assistant';
       const stream = result.body as any as Readable;
