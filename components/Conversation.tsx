@@ -25,6 +25,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const inputBgColor = useColorModeValue('white', 'bg6')
   const bottomRef = useRef(null);
   const [input, setInput] = useState('');
+  const username = useSelector((state: any) => state.user.username);
   const jwt = useSelector((state: any) => state.user.token);
   const session = useSelector((state: any) => state.session.session);
   const [isWaitComplete, setIsWaitComplete] = useState(false);
@@ -157,6 +158,10 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
                           content: {
                             type: 'text',
                             parts: [input],
+                          },
+                          author: {
+                            role: 'user',
+                            name: username,
                           }
                         }
                         setInput('');
@@ -176,6 +181,10 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
                               content: {
                                 type: 'text',
                                 parts: [input],
+                              },
+                              author: {
+                                role: 'user',
+                                name: username,
                               }
                             }
                             setInput('');

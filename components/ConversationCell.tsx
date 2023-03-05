@@ -12,6 +12,11 @@ export type Message = {
     type: 'text' | 'image' | 'video' | 'audio' | 'file'
     parts: string[]
   },
+  author: {
+    role: 'assistant' | 'user' | 'system',
+    name?: string,
+    metadata?: {}
+  }
 }
 
 const ConversationCell: FC<{ message: Message }> = ({message}) => {

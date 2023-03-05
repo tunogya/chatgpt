@@ -92,6 +92,7 @@ export default async function handler(
                   SK: message.id,
                   role: message.role,
                   content: message.content,
+                  author: message.author,
                   TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
                 }
               },
@@ -189,6 +190,9 @@ export default async function handler(
                       parts: [
                         part,
                       ],
+                    },
+                    author: {
+                      role,
                     }
                   }
                 ],
@@ -209,6 +213,9 @@ export default async function handler(
             content: {
               type: 'text',
               parts: [full_content],
+            },
+            author: {
+              role,
             },
             TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
             created: Math.floor(Date.now() / 1000),
