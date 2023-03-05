@@ -143,7 +143,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       <Stack position={'absolute'} bottom={0} left={0} w={'full'} spacing={0}>
         <Stack px={2} w={'full'} align={'center'}>
           <InputGroup maxW={'container.sm'} boxShadow={'0 0 10px rgba(0, 0, 0, 0.1)'}>
-            <Input variant={'outline'} bg={inputBgColor} color={fontColor} size={['sm', 'md']} value={input}
+            <Input variant={'outline'} bg={inputBgColor} color={fontColor} value={input}
                    isDisabled={isWaitComplete}
                    onChange={(e) => {
                      setInput(e.target.value)
