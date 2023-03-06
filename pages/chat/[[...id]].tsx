@@ -10,7 +10,7 @@ import {useRouter} from "next/router";
 const Chat = () => {
   const [isMobile] = useMediaQuery('(max-width: 768px)')
   const router = useRouter()
-  const conversation_id = router.query.id as string
+  const conversation_id = router.query?.id?.[0] as string
 
   return (
     <Stack direction={['column', 'column', 'row']} h={'full'} w={'full'} spacing={0}>
