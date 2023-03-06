@@ -67,7 +67,7 @@ const Menu = () => {
   }
 
   const getUserSession = async () => {
-    const response = await fetch('/api/session', {
+    const response = await fetch('/api/auth/session', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
