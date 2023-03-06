@@ -1,10 +1,10 @@
 import AddIcon from "@/components/SVG/AddIcon";
-import ConversationListItem from "@/components/ConversationListItem";
 import LogoutIcon from "@/components/SVG/LogoutIcon";
 import SunIcon from "@/components/SVG/SunIcon";
 import DeleteIcon from "@/components/SVG/DeleteIcon";
+import ConversationsList from "@/components/ConversationsList";
 
-const NaviBar = () => {
+const NavigationBar = () => {
   return (
     <div className={'dark hidden bg-gray-900 md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col'}>
       <div className={'flex h-full min-h-0 flex-col '}>
@@ -15,9 +15,7 @@ const NaviBar = () => {
               <AddIcon/>
               新会话
             </a>
-            <div className="flex-col flex-1 overflow-y-auto border-b border-white/20">
-              <ConversationListItem/>
-            </div>
+            <ConversationsList/>
             <a
               className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
               duration-200 text-white cursor-pointer text-sm">
@@ -41,4 +39,4 @@ const NaviBar = () => {
   )
 }
 
-export default NaviBar
+export default NavigationBar

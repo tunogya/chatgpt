@@ -1,5 +1,5 @@
 import {useRouter} from "next/router";
-import NaviBar from "@/components/NaviBar";
+import NavigationBar from "@/components/NavigationBar";
 import Content from "@/components/Content";
 
 const Chat = () => {
@@ -8,7 +8,7 @@ const Chat = () => {
 
   return (
     <div className={'overflow-hidden w-full h-full relative'}>
-      <NaviBar/>
+      <NavigationBar/>
       <Content/>
     </div>
   )

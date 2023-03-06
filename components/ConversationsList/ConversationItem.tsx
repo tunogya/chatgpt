@@ -1,6 +1,6 @@
 import ConversationIcon from "@/components/SVG/ConversationIcon";
 
-const ConversationListItem = () => {
+const ConversationItem = () => {
   return (
     <div className="flex flex-col gap-2 text-gray-100 text-sm"><a
       className="flex py-3 px-3 items-center gap-3 relative rounded-md hover:bg-[#2A2B32] cursor-pointer break-all hover:pr-4 group">
@@ -15,4 +15,4 @@ const ConversationListItem = () => {
   )
 }
 
-export default ConversationListItem
+export default ConversationItem
