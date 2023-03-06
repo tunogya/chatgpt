@@ -39,6 +39,7 @@ export default async function handler(
           ':is_visible': true,
         },
         ScanIndexForward: false,
+        ProjectionExpression: 'PK, SK, title, created',
       }));
       res.status(200).json({
         items: conversations.Items?.map((item: any) => ({

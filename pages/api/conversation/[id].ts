@@ -3,6 +3,19 @@ import {ddbDocClient} from "@/utils/DynamoDB";
 import {DeleteCommand, GetCommand, QueryCommand, UpdateCommand} from "@aws-sdk/lib-dynamodb";
 import jwt from "jsonwebtoken";
 
+// type Data = {
+//   title: string,
+//   create_time: string,
+//   mapping: {
+//     [key: string]: {
+//       children: string[],
+//       id: string,
+//       message: Message | null,
+//       parent: string | null,
+//     }
+//   },
+// }
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
