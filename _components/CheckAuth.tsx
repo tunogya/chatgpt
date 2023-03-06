@@ -14,7 +14,7 @@ const CheckAuth = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          token: accessToken
+          accessToken
         }),
       })
       if (res.status === 200) {

@@ -58,9 +58,9 @@ const Login = () => {
       }),
     })
     if (res.status === 200) {
-      const {token} = await res.json()
+      const {accessToken} = await res.json()
       // set token to store
-      dispatch(setAccessToken(token))
+      dispatch(setAccessToken(accessToken))
       dispatch(setUser({
         id: `USER#${username.toLowerCase()}`,
         username,

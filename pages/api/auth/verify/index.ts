@@ -11,13 +11,13 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const {token} = req.body
+  const {accessToken} = req.body
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST'])
     res.status(405).end(`Method ${req.method} Not Allowed`)
     return
   }
-  jwt.verify(token, process.env.JWT_SECRET || '', (err: any, decoded: any) => {
+  jwt.verify(accessToken, process.env.JWT_SECRET || '', (err: any, decoded: any) => {
     if (err) {
       res.status(401).json({error: 'invalid token'})
       return

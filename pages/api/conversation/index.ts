@@ -10,12 +10,12 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // get token from header authorization
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
+  const accessToken = req.headers.authorization?.split(' ')[1];
+  if (!accessToken) {
     res.status(401).json({error: 'invalid token'})
     return
   }
-  jwt.verify(token, process.env.JWT_SECRET || '', async (err: any, decoded: any) => {
+  jwt.verify(accessToken, process.env.JWT_SECRET || '', async (err: any, decoded: any) => {
     if (err) {
       res.status(401).json({error: 'invalid token'})
       return
