@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {Message} from "@/components/ConversationCell";
+import {Message} from "@/_components/ConversationCell";
 
 export const index = createSlice({
   name: 'session',

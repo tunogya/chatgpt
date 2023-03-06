@@ -13,7 +13,7 @@ import {clearSession, setConversation} from "@/store/session";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import ConversationMenuItem from "@/components/ConversationMenuItem";
+import ConversationMenuItem from "@/_components/ConversationMenuItem";
 
 const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()

@@ -1,21 +1,16 @@
-import {Stack} from '@chakra-ui/react';
 import type {AppProps} from 'next/app'
 import Script from 'next/script';
 import Head from 'next/head';
-import useWindowSize from '@/hooks/useWindowSize';
 import {Provider} from 'react-redux'
 import store from "@/store";
 import {PersistGate} from "redux-persist/integration/react";
 import {persistStore} from "redux-persist";
 import {Spinner} from '@chakra-ui/react'
-import CheckAuth from "@/components/CheckAuth";
 import "@/styles/index.css";
 
 const persistor = persistStore(store);
 
 export default function App({Component, pageProps}: AppProps) {
-  const {height} = useWindowSize()
-
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={<Spinner color='#10A37F'/>}>
@@ -85,14 +80,7 @@ export default function App({Component, pageProps}: AppProps) {
                 gtag('config', 'G-EDPQ3K7EN8');
               `}
         </Script>
-        <CheckAuth/>
-        {
-          height && (
-            <Stack h={height} spacing={0}>
-              <Component {...pageProps} />
-            </Stack>
-          )
-        }
+        <Component {...pageProps} />
       </PersistGate>
     </Provider>
   )

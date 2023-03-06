@@ -2,9 +2,9 @@ import {
   Stack,
   useMediaQuery,
 } from '@chakra-ui/react';
-import MenuMobile from "@/components/MenuMobile";
-import Menu from "@/components/Menu";
-import Conversation from "@/components/Conversation";
+import MenuMobile from "@/_components/MenuMobile";
+import Menu from "@/_components/Menu";
+import Conversation from "@/_components/Conversation";
 import {useRouter} from "next/router";
 
 const Chat = () => {

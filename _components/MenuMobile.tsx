@@ -9,7 +9,7 @@ import {
   useColorModeValue, useDisclosure
 } from "@chakra-ui/react";
 import {AddIcon, HamburgerIcon} from "@chakra-ui/icons";
-import Menu from "@/components/Menu";
+import Menu from "@/_components/Menu";
 import {useRouter} from "next/router";
 import {clearSession} from "@/store/session";
 import {useDispatch} from "react-redux";

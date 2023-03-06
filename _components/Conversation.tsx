@@ -11,7 +11,7 @@ import {
 import {IoPaperPlaneOutline} from "react-icons/io5";
 import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import ConversationCell, {Message} from "@/components/ConversationCell";
+import ConversationCell, {Message} from "@/_components/ConversationCell";
 import {addMessageToSession, setSession, updateMessageAndIdAndTitleToSession} from "@/store/session";
 import Head from "next/head";
 
