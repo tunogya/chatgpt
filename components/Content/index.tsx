@@ -1,4 +1,5 @@
 import Placeholder from "./PlaceHoder";
+import MobileNavigationBar from "@/components/NavigationBar/MobileNavigationBar";
 
 const Content = () => {
 
@@ -28,8 +29,8 @@ const Content = () => {
           </div>
         </form>
         <div className="px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6">
-          <a href="https://github.com/tunogya/chatgpt" target="_blank" rel="noreferrer"
-             className="underline">ChatGPT</a>. 免费使用
+          <a href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes" target="_blank" rel="noreferrer"
+             className="underline">ChatGPT 2.13</a>. 仅供学习交流，不得用于商业用途。
         </div>
       </div>
     )
@@ -37,6 +38,7 @@ const Content = () => {
 
   return (
     <div className="flex h-full flex-1 flex-col md:pl-[260px]">
+      <MobileNavigationBar/>
       <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
         <div className="flex-1 overflow-hidden">
           <div className="react-scroll-to-bottom--css-minru-79elbk h-full dark:bg-gray-800">
