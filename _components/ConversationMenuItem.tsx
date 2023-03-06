@@ -128,14 +128,10 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
             {!deleteConfirm && !updateConfirm && (
               <HStack spacing={0}>
                 <IconButton aria-label={'edit'} icon={<EditIcon/>} color={'gray.50'} size={'xs'} variant={'ghost'}
-                            onClick={() => {
-                              setUpdateConfirm(true);
-                            }}
+                            onClick={() => setUpdateConfirm(true)}
                 />
                 <IconButton aria-label={'delete'} icon={<DeleteIcon/>} color={'gray.50'} size={'xs'} variant={'ghost'}
-                            onClick={() => {
-                              setDeleteConfirm(true);
-                            }}
+                            onClick={() => setDeleteConfirm(true)}
                 />
               </HStack>
             )}

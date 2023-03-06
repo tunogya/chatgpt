@@ -28,9 +28,11 @@ const ConversationsList = () => {
 
   return (
     <div className="flex-col flex-1 overflow-y-auto border-b border-white/20">
-      {conversation && conversation?.map((item: ConversationItemProps) => (
-        <ConversationItem key={item.id} {...item}/>
-      ))}
+      <div className="flex flex-col gap-2 text-gray-100 text-sm">
+        {conversation && conversation?.map((item: ConversationItemProps) => (
+          <ConversationItem key={item.id} {...item}/>
+        ))}
+      </div>
     </div>
   )
 }
