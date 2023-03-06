@@ -7,7 +7,13 @@ import {createHash, createHmac} from 'crypto';
 
 type Data = {
   error?: string
-  token?: string
+  user?: {
+    id: string
+    username?: string
+    photo_url?: string
+  },
+  expires?: string
+  accessToken?: string
 }
 
 export default async function handler(
@@ -73,14 +79,22 @@ export default async function handler(
       }
     }));
 
-    const token = jwt.sign({
+    const accessToken = jwt.sign({
       id: `TG-USER#${id}`,
       username,
       iat: Math.floor(Date.now() / 1000) - 3, // 3 seconds before
     }, process.env.JWT_SECRET || '', {
       expiresIn: '7d',
     })
-    res.status(200).json({token})
+    res.status(200).json({
+      user: {
+        id: `TG-USER#${id}`,
+        username,
+        photo_url,
+      },
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      accessToken,
+    })
   } catch (e) {
     res.status(400).json({error: 'try again later!'})
   }

@@ -6,7 +6,13 @@ import jwt from 'jsonwebtoken';
 
 type Data = {
   error?: string
-  token?: string
+  user?: {
+    id: string
+    username?: string
+    photo_url?: string
+  },
+  expires?: string
+  accessToken?: string
 }
 
 export default async function handler(
@@ -42,12 +48,21 @@ export default async function handler(
       res.status(404).json({error: 'no user found!'})
       return
     }
-    res.status(200).json({
-      // @ts-ignore
+    const new_accessToken = jwt.sign({
       id: Item.PK,
-      username: Item.username || undefined,
-      photo_url: Item.photo_url || undefined,
-      token,
+      username: Item.username,
+      iat: Math.floor(Date.now() / 1000) - 3, // 3 seconds before
+    }, process.env.JWT_SECRET || '', {
+      expiresIn: '7d',
+    });
+    res.status(200).json({
+      user: {
+        id: Item.PK,
+        username: Item.username || undefined,
+        photo_url: Item.photo_url || undefined,
+      },
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      accessToken: new_accessToken,
     })
   })
 }

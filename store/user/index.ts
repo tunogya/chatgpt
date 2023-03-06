@@ -3,38 +3,32 @@ import {createSlice} from '@reduxjs/toolkit'
 export const index = createSlice({
   name: 'user',
   initialState: {
-    user: null,
+    id: null,
     username: null,
     photo_url: null,
-    token: null,
+    accessToken: null,
   },
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload
+      state.id = action.payload.id
+      state.username = action.payload.username
+      state.photo_url = action.payload.photo_url
     },
-    setUsername: (state, action) => {
-      state.username = action.payload
-    },
-    setPhotoUrl: (state, action) => {
-      state.photo_url = action.payload
-    },
-    setToken: (state, action) => {
-      state.token = action.payload
+    setAccessToken: (state, action) => {
+      state.accessToken = action.payload
     },
     logout: (state) => {
-      state.user = null
+      state.id = null
       state.username = null
-      state.token = null
       state.photo_url = null
+      state.accessToken = null
     },
   }
 })
 
 export const {
   setUser,
-  setUsername,
-  setPhotoUrl,
-  setToken,
+  setAccessToken,
   logout,
 } = index.actions
 

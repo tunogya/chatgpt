@@ -17,7 +17,7 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
   const session = useSelector((state: any) => state.session.session);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [updateConfirm, setUpdateConfirm] = useState(false);
-  const jwt = useSelector((state: any) => state.user.token);
+  const accessToken = useSelector((state: any) => state.user.accessToken);
   const [title, setTitle] = useState(item.title);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`,
+          Authorization: `Bearer ${accessToken}`,
         }
       })
       dispatch(deleteConversation(item.id))
@@ -51,7 +51,7 @@ const ConversationMenuItem: FC<ConversationMenuItemProps> = ({item}) => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           title: title,

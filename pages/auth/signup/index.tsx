@@ -7,7 +7,7 @@ import {
 import {useMemo, useState} from 'react';
 import {useRouter} from 'next/router';
 import * as crypto from 'crypto';
-import { setUser, setToken } from '@/store/user';
+import { setUser, setAccessToken } from '@/store/user';
 import {useDispatch} from "react-redux";
 
 const Login = () => {
@@ -55,9 +55,9 @@ const Login = () => {
       }),
     })
     if (res.status === 200) {
-      const {token} = await res.json()
-      dispatch(setToken(token))
-      dispatch(setUser(`USER#${username.toLowerCase()}`))
+      const {accessToken, user} = await res.json()
+      dispatch(setAccessToken(accessToken))
+      dispatch(setUser(user))
       await router.push('/chat')
     } else {
       const {error} = await res.json()

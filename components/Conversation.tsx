@@ -26,7 +26,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
   const bottomRef = useRef(null);
   const [input, setInput] = useState('');
   const username = useSelector((state: any) => state.user.username);
-  const jwt = useSelector((state: any) => state.user.token);
+  const accessToken = useSelector((state: any) => state.user.accessToken);
   const session = useSelector((state: any) => state.session.session);
   const [isWaitComplete, setIsWaitComplete] = useState(false);
   const [isWaitHistory, setIsWaitHistory] = useState(false);
@@ -42,7 +42,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
     })
     res = await res.json()
@@ -76,7 +76,7 @@ const Conversation: FC<ConversationProps> = ({conversation_id}) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
         conversation_id: session.id,

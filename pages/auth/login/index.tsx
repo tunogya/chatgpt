@@ -9,7 +9,7 @@ import {useRouter} from 'next/router';
 import * as crypto from 'crypto';
 import {FaTelegramPlane} from "react-icons/fa";
 import {useDispatch} from "react-redux";
-import { setToken, setUser } from '@/store/user';
+import { setAccessToken, setUser } from '@/store/user';
 
 const Login = () => {
   const router = useRouter()
@@ -60,8 +60,12 @@ const Login = () => {
     if (res.status === 200) {
       const {token} = await res.json()
       // set token to store
-      dispatch(setToken(token))
-      dispatch(setUser(`USER#${username.toLowerCase()}`))
+      dispatch(setAccessToken(token))
+      dispatch(setUser({
+        id: `USER#${username.toLowerCase()}`,
+        username,
+        photo_url: '',
+      }))
       await router.push({
         pathname: '/chat',
         query: {
@@ -105,10 +109,9 @@ const Login = () => {
         }),
       })
       if (res.status === 200) {
-        const {token} = await res.json()
-        // set token to store
-        dispatch(setToken(token))
-        dispatch(setUser(`TG-USER#${data.id}`))
+        const {accessToken, user} = await res.json()
+        dispatch(setAccessToken(accessToken))
+        dispatch(setUser(user))
         await router.push('/chat')
       } else {
         const {error} = await res.json()

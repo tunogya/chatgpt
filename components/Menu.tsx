@@ -7,9 +7,7 @@ import {
 } from "@chakra-ui/react";
 import {AddIcon, CheckIcon, DeleteIcon, MoonIcon, SunIcon, WarningTwoIcon} from "@chakra-ui/icons";
 import {
-  logout,
-  setPhotoUrl,
-  setUsername
+  logout, setAccessToken, setUser
 } from "@/store/user";
 import {clearSession, setConversation} from "@/store/session";
 import {useRouter} from "next/router";
@@ -21,7 +19,7 @@ const Menu = () => {
   const {colorMode, toggleColorMode} = useColorMode()
   const router = useRouter()
   const dispatch = useDispatch();
-  const jwt = useSelector((state: any) => state.user.token);
+  const accessToken = useSelector((state: any) => state.user.accessToken);
   const session = useSelector((state: any) => state.session.session);
   const conversation = useSelector((state: any) => state.session.conversation);
   const [isWaitClear, setIsWaitClear] = useState(false);
@@ -37,7 +35,7 @@ const Menu = () => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           ids: conversation.map((c: any) => c.id),
@@ -61,7 +59,7 @@ const Menu = () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     const data = await response.json();
@@ -73,12 +71,12 @@ const Menu = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     const data = await response.json();
-    dispatch(setUsername(data.username));
-    dispatch(setPhotoUrl(data.photo_url));
+    dispatch(setUser(data.user));
+    dispatch(setAccessToken(data.accessToken));
   }
 
   useEffect(() => {

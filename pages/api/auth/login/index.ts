@@ -6,7 +6,13 @@ import jwt from 'jsonwebtoken';
 
 type Data = {
   error?: string
-  token?: string
+  user?: {
+    id: string
+    username?: string
+    photo_url?: string
+  },
+  expires?: string
+  accessToken?: string
 }
 
 export default async function handler(
@@ -40,13 +46,21 @@ export default async function handler(
       res.status(400).json({ error: 'error password!' })
       return
     }
-    const token = jwt.sign({
+    const accessToken = jwt.sign({
       id: `USER#${username}`,
       iat: Math.floor(Date.now() / 1000) - 3, // 3 seconds before
     }, process.env.JWT_SECRET || '', {
       expiresIn: '7d',
     })
-    res.status(200).json({ token })
+    res.status(200).json({
+      user: {
+        id: `USER#${username}`,
+        username: Item.username || undefined,
+        photo_url: Item.photo_url || undefined,
+      },
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      accessToken,
+    })
   } catch (e) {
     res.status(400).json({ error: 'try again later!' })
   }

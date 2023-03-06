@@ -4,17 +4,17 @@ import {useSelector} from "react-redux";
 
 const CheckAuth = () => {
   const router = useRouter()
-  const jwt = useSelector((state: any) => state.user.token)
+  const accessToken = useSelector((state: any) => state.user.accessToken)
 
   const check = useCallback(async () => {
-    if (jwt) {
+    if (accessToken) {
       const res = await fetch('/api/auth/verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          token: jwt
+          token: accessToken
         }),
       })
       if (res.status === 200) {
@@ -34,7 +34,7 @@ const CheckAuth = () => {
         query: {...router.query}
       })
     }
-  }, [jwt])
+  }, [accessToken])
 
   useEffect(() => {
     check()
