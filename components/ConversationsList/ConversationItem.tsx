@@ -69,25 +69,29 @@ const ConversationItem: FC<ConversationItemProps> = ({...props}) => {
   }
 
   const isSelected = useMemo(() => {
-    return props.id.split('#').pop() === router.query.id && props.id === session.id;
-  }, [props.id, router.query.id, session.id])
+    return props.id.split('#').pop() === router.query.id?.[0];
+  }, [props.id, router.query.id])
 
   return (
-    <div className={`flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer hover:pr-14 break-all ${isSelected ? "pr-14 bg-gray-800 hover:bg-gray-800" : "hover:bg-[#2A2B32] hover:pr-4"}`}>
+    <div
+      className={`flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all ${isSelected ? "pr-14 bg-gray-800 hover:bg-gray-800" : "hover:bg-[#2A2B32] hover:pr-4"}`}>
       {
         deleteConfirm ? <DeleteIcon/> : <ConversationIcon/>
       }
-      {
-        updateConfirm ? (
-          <input type="text" className="text-sm border-none bg-transparent p-0 m-0 w-full mr-0"
-                 value={props.title} onChange={(e) => setTitle(e.target.value)}/>
-        ) : (
-          <div className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">
-            {props.title}
-            <div className={`absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l ${isSelected ? "from-gray-800" : "from-gray-900 group-hover:from-[#2A2B32]"}`}></div>
-          </div>
-        )
-      }
+      <div className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">
+        {
+          updateConfirm ? (
+            <input type="text" className="text-sm border-none bg-transparent p-0 m-0 w-full mr-0"
+                   value={props.title} onChange={(e) => setTitle(e.target.value)}/>
+          ) : (
+            <>
+              {props.title}
+              <div
+                className={`absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l ${isSelected ? "from-gray-800" : "from-gray-900 group-hover:from-[#2A2B32]"}`}></div>
+            </>
+          )
+        }
+      </div>
       {
         isSelected && (
           <>
