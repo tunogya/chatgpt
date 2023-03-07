@@ -5,7 +5,7 @@ import DeleteIcon from "@/components/SVG/DeleteIcon";
 import ConversationsList from "@/components/ConversationsList";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {logout} from "@/store/user";
 import {clearSession, setConversation} from "@/store/session";
 import RightIcon from "@/components/SVG/RightIcon";
@@ -16,6 +16,29 @@ const NavigationBar = () => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const conversation = useSelector((state: any) => state.session.conversation);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [colorMode, setColorMode] = useState('light');
+
+  useEffect(() => {
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setColorMode('dark')
+      document.documentElement.classList.add('dark')
+    } else {
+      setColorMode('light')
+      document.documentElement.classList.remove('dark')
+    }
+  }, [])
+
+  const toggleColorMode = () => {
+    if (colorMode === 'light') {
+      setColorMode('dark')
+      document.documentElement.classList.add('dark')
+      localStorage.theme = 'dark'
+    } else {
+      setColorMode('light')
+      document.documentElement.classList.remove('dark')
+      localStorage.theme = 'light'
+    }
+  }
 
   const clearConversationList = async () => {
     if (!deleteConfirm) {
@@ -86,9 +109,10 @@ const NavigationBar = () => {
         }
         <a
           className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
-              duration-200 text-white cursor-pointer text-sm">
+              duration-200 text-white cursor-pointer text-sm" onClick={toggleColorMode}
+        >
           <SunIcon/>
-          深色模式
+          {colorMode === 'light' ? '深色' : '浅色'}模式
         </a>
         <a
           className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors

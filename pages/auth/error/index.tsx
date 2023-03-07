@@ -1,19 +1,25 @@
-import {Button, Stack, Text, useColorModeValue} from '@chakra-ui/react';
 import {useRouter} from 'next/router';
+import OpenAIIcon from "@/components/SVG/OpenAIIcon";
 
 const Error = () => {
   const router = useRouter()
   const {error} = router.query
-  const bg = useColorModeValue('white', 'bg2')
-  const fontColor = useColorModeValue('fontColor1', 'fontColor2')
 
   return (
-    <Stack h={'full'} w={'full'} bg={bg} align={'center'} justify={'center'}>
-      <Text fontSize={'sm'} color={fontColor}>错误</Text>
-      <Text fontSize={'sm'} color={fontColor}>啊呀！{error}</Text>
-      <Button color={fontColor} onClick={() => router.back()}>返回</Button>
-    </Stack>
+    <div className="w-full h-full flex justify-center items-center flex-col bg-gray-50 dark:bg-gray-800">
+      <div className="w-96 flex flex-col justify-center items-center">
+        <div className="mb-5">
+          <OpenAIIcon/>
+        </div>
+        <div className="mb-2 text-center text-lg">呀！</div>
+        <div className="mb-5 text-center">{error}</div>
+        <button className="btn relative btn-neutral" onClick={() => router.back()}>
+          <div className="flex w-full items-center justify-center gap-2">返回</div>
+        </button>
+      </div>
+    </div>
   )
 }
 
 export default Error
+
