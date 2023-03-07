@@ -74,7 +74,7 @@ const ConversationItem: FC<ConversationItemProps> = ({...props}) => {
 
   return (
     <div
-      className={`flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all ${isSelected ? "pr-14 bg-gray-800 hover:bg-gray-800" : "hover:bg-[#2A2B32] hover:pr-4"}`}>
+      className={`flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all ${isSelected ? "pr-14 bg-gray-800 hover:bg-gray-800" : "hover:bg-[#2A2B32] hover:pr-4 group"}`}>
       {
         deleteConfirm ? <DeleteIcon/> : <ConversationIcon/>
       }
