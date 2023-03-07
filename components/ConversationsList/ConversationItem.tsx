@@ -73,8 +73,14 @@ const ConversationItem: FC<ConversationItemProps> = ({...props}) => {
   }, [props.id, router.query.id])
 
   return (
-    <div
-      className={`flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all ${isSelected ? "pr-14 bg-gray-800 hover:bg-gray-800" : "hover:bg-[#2A2B32] hover:pr-4 group"}`}>
+    <a
+      className={`flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all ${isSelected ? "pr-14 bg-gray-800 hover:bg-gray-800" : "hover:bg-[#2A2B32] hover:pr-4 group"}`}
+      onClick={() => {
+        router.push({
+          pathname: `/chat/${props.id.split('#').pop()}`,
+        })
+      }}
+    >
       {
         deleteConfirm ? <DeleteIcon/> : <ConversationIcon/>
       }
@@ -82,10 +88,10 @@ const ConversationItem: FC<ConversationItemProps> = ({...props}) => {
         {
           updateConfirm ? (
             <input type="text" className="text-sm border-none bg-transparent p-0 m-0 w-full mr-0"
-                   value={props.title} onChange={(e) => setTitle(e.target.value)}/>
+                   value={title} onChange={(e) => setTitle(e.target.value)}/>
           ) : (
             <>
-              {props.title}
+              {title}
               <div
                 className={`absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l ${isSelected ? "from-gray-800" : "from-gray-900 group-hover:from-[#2A2B32]"}`}></div>
             </>
@@ -134,7 +140,7 @@ const ConversationItem: FC<ConversationItemProps> = ({...props}) => {
           </>
         )
       }
-    </div>
+    </a>
   )
 }
 
