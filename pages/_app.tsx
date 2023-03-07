@@ -7,6 +7,7 @@ import {PersistGate} from "redux-persist/integration/react";
 import {persistStore} from "redux-persist";
 import {Spinner} from '@chakra-ui/react'
 import "@/styles/index.css";
+import CheckAuth from "@/components/CheckAuth";
 
 const persistor = persistStore(store);
 
@@ -80,6 +81,7 @@ export default function App({Component, pageProps}: AppProps) {
                 gtag('config', 'G-EDPQ3K7EN8');
               `}
         </Script>
+        <CheckAuth/>
         <Component {...pageProps} />
       </PersistGate>
     </Provider>
