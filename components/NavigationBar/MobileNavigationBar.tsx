@@ -2,9 +2,12 @@ import {useDispatch} from "react-redux";
 import {setIsOpenSidebar} from "@/store/ui";
 import AddIcon from "@/components/SVG/AddIcon";
 import MenuIcon from "@/components/SVG/MenuIcon";
+import {clearSession} from "@/store/session";
+import {useRouter} from "next/router";
 
 const MobileNavigationBar = () => {
   const dispatch = useDispatch()
+  const router = useRouter()
 
   return (
     <div
@@ -15,7 +18,13 @@ const MobileNavigationBar = () => {
         <MenuIcon/>
       </button>
       <h1 className="flex-1 text-center text-base font-normal">新会话</h1>
-      <button type="button" className="px-3">
+      <button type="button" className="px-3"
+              onClick={async () => {
+                await dispatch(clearSession());
+                await router.push({
+                  pathname: `/chat`,
+                })
+              }}>
         <AddIcon/>
       </button>
     </div>
