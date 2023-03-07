@@ -1,5 +1,5 @@
 import ConversationIcon from "@/components/SVG/ConversationIcon";
-import {FC, useState} from "react";
+import {FC, useMemo, useState} from "react";
 import RightIcon from "@/components/SVG/RightIcon";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch, useSelector} from "react-redux";
@@ -68,10 +68,12 @@ const ConversationItem: FC<ConversationItemProps> = ({...props}) => {
     }
   }
 
+  const isSelected = useMemo(() => {
+    return props.id.split('#').pop() === router.query.id && props.id === session.id;
+  }, [props.id, router.query.id, session.id])
+
   return (
-    // normal hover:bg-[#2A2B32]
-    <div
-      className="flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer hover:pr-14 break-all pr-14 bg-gray-800 hover:bg-gray-800">
+    <div className={`flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer hover:pr-14 break-all ${isSelected ? "pr-14 bg-gray-800 hover:bg-gray-800" : "hover:bg-[#2A2B32] hover:pr-4"}`}>
       {
         deleteConfirm ? <DeleteIcon/> : <ConversationIcon/>
       }
@@ -82,12 +84,12 @@ const ConversationItem: FC<ConversationItemProps> = ({...props}) => {
         ) : (
           <div className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">
             {props.title}
-            <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800"></div>
+            <div className={`absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l ${isSelected ? "from-gray-800" : "from-gray-900 group-hover:from-[#2A2B32]"}`}></div>
           </div>
         )
       }
       {
-        props.id.split('#').pop() === router.query.id && props.id === session.id && (
+        isSelected && (
           <>
             {
               deleteConfirm && (
@@ -133,6 +135,3 @@ const ConversationItem: FC<ConversationItemProps> = ({...props}) => {
 }
 
 export default ConversationItem
-
-
-
