@@ -50,16 +50,22 @@ const DialogBoxList = () => {
   }, [session.messages]);
 
   return (
-    <div className="flex flex-col items-center text-sm dark:bg-gray-800">
-      {
-        session?.messages?.length > 0 && ((session?.id && conversation_id) ? session.id?.split('#').pop() === conversation_id : true)
-        ? session.messages.map((item: any, index: number) => (
-          <DialogBoxItem key={index} {...item} />
-        )) : (
-          <Placeholder />
-          )
-      }
-      <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+    <div className="flex-1 overflow-hidden">
+      <div className="react-scroll-to-bottom--css-izfbq-79elbk h-full dark:bg-gray-800">
+        <div className="react-scroll-to-bottom--css-izfbq-1n7m0yu">
+          <div className="flex flex-col items-center text-sm dark:bg-gray-800">
+            {
+              session?.messages?.length > 0 && ((session?.id && conversation_id) ? session.id?.split('#').pop() === conversation_id : true)
+                ? session.messages.map((item: any, index: number) => (
+                  <DialogBoxItem key={index} {...item} />
+                )) : (
+                  <Placeholder/>
+                )
+            }
+            <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
