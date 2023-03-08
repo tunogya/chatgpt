@@ -4,6 +4,7 @@ import {setSession} from "@/store/session";
 import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
 import {useRouter} from "next/router";
 import Placeholder from "@/components/DialogBoxList/PlaceHoder";
+import DownIcon from "@/components/SVG/DownIcon";
 
 const DialogBoxList = () => {
   const bottomRef = useRef(null);
@@ -50,9 +51,9 @@ const DialogBoxList = () => {
   }, [session.messages]);
 
   return (
-    <div className="flex-1 overflow-auto">
-      <div className="react-scroll-to-bottom--css-izfbq-79elbk h-full dark:bg-gray-800">
-        <div className="react-scroll-to-bottom--css-izfbq-1n7m0yu">
+    <div className="flex-1 overflow-hidden">
+      <div className="overflow-y-auto w-full h-full dark:bg-gray-800">
+        <div className="overflow-y-auto w-full">
           <div className="flex flex-col items-center text-sm dark:bg-gray-800">
             {
               session?.messages?.length > 0 && ((session?.id && conversation_id) ? session.id?.split('#').pop() === conversation_id : true)
@@ -64,6 +65,10 @@ const DialogBoxList = () => {
             }
             <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
           </div>
+          <button
+            className="cursor-pointer absolute right-6 bottom-[124px] md:bottom-[120px] z-10 rounded-full border border-gray-200 bg-gray-50 text-gray-600 dark:border-white/10 dark:bg-white/10 dark:text-gray-200">
+            <DownIcon/>
+          </button>
         </div>
       </div>
     </div>
