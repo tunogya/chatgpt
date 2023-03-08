@@ -2,7 +2,7 @@ import AddIcon from "@/components/SVG/AddIcon";
 import LogoutIcon from "@/components/SVG/LogoutIcon";
 import SunIcon from "@/components/SVG/SunIcon";
 import DeleteIcon from "@/components/SVG/DeleteIcon";
-import ConversationsList from "@/components/ConversationsList";
+import DialogMenuList from "@/components/DialogMenuList";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
@@ -94,7 +94,7 @@ const NavigationBar = () => {
           <AddIcon/>
           新会话
         </a>
-        <ConversationsList/>
+        <DialogMenuList/>
         {
           conversation && conversation.length > 0 && (
             <a

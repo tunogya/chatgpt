@@ -14,7 +14,7 @@ export type ConversationItemProps = {
   create_time: string,
 }
 
-const ConversationItem: FC<ConversationItemProps> = ({...props}) => {
+const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
   const session = useSelector((state: any) => state.session.session);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [updateConfirm, setUpdateConfirm] = useState(false);
@@ -144,4 +144,4 @@ const ConversationItem: FC<ConversationItemProps> = ({...props}) => {
   )
 }
 
-export default ConversationItem
+export default DialogMenuItem

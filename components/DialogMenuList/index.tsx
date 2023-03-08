@@ -1,9 +1,9 @@
-import ConversationItem, {ConversationItemProps} from "./ConversationItem";
+import DialogMenuItem, {ConversationItemProps} from "./DialogMenuItem";
 import {setConversation} from "@/store/session";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 
-const ConversationsList = () => {
+const DialogMenuList = () => {
   const dispatch = useDispatch();
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const session = useSelector((state: any) => state.session.session);
@@ -30,11 +30,11 @@ const ConversationsList = () => {
     <div className="flex-col flex-1 overflow-y-auto border-b border-white/20">
       <div className="flex flex-col gap-2 text-gray-100 text-sm">
         {conversation && conversation?.map((item: ConversationItemProps) => (
-          <ConversationItem key={item.id} {...item}/>
+          <DialogMenuItem key={item.id} {...item}/>
         ))}
       </div>
     </div>
   )
 }
 
-export default ConversationsList
+export default DialogMenuList
