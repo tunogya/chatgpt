@@ -50,7 +50,7 @@ const DialogBoxList = () => {
   }, [session.messages]);
 
   return (
-    <div className="flex-1 overflow-hidden">
+    <div className="flex-1 overflow-auto">
       <div className="react-scroll-to-bottom--css-izfbq-79elbk h-full dark:bg-gray-800">
         <div className="react-scroll-to-bottom--css-izfbq-1n7m0yu">
           <div className="flex flex-col items-center text-sm dark:bg-gray-800">
