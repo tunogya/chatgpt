@@ -1,7 +1,6 @@
 import ReIcon from "@/components/SVG/ReIcon";
 import StopIcon from "@/components/SVG/StopIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {setIsShowRegenerate, setIsShowStop} from "@/store/ui";
 import {Message} from "@/_components/ConversationCell";
 import {addMessageToSession, updateMessageAndIdAndTitleToSession} from "@/store/session";
 import {useState} from "react";
@@ -76,7 +75,6 @@ const InputArea = () => {
               session.messages.length >= 2 && (
                 <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
                   // TODO: re-generate dialog
-                  dispatch(setIsShowRegenerate(false))
                 }}>
                   <div className="flex w-full items-center justify-center gap-2">
                     <ReIcon/>
@@ -88,7 +86,7 @@ const InputArea = () => {
             {isWaitComplete && (
               <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
                 // TODO: stop generate dialog
-                dispatch(setIsShowStop(false))
+                setIsWaitComplete(false)
               }}>
                 <div className="flex w-full items-center justify-center gap-2">
                   <StopIcon/>
