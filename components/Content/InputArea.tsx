@@ -2,11 +2,68 @@ import ReIcon from "@/components/SVG/ReIcon";
 import StopIcon from "@/components/SVG/StopIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {setIsShowRegenerate, setIsShowStop} from "@/store/ui";
+import {Message} from "@/_components/ConversationCell";
+import {addMessageToSession, updateMessageAndIdAndTitleToSession} from "@/store/session";
+import {useState} from "react";
+import SendIcon from "@/components/SVG/SendIcon";
 
 const InputArea = () => {
-  const isShowRegenerate = useSelector((state: any) => state.ui.isShowRegenerate);
-  const isShowStop = useSelector((state: any) => state.ui.isShowStop);
-  const dispatch = useDispatch()
+  const [isWaitComplete, setIsWaitComplete] = useState(false);
+  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const session = useSelector((state: any) => state.session.session);
+  const username = useSelector((state: any) => state.user.username);
+  const dispatch = useDispatch();
+  const [input, setInput] = useState('');
+
+  // request message to assistant and complete conversation
+  const complete = async (message: Message) => {
+    setIsWaitComplete(true)
+    dispatch(addMessageToSession(message))
+
+    const res = await fetch('/api/conversation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        conversation_id: session.id,
+        action: 'next',
+        model: 'gpt-3.5-turbo',
+        messages: [message],
+        parent_message_id: session.messages.length > 0 ? session.messages[session.messages.length - 1].id : undefined,
+      }),
+    })
+    // @ts-ignore
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    // @ts-ignore
+    const readChunk = async () => {
+      return reader.read().then(({value, done}) => {
+        if (!done) {
+          const dataString = decoder.decode(value);
+          // split data by line, and remove empty line
+          const lines = dataString.split('\n\n').filter((line) => line !== '').map((line) => line.trim().replace('data: ', ''));
+          for (const line of lines) {
+            if (line.startsWith('[DONE]')) {
+              setIsWaitComplete(false)
+            } else {
+              const data = JSON.parse(line);
+              dispatch(updateMessageAndIdAndTitleToSession({
+                id: data.id,
+                title: data.title,
+                message: data.messages[0],
+              }))
+            }
+          }
+          return readChunk()
+        } else {
+          setIsWaitComplete(false)
+        }
+      });
+    };
+    await readChunk();
+  }
 
   return (
     <div
@@ -16,7 +73,7 @@ const InputArea = () => {
         <div className="relative flex h-full flex-1 md:flex-col">
           <div className="flex ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center">
             {
-              isShowRegenerate && (
+              session.messages.length >= 2 && (
                 <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
                   // TODO: re-generate dialog
                   dispatch(setIsShowRegenerate(false))
@@ -28,7 +85,7 @@ const InputArea = () => {
                 </button>
               )
             }
-            {isShowStop && (
+            {isWaitComplete && (
               <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
                 // TODO: stop generate dialog
                 dispatch(setIsShowStop(false))
@@ -43,16 +100,29 @@ const InputArea = () => {
           <div
             className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: 24, overflowY: 'hidden'}}
-                          rows={1}
+                          rows={1} onChange={(e) => setInput(e.target.value)}
                           className="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent md:pl-0"></textarea>
             <button
-              className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent">
-              <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round"
-                   strokeLinejoin="round" className="h-4 w-4 mr-1" height="1em" width="1em"
-                   xmlns="http://www.w3.org/2000/svg">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
+              className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent"
+              onClick={async (e) => {
+                e.preventDefault();
+                if (input === '') return;
+                const message: Message = {
+                  id: Math.floor(Date.now() / 1000).toString(),
+                  role: 'user',
+                  content: {
+                    type: 'text',
+                    parts: [input],
+                  },
+                  author: {
+                    role: 'user',
+                    name: username,
+                  }
+                }
+                setInput('');
+                await complete(message);
+              }}>
+              <SendIcon/>
             </button>
           </div>
         </div>
