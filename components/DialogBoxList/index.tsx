@@ -41,7 +41,7 @@ const DialogBoxListContent = () => {
       messages: res.messages,
     }))
     setIsWaitHistory(false);
-  }, [conversation_id])
+  }, [conversation_id, isWaitHistory, accessToken])
 
   useEffect(() => {
     getHistoryMessageOfSession()

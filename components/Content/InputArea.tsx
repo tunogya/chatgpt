@@ -1,10 +1,12 @@
 import ReIcon from "@/components/SVG/ReIcon";
 import StopIcon from "@/components/SVG/StopIcon";
-import {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {setIsShowRegenerate, setIsShowStop} from "@/store/ui";
 
 const InputArea = () => {
-  const [showReGenerate, setShowReGenerate] = useState(false);
-  const [showStop, setShowStop] = useState(false);
+  const isShowRegenerate = useSelector((state: any) => state.ui.isShowRegenerate);
+  const isShowStop = useSelector((state: any) => state.ui.isShowStop);
+  const dispatch = useDispatch()
 
   return (
     <div
@@ -14,8 +16,11 @@ const InputArea = () => {
         <div className="relative flex h-full flex-1 md:flex-col">
           <div className="flex ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center">
             {
-              showReGenerate && (
-                <button className="btn relative btn-neutral border-0 md:border">
+              isShowRegenerate && (
+                <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
+                  // TODO: re-generate dialog
+                  dispatch(setIsShowRegenerate(false))
+                }}>
                   <div className="flex w-full items-center justify-center gap-2">
                     <ReIcon/>
                     重新生成对话
@@ -23,8 +28,11 @@ const InputArea = () => {
                 </button>
               )
             }
-            {showStop && (
-              <button className="btn relative btn-neutral border-0 md:border">
+            {isShowStop && (
+              <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
+                // TODO: stop generate dialog
+                dispatch(setIsShowStop(false))
+              }}>
                 <div className="flex w-full items-center justify-center gap-2">
                   <StopIcon/>
                   停止生成对话
