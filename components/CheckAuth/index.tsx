@@ -18,10 +18,12 @@ const CheckAuth = () => {
         }),
       })
       if (res.status === 200) {
-        await router.push({
-          pathname: '/chat',
-          query: {...router.query}
-        })
+        if (router.pathname.startsWith('/auth') || router.pathname === '/') {
+          await router.push({
+            pathname: '/chat',
+            query: {...router.query}
+          })
+        }
       } else {
         await router.push({
           pathname: '/auth/login',
