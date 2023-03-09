@@ -4,7 +4,7 @@ import RightIcon from "@/components/SVG/RightIcon";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {useRouter} from "next/router";
-import {deleteConversation, updateConversationTitle} from "@/store/session";
+import {deleteConversationById, updateConversationById} from "@/store/session";
 import DeleteIcon from "@/components/SVG/DeleteIcon";
 import EditIcon from "@/components/SVG/EditIcon";
 
@@ -15,7 +15,6 @@ export type ConversationItemProps = {
 }
 
 const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
-  const session = useSelector((state: any) => state.session.session);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [updateConfirm, setUpdateConfirm] = useState(false);
   const accessToken = useSelector((state: any) => state.user.accessToken);
@@ -23,7 +22,7 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const deleteConversationItem = async () => {
+  const deleteConversationByIdItem = async () => {
     try {
       await fetch(`/api/conversation/${props.id.split('#').pop()}`, {
         method: 'DELETE',
@@ -32,7 +31,7 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
           Authorization: `Bearer ${accessToken}`,
         }
       })
-      dispatch(deleteConversation(props.id))
+      dispatch(deleteConversationById(props.id))
       if (router.query.id === props.id.split('#').pop()) {
         await router.push({
           pathname: `/chat`,
@@ -59,7 +58,7 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
         })
       })
       setUpdateConfirm(false)
-      dispatch(updateConversationTitle({
+      dispatch(updateConversationById({
         id: props.id,
         title: title,
       }))
@@ -104,7 +103,7 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
             {
               deleteConfirm && (
                 <div className="absolute flex right-1 z-10 text-gray-300 visible">
-                  <button className="p-1 hover:text-white" onClick={deleteConversationItem}>
+                  <button className="p-1 hover:text-white" onClick={deleteConversationByIdItem}>
                     <RightIcon/>
                   </button>
                   <button className="p-1 hover:text-white" onClick={() => setDeleteConfirm(false)}>

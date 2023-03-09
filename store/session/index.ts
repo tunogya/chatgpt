@@ -1,32 +1,74 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {Message} from "@/_components/ConversationCell";
+
+export type Message = {
+  author: {
+    role: 'assistant' | 'user' | 'system',
+    name?: string,
+    metadata?: {}
+  },
+  content: {
+    type: 'text' | 'image' | 'video' | 'audio' | 'file'
+    parts: string[]
+  },
+  id: string,
+  role: 'assistant' | 'user' | 'system'
+}
 
 export const index = createSlice({
   name: 'session',
   initialState: {
-    conversation: [],
+    // conversation is used to store the conversation list
+    conversation: [] as {
+      id: string, // conversation id
+      title: string, // conversation title
+      create_time: string, // conversation create time
+    }[],
+    // session is used to store the current conversation
     session: {
-      id: null,
-      title: '新会话',
-      messages: [] as Message[]
+      id: null, // conversation id
+      title: '新会话', // conversation title
+      create_time: "", // conversation create time
+      mapping: {} as { // mapping used to store messages in a tree structure
+        [key: string]: { // message id
+          children: string[], // children message id array
+          id: string, // message id
+          message: Message | null, // message
+          parent: string | null // parent message id
+        }
+      },
     },
   },
   reducers: {
-    setConversation: (state, action) => {
-      state.conversation = action.payload || [];
+    // setConversation is used to set the conversation list
+    setConversation: (state, action: {
+      payload: {
+        id: string,
+        title: string,
+        create_time: string,
+      }[]
+    }) => {
+      state.conversation = action.payload;
     },
-    updateConversationTitle: (state, action) => {
-      const {id, title} = action.payload
-      const index = state.conversation?.findIndex((c: any) => c.id === id) || -1
+    // updateConversationById is used to update the conversation list by id
+    updateConversationById: (state, action: {
+      payload: {
+        id: string,
+        title?: string,
+        create_time?: string,
+      }
+    }) => {
+      const newConversation = action.payload
+      const index = state.conversation.findIndex((c: any) => c.id === newConversation.id)
       if (index !== -1) {
-        // @ts-ignore
-        state.conversation[index].title = title
-      }
-      if (id === state.session.id) {
-        state.session.title = title
+        state.conversation[index] = {
+          ...state.conversation[index],
+          ...newConversation
+        }
       }
     },
-    deleteConversation: (state, action) => {
+    deleteConversationById: (state, action: {
+      payload: string
+    }) => {
       const id = action.payload
       const index = state.conversation.findIndex((c: any) => c.id === id)
       if (index !== -1) {
@@ -37,32 +79,40 @@ export const index = createSlice({
         state.session = {
           id: null,
           title: '新会话',
-          messages: [] as Message[]
+          create_time: "",
+          mapping: {},
         }
       }
     },
+    // setSession is used to set the current session
     setSession: (state, action) => {
       state.session = action.payload
     },
-    addMessageToSession: (state, action) => {
-      state.session.messages = [...state.session.messages, action.payload]
-    },
-    updateMessageAndIdAndTitleToSession: (state, action) => {
-      const {id, title, message} = action.payload
-      state.session.id = id
-      state.session.title = title
-      const index = state.session.messages?.findIndex((m) => m.id === message.id) || -1
-      if (index !== -1) {
-        state.session.messages[index].content.parts[0] += message.content.parts[0]
-      } else {
-        state.session.messages.push(message)
+    // updateSession is used to update the part of the current session
+    updateSession: (state, action) => {
+      state.session = {
+        ...state.session,
+        ...action.payload
       }
     },
+    // update message in session
+    updateMessageInSession: (state, action) => {
+      const {id, message} = action.payload
+      state.session.mapping = {
+        ...state.session.mapping,
+        [id]: {
+          ...state.session.mapping[id],
+          message
+        }
+      }
+    },
+    // clearSession is used to clear the current session
     clearSession: (state) => {
       state.session = {
         id: null,
         title: '新会话',
-        messages: [] as Message[]
+        create_time: "",
+        mapping: {},
       }
     }
   }
@@ -70,11 +120,11 @@ export const index = createSlice({
 
 export const {
   setConversation,
+  updateConversationById,
+  deleteConversationById,
   setSession,
-  addMessageToSession,
-  deleteConversation,
-  updateConversationTitle,
-  updateMessageAndIdAndTitleToSession,
+  updateSession,
+  updateMessageInSession,
   clearSession
 } = index.actions
 

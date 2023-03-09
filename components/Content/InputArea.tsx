@@ -1,8 +1,7 @@
 import ReIcon from "@/components/SVG/ReIcon";
 import StopIcon from "@/components/SVG/StopIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {Message} from "@/_components/ConversationCell";
-import {addMessageToSession, updateMessageAndIdAndTitleToSession} from "@/store/session";
+import {updateMessageInSession, Message, setSession, updateSession} from "@/store/session";
 import {useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
 
@@ -13,12 +12,14 @@ const InputArea = () => {
   const username = useSelector((state: any) => state.user.username);
   const dispatch = useDispatch();
   const [input, setInput] = useState('');
+  const [parent_message_id, setParentMessageId] = useState(null);
 
-  // request message to assistant and complete conversation
   const complete = async (message: Message) => {
     setIsWaitComplete(true)
-    dispatch(addMessageToSession(message))
-
+    dispatch(updateMessageInSession({
+      id: message.id,
+      message,
+    }))
     const res = await fetch('/api/conversation', {
       method: 'POST',
       headers: {
@@ -30,7 +31,7 @@ const InputArea = () => {
         action: 'next',
         model: 'gpt-3.5-turbo',
         messages: [message],
-        parent_message_id: session.messages.length > 0 ? session.messages[session.messages.length - 1].id : undefined,
+        parent_message_id,
       }),
     })
     // @ts-ignore
@@ -48,11 +49,18 @@ const InputArea = () => {
               setIsWaitComplete(false)
             } else {
               const data = JSON.parse(line);
-              dispatch(updateMessageAndIdAndTitleToSession({
-                id: data.id,
-                title: data.title,
-                message: data.messages[0],
-              }))
+              // if session.id is null, update session
+              if (!session.id) {
+                dispatch(updateSession({
+                  id: data.conversation_id,
+                  title: data.title,
+                }))
+              }
+
+
+              // TODO: update session data
+              // addMessageToSession
+              // and then updateMessageInSession
             }
           }
           return readChunk()
