@@ -187,7 +187,7 @@ export default async function handler(
                     id: message_id,
                     role,
                     content: {
-                      type: 'text',
+                      content_type: 'text',
                       parts: [
                         part,
                       ],

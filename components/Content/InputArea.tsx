@@ -17,9 +17,33 @@ const InputArea = () => {
   const complete = async (message: Message) => {
     setIsWaitComplete(true)
     dispatch(updateMessageInSession({
-      id: message.id,
       message,
+      parent: parent_message_id,
     }))
+    /**
+     * POST /api/conversation
+     * request data:
+     * {
+     *     "action": "next",
+     *     "messages": [
+     *         {
+     *             "id": "3fc5da70-98ab-4769-940a-13c26613b211",
+     *             "author": {
+     *                 "role": "user"
+     *             },
+     *             "role": "user",
+     *             "content": {
+     *                 "content_type": "text",
+     *                 "parts": [
+     *                     "Hello"
+     *                 ]
+     *             }
+     *         }
+     *     ],
+     *     "parent_message_id": "91d08562-c1a2-4252-89d0-4eba985a65b6",
+     *     "model": "text-davinci-002-render-sha"
+     * }
+     */
     const res = await fetch('/api/conversation', {
       method: 'POST',
       headers: {
@@ -42,7 +66,7 @@ const InputArea = () => {
         role: 'assistant',
       },
       content: {
-        type: 'text',
+        content_type: 'text',
         parts: [""],
       },
       id: '',
@@ -104,18 +128,18 @@ const InputArea = () => {
         className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
         <div className="relative flex h-full flex-1 md:flex-col">
           <div className="flex ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center">
-            {
-              session?.messages?.length >= 2 && (
-                <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
-                  // TODO: re-generate dialog
-                }}>
-                  <div className="flex w-full items-center justify-center gap-2">
-                    <ReIcon/>
-                    重新生成对话
-                  </div>
-                </button>
-              )
-            }
+            {/*{*/}
+            {/*  session?.messages?.length >= 2 && (*/}
+            {/*    <button className="btn relative btn-neutral border-0 md:border" onClick={() => {*/}
+            {/*      // TODO: re-generate dialog*/}
+            {/*    }}>*/}
+            {/*      <div className="flex w-full items-center justify-center gap-2">*/}
+            {/*        <ReIcon/>*/}
+            {/*        重新生成对话*/}
+            {/*      </div>*/}
+            {/*    </button>*/}
+            {/*  )*/}
+            {/*}*/}
             {isWaitComplete && (
               <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
                 // TODO: stop generate dialog
@@ -138,17 +162,33 @@ const InputArea = () => {
               onClick={async (e) => {
                 e.preventDefault();
                 if (input === '') return;
+                /**
+                 * Message example:
+                 *         {
+                 *             "id": "3fc5da70-98ab-4769-940a-13c26613b211",
+                 *             "author": {
+                 *                 "role": "user"
+                 *             },
+                 *             "role": "user",
+                 *             "content": {
+                 *                 "content_type": "text",
+                 *                 "parts": [
+                 *                     "Hello"
+                 *                 ]
+                 *             }
+                 *         }
+                 */
                 const message: Message = {
                   id: Math.floor(Date.now() / 1000).toString(),
-                  role: 'user',
-                  content: {
-                    type: 'text',
-                    parts: [input],
-                  },
                   author: {
                     role: 'user',
                     name: username,
-                  }
+                  },
+                  role: 'user',
+                  content: {
+                    content_type: 'text',
+                    parts: [input],
+                  },
                 }
                 setInput('');
                 await complete(message);

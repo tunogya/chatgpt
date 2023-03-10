@@ -9,7 +9,7 @@ export type Message = {
   id: string
   role: 'assistant' | 'user' | 'system'
   content: {
-    type: 'text' | 'image' | 'video' | 'audio' | 'file'
+    content_type: 'text' | 'image' | 'video' | 'audio' | 'file'
     parts: string[]
   },
   author: {
