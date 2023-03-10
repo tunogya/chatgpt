@@ -1,7 +1,7 @@
 import ReIcon from "@/components/SVG/ReIcon";
 import StopIcon from "@/components/SVG/StopIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {updateMessageInSession, Message, setSession, updateSession} from "@/store/session";
+import {updateMessageInSession, Message, updateSession} from "@/store/session";
 import {useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
 
@@ -37,6 +37,17 @@ const InputArea = () => {
     // @ts-ignore
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
+    let _message = {
+      author: {
+        role: 'assistant',
+      },
+      content: {
+        type: 'text',
+        parts: [""],
+      },
+      id: '',
+      role: '',
+    };
     // @ts-ignore
     const readChunk = async () => {
       return reader.read().then(({value, done}) => {
@@ -52,15 +63,29 @@ const InputArea = () => {
               // if session.id is null, update session
               if (!session.id) {
                 dispatch(updateSession({
-                  id: data.conversation_id,
+                  id: data.id,
                   title: data.title,
                 }))
               }
-
-
-              // TODO: update session data
-              // addMessageToSession
-              // and then updateMessageInSession
+              _message = {
+                ..._message,
+                id: data.messages[0].id,
+                role: data.messages[0].author.role,
+                content: {
+                  ..._message.content,
+                  parts: [
+                    _message.content.parts[0] + data.messages[0].content.parts[0]
+                  ],
+                },
+                author: {
+                  ..._message.author,
+                  role: data.messages[0].author.role,
+                }
+              }
+              dispatch(updateMessageInSession({
+                id: data.messages[0].id,
+                message: _message,
+              }))
             }
           }
           return readChunk()
@@ -80,7 +105,7 @@ const InputArea = () => {
         <div className="relative flex h-full flex-1 md:flex-col">
           <div className="flex ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center">
             {
-              session.messages.length >= 2 && (
+              session?.messages?.length >= 2 && (
                 <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
                   // TODO: re-generate dialog
                 }}>

@@ -47,6 +47,8 @@ const DialogBoxListContent = () => {
     getHistoryMessageOfSession()
   }, [getHistoryMessageOfSession])
 
+  console.log(session)
+
   // scroll to bottom when new message
   useEffect(() => {
     // @ts-ignore
@@ -56,21 +58,21 @@ const DialogBoxListContent = () => {
   return (
     <div className={"w-full"}>
       <div className="flex flex-col items-center text-sm dark:bg-gray-800">
-        {
-          session?.messages?.length > 0 && ((session?.id && conversation_id) ? session.id?.split('#').pop() === conversation_id : true)
-            ? (
-              <>
-                {
-                  session.messages.map((item: any, index: number) => (
-                    <DialogBoxItem key={index} {...item} />
-                  ))
-                }
-                <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
-              </>
-            ) : (
-              !isWaitHistory && <Placeholder/>
-            )
-        }
+        {/*{*/}
+        {/*  session?.messages?.length > 0 && ((session?.id && conversation_id) ? session.id?.split('#').pop() === conversation_id : true)*/}
+        {/*    ? (*/}
+        {/*      <>*/}
+        {/*        {*/}
+        {/*          session.messages.map((item: any, index: number) => (*/}
+        {/*            <DialogBoxItem key={index} {...item} />*/}
+        {/*          ))*/}
+        {/*        }*/}
+        {/*        <div className="w-full h-32 md:h-48 flex-shrink-0"></div>*/}
+        {/*      </>*/}
+        {/*    ) : (*/}
+        {/*      !isWaitHistory && <Placeholder/>*/}
+        {/*    )*/}
+        {/*}*/}
       </div>
       {
         !sticky && (
