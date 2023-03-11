@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {updateMessageInSession, Message, updateSession} from "@/store/session";
 import {useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
+import uid from "@/utils/uid";
 
 const InputArea = () => {
   const [isWaitComplete, setIsWaitComplete] = useState(false);
@@ -20,30 +21,6 @@ const InputArea = () => {
       message,
       parent: parent_message_id,
     }))
-    /**
-     * POST /api/conversation
-     * request data:
-     * {
-     *     "action": "next",
-     *     "messages": [
-     *         {
-     *             "id": "3fc5da70-98ab-4769-940a-13c26613b211",
-     *             "author": {
-     *                 "role": "user"
-     *             },
-     *             "role": "user",
-     *             "content": {
-     *                 "content_type": "text",
-     *                 "parts": [
-     *                     "Hello"
-     *                 ]
-     *             }
-     *         }
-     *     ],
-     *     "parent_message_id": "91d08562-c1a2-4252-89d0-4eba985a65b6",
-     *     "model": "text-davinci-002-render-sha"
-     * }
-     */
     const res = await fetch('/api/conversation', {
       method: 'POST',
       headers: {
@@ -63,10 +40,10 @@ const InputArea = () => {
     const decoder = new TextDecoder();
     let _message = {
       author: {
-        role: 'assistant',
+        role: '',
       },
       content: {
-        content_type: 'text',
+        content_type: '',
         parts: [""],
       },
       id: '',
@@ -107,8 +84,8 @@ const InputArea = () => {
                 }
               }
               dispatch(updateMessageInSession({
-                id: data.messages[0].id,
                 message: _message,
+                parent: parent_message_id,
               }))
             }
           }
@@ -162,24 +139,8 @@ const InputArea = () => {
               onClick={async (e) => {
                 e.preventDefault();
                 if (input === '') return;
-                /**
-                 * Message example:
-                 *         {
-                 *             "id": "3fc5da70-98ab-4769-940a-13c26613b211",
-                 *             "author": {
-                 *                 "role": "user"
-                 *             },
-                 *             "role": "user",
-                 *             "content": {
-                 *                 "content_type": "text",
-                 *                 "parts": [
-                 *                     "Hello"
-                 *                 ]
-                 *             }
-                 *         }
-                 */
                 const message: Message = {
-                  id: Math.floor(Date.now() / 1000).toString(),
+                  id: uid.getUniqueID().toString(),
                   author: {
                     role: 'user',
                     name: username,

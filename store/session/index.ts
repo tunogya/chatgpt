@@ -26,20 +26,20 @@ import {createSlice} from '@reduxjs/toolkit'
 export type Message = {
   id: string,
   author: {
-    role: 'assistant' | 'user' | 'system',
+    role: string, // 'assistant' | 'user' | 'system'
     name?: string,
     metadata?: {}
   },
   create_time?: number,
   content: {
-    content_type: 'text' | 'image' | 'video' | 'audio' | 'file'
+    content_type: string, // 'text' | 'image' | 'video' | 'audio' | 'file'
     parts: string[]
   },
-  role: 'assistant' | 'user' | 'system',
+  role: string, // 'assistant' | 'user' | 'system'
   end_turn?: boolean,
   weight?: number,
   metadata?: {},
-  recipient?: 'all' | 'user' | 'assistant' | 'system'
+  recipient?: string, // 'all' | 'user' | 'assistant' | 'system'
 }
 
 export const index = createSlice({
@@ -193,7 +193,7 @@ export const index = createSlice({
     updateMessageInSession: (state, action: {
       payload: {
         message: Message,
-        parent: string
+        parent: string | null,
       }
     }) => {
       const {message, parent} = action.payload

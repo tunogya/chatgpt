@@ -63,69 +63,71 @@ export default async function handler(
         res.status(400).json({error: 'Currently, only gpt-3.5-turbo and gpt-3.5-turbo-0301 are supported.'})
         return
       }
-      let conversation_id = req.body?.conversation_id || undefined;
-      if (!conversation_id) {
-        conversation_id = `CONVERSATION#${uid.getUniqueID().toString()}`;
-        try {
-          await ddbDocClient.send(new PutCommand({
-            TableName: 'wizardingpay',
-            Item: {
-              PK: user_id,
-              SK: conversation_id,
-              title: messages[0].content.parts[0].slice(0, 20),
-              created: Math.floor(Date.now() / 1000),
-              TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
-              is_visible: true,
-            },
-          }));
-        } catch (e) {
-          res.status(500).json({error: 'failed to create conversation'})
-          return
-        }
+      let conversation: {
+        id: null | string, title: null | string, create_time: null | number, mapping: {
+          [key: string]: any
+        },
+      } = {
+        id: req.body?.conversation_id ?? null,
+        title: null,
+        create_time: null,
+        mapping: {},
       }
-      try {
-        await ddbDocClient.send(new BatchWriteCommand({
-          RequestItems: {
-            'wizardingpay': messages.map((message: any) => ({
-              PutRequest: {
-                Item: {
-                  PK: conversation_id,
-                  SK: message.id,
-                  role: message.role,
-                  content: message.content,
-                  author: message.author,
-                  TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
-                }
-              },
-            }))
-          }
+      if (!conversation.id) {
+        conversation = {
+          ...conversation,
+          id: `CONVERSATION#${uid.getUniqueID().toString()}`,
+          create_time: Math.floor(Date.now() / 1000),
+        }
+      } else {
+        const old_conversation = await ddbDocClient.send(new GetCommand({
+          TableName: 'wizardingpay',
+          Key: {
+            PK: user_id,
+            SK: req.body?.conversation_id,
+          },
         }));
-      } catch (e) {
-        res.status(500).json({error: 'failed to create conversation'})
-        return
-      }
-      const full_messages = [] as { role: string, content: string }[];
-      if (parent_message_id) {
-        try {
-          const parent_message = await ddbDocClient.send(new GetCommand({
-            TableName: 'wizardingpay',
-            Key: {
-              PK: conversation_id,
-              SK: parent_message_id,
-            }
-          }));
-          const parent_message_role = parent_message.Item?.role;
-          const parent_message_content = parent_message.Item?.content.parts[0];
-          full_messages.push({
-            role: parent_message_role,
-            content: parent_message_content,
-          });
-        } catch (e) {
-          res.status(500).json({error: 'failed to create conversation'})
+        conversation = {
+          ...conversation,
+          id: old_conversation.Item?.PK,
+          title: old_conversation.Item?.title,
+          create_time: old_conversation.Item?.create_time,
+          mapping: old_conversation.Item?.mapping,
         }
       }
+      // add new user message to mapping
+      conversation = {
+        ...conversation,
+        mapping: {
+          ...conversation.mapping,
+          [messages[0].id]: {
+            id: messages[0].id,
+            message: messages[0],
+            parent: parent_message_id,
+            children: []
+          }
+        }
+      }
+
+      if (parent_message_id) {
+        conversation = {
+          ...conversation,
+          mapping: {
+            ...conversation.mapping,
+            [parent_message_id]: {
+              ...conversation.mapping[parent_message_id],
+              children: [
+                ...conversation.mapping[parent_message_id].children,
+                messages[0].id,
+              ]
+            }
+          }
+        }
+      }
+
+      const full_old_messages = [] as { role: string, content: string }[];
       // put current messages to full_messages
-      full_messages.push(...messages.map((message: any) => ({
+      full_old_messages.push(...messages.map((message: any) => ({
           role: message.role,
           content: message.content.parts[0],
         })
@@ -138,7 +140,7 @@ export default async function handler(
         method: 'POST',
         body: JSON.stringify({
           model,
-          messages: full_messages,
+          messages: full_old_messages,
           temperature: 1,
           top_p: 1,
           frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
@@ -154,9 +156,18 @@ export default async function handler(
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
 
-      const message_id = Math.floor(Date.now() / 1000).toString();
-      let full_content = '';
-      let role = 'assistant';
+      const message_id = uid.getUniqueID().toString();
+      let full_callback_message = {
+        author: {
+          role: '',
+        },
+        content: {
+          content_type: '',
+          parts: [""],
+        },
+        id: '',
+        role: '',
+      };
       const stream = result.body as any as Readable;
       stream.on('data', (chunk: any) => {
         const lines = chunk
@@ -172,20 +183,36 @@ export default async function handler(
             try {
               const data = JSON.parse(line);
               if (data.choices[0].delta?.role) {
-                role = data.choices[0].delta.role;
+                full_callback_message = {
+                  ...full_callback_message,
+                  role: data.messages[0].author.role,
+                  author: {
+                    ...full_callback_message.author,
+                    role: data.messages[0].author.role,
+                  }
+                }
               }
               if (!data.choices[0].delta?.content) {
                 return;
               }
               const part = data.choices[0].delta.content
-              full_content += part;
+              full_callback_message = {
+                ...full_callback_message,
+                id: data.messages[0].id,
+                content: {
+                  ...full_callback_message.content,
+                  parts: [
+                    full_callback_message.content.parts[0] + part
+                  ],
+                },
+              }
               res.write(`data: ${JSON.stringify({
-                id: conversation_id,
+                id: conversation.id,
                 title: messages[0].content.parts[0],
                 messages: [
                   {
                     id: message_id,
-                    role,
+                    role: full_callback_message.role,
                     content: {
                       content_type: 'text',
                       parts: [
@@ -193,7 +220,7 @@ export default async function handler(
                       ],
                     },
                     author: {
-                      role,
+                      role: full_callback_message.role,
                     }
                   }
                 ],
@@ -205,23 +232,34 @@ export default async function handler(
         }
       });
       stream.on('end', async () => {
+        // add ai callback message to conversation and add to user children
+        conversation = {
+          ...conversation,
+          mapping: {
+            ...conversation.mapping,
+            [message_id]: {
+              id: message_id,
+              message: full_callback_message,
+              parent: messages[0].id,
+              children: []
+            },
+            [messages[0].id]: {
+              ...conversation.mapping[messages[0].id],
+              children: [
+                ...conversation.mapping[messages[0].id].children,
+                message_id,
+              ]
+            }
+          }
+        }
         await ddbDocClient.send(new PutCommand({
           TableName: 'wizardingpay',
           Item: {
-            PK: conversation_id,
-            SK: message_id,
-            role: role,
-            content: {
-              type: 'text',
-              parts: [full_content],
-            },
-            author: {
-              role,
-            },
-            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
-            created: Math.floor(Date.now() / 1000),
-          },
-        }))
+            PK: user_id,
+            SK: conversation.id,
+            ...conversation,
+          }
+        }));
         res.end();
       });
       stream.on('error', (error: any) => {

@@ -45,42 +45,6 @@ export default async function handler(
           }))
           conversationRes.Item.messages = messagesRes.Items
           res.status(200).json(conversationRes.Item)
-          /**
-           * Response data:
-           * {
-           *   "title": "Hello and Assistance",
-           *   "create_time": 1678466827.852352,
-           *   "mapping": {
-           *     "e64c6238-0ae1-4d1f-8ecd-3e07a89849b5": {
-           *       "id": "e64c6238-0ae1-4d1f-8ecd-3e07a89849b5",
-           *       "message": {
-           *         "id": "e64c6238-0ae1-4d1f-8ecd-3e07a89849b5",
-           *         "author": {
-           *           "role": "system",
-           *           "metadata": {}
-           *         },
-           *         "create_time": 1678466827.852352,
-           *         "content": {
-           *           "content_type": "text",
-           *           "parts": [
-           *             ""
-           *           ]
-           *         },
-           *         "end_turn": true,
-           *         "weight": 1,
-           *         "metadata": {},
-           *         "recipient": "all"
-           *       },
-           *       "parent": "91d08562-c1a2-4252-89d0-4eba985a65b6",
-           *       "children": [
-           *         "3fc5da70-98ab-4769-940a-13c26613b211"
-           *       ]
-           *     },
-           *   },
-           *   "moderation_results": [],
-           *   "current_node": "f253c0d1-eb10-4ee4-9371-31832eae073f"
-           * }
-           */
         } else {
           res.status(404).json({error: 'No conversation found'})
         }
