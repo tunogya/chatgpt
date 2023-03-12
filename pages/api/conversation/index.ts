@@ -124,8 +124,8 @@ export default async function handler(
           }
         }
       }
-
       const full_old_messages = [] as { role: string, content: string }[];
+      // TODO, add odd messages from mapping to array
       // put current messages to full_messages
       full_old_messages.push(...messages.map((message: any) => ({
           role: message.role,
@@ -156,7 +156,7 @@ export default async function handler(
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
 
-      const message_id = uid.getUniqueID().toString();
+      const message_id = Math.floor(new Date().getTime() / 1000).toString();
       let full_callback_message = {
         author: {
           role: '',

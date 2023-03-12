@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {updateMessageInSession, Message, updateSession} from "@/store/session";
 import {useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
-import uid from "@/utils/uid";
 
 const InputArea = () => {
   const [isWaitComplete, setIsWaitComplete] = useState(false);
@@ -140,7 +139,7 @@ const InputArea = () => {
                 e.preventDefault();
                 if (input === '') return;
                 const message: Message = {
-                  id: uid.getUniqueID().toString(),
+                  id: Math.floor(new Date().getTime() / 1000).toString(),
                   author: {
                     role: 'user',
                     name: username,
