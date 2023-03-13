@@ -37,7 +37,7 @@ export default async function handler(
         SK: `USER#${username.toLowerCase()}`,
         username,
         password,
-        created: Math.floor(new Date().getTime() / 1000),
+        created: Math.floor(Date.now() / 1000),
       },
       ConditionExpression: 'attribute_not_exists(#PK)',
       ExpressionAttributeNames: {

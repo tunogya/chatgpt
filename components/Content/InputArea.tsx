@@ -139,7 +139,7 @@ const InputArea = () => {
                 e.preventDefault();
                 if (input === '') return;
                 const message: Message = {
-                  id: Math.floor(new Date().getTime() / 1000).toString(),
+                  id: Math.floor(Date.now() / 1000).toString(),
                   author: {
                     role: 'user',
                     name: username,

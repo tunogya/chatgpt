@@ -27,16 +27,13 @@ export default async function handler(
       const conversations = await ddbDocClient.send(new QueryCommand({
         TableName: 'wizardingpay',
         KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :sk)',
-        FilterExpression: '#is_visible = :is_visible',
         ExpressionAttributeNames: {
           '#pk': 'PK',
           '#sk': 'SK',
-          '#is_visible': 'is_visible',
         },
         ExpressionAttributeValues: {
           ':pk': user_id,
           ':sk': 'CONVERSATION#',
-          ':is_visible': true,
         },
         ScanIndexForward: false,
         ProjectionExpression: 'PK, SK, title, created',
@@ -45,7 +42,7 @@ export default async function handler(
         items: conversations.Items?.map((item: any) => ({
           id: item.SK,
           title: item.title,
-          create_time: new Date(item.created * 1000).toISOString(),
+          create_time: item?.created ? new Date(item.created * 1000)?.toLocaleString() : null,
         })),
         total: conversations.Count,
         limit,
@@ -64,20 +61,21 @@ export default async function handler(
         return
       }
       let conversation: {
-        id: null | string, title: null | string, create_time: null | number, mapping: {
+        id: null | string, title: null | string, created: null | number, mapping: {
           [key: string]: any
         },
       } = {
         id: req.body?.conversation_id ?? null,
         title: null,
-        create_time: null,
+        created: null,
         mapping: {},
       }
       if (!conversation.id) {
         conversation = {
           ...conversation,
           id: `CONVERSATION#${uid.getUniqueID().toString()}`,
-          create_time: Math.floor(Date.now() / 1000),
+          title: messages[0].content.parts[0],
+          created: Math.floor(Date.now() / 1000),
         }
       } else {
         const old_conversation = await ddbDocClient.send(new GetCommand({
@@ -91,7 +89,7 @@ export default async function handler(
           ...conversation,
           id: old_conversation.Item?.PK,
           title: old_conversation.Item?.title,
-          create_time: old_conversation.Item?.create_time,
+          created: old_conversation.Item?.create_time,
           mapping: old_conversation.Item?.mapping,
         }
       }
@@ -156,7 +154,7 @@ export default async function handler(
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
 
-      const message_id = Math.floor(new Date().getTime() / 1000).toString();
+      const message_id = Math.floor(Date.now() / 1000).toString();
       let full_callback_message = {
         author: {
           role: '',

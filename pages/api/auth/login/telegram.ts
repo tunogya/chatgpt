@@ -30,7 +30,7 @@ export default async function handler(
   const {id, first_name, username, photo_url, auth_date} = data
 
   // // auth_date must be less than 5 minutes
-  if (Math.floor(new Date().getTime() / 1000) - auth_date > 300) {
+  if (Math.floor(Date.now() / 1000) - auth_date > 300) {
     res.status(400).json({error: 'timeout, try again later!'})
     return
   }
@@ -75,7 +75,7 @@ export default async function handler(
         ':username': username,
         ':first_name': first_name,
         ':photo_url': photo_url,
-        ':updated': Math.floor(new Date().getTime() / 1000),
+        ':updated': Math.floor(Date.now() / 1000),
       }
     }));
 
