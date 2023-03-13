@@ -23,6 +23,8 @@ const DialogBoxItem: FC<Message> = ({...props}) => {
   const username = useSelector((state: any) => state.user.username);
   const [editMode, setEditMode] = useState(false);
 
+  console.log(props.content.parts[0].trim())
+
   if (props.role === 'user') {
     return (
       <div className="w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800">
@@ -42,7 +44,7 @@ const DialogBoxItem: FC<Message> = ({...props}) => {
                   <textarea className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
                     style={{height: '24px', overflowY: 'hidden'}}
                   >
-                    {props.content.parts[0]}
+                    {props.content.parts[0].trim()}
                   </textarea>
                   <div className="text-center mt-2 flex justify-center">
                     <button className="btn relative btn-primary mr-2" onClick={() => {
@@ -61,7 +63,7 @@ const DialogBoxItem: FC<Message> = ({...props}) => {
                 <>
                   <div className="flex flex-grow flex-col gap-3">
                     <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
-                      {props.content.parts[0]}
+                      {props.content.parts[0].trim()}
                     </div>
                   </div>
                   <div className="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible">
@@ -99,7 +101,7 @@ const DialogBoxItem: FC<Message> = ({...props}) => {
             <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
               <div className="markdown prose w-full break-words dark:prose-invert light">
                 <p>
-                  {props.content.parts[0]}
+                  {props.content.parts[0].trim()}
                 </p>
               </div>
             </div>
