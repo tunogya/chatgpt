@@ -23,8 +23,6 @@ const DialogBoxItem: FC<Message> = ({...props}) => {
   const username = useSelector((state: any) => state.user.username);
   const [editMode, setEditMode] = useState(false);
 
-  console.log(props.content.parts[0].trim())
-
   if (props.role === 'user') {
     return (
       <div className="w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800">
