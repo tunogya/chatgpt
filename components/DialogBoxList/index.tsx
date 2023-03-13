@@ -1,7 +1,7 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setSession} from "@/store/session";
-import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
+import DialogBoxItem, {Message} from "@/components/DialogBoxList/DialogBoxItem";
 import {useRouter} from "next/router";
 import Placeholder from "@/components/DialogBoxList/PlaceHoder";
 import DownIcon from "@/components/SVG/DownIcon";
@@ -17,6 +17,7 @@ const DialogBoxListContent = () => {
   const conversation_id = router.query.id?.[0];
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
+  const [path, setPath] = useState<any[]>([]);
 
   // get current conversation history
   const getHistoryMessageOfSession = useCallback(async () => {
@@ -38,16 +39,16 @@ const DialogBoxListContent = () => {
       // @ts-ignore
       title: res.title,
       // @ts-ignore
-      messages: res.messages,
+      mapping: res.mapping,
+      // @ts-ignore
+      create_time: new Date(res.created * 1000).toLocaleString(),
     }))
-    setIsWaitHistory(false);
+    // setIsWaitHistory(false);
   }, [conversation_id])
 
   useEffect(() => {
     getHistoryMessageOfSession()
   }, [getHistoryMessageOfSession])
-
-  console.log(session.mapping)
 
   // scroll to bottom when new message
   useEffect(() => {
@@ -55,24 +56,57 @@ const DialogBoxListContent = () => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [session.messages]);
 
+  const rootMessageId = useMemo(() => {
+    // return null
+    // 遍历session.mapping，找到parent为null的节点
+    if (!session?.mapping) {
+      return null
+    }
+    const ids = Object?.keys(session.mapping) || []
+    if (ids.length === 0) {
+      return null
+    }
+    let check_point = ids[0]
+    while (session.mapping[check_point].parent !== null) {
+      check_point = session.mapping[check_point].parent
+    }
+    return check_point
+  }, [session.mapping])
+
+  const renderConversation = (messageId: string | null) => {
+    if (!messageId) {
+      return <></>
+    }
+    const item = session.mapping[messageId]
+    const children_id = 0
+    const children = item?.children.map((id: string) => renderConversation(id))
+
+    return (
+      <>
+        <DialogBoxItem {...item.message} />
+        {
+          item.children?.length > 0 && (
+            children[children_id]
+          )
+        }
+      </>
+    )
+  }
+
   return (
     <div className={"w-full"}>
       <div className="flex flex-col items-center text-sm dark:bg-gray-800">
-        {/*{*/}
-        {/*  session?.messages?.length > 0 && ((session?.id && conversation_id) ? session.id?.split('#').pop() === conversation_id : true)*/}
-        {/*    ? (*/}
-        {/*      <>*/}
-        {/*        {*/}
-        {/*          session.messages.map((item: any, index: number) => (*/}
-        {/*            <DialogBoxItem key={index} {...item} />*/}
-        {/*          ))*/}
-        {/*        }*/}
-        {/*        <div className="w-full h-32 md:h-48 flex-shrink-0"></div>*/}
-        {/*      </>*/}
-        {/*    ) : (*/}
-        {/*      !isWaitHistory && <Placeholder/>*/}
-        {/*    )*/}
-        {/*}*/}
+        {
+         true
+            ? (
+              <>
+                {renderConversation(rootMessageId)}
+                <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+              </>
+            ) : (
+              !isWaitHistory && <Placeholder/>
+            )
+        }
       </div>
       {
         !sticky && (
