@@ -182,13 +182,14 @@ export default async function handler(
           } else {
             try {
               const data = JSON.parse(line);
+              console.log(data)
               if (data.choices[0].delta?.role) {
                 full_callback_message = {
                   ...full_callback_message,
-                  role: data.messages[0].author.role,
+                  role: data.choices[0].author.role,
                   author: {
                     ...full_callback_message.author,
-                    role: data.messages[0].author.role,
+                    role: data.choices[0].author.role,
                   }
                 }
               }
@@ -198,7 +199,7 @@ export default async function handler(
               const part = data.choices[0].delta.content
               full_callback_message = {
                 ...full_callback_message,
-                id: data.messages[0].id,
+                id: data.choices[0].id,
                 content: {
                   ...full_callback_message.content,
                   parts: [
@@ -226,7 +227,7 @@ export default async function handler(
                 ],
               })}\n\n`);
             } catch (e) {
-              console.log(`line parse error:`, line)
+              console.log(e)
             }
           }
         }

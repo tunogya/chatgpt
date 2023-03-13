@@ -47,7 +47,7 @@ const DialogBoxListContent = () => {
     getHistoryMessageOfSession()
   }, [getHistoryMessageOfSession])
 
-  console.log(session)
+  console.log(session.mapping)
 
   // scroll to bottom when new message
   useEffect(() => {
