@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setSession} from "@/store/session";
-import DialogBoxItem, {Message} from "@/components/DialogBoxList/DialogBoxItem";
+import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
 import {useRouter} from "next/router";
 import Placeholder from "@/components/DialogBoxList/PlaceHoder";
 import DownIcon from "@/components/SVG/DownIcon";
@@ -17,7 +17,6 @@ const DialogBoxListContent = () => {
   const conversation_id = router.query.id?.[0];
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
-  const [path, setPath] = useState<any[]>([]);
 
   // get current conversation history
   const getHistoryMessageOfSession = useCallback(async () => {
@@ -73,36 +72,16 @@ const DialogBoxListContent = () => {
     return check_point
   }, [session.mapping])
 
-  const renderConversation = (messageId: string | null) => {
-    if (!messageId) {
-      return <></>
-    }
-    const item = session.mapping[messageId]
-    const children_id = 0
-    const children = item?.children.map((id: string) => renderConversation(id))
-
-    return (
-      <>
-        <DialogBoxItem {...item.message} />
-        {
-          item.children?.length > 0 && (
-            children[children_id]
-          )
-        }
-      </>
-    )
-  }
 
   return (
     <div className={"w-full"}>
       <div className="flex flex-col items-center text-sm dark:bg-gray-800">
         {
-         true
+          true
             ? (
-              <>
-                {renderConversation(rootMessageId)}
-                <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
-              </>
+              rootMessageId && (
+                <DialogBoxItem id={rootMessageId}/>
+              )
             ) : (
               !isWaitHistory && <Placeholder/>
             )
@@ -120,13 +99,14 @@ const DialogBoxListContent = () => {
   )
 }
 
-// eslint-disable-next-line react/display-name
-export default () => {
+const WrapDialogBoxListContent = () => {
   return (
     <div className="flex-1 overflow-hidden">
       <ScrollToBottom className="h-full dark:bg-gray-800">
-        <DialogBoxListContent />
+        <DialogBoxListContent/>
       </ScrollToBottom>
     </div>
   )
 }
+
+export default WrapDialogBoxListContent

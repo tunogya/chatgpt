@@ -42,6 +42,7 @@ export const index = createSlice({
         }
       },
     },
+    lastMessageId: null,
   },
   reducers: {
     // setConversation is used to set the conversation list
@@ -132,6 +133,9 @@ export const index = createSlice({
         create_time: "",
         mapping: {},
       }
+    },
+    updateLastMessageId: (state, action) => {
+      state.lastMessageId = action.payload
     }
   }
 })
@@ -143,7 +147,8 @@ export const {
   setSession,
   updateSession,
   updateMessageInSession,
-  clearSession
+  clearSession,
+  updateLastMessageId
 } = index.actions
 
 export default index.reducer

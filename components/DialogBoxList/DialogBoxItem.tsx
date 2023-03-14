@@ -1,9 +1,10 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import Edit2Icon from "@/components/SVG/Edit2Icon";
 import OpenAIIcon from "@/components/SVG/OpenAIIcon";
 import LikeIcon from "@/components/SVG/LikeIcon";
 import UnLikeIcon from "@/components/SVG/UnLikeIcon";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {updateLastMessageId} from "@/store/session";
 
 export type Message = {
   id: string
@@ -19,13 +20,14 @@ export type Message = {
   }
 }
 
-const DialogBoxItem: FC<Message> = ({...props}) => {
+const BaseDialogBoxItem: FC<Message> = ({...props}) => {
   const username = useSelector((state: any) => state.user.username);
   const [editMode, setEditMode] = useState(false);
 
   if (props.role === 'user') {
     return (
-      <div className="w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800">
+      <div
+        className="w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800">
         <div
           className="text-base gap-4 md:gap-6 m-auto md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0">
           <div className="w-[30px] flex flex-col relative items-end">
@@ -40,7 +42,7 @@ const DialogBoxItem: FC<Message> = ({...props}) => {
               editMode ? (
                 <div className="flex flex-grow flex-col gap-3">
                   <textarea className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
-                    style={{height: '24px', overflowY: 'hidden'}}
+                            style={{height: '24px', overflowY: 'hidden'}}
                   >
                     {props.content.parts[0].trim()}
                   </textarea>
@@ -64,11 +66,13 @@ const DialogBoxItem: FC<Message> = ({...props}) => {
                       {props.content.parts[0].trim()}
                     </div>
                   </div>
-                  <div className="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible">
-                    <button className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400 md:invisible md:group-hover:visible"
-                            onClick={() => {
-                              setEditMode(true)
-                            }}
+                  <div
+                    className="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible">
+                    <button
+                      className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400 md:invisible md:group-hover:visible"
+                      onClick={() => {
+                        setEditMode(true)
+                      }}
                     >
                       <Edit2Icon/>
                     </button>
@@ -120,6 +124,41 @@ const DialogBoxItem: FC<Message> = ({...props}) => {
         </div>
       </div>
     </div>
+  )
+}
+
+type RenderDialogBoxItemProps = {
+  id: string
+}
+
+const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
+  const session = useSelector((state: any) => state.session.session);
+  const [children_id, setChildren_id] = useState(0)
+  const dispatch = useDispatch()
+
+  const item = session.mapping?.[id]
+
+  const children = item?.children?.map((id: string) => (
+    <DialogBoxItem key={id} id={id}/>
+  ))
+
+  useEffect(() => {
+    if (children.length === 0) {
+      dispatch(updateLastMessageId(id))
+    }
+  }, [children])
+
+  return (
+    <>
+      <BaseDialogBoxItem {...item.message} />
+      {
+        children[children_id] ? (
+          children[children_id]
+        ) : (
+          <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+        )
+      }
+    </>
   )
 }
 
