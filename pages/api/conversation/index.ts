@@ -87,9 +87,9 @@ export default async function handler(
         }));
         conversation = {
           ...conversation,
-          id: old_conversation.Item?.PK,
+          id: old_conversation.Item?.SK,
           title: old_conversation.Item?.title,
-          created: old_conversation.Item?.create_time,
+          created: old_conversation.Item?.created,
           mapping: old_conversation.Item?.mapping,
         }
       }
@@ -231,6 +231,7 @@ export default async function handler(
       });
       stream.on('end', async () => {
         // add ai callback message to conversation and add to user children
+        console.log('save conversation')
         conversation = {
           ...conversation,
           mapping: {
@@ -250,6 +251,7 @@ export default async function handler(
             }
           }
         }
+        console.log(conversation)
         await ddbDocClient.send(new PutCommand({
           TableName: 'wizardingpay',
           Item: {
