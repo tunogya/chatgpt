@@ -140,7 +140,7 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
 
   const children = item?.children?.map((id: string) => (
     <DialogBoxItem key={id} id={id}/>
-  ))
+  )) || []
 
   useEffect(() => {
     if (children.length === 0) {
@@ -152,7 +152,7 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
     <>
       <BaseDialogBoxItem {...item.message} />
       {
-        children[children_id] ? (
+        children.length > 0 ? (
           children[children_id]
         ) : (
           <div className="w-full h-32 md:h-48 flex-shrink-0"></div>

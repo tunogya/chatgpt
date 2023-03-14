@@ -12,13 +12,13 @@ const InputArea = () => {
   const username = useSelector((state: any) => state.user.username);
   const dispatch = useDispatch();
   const [input, setInput] = useState('');
-  const [parent_message_id, setParentMessageId] = useState(null);
+  const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
 
   const complete = async (message: Message) => {
     setIsWaitComplete(true)
     dispatch(updateMessageInSession({
       message,
-      parent: parent_message_id,
+      parent: lastMessageId,
     }))
     const res = await fetch('/api/conversation', {
       method: 'POST',
@@ -31,7 +31,7 @@ const InputArea = () => {
         action: 'next',
         model: 'gpt-3.5-turbo',
         messages: [message],
-        parent_message_id,
+        parent_message_id: lastMessageId,
       }),
     })
     // @ts-ignore
@@ -84,7 +84,7 @@ const InputArea = () => {
               }
               dispatch(updateMessageInSession({
                 message: _message,
-                parent: parent_message_id,
+                parent: lastMessageId,
               }))
             }
           }

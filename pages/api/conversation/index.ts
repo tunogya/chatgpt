@@ -180,14 +180,13 @@ export default async function handler(
           } else {
             try {
               const data = JSON.parse(line);
-              console.log(data)
               if (data.choices[0].delta?.role) {
                 full_callback_message = {
                   ...full_callback_message,
-                  role: data.choices[0].author.role,
+                  role: data.choices[0].delta.role,
                   author: {
                     ...full_callback_message.author,
-                    role: data.choices[0].author.role,
+                    role: data.choices[0].delta.role,
                   }
                 }
               }
