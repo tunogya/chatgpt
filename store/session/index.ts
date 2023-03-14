@@ -145,6 +145,7 @@ export const index = createSlice({
         create_time: "",
         mapping: {},
       }
+      state.lastMessageId = null
     },
     updateLastMessageId: (state, action) => {
       state.lastMessageId = action.payload
