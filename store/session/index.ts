@@ -109,16 +109,28 @@ export const index = createSlice({
       }
     }) => {
       const {message, parent} = action.payload
-      state.session.mapping = {
-        ...state.session.mapping,
-        [message.id]: {
-          ...state.session.mapping[message.id],
+      if (!state.session.mapping[message.id]) {
+        state.session.mapping[message.id] = {
           id: message.id,
           message,
           parent,
-        },
+          children: []
+        }
+      } else {
+        state.session.mapping = {
+          ...state.session.mapping,
+          [message.id]: {
+            ...state.session.mapping[message.id],
+            id: message.id,
+            message,
+            parent,
+          },
+        }
       }
       if (parent) {
+        if (!state.session.mapping[parent].children) {
+          state.session.mapping[parent].children = []
+        }
         state.session.mapping[parent].children = [
           ...state.session.mapping[parent].children,
           message.id
