@@ -20,7 +20,7 @@ const MobileNavigationBar = () => {
       <h1 className="flex-1 text-center text-base font-normal">新会话</h1>
       <button type="button" className="px-3"
               onClick={async () => {
-                await dispatch(clearSession());
+                dispatch(clearSession());
                 await router.push({
                   pathname: `/chat`,
                 })

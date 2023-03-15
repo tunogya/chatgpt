@@ -1,10 +1,12 @@
 import {useRouter} from 'next/router';
 import {useCallback, useEffect} from 'react';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {clearSession} from "@/store/session";
 
 const CheckAuth = () => {
   const router = useRouter()
   const accessToken = useSelector((state: any) => state.user.accessToken)
+  const dispatch = useDispatch()
 
   const check = useCallback(async () => {
     if (accessToken) {
@@ -19,18 +21,21 @@ const CheckAuth = () => {
       })
       if (res.status === 200) {
         if (router.pathname.startsWith('/auth') || router.pathname === '/') {
+          dispatch(clearSession());
           await router.push({
             pathname: '/chat',
             query: {...router.query}
           })
         }
       } else {
+        dispatch(clearSession());
         await router.push({
           pathname: '/auth/login',
           query: {...router.query}
         })
       }
     } else {
+      dispatch(clearSession());
       await router.push({
         pathname: '/auth/login',
         query: {...router.query}

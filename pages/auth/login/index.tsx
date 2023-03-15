@@ -10,6 +10,7 @@ import * as crypto from 'crypto';
 import {FaTelegramPlane} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import { setAccessToken, setUser } from '@/store/user';
+import {clearSession} from "@/store/session";
 
 const Login = () => {
   const router = useRouter()
@@ -66,6 +67,7 @@ const Login = () => {
         username,
         photo_url: '',
       }))
+      dispatch(clearSession());
       await router.push({
         pathname: '/chat',
         query: {
@@ -74,6 +76,7 @@ const Login = () => {
       })
     } else {
       const {error} = await res.json()
+      dispatch(clearSession());
       await router.push({
         pathname: '/auth/error',
         query: {
@@ -89,6 +92,7 @@ const Login = () => {
     // @ts-ignore
     window?.Telegram.Login.auth({ bot_id: process.env.BOT_TOKEN || '', request_access: 'write', embed: 1 }, async (data) => {
       if (!data) {
+        dispatch(clearSession());
         await router.push({
           pathname: '/auth/error',
           query: {
@@ -112,9 +116,11 @@ const Login = () => {
         const {accessToken, user} = await res.json()
         dispatch(setAccessToken(accessToken))
         dispatch(setUser(user))
+        dispatch(clearSession());
         await router.push('/chat')
       } else {
         const {error} = await res.json()
+        dispatch(clearSession());
         await router.push({
           pathname: '/auth/error',
           query: {

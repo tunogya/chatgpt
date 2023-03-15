@@ -9,6 +9,7 @@ import {useRouter} from 'next/router';
 import * as crypto from 'crypto';
 import { setUser, setAccessToken } from '@/store/user';
 import {useDispatch} from "react-redux";
+import {clearSession} from "@/store/session";
 
 const Login = () => {
   const router = useRouter()
@@ -58,9 +59,11 @@ const Login = () => {
       const {accessToken, user} = await res.json()
       dispatch(setAccessToken(accessToken))
       dispatch(setUser(user))
+      dispatch(clearSession());
       await router.push('/chat')
     } else {
       const {error} = await res.json()
+      dispatch(clearSession());
       await router.push({
         pathname: '/auth/error',
         query: {

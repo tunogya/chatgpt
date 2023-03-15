@@ -4,7 +4,7 @@ import RightIcon from "@/components/SVG/RightIcon";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {useRouter} from "next/router";
-import {deleteConversationById, updateConversationById} from "@/store/session";
+import {clearSession, deleteConversationById, updateConversationById} from "@/store/session";
 import DeleteIcon from "@/components/SVG/DeleteIcon";
 import EditIcon from "@/components/SVG/EditIcon";
 
@@ -32,7 +32,8 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
         }
       })
       dispatch(deleteConversationById(props.id))
-      if (router.query.id === props.id.split('#').pop()) {
+      if (router.query.id?.[0] === props.id.split('#').pop()) {
+        dispatch(clearSession());
         await router.push({
           pathname: `/chat`,
         })

@@ -85,7 +85,7 @@ const NavigationBar = () => {
         <a className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
             duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 border border-white/20"
            onClick={async () => {
-             await dispatch(clearSession());
+             dispatch(clearSession());
              await router.push({
                pathname: `/chat`,
              })
@@ -119,6 +119,7 @@ const NavigationBar = () => {
               duration-200 text-white cursor-pointer text-sm"
           onClick={async () => {
             await dispatch(logout())
+            dispatch(clearSession());
             await router.push('/auth/login')
           }}
         >
