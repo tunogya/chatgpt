@@ -160,7 +160,7 @@ export default async function handler(
           role: '',
         },
         content: {
-          content_type: '',
+          content_type: 'text',
           parts: [""],
         },
         id: '',
@@ -212,7 +212,7 @@ export default async function handler(
                     id: message_id,
                     role: full_callback_message.role,
                     content: {
-                      content_type: 'text',
+                      content_type: full_callback_message.content.content_type,
                       parts: [
                         part,
                       ],
@@ -231,7 +231,6 @@ export default async function handler(
       });
       stream.on('end', async () => {
         // add ai callback message to conversation and add to user children
-        console.log('save conversation')
         conversation = {
           ...conversation,
           mapping: {
@@ -251,7 +250,6 @@ export default async function handler(
             }
           }
         }
-        console.log(conversation)
         await ddbDocClient.send(new PutCommand({
           TableName: 'wizardingpay',
           Item: {
