@@ -1,7 +1,7 @@
 import ReIcon from "@/components/SVG/ReIcon";
 import StopIcon from "@/components/SVG/StopIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {updateMessageInSession, Message, updateSession} from "@/store/session";
+import {updateMessageInSession, Message, updateSession, updateLastMessageId} from "@/store/session";
 import {useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
 
@@ -14,7 +14,7 @@ const InputArea = () => {
   const [input, setInput] = useState('');
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
 
-  const complete = async (message: Message) => {
+  const complete = async (message: Message, parent: string) => {
     setIsWaitComplete(true)
     dispatch(updateMessageInSession({
       message,
@@ -84,7 +84,7 @@ const InputArea = () => {
               }
               dispatch(updateMessageInSession({
                 message: _message,
-                parent: lastMessageId,
+                parent: parent,
               }))
             }
           }
@@ -138,8 +138,9 @@ const InputArea = () => {
               onClick={async (e) => {
                 e.preventDefault();
                 if (input === '') return;
+                const message_id = Math.floor(Date.now() / 1000).toString()
                 const message: Message = {
-                  id: Math.floor(Date.now() / 1000).toString(),
+                  id: message_id,
                   author: {
                     role: 'user',
                     name: username,
@@ -150,8 +151,9 @@ const InputArea = () => {
                     parts: [input],
                   },
                 }
+                dispatch(updateLastMessageId(message_id));
                 setInput('');
-                await complete(message);
+                await complete(message, message_id);
               }}>
               <SendIcon/>
             </button>
