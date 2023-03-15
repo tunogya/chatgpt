@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useEffect, useMemo, useState} from "react";
 import Edit2Icon from "@/components/SVG/Edit2Icon";
 import OpenAIIcon from "@/components/SVG/OpenAIIcon";
 import LikeIcon from "@/components/SVG/LikeIcon";
@@ -136,21 +136,21 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
   const [children_id, setChildren_id] = useState(0)
   const dispatch = useDispatch()
 
-  const item = session.mapping?.[id]
-
-  const children = item?.children?.map((id: string) => (
-    <DialogBoxItem key={id} id={id}/>
-  )) || []
+  const children = useMemo(() => {
+    return session.mapping?.[id]?.children?.map((id: string) => (
+      <DialogBoxItem key={id} id={id}/>
+    )) || []
+  }, [session, id])
 
   useEffect(() => {
     if (children.length === 0) {
       dispatch(updateLastMessageId(id))
     }
-  }, [children])
+  }, [children, id])
 
   return (
     <>
-      <BaseDialogBoxItem {...item.message} />
+      <BaseDialogBoxItem {...session.mapping?.[id].message} />
       {
         children.length > 0 ? (
           children[children_id]
