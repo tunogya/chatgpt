@@ -37,6 +37,7 @@ export default async function handler(
         },
         ScanIndexForward: false,
         ProjectionExpression: 'PK, SK, title, created',
+        Limit: limit,
       }));
       res.status(200).json({
         items: conversations.Items?.map((item: any) => ({

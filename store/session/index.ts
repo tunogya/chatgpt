@@ -131,10 +131,12 @@ export const index = createSlice({
         if (!state.session.mapping[parent].children) {
           state.session.mapping[parent].children = []
         }
-        state.session.mapping[parent].children = [
-          ...state.session.mapping[parent].children,
-          message.id
-        ]
+        if (state.session.mapping[parent].children.indexOf(message.id) === -1) {
+          state.session.mapping[parent].children = [
+            ...state.session.mapping[parent].children,
+            message.id
+          ]
+        }
       }
     },
     // clearSession is used to clear the current session
