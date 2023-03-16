@@ -103,7 +103,7 @@ const BaseDialogBoxItem: FC<Message> = ({...props}) => {
             <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
               <div className="markdown prose w-full break-words dark:prose-invert light">
                 <p>
-                  {props.content.parts[0].trim()}
+                  {props.content.parts?.[0]?.trim()}
                 </p>
               </div>
             </div>

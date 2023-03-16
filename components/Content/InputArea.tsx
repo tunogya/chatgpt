@@ -1,4 +1,4 @@
-import ReIcon from "@/components/SVG/ReIcon";
+// import ReIcon from "@/components/SVG/ReIcon";
 import StopIcon from "@/components/SVG/StopIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {updateMessageInSession, Message, updateSession, updateLastMessageId} from "@/store/session";
@@ -56,36 +56,41 @@ const InputArea = () => {
           // split data by line, and remove empty line
           const lines = dataString.split('\n\n').filter((line) => line !== '').map((line) => line.trim().replace('data: ', ''));
           for (const line of lines) {
-            if (line.startsWith('[DONE]')) {
+            if (line === "[DONE]") {
               setIsWaitComplete(false)
+              console.log('[DONE]')
             } else {
-              const data = JSON.parse(line);
-              // if session.id is null, update session
-              if (!session.id) {
-                dispatch(updateSession({
-                  id: data.id,
-                  title: data.title,
-                }))
-              }
-              _message = {
-                ..._message,
-                id: data.messages[0].id,
-                role: data.messages[0].author.role,
-                content: {
-                  ..._message.content,
-                  parts: [
-                    _message.content.parts[0] + data.messages[0].content.parts[0]
-                  ],
-                },
-                author: {
-                  ..._message.author,
-                  role: data.messages[0].author.role,
+              try {
+                const data = JSON.parse(line);
+                // if session.id is null, update session
+                if (!session.id) {
+                  dispatch(updateSession({
+                    id: data.id,
+                    title: data.title,
+                  }))
                 }
+                _message = {
+                  ..._message,
+                  id: data.messages[0].id,
+                  role: data.messages[0].author.role,
+                  content: {
+                    ..._message.content,
+                    parts: [
+                      _message.content.parts[0] + data.messages[0].content.parts[0]
+                    ],
+                  },
+                  author: {
+                    ..._message.author,
+                    role: data.messages[0].author.role,
+                  }
+                }
+                dispatch(updateMessageInSession({
+                  message: _message,
+                  parent: parent,
+                }))
+              } catch (e) {
+                console.log(e)
               }
-              dispatch(updateMessageInSession({
-                message: _message,
-                parent: parent,
-              }))
             }
           }
           return readChunk()

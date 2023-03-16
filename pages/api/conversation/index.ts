@@ -175,13 +175,12 @@ export default async function handler(
           .filter((line: string) => line !== '')
           .map((line: string) => line.trim().replace('data: ', ''));
         for (const line of lines) {
-          // when chunk is [DONE], the stream is finished
           if (line === '[DONE]') {
-            res.write('data: [DONE]\n\n');
+            console.log('[DONE]')
           } else {
             try {
               const data = JSON.parse(line);
-              if (data.choices[0].delta?.role) {
+              if (data.choices?.[0].delta?.role) {
                 full_callback_message = {
                   ...full_callback_message,
                   role: data.choices[0].delta.role,
@@ -191,7 +190,7 @@ export default async function handler(
                   }
                 }
               }
-              if (!data.choices[0].delta?.content) {
+              if (!data.choices?.[0].delta?.content) {
                 return;
               }
               const part = data.choices[0].delta.content
@@ -259,6 +258,7 @@ export default async function handler(
             ...conversation,
           }
         }));
+        res.write('data: [DONE]\n\n');
         res.end();
       });
       stream.on('error', (error: any) => {
