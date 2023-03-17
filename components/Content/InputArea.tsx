@@ -4,9 +4,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {updateMessageInSession, Message, updateSession, updateLastMessageId} from "@/store/session";
 import {useEffect, useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
+import {setIsWaitComplete} from "@/store/ui";
 
 const InputArea = () => {
-  const [isWaitComplete, setIsWaitComplete] = useState(false);
+  const isWaitComplete = useSelector((state: any) => state.ui.isWaitComplete);
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const session = useSelector((state: any) => state.session.session);
   const username = useSelector((state: any) => state.user.username);
@@ -15,91 +16,96 @@ const InputArea = () => {
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
 
   const complete = async (message: Message, parent: string) => {
-    setIsWaitComplete(true)
+    dispatch(setIsWaitComplete(true))
     dispatch(updateMessageInSession({
       message,
       parent: lastMessageId,
     }))
-    const res = await fetch('/api/conversation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        conversation_id: session.id,
-        action: 'next',
-        model: 'gpt-3.5-turbo',
-        messages: [message],
-        parent_message_id: lastMessageId,
-      }),
-    })
-    // @ts-ignore
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let _message = {
-      author: {
+    try {
+      const res = await fetch('/api/conversation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          conversation_id: session.id,
+          action: 'next',
+          model: 'gpt-3.5-turbo',
+          messages: [message],
+          parent_message_id: lastMessageId,
+        }),
+      })
+      // @ts-ignore
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let _message = {
+        author: {
+          role: '',
+        },
+        content: {
+          content_type: '',
+          parts: [""],
+        },
+        id: '',
         role: '',
-      },
-      content: {
-        content_type: '',
-        parts: [""],
-      },
-      id: '',
-      role: '',
-    };
-    // @ts-ignore
-    const readChunk = async () => {
-      return reader.read().then(({value, done}) => {
-        if (!done) {
-          const dataString = decoder.decode(value);
-          // split data by line, and remove empty line
-          const lines = dataString.split('\n\n').filter((line) => line !== '').map((line) => line.trim().replace('data: ', ''));
-          for (const line of lines) {
-            if (line === "[DONE]") {
-              setIsWaitComplete(false)
-              console.log('[DONE]')
-            } else {
-              try {
-                const data = JSON.parse(line);
-                // if session.id is null, update session
-                if (!session.id) {
-                  dispatch(updateSession({
-                    id: data.id,
-                    title: data.title,
-                  }))
-                }
-                _message = {
-                  ..._message,
-                  id: data.messages[0].id,
-                  role: data.messages[0].author.role,
-                  content: {
-                    ..._message.content,
-                    parts: [
-                      _message.content.parts[0] + data.messages[0].content.parts[0]
-                    ],
-                  },
-                  author: {
-                    ..._message.author,
-                    role: data.messages[0].author.role,
+      };
+      // @ts-ignore
+      const readChunk = async () => {
+        return reader.read().then(({value, done}) => {
+          if (!done) {
+            const dataString = decoder.decode(value);
+            // split data by line, and remove empty line
+            const lines = dataString.split('\n\n').filter((line) => line !== '').map((line) => line.trim().replace('data: ', ''));
+            for (const line of lines) {
+              if (line === "[DONE]") {
+                setIsWaitComplete(false)
+                console.log('[DONE]')
+              } else {
+                try {
+                  const data = JSON.parse(line);
+                  // if session.id is null, update session
+                  if (!session.id) {
+                    dispatch(updateSession({
+                      id: data.id,
+                      title: data.title,
+                    }))
                   }
+                  _message = {
+                    ..._message,
+                    id: data.messages[0].id,
+                    role: data.messages[0].author.role,
+                    content: {
+                      ..._message.content,
+                      parts: [
+                        _message.content.parts[0] + data.messages[0].content.parts[0]
+                      ],
+                    },
+                    author: {
+                      ..._message.author,
+                      role: data.messages[0].author.role,
+                    }
+                  }
+                  dispatch(updateMessageInSession({
+                    message: _message,
+                    parent: parent,
+                  }))
+                } catch (e) {
+                  console.log(e)
                 }
-                dispatch(updateMessageInSession({
-                  message: _message,
-                  parent: parent,
-                }))
-              } catch (e) {
-                console.log(e)
               }
             }
+            return readChunk()
+          } else {
+            dispatch(setIsWaitComplete(false))
           }
-          return readChunk()
-        } else {
-          setIsWaitComplete(false)
-        }
-      });
-    };
-    await readChunk();
+        });
+      };
+      await readChunk();
+    } catch (e) {
+      dispatch(setIsWaitComplete(false))
+      console.log(e)
+    }
   }
 
   const [second, setSecond] = useState(0);
@@ -133,7 +139,7 @@ const InputArea = () => {
             {isWaitComplete && (
               <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
                 // TODO: stop generate dialog
-                setIsWaitComplete(false)
+                dispatch(setIsWaitComplete(false))
               }}>
                 <div className="flex w-full items-center justify-center gap-2">
                   <StopIcon/>

@@ -20,11 +20,22 @@ export type Message = {
   }
 }
 
-const BaseDialogBoxItem: FC<Message> = ({...props}) => {
+export type BaseDialogBoxItemProps = {
+  id: string,
+  message: Message,
+}
+
+const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const username = useSelector((state: any) => state.user.username);
+  const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
+  const isWaitComplete = useSelector((state: any) => state.ui.isWaitComplete)
   const [editMode, setEditMode] = useState(false);
 
-  if (props.role === 'user') {
+  const showStreaming = useMemo(() => {
+    return lastMessageId === props.id && isWaitComplete
+  }, [lastMessageId, props.id, isWaitComplete])
+
+  if (props.message.role === 'user') {
     return (
       <div
         className="w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800">
@@ -44,7 +55,7 @@ const BaseDialogBoxItem: FC<Message> = ({...props}) => {
                   <textarea className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
                             style={{height: '24px', overflowY: 'hidden'}}
                   >
-                    {props.content.parts[0].trim()}
+                    {props.message.content.parts[0].trim()}
                   </textarea>
                   <div className="text-center mt-2 flex justify-center">
                     <button className="btn relative btn-primary mr-2" onClick={() => {
@@ -62,8 +73,8 @@ const BaseDialogBoxItem: FC<Message> = ({...props}) => {
               ) : (
                 <>
                   <div className="flex flex-grow flex-col gap-3">
-                    <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
-                      {props.content.parts[0].trim()}
+                    <div className=" min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
+                      {props.message.content.parts[0].trim()}
                     </div>
                   </div>
                   <div
@@ -101,9 +112,9 @@ const BaseDialogBoxItem: FC<Message> = ({...props}) => {
         <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
           <div className="flex flex-grow flex-col gap-3">
             <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
-              <div className="markdown prose w-full break-words dark:prose-invert light">
+              <div className={`${showStreaming && "result-streaming"} markdown prose w-full break-words dark:prose-invert light`}>
                 <p>
-                  {props.content.parts?.[0]?.trim()}
+                  {props.message.content.parts?.[0]?.trim()}
                 </p>
               </div>
             </div>
@@ -150,7 +161,7 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
 
   return (
     <>
-      <BaseDialogBoxItem {...session.mapping?.[id].message} />
+      <BaseDialogBoxItem message={session.mapping?.[id].message} id={id}/>
       {
         children.length > 0 ? (
           children[children_id]

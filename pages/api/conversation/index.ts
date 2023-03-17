@@ -131,139 +131,145 @@ export default async function handler(
           content: message.content.parts[0],
         })
       ))
-      const result = await fetch('https://api.openai.com/v1/chat/completions', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          model,
-          messages: full_old_messages,
-          temperature: 1,
-          top_p: 1,
-          frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
-          presence_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
-          stream: true, // false is default
-          n: 1,
-          user: user_id,
-        }),
-      });
 
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache, no-transform');
-      res.setHeader('X-Accel-Buffering', 'no');
+      try {
+        const result = await fetch('https://api.openai.com/v1/chat/completions', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            model,
+            messages: full_old_messages,
+            temperature: 1,
+            top_p: 1,
+            frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
+            presence_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
+            stream: true, // false is default
+            n: 1,
+            user: user_id,
+          }),
+        });
 
-      const message_id = Math.floor(Date.now() / 1000).toString();
-      let full_callback_message = {
-        author: {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Content-Type', 'text/event-stream');
+        res.setHeader('Cache-Control', 'no-cache, no-transform');
+        res.setHeader('X-Accel-Buffering', 'no');
+
+        const message_id = Math.floor(Date.now() / 1000).toString();
+        let full_callback_message = {
+          author: {
+            role: '',
+          },
+          content: {
+            content_type: 'text',
+            parts: [""],
+          },
+          id: '',
           role: '',
-        },
-        content: {
-          content_type: 'text',
-          parts: [""],
-        },
-        id: '',
-        role: '',
-      };
-      const stream = result.body as any as Readable;
-      stream.on('data', (chunk: any) => {
-        const lines = chunk
-          .toString()
-          .split('\n\n')
-          .filter((line: string) => line !== '')
-          .map((line: string) => line.trim().replace('data: ', ''));
-        for (const line of lines) {
-          if (line === '[DONE]') {
-            console.log('[DONE]')
-          } else {
-            try {
-              const data = JSON.parse(line);
-              if (data.choices?.[0].delta?.role) {
-                full_callback_message = {
-                  ...full_callback_message,
-                  role: data.choices[0].delta.role,
-                  author: {
-                    ...full_callback_message.author,
+        };
+        const stream = result.body as any as Readable;
+        stream.on('data', (chunk: any) => {
+          const lines = chunk
+            .toString()
+            .split('\n\n')
+            .filter((line: string) => line !== '')
+            .map((line: string) => line.trim().replace('data: ', ''));
+          for (const line of lines) {
+            if (line === '[DONE]') {
+              console.log('[DONE]')
+            } else {
+              try {
+                const data = JSON.parse(line);
+                if (data.choices?.[0].delta?.role) {
+                  full_callback_message = {
+                    ...full_callback_message,
                     role: data.choices[0].delta.role,
-                  }
-                }
-              }
-              if (!data.choices?.[0].delta?.content) {
-                return;
-              }
-              const part = data.choices[0].delta.content
-              full_callback_message = {
-                ...full_callback_message,
-                id: data.choices[0].id,
-                content: {
-                  ...full_callback_message.content,
-                  parts: [
-                    full_callback_message.content.parts[0] + part
-                  ],
-                },
-              }
-              res.write(`data: ${JSON.stringify({
-                id: conversation.id,
-                title: messages[0].content.parts[0],
-                messages: [
-                  {
-                    id: message_id,
-                    role: full_callback_message.role,
-                    content: {
-                      content_type: full_callback_message.content.content_type,
-                      parts: [
-                        part,
-                      ],
-                    },
                     author: {
-                      role: full_callback_message.role,
+                      ...full_callback_message.author,
+                      role: data.choices[0].delta.role,
                     }
                   }
-                ],
-              })}\n\n`);
-            } catch (e) {
-              console.log(e)
+                }
+                if (!data.choices?.[0].delta?.content) {
+                  return;
+                }
+                const part = data.choices[0].delta.content
+                full_callback_message = {
+                  ...full_callback_message,
+                  id: data.choices[0].id,
+                  content: {
+                    ...full_callback_message.content,
+                    parts: [
+                      full_callback_message.content.parts[0] + part
+                    ],
+                  },
+                }
+                res.write(`data: ${JSON.stringify({
+                  id: conversation.id,
+                  title: messages[0].content.parts[0],
+                  messages: [
+                    {
+                      id: message_id,
+                      role: full_callback_message.role,
+                      content: {
+                        content_type: full_callback_message.content.content_type,
+                        parts: [
+                          part,
+                        ],
+                      },
+                      author: {
+                        role: full_callback_message.role,
+                      }
+                    }
+                  ],
+                })}\n\n`);
+              } catch (e) {
+                console.log(e)
+              }
             }
           }
-        }
-      });
-      stream.on('end', async () => {
-        // add ai callback message to conversation and add to user children
-        conversation = {
-          ...conversation,
-          mapping: {
-            ...conversation.mapping,
-            [message_id]: {
-              id: message_id,
-              message: full_callback_message,
-              parent: messages[0].id,
-              children: []
-            },
-            [messages[0].id]: {
-              ...conversation.mapping[messages[0].id],
-              children: [
-                ...conversation.mapping[messages[0].id].children,
-                message_id,
-              ]
-            }
-          }
-        }
-        await ddbDocClient.send(new PutCommand({
-          TableName: 'wizardingpay',
-          Item: {
-            PK: user_id,
-            SK: conversation.id,
+        });
+        stream.on('end', async () => {
+          // add ai callback message to conversation and add to user children
+          conversation = {
             ...conversation,
+            mapping: {
+              ...conversation.mapping,
+              [message_id]: {
+                id: message_id,
+                message: full_callback_message,
+                parent: messages[0].id,
+                children: []
+              },
+              [messages[0].id]: {
+                ...conversation.mapping[messages[0].id],
+                children: [
+                  ...conversation.mapping[messages[0].id].children,
+                  message_id,
+                ]
+              }
+            }
           }
-        }));
-        res.write('data: [DONE]\n\n');
-        res.end();
-      });
-      stream.on('error', (error: any) => {
-        res.end(`data: ${JSON.stringify({error})}\n\n`);
-      });
+          await ddbDocClient.send(new PutCommand({
+            TableName: 'wizardingpay',
+            Item: {
+              PK: user_id,
+              SK: conversation.id,
+              ...conversation,
+            }
+          }));
+          res.write('data: [DONE]\n\n');
+          res.end();
+        });
+        stream.on('error', (error: any) => {
+          res.end(`data: ${JSON.stringify({error})}\n\n`);
+        });
+      } catch (e) {
+        console.log(e)
+        res.status(500).json({error: "Error"})
+      }
     } else if (req.method === 'DELETE') {
       const {ids} = req.body;
       try {
@@ -281,7 +287,8 @@ export default async function handler(
         }));
         res.status(200).json({success: true})
       } catch (e) {
-        res.status(500).json({error: e})
+        console.log(e)
+        res.status(500).json({error: "Error"})
         return
       }
     }
