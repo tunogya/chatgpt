@@ -2,7 +2,7 @@
 import StopIcon from "@/components/SVG/StopIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {updateMessageInSession, Message, updateSession, updateLastMessageId} from "@/store/session";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
 
 const InputArea = () => {
@@ -102,6 +102,15 @@ const InputArea = () => {
     await readChunk();
   }
 
+  const [second, setSecond] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSecond((second + 1) % 3);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [second]);
+
   return (
     <div
       className="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient">
@@ -139,7 +148,8 @@ const InputArea = () => {
                           rows={1} onChange={(e) => setInput(e.target.value)} value={input}
                           className="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent md:pl-0"></textarea>
             <button
-              className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent"
+              className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent disabled:bottom-0.5 md:disabled:bottom-1"
+              disabled={isWaitComplete}
               onClick={async (e) => {
                 e.preventDefault();
                 if (input === '') return;
@@ -160,7 +170,17 @@ const InputArea = () => {
                 setInput('');
                 await complete(message, message_id);
               }}>
-              <SendIcon/>
+              {
+                isWaitComplete ? (
+                  <div className="text-2xl">
+                    <span className={''}>·</span>
+                    <span className={`${second % 3 === 1 && 'invisible'}`}>·</span>
+                    <span className={`${second % 3 >= 1 && 'invisible'}`}>·</span>
+                  </div>
+                ) : (
+                  <SendIcon/>
+                )
+              }
             </button>
           </div>
         </div>
