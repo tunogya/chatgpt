@@ -81,18 +81,6 @@ export default function App({Component, pageProps}: AppProps) {
                 gtag('config', 'G-EDPQ3K7EN8');
               `}
         </Script>
-        <Script defer src={"https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"}
-                integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4"
-                crossOrigin="anonymous"></Script>
-        <Script defer src={"https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"}
-                integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
-                crossOrigin="anonymous" id={'katex-render'}
-                onLoad={() => {
-                  // @ts-ignore
-                  renderMathInElement(document.body)
-                }}
-        >
-        </Script>
         <CheckAuth/>
         <Component {...pageProps} />
       </PersistGate>
