@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {updateLastMessageId} from "@/store/session";
 import ReactMarkdown from "react-markdown";
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
-import {atomDark} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {atomDark} from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from 'rehype-katex';
