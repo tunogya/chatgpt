@@ -157,7 +157,10 @@ export default async function handler(
         res.setHeader('Cache-Control', 'no-cache, no-transform');
         res.setHeader('X-Accel-Buffering', 'no');
 
-        const message_id = Math.floor(Date.now() / 1000).toString();
+        let message_id = Math.floor(Date.now() / 1000).toString();
+        if (Number(message_id) === Number(parent_message_id)) {
+          message_id =( Number(message_id) + 1).toString()
+        }
         let full_callback_message = {
           author: {
             role: '',
