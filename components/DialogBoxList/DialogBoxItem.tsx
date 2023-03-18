@@ -5,6 +5,7 @@ import LikeIcon from "@/components/SVG/LikeIcon";
 import UnLikeIcon from "@/components/SVG/UnLikeIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {updateLastMessageId} from "@/store/session";
+import RenderContent from "@/components/DialogBoxList/RenderContent";
 
 export type Message = {
   id: string
@@ -115,9 +116,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
               <div className={`${showStreaming && "result-streaming"} markdown prose w-full break-words dark:prose-invert light`}>
                 {
                   props.message.content.parts?.[0]?.trim()?.split('\n\n')?.map((p, index) => (
-                    <p key={index}>
-                      {p}
-                    </p>
+                    <RenderContent key={index} content={p} />
                   ))
                 }
               </div>
