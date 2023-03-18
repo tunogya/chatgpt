@@ -1,12 +1,9 @@
 import { defineStyleConfig } from '@chakra-ui/react'
-import {Montserrat} from '@next/font/google';
-
-const montserrat = Montserrat({ subsets: ['latin'] });
 
 const Button = defineStyleConfig({
   baseStyle: {
     borderRadius: 'md',
-    fontFamily: montserrat.style.fontFamily,
+    fontFamily: "Söhne",
     cursor: 'pointer',
   },
   sizes: {
@@ -24,16 +21,24 @@ const Button = defineStyleConfig({
   variants: {
     outline: {
       border: '1px solid',
-      // @ts-ignore
-      _hover: null,
-      // @ts-ignore
-      _active: null,
+      _hover: {
+        bg: '',
+        opacity: 0.8,
+      },
+      _active: {
+        bg: '',
+        opacity: 0.8,
+      },
     },
     solid: {
-      // @ts-ignore
-      _hover: null,
-      // @ts-ignore
-      _active: null,
+      _hover: {
+        bg: '',
+        opacity: 0.8,
+      },
+      _active: {
+        bg: '',
+        opacity: 0.8,
+      },
     },
     ghost: {
       px: 3,

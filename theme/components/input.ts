@@ -1,14 +1,11 @@
 import { defineStyleConfig } from '@chakra-ui/react'
-import {Montserrat} from '@next/font/google';
-
-const montserrat = Montserrat({ subsets: ['latin'] });
 
 const Input = defineStyleConfig({
   baseStyle: {},
   variants: {
     filled: {
       field: {
-        fontFamily: montserrat.style.fontFamily,
+        fontFamily: "Söhne",
         borderRadius: '6px',
         borderWidth: '1px',
         fontSize: 'sm',
@@ -21,7 +18,7 @@ const Input = defineStyleConfig({
     },
     outline: {
       field: {
-        fontFamily: montserrat.style.fontFamily,
+        fontFamily: "Söhne",
         borderRadius: '6px',
         borderWidth: '1px',
         fontSize: 'sm',
