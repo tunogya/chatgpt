@@ -14,12 +14,12 @@ const DialogBoxListContent = () => {
   const [isWaitHistory, setIsWaitHistory] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const conversation_id = router.query.id?.[0];
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
 
   // get current conversation history
   const getHistoryMessageOfSession = useCallback(async () => {
+    const conversation_id = router.query.id?.[0];
     if (!conversation_id || isWaitHistory) {
       return
     }
@@ -42,8 +42,8 @@ const DialogBoxListContent = () => {
       // @ts-ignore
       create_time: new Date(res.created * 1000).toLocaleString(),
     }))
-    // setIsWaitHistory(false);
-  }, [conversation_id])
+    setIsWaitHistory(false);
+  }, [router])
 
   useEffect(() => {
     getHistoryMessageOfSession()
