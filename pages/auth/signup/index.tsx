@@ -10,6 +10,7 @@ import * as crypto from 'crypto';
 import { setUser, setAccessToken } from '@/store/user';
 import {useDispatch} from "react-redux";
 import {clearSession} from "@/store/session";
+import theme from "../../../theme";
 
 const Login = () => {
   const router = useRouter()
@@ -74,7 +75,7 @@ const Login = () => {
   }
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Stack h={'full'} w={'full'} bg={bg} justify={'center'} align={'center'} spacing={8} px={2}>
         <HStack w={['full', '300px']}>
           <Button size={'xs'} color={fontColor} onClick={() => {

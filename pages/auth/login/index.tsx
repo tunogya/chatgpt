@@ -11,6 +11,7 @@ import {FaTelegramPlane} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import { setAccessToken, setUser } from '@/store/user';
 import {clearSession} from "@/store/session";
+import theme from "../../../theme";
 
 const Login = () => {
   const router = useRouter()
@@ -133,7 +134,7 @@ const Login = () => {
   };
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Stack h={'full'} w={'full'} bg={bg} justify={'center'} align={'center'} spacing={8} px={2}>
         <Text textAlign={'center'} fontSize={'sm'} fontWeight={'500'} color={fontColor}>
           欢迎使用 {via} ChatGPT
