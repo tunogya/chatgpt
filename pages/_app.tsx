@@ -90,7 +90,10 @@ export default function App({Component, pageProps}: AppProps) {
         <Script defer src={"https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"}
                 integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
                 crossOrigin="anonymous" id={'katex-render'}
-                // onLoad="renderMathInElement(document.body);"
+                onLoad={() => {
+                  // @ts-ignore
+                  renderMathInElement(document.body)
+                }}
         >
         </Script>
         <CheckAuth/>
