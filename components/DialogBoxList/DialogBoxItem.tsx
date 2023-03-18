@@ -5,7 +5,12 @@ import LikeIcon from "@/components/SVG/LikeIcon";
 import UnLikeIcon from "@/components/SVG/UnLikeIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {updateLastMessageId} from "@/store/session";
-import RenderContent from "@/components/DialogBoxList/RenderContent";
+import ReactMarkdown from "react-markdown";
+import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
+import {atomDark} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from 'rehype-katex';
 
 export type Message = {
   id: string
@@ -31,6 +36,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const isWaitComplete = useSelector((state: any) => state.ui.isWaitComplete)
   const [editMode, setEditMode] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const showStreaming = useMemo(() => {
     return lastMessageId === props.id && isWaitComplete
@@ -137,13 +143,33 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
           <div className="flex flex-grow flex-col gap-3">
             <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
-              <div className={`${showStreaming && "result-streaming"} markdown prose w-full break-words dark:prose-invert light`}>
-                {
-                  parts.map((p, index) => (
-                    <RenderContent key={index} content={p} />
-                  ))
-                }
-              </div>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeKatex]}
+                components={{
+                  code({node, inline, className, children, ...props}) {
+                    const match = /language-(\w+)/.exec(className || '')
+                    return !inline && match ? (
+                      // @ts-ignore
+                      <SyntaxHighlighter
+                        // @ts-ignore
+                        style={atomDark}
+                        language={match[1]}
+                        PreTag="div"
+                        {...props}
+                      >
+                        {String(children).replace(/\n$/, '')}
+                      </SyntaxHighlighter>
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    )
+                  }
+                }}
+                className={`${showStreaming && "result-streaming"} markdown prose w-full break-words dark:prose-invert light`}>
+                {props.message.content.parts[0].trim()}
+              </ReactMarkdown>
             </div>
           </div>
           <div className="flex justify-between">
