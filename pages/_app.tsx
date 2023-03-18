@@ -67,9 +67,6 @@ export default function App({Component, pageProps}: AppProps) {
                 as="font"/>
           <link href="/fonts/KaTeX_Typewriter-Regular.woff"
                 as="font"/>
-          <link rel="stylesheet" href={"https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css"}
-                integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0"
-                crossOrigin="anonymous"/>
         </Head>
         <Script src={'https://telegram.org/js/games.js'}/>
         <Script id={'telegram-web-app'} src={'https://telegram.org/js/telegram-web-app.js'}/>
