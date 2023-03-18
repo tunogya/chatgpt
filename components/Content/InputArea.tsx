@@ -123,7 +123,7 @@ const InputArea = () => {
       <form
         className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
         <div className="relative flex h-full flex-1 md:flex-col">
-          <div className="flex ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center">
+          <div className="flex ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center hidden md:block">
             {/*{*/}
             {/*  session?.messages?.length >= 2 && (*/}
             {/*    <button className="btn relative btn-neutral border-0 md:border" onClick={() => {*/}
@@ -194,8 +194,20 @@ const InputArea = () => {
               }
             </button>
           </div>
+          {
+            isWaitComplete && (
+              <div className="flex ml-1 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center md:hidden">
+                <button className="btn relative btn-neutral border-0 md:border">
+                  <div className="flex w-full items-center justify-center gap-2">
+                    <StopIcon/>
+                  </div>
+                </button>
+              </div>
+            )
+          }
         </div>
       </form>
+
       <div className="px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6">
         <a href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes" target="_blank" rel="noreferrer"
            className="underline">ChatGPT 2.13</a>. 仅供学习交流，不得用于商业用途。
