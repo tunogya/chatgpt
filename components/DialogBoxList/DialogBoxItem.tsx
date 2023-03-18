@@ -114,7 +114,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
             <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
               <div className={`${showStreaming && "result-streaming"} markdown prose w-full break-words dark:prose-invert light`}>
                 {
-                  props.message.content.parts?.[0].trim().split('\n\n').map((p, index) => (
+                  props.message.content.parts?.[0]?.trim()?.split('\n\n')?.map((p, index) => (
                     <p key={index}>
                       {p}
                     </p>
