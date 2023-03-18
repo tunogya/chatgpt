@@ -57,7 +57,7 @@ const RenderContent: FC<RenderContentProps> = ({...props}) => {
             navigator.clipboard.writeText(props.content.split('\n').slice(1, -1).join('\n'))
             setTimeout(() => {
               setCopied(false)
-            }, 3_000)
+            }, 1_000)
           }}>
             <CopyIcon/>{ copied ?  'Copy success' : 'Copy code' }
           </button>
