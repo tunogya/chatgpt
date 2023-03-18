@@ -77,7 +77,7 @@ const DialogBoxListContent = () => {
     <div className={"w-full"}>
       <div className="flex flex-col items-center text-sm dark:bg-gray-800">
         {
-          true
+          (!!session?.id)
             ? (
               rootMessageId && (
                 <DialogBoxItem id={rootMessageId}/>
