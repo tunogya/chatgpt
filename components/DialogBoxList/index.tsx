@@ -72,19 +72,26 @@ const DialogBoxListContent = () => {
     return check_point
   }, [session.mapping])
 
-
   return (
     <div className={"w-full"}>
       <div className="flex flex-col items-center text-sm dark:bg-gray-800">
         {
-          (session?.id || rootMessageId)
-            ? (
-              rootMessageId && (
-                <DialogBoxItem id={rootMessageId}/>
+          // if isWaitHistory is true, show null
+          isWaitHistory ? (
+            <></>
+          ) : (
+            // if session.id is not null, can show dialog box
+            // if session id is null, but rootMessageId has value, can show dialog box
+            // if session id is null, and rootMessageId is null, too, show placeholder
+            (session?.id || rootMessageId)
+              ? (
+                rootMessageId && (
+                  <DialogBoxItem id={rootMessageId}/>
+                )
+              ) : (
+                <Placeholder/>
               )
-            ) : (
-              !isWaitHistory && <Placeholder/>
-            )
+          )
         }
       </div>
       {
