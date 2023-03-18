@@ -7,6 +7,7 @@ import {PersistGate} from "redux-persist/integration/react";
 import {persistStore} from "redux-persist";
 import {Spinner} from '@chakra-ui/react'
 import "@/styles/index.css";
+import 'highlight.js/styles/default.css';
 import CheckAuth from "@/components/CheckAuth";
 
 const persistor = persistStore(store);

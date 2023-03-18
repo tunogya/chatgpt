@@ -36,6 +36,30 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
     return lastMessageId === props.id && isWaitComplete
   }, [lastMessageId, props.id, isWaitComplete])
 
+  const parts = useMemo(() => {
+    let parts = props.message.content.parts?.[0].split('\n\n')
+    let newParts = [] as string[]
+    for (let i = 0; i < parts.length; i++) {
+      if (parts[i].startsWith('```') && parts[i].endsWith('```')) {
+        newParts.push(parts[i])
+      } else if (parts[i].startsWith('```') && !parts[i].endsWith('```')) {
+        let codeBlock = parts[i]
+        for (let j = i + 1; j < parts.length; j++) {
+          codeBlock += '\n' + parts[j]
+          if (parts[j].endsWith('```')) {
+            i = j
+            break
+          }
+        }
+        newParts.push(codeBlock)
+      } else {
+        newParts.push(parts[i])
+      }
+    }
+    parts = newParts
+    return parts
+  }, [props.message.content.parts])
+
   if (props.message.role === 'user') {
     return (
       <div
@@ -115,7 +139,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
             <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
               <div className={`${showStreaming && "result-streaming"} markdown prose w-full break-words dark:prose-invert light`}>
                 {
-                  props.message.content.parts?.[0]?.trim()?.split('\n\n')?.map((p, index) => (
+                  parts.map((p, index) => (
                     <RenderContent key={index} content={p} />
                   ))
                 }
