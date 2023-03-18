@@ -144,11 +144,12 @@ type RenderDialogBoxItemProps = {
 
 const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
   const session = useSelector((state: any) => state.session.session);
-  const [children_id, setChildren_id] = useState(0)
+  const [children_index, setChildren_index] = useState(0)
   const dispatch = useDispatch()
 
   const children = useMemo(() => {
-    return session.mapping?.[id]?.children?.map((id: string) => (
+    // filter used to remove the current id from the children list, so that the current id is not rendered twice
+    return session.mapping?.[id]?.children?.filter((c_id: string) => c_id !== id)?.map((id: string) => (
       <DialogBoxItem key={id} id={id}/>
     )) || []
   }, [session, id])
@@ -164,7 +165,7 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
       <BaseDialogBoxItem message={session.mapping?.[id].message} id={id}/>
       {
         children.length > 0 ? (
-          children[children_id]
+          children[children_index]
         ) : (
           <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
         )
