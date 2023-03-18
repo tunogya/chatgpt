@@ -5,6 +5,7 @@ import {updateMessageInSession, Message, updateSession, updateLastMessageId} fro
 import {useEffect, useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
 import {setIsWaitComplete} from "@/store/ui";
+import { v4 as uuidv4 } from 'uuid';
 
 const InputArea = () => {
   const isWaitComplete = useSelector((state: any) => state.ui.isWaitComplete);
@@ -164,7 +165,7 @@ const InputArea = () => {
               onClick={async (e) => {
                 e.preventDefault();
                 if (input === '') return;
-                const message_id = Math.floor(Date.now() / 1000).toString()
+                const message_id = uuidv4();
                 const message: Message = {
                   id: message_id,
                   author: {

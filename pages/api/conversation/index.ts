@@ -4,6 +4,7 @@ import {ddbDocClient} from "@/utils/DynamoDB";
 import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {Readable} from "stream";
 import uid from "@/utils/uid";
+import { v4 as uuidv4 } from 'uuid';
 
 export default async function handler(
   req: NextApiRequest,
@@ -157,10 +158,7 @@ export default async function handler(
         res.setHeader('Cache-Control', 'no-cache, no-transform');
         res.setHeader('X-Accel-Buffering', 'no');
 
-        let message_id = Math.floor(Date.now() / 1000).toString();
-        if (Number(message_id) === Number(parent_message_id)) {
-          message_id =( Number(message_id) + 1).toString()
-        }
+        const message_id = uuidv4();
         let full_callback_message = {
           author: {
             role: '',
