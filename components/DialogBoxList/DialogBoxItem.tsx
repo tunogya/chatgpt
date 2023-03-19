@@ -36,7 +36,6 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete)
   const [editMode, setEditMode] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const showStreaming = useMemo(() => {
     return lastMessageId === props.id && isWaitComplete

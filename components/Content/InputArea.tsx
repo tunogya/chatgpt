@@ -8,12 +8,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 const InputArea = () => {
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete);
-  const accessToken = useSelector((state: any) => state.user.accessToken);
-  const session = useSelector((state: any) => state.session.session);
-  const username = useSelector((state: any) => state.user.username);
-  const dispatch = useDispatch();
-  const [input, setInput] = useState('');
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
+  const session = useSelector((state: any) => state.session.session);
+  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const username = useSelector((state: any) => state.user.username);
+  const [input, setInput] = useState('');
+  const dispatch = useDispatch();
 
   const complete = async (message: Message, parent: string) => {
     dispatch(setIsWaitComplete(true))
