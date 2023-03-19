@@ -167,7 +167,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                     )
                   }
                 }}
-                className={`${showStreaming && "result-streaming"} markdown prose w-full break-words dark:prose-invert light`}>
+                className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
                 {props.message.content.parts[0].trim()}
               </ReactMarkdown>
             </div>
