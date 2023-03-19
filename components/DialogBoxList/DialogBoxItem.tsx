@@ -1,5 +1,5 @@
 import {FC, useEffect, useMemo, useState} from "react";
-import Edit2Icon from "@/components/SVG/Edit2Icon";
+// import Edit2Icon from "@/components/SVG/Edit2Icon";
 import OpenAIIcon from "@/components/SVG/OpenAIIcon";
 import LikeIcon from "@/components/SVG/LikeIcon";
 import UnLikeIcon from "@/components/SVG/UnLikeIcon";
@@ -83,17 +83,17 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                       {props.message.content.parts[0].trim()}
                     </div>
                   </div>
-                  <div
-                    className="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible">
-                    <button
-                      className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400 md:invisible md:group-hover:visible"
-                      onClick={() => {
-                        setEditMode(true)
-                      }}
-                    >
-                      <Edit2Icon/>
-                    </button>
-                  </div>
+                  {/*<div*/}
+                  {/*  className="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible">*/}
+                  {/*  <button*/}
+                  {/*    className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400 md:invisible md:group-hover:visible"*/}
+                  {/*    onClick={() => {*/}
+                  {/*      setEditMode(true)*/}
+                  {/*    }}*/}
+                  {/*  >*/}
+                  {/*    <Edit2Icon/>*/}
+                  {/*  </button>*/}
+                  {/*</div>*/}
                 </>
               )
             }
