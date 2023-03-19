@@ -6,6 +6,7 @@ import {useRouter} from "next/router";
 import Placeholder from "@/components/DialogBoxList/PlaceHoder";
 import DownIcon from "@/components/SVG/DownIcon";
 import ScrollToBottom, {useScrollToBottom, useSticky} from "react-scroll-to-bottom";
+import LoadingIcon from "@/components/SVG/LoadingIcon";
 
 const DialogBoxListContent = () => {
   const bottomRef = useRef(null);
@@ -76,9 +77,11 @@ const DialogBoxListContent = () => {
     <div className={"w-full"}>
       <div className="flex flex-col items-center text-sm dark:bg-gray-800">
         {
-          // if isWaitHistory is true, show null
           isWaitHistory ? (
-            <></>
+            <div className="flex flex-col items-center text-sm dark:bg-gray-800">
+              <LoadingIcon />
+              <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+            </div>
           ) : (
             // if session.id is not null, can show dialog box
             // if session id is null, but rootMessageId has value, can show dialog box

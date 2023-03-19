@@ -4,6 +4,7 @@ import AddIcon from "@/components/SVG/AddIcon";
 import MenuIcon from "@/components/SVG/MenuIcon";
 import {clearSession} from "@/store/session";
 import {useRouter} from "next/router";
+import LoadingIcon from "@/components/SVG/LoadingIcon";
 
 const MobileNavigationBar = () => {
   const dispatch = useDispatch()
