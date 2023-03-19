@@ -9,6 +9,7 @@ const MobileNavigationBar = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const session = useSelector((state: any) => state.session.session)
+  const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory)
 
   return (
     <div
@@ -18,7 +19,7 @@ const MobileNavigationBar = () => {
         <span className="sr-only">打开侧边栏</span>
         <MenuIcon/>
       </button>
-      <h1 className="flex-1 text-center text-base font-normal">{session?.title}</h1>
+      <h1 className="flex-1 text-center text-base font-normal">{isWaitHistory ? '...' : session?.title}</h1>
       <button type="button" className="px-3"
               onClick={async () => {
                 dispatch(clearSession());

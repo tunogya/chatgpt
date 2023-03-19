@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setSession} from "@/store/session";
+import {setIsWaitHistory, setSession} from "@/store/session";
 import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
 import {useRouter} from "next/router";
 import Placeholder from "@/components/DialogBoxList/PlaceHoder";
@@ -11,7 +11,7 @@ const DialogBoxListContent = () => {
   const bottomRef = useRef(null);
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const session = useSelector((state: any) => state.session.session);
-  const [isWaitHistory, setIsWaitHistory] = useState(false);
+  const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory);
   const dispatch = useDispatch();
   const router = useRouter();
   const scrollToBottom = useScrollToBottom();
@@ -23,7 +23,7 @@ const DialogBoxListContent = () => {
     if (!conversation_id || isWaitHistory) {
       return
     }
-    setIsWaitHistory(true);
+    dispatch(setIsWaitHistory(true));
     let res = await fetch(`/api/conversation/${conversation_id}`, {
       method: 'GET',
       headers: {
@@ -42,7 +42,7 @@ const DialogBoxListContent = () => {
       // @ts-ignore
       create_time: new Date(res.created * 1000).toLocaleString(),
     }))
-    setIsWaitHistory(false);
+    dispatch(setIsWaitHistory(false));
   }, [router])
 
   useEffect(() => {

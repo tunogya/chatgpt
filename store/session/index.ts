@@ -43,7 +43,10 @@ export const index = createSlice({
       },
     },
     lastMessageId: null,
+    // isWaitComplete is used to indicate whether the answer wait is complete
     isWaitComplete: false,
+    // isWaitHistory is used to indicate whether the history wait is complete
+    isWaitHistory: false,
   },
   reducers: {
     // setConversation is used to set the conversation list
@@ -150,12 +153,16 @@ export const index = createSlice({
       }
       state.lastMessageId = null
       state.isWaitComplete = false
+      state.isWaitHistory = false
     },
     updateLastMessageId: (state, action) => {
       state.lastMessageId = action.payload
     },
     setIsWaitComplete: (state, action) => {
       state.isWaitComplete = action.payload
+    },
+    setIsWaitHistory: (state, action) => {
+      state.isWaitHistory = action.payload
     }
   }
 })
@@ -169,7 +176,8 @@ export const {
   updateMessageInSession,
   clearSession,
   updateLastMessageId,
-  setIsWaitComplete
+  setIsWaitComplete,
+  setIsWaitHistory,
 } = index.actions
 
 export default index.reducer
