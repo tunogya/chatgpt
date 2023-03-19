@@ -43,6 +43,7 @@ export const index = createSlice({
       },
     },
     lastMessageId: null,
+    isWaitComplete: false,
   },
   reducers: {
     // setConversation is used to set the conversation list
@@ -148,9 +149,13 @@ export const index = createSlice({
         mapping: {},
       }
       state.lastMessageId = null
+      state.isWaitComplete = false
     },
     updateLastMessageId: (state, action) => {
       state.lastMessageId = action.payload
+    },
+    setIsWaitComplete: (state, action) => {
+      state.isWaitComplete = action.payload
     }
   }
 })
@@ -163,7 +168,8 @@ export const {
   updateSession,
   updateMessageInSession,
   clearSession,
-  updateLastMessageId
+  updateLastMessageId,
+  setIsWaitComplete
 } = index.actions
 
 export default index.reducer

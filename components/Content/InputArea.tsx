@@ -1,10 +1,9 @@
 // import ReIcon from "@/components/SVG/ReIcon";
 import StopIcon from "@/components/SVG/StopIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {updateMessageInSession, Message, updateSession, updateLastMessageId} from "@/store/session";
+import {updateMessageInSession, Message, updateSession, updateLastMessageId, setIsWaitComplete} from "@/store/session";
 import {useEffect, useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
-import {setIsWaitComplete} from "@/store/ui";
 import { v4 as uuidv4 } from 'uuid';
 
 const InputArea = () => {
