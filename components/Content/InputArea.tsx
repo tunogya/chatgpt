@@ -120,36 +120,9 @@ const InputArea = () => {
   return (
     <div
       className="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient">
-      <form
-        className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
+      <form className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
         <div className="relative flex h-full flex-1 md:flex-col">
-          <div className="flex ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center hidden md:block">
-            {/*{*/}
-            {/*  session?.messages?.length >= 2 && (*/}
-            {/*    <button className="btn relative btn-neutral border-0 md:border" onClick={() => {*/}
-            {/*      // TODO: re-generate dialog*/}
-            {/*    }}>*/}
-            {/*      <div className="flex w-full items-center justify-center gap-2">*/}
-            {/*        <ReIcon/>*/}
-            {/*        重新生成对话*/}
-            {/*      </div>*/}
-            {/*    </button>*/}
-            {/*  )*/}
-            {/*}*/}
-            {isWaitComplete && (
-              <button className="btn relative btn-neutral border-0 md:border" onClick={() => {
-                // TODO: stop generate dialog
-                dispatch(setIsWaitComplete(false))
-              }}>
-                <div className="flex w-full items-center justify-center gap-2">
-                  <StopIcon/>
-                  停止生成对话
-                </div>
-              </button>
-            )}
-          </div>
-          <div
-            className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
+          <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
                           rows={1}
                           onChange={(e) => {
@@ -194,20 +167,8 @@ const InputArea = () => {
               }
             </button>
           </div>
-          {
-            isWaitComplete && (
-              <div className="flex ml-1 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center md:hidden">
-                <button className="btn relative btn-neutral border-0 md:border">
-                  <div className="flex w-full items-center justify-center gap-2">
-                    <StopIcon/>
-                  </div>
-                </button>
-              </div>
-            )
-          }
         </div>
       </form>
-
       <div className="px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6">
         <a href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes" target="_blank" rel="noreferrer"
            className="underline">ChatGPT 2.13</a>. 仅供学习交流，不得用于商业用途。
