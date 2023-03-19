@@ -1,5 +1,3 @@
-// import ReIcon from "@/components/SVG/ReIcon";
-import StopIcon from "@/components/SVG/StopIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {updateMessageInSession, Message, updateSession, updateLastMessageId, setIsWaitComplete} from "@/store/session";
 import {useEffect, useState} from "react";
