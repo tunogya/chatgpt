@@ -1,4 +1,4 @@
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setIsOpenSidebar} from "@/store/ui";
 import AddIcon from "@/components/SVG/AddIcon";
 import MenuIcon from "@/components/SVG/MenuIcon";
@@ -8,6 +8,7 @@ import {useRouter} from "next/router";
 const MobileNavigationBar = () => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const session = useSelector((state: any) => state.session.session)
 
   return (
     <div
@@ -17,7 +18,7 @@ const MobileNavigationBar = () => {
         <span className="sr-only">打开侧边栏</span>
         <MenuIcon/>
       </button>
-      <h1 className="flex-1 text-center text-base font-normal">新会话</h1>
+      <h1 className="flex-1 text-center text-base font-normal">{session?.title}</h1>
       <button type="button" className="px-3"
               onClick={async () => {
                 dispatch(clearSession());
