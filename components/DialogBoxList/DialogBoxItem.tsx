@@ -50,7 +50,9 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
           <div className="w-[30px] flex flex-col relative items-end">
             <div className="relative flex">
               <span>
-              {username}
+                <div className={"relative h-[30px] w-[30px] p-1 rounded-sm text-white bg-gray-600 flex items-center justify-center"}>
+                  {username.slice(0, 1).toUpperCase()}
+                </div>
               </span>
             </div>
           </div>
