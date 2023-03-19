@@ -34,7 +34,7 @@ export type BaseDialogBoxItemProps = {
 const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const username = useSelector((state: any) => state.user.username);
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
-  const isWaitComplete = useSelector((state: any) => state.ui.isWaitComplete)
+  const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete)
   const [editMode, setEditMode] = useState(false);
   const [copied, setCopied] = useState(false);
 

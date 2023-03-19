@@ -7,7 +7,7 @@ import SendIcon from "@/components/SVG/SendIcon";
 import { v4 as uuidv4 } from 'uuid';
 
 const InputArea = () => {
-  const isWaitComplete = useSelector((state: any) => state.ui.isWaitComplete);
+  const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete);
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const session = useSelector((state: any) => state.session.session);
   const username = useSelector((state: any) => state.user.username);
@@ -59,7 +59,7 @@ const InputArea = () => {
             const lines = dataString.split('\n\n').filter((line) => line !== '').map((line) => line.trim().replace('data: ', ''));
             for (const line of lines) {
               if (line === "[DONE]") {
-                setIsWaitComplete(false)
+                dispatch(setIsWaitComplete(false))
                 console.log('[DONE]')
               } else {
                 try {
