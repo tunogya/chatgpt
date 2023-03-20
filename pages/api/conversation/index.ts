@@ -138,14 +138,40 @@ export default async function handler(
       }
 
       const full_old_messages = [] as { role: string, content: string }[];
-      // TODO, add odd messages from mapping to array
+      if (parent_message_id !== '00000000-0000-0000-0000-000000000000') {
+        const old_conversation = await ddbDocClient.send(new GetCommand({
+          TableName: 'wizardingpay',
+          Key: {
+            PK: user_id,
+            SK: conversation.id,
+          }
+        }));
+        const old_mapping = old_conversation.Item?.mapping ?? {};
+        const parent_ids = [parent_message_id];
+        let current_parent_id = parent_message_id;
+        while (current_parent_id !== '00000000-0000-0000-0000-000000000000') {
+          current_parent_id = old_mapping[current_parent_id].parent;
+          if (current_parent_id !== '00000000-0000-0000-0000-000000000000') {
+            parent_ids.push(current_parent_id);
+          } else {
+            break;
+          }
+        }
+        parent_ids.reverse().forEach((parent_id) => {
+          const parent_message = old_mapping[parent_id].message;
+          console.log("parent_message", parent_message)
+          full_old_messages.push({
+            role: parent_message.role,
+            content: parent_message.content.parts[0],
+          })
+        })
+      }
       // put current messages to full_messages
       full_old_messages.push(...messages.map((message: any) => ({
           role: message.role,
           content: message.content.parts[0],
         })
       ))
-
       try {
         const result = await fetch('https://api.openai.com/v1/chat/completions', {
           headers: {
