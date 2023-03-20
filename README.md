@@ -26,12 +26,11 @@ A replica of a chatbot application powered by GPT-3.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about this project, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- [OpenAI API](https://beta.openai.com/docs/api-reference/introduction) - learn about OpenAI API.
+- [DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) - learn about DynamoDB.
 
 ## Deployments
 
@@ -39,5 +38,7 @@ You can deploy this project by PM2. Vercel is not supported because of the Serve
 
 ```bash
 npm install -g pm2
-pm2 start npm --name "chatgpt" -- start
+npm install
+npm run build
+pm2 start ecosystem.config.js
 ```
