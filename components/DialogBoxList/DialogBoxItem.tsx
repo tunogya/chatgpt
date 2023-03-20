@@ -183,7 +183,7 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
 
   const children = useMemo(() => {
     // filter used to remove the current id from the children list, so that the current id is not rendered twice
-    return session.mapping?.[id]?.children?.filter((c_id: string) => c_id !== id)?.map((id: string) => (
+    return session?.mapping?.[id]?.children?.filter((c_id: string) => c_id !== id)?.map((id: string) => (
       <DialogBoxItem key={id} id={id}/>
     )) || []
   }, [session, id])
@@ -192,6 +192,7 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
     if (children.length === 0) {
       dispatch(updateLastMessageId(id))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children, id])
 
   return (

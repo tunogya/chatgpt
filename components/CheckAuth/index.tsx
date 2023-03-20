@@ -41,6 +41,7 @@ const CheckAuth = () => {
         query: {...router.query}
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken])
 
   useEffect(() => {

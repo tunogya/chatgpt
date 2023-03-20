@@ -73,7 +73,7 @@ const DialogBoxListContent = () => {
       check_point = session.mapping[check_point].parent
     }
     return check_point
-  }, [session.mapping])
+  }, [session])
 
   return (
     <div className={"w-full"}>
