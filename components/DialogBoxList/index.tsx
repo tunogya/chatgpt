@@ -21,7 +21,7 @@ const DialogBoxListContent = () => {
   // get current conversation history
   const getHistoryMessageOfSession = useCallback(async () => {
     const conversation_id = router.query.id?.[0];
-    if (!conversation_id || isWaitHistory) {
+    if (!conversation_id) {
       return
     }
     dispatch(setIsWaitHistory(true));
@@ -44,6 +44,7 @@ const DialogBoxListContent = () => {
       create_time: new Date(res.created * 1000).toLocaleString(),
     }))
     dispatch(setIsWaitHistory(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router])
 
   useEffect(() => {
