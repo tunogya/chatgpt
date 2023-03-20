@@ -42,7 +42,7 @@ export const index = createSlice({
         }
       },
     },
-    lastMessageId: null,
+    lastMessageId: "00000000-0000-0000-0000-000000000000",
     // isWaitComplete is used to indicate whether the answer wait is complete
     isWaitComplete: false,
     // isWaitHistory is used to indicate whether the history wait is complete
@@ -109,7 +109,7 @@ export const index = createSlice({
     updateMessageInSession: (state, action: {
       payload: {
         message: Message,
-        parent: string | null,
+        parent: string,
       }
     }) => {
       const {message, parent} = action.payload
@@ -131,7 +131,16 @@ export const index = createSlice({
           },
         }
       }
-      if (parent) {
+      if (parent === '00000000-0000-0000-0000-000000000000') {
+        if (!state.session.mapping['00000000-0000-0000-0000-000000000000']) {
+          state.session.mapping['00000000-0000-0000-0000-000000000000'] = {
+            id: '00000000-0000-0000-0000-000000000000',
+            message: null,
+            parent: null,
+            children: [message.id]
+          }
+        }
+      } else {
         if (!state.session.mapping[parent].children) {
           state.session.mapping[parent].children = []
         }
@@ -151,7 +160,7 @@ export const index = createSlice({
         create_time: "",
         mapping: {},
       }
-      state.lastMessageId = null
+      state.lastMessageId = "00000000-0000-0000-0000-000000000000"
       state.isWaitComplete = false
       state.isWaitHistory = false
     },

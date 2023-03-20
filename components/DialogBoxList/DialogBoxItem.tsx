@@ -28,7 +28,7 @@ export type Message = {
 
 export type BaseDialogBoxItemProps = {
   id: string,
-  message: Message,
+  message: Message | null,
 }
 
 const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
@@ -40,6 +40,10 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const showStreaming = useMemo(() => {
     return lastMessageId === props.id && isWaitComplete
   }, [lastMessageId, props.id, isWaitComplete])
+
+  if (props.message === null) {
+    return <></>
+  }
 
   if (props.message.role === 'user') {
     return (

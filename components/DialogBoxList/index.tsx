@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setIsWaitHistory, setSession} from "@/store/session";
 import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
@@ -57,11 +57,13 @@ const DialogBoxListContent = () => {
   }, [session.messages]);
 
   const rootMessageId = useMemo(() => {
-    // return null
-    // 遍历session.mapping，找到parent为null的节点
-    if (!session?.mapping) {
+    if (!session) {
       return null
     }
+    if (session.mapping?.['00000000-0000-0000-0000-000000000000']) {
+      return '00000000-0000-0000-0000-000000000000'
+    }
+    // for those who has no root(00000000-0000-0000-0000-000000000000) message
     const ids = Object?.keys(session.mapping) || []
     if (ids.length === 0) {
       return null

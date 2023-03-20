@@ -108,8 +108,20 @@ export default async function handler(
           }
         }
       }
-
-      if (parent_message_id) {
+      if (parent_message_id === '00000000-0000-0000-0000-000000000000') {
+        conversation = {
+          ...conversation,
+          mapping: {
+            ...conversation.mapping,
+            ["00000000-0000-0000-0000-000000000000"]: {
+              id: "00000000-0000-0000-0000-000000000000",
+              message: null,
+              parent: null,
+              children: [messages[0].id]
+            }
+          }
+        }
+      } else {
         conversation = {
           ...conversation,
           mapping: {
@@ -124,6 +136,7 @@ export default async function handler(
           }
         }
       }
+
       const full_old_messages = [] as { role: string, content: string }[];
       // TODO, add odd messages from mapping to array
       // put current messages to full_messages
