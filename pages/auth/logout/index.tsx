@@ -1,20 +1,28 @@
-import {useEffect} from "react";
+import {useCallback, useEffect} from "react";
 import OpenAIIcon from "@/components/SVG/OpenAIIcon";
 import {useRouter} from "next/router";
+import {useUser} from "@auth0/nextjs-auth0/client";
 
 const Logout = () => {
   const router = useRouter();
+  const {user} = useUser()
 
-  const logout = async () => {
-    await fetch('/api/auth/logout')
-    setTimeout(() => {
-      router.push('/auth/login')
-    }, 1000)
-  }
+  const logout = useCallback(async () => {
+    if (user) {
+      await fetch('/api/auth/logout')
+      setTimeout(() => {
+        router.push('/auth/login')
+      }, 1000)
+    } else {
+      setTimeout(() => {
+        router.push('/auth/login')
+      }, 1000)
+    }
+  }, [router, user])
 
   useEffect(() => {
-    logout
-  }, [])
+    logout()
+  }, [logout])
 
   return (
     <div className="w-full h-full flex justify-center items-center flex-col bg-gray-50 dark:bg-gray-800">
