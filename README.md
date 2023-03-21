@@ -1,10 +1,6 @@
 # ChatGPT
 
-A replica of a chatbot application powered by GPT-3.
-
-- Next.js
-- DynamoDB
-- Auth0
+A free conversational AI system that listens, learns, and challenges. Powered by OpenAI API.
 
 ## Start Wizard
 
@@ -13,7 +9,7 @@ A replica of a chatbot application powered by GPT-3.
    > Set the partition key as PK, the sort key as SK, and the TTL field as TTL.
 
 2. Create an OpenAI API key.
-3. Create an Auth0 account. 
+3. Create an Auth0 account.
 4. Clone or download the project. 
 5. Install the dependencies by running `npm install` or `yarn install`. 
 6. Create a `.env` file and edit the environment variables. 
