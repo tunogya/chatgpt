@@ -6,21 +6,15 @@
 import React from 'react';
 import {NextPage} from 'next';
 import {useRouter} from 'next/router';
-import {Button, Heading, Stack} from '@chakra-ui/react';
 
 const Error: NextPage = () => {
   const router = useRouter();
   return (
-    <Stack
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      h="100vh"
-    >
-      <Heading>404</Heading>
-      <Heading>Page not found</Heading>
-      <Button onClick={() => router.push('/')}>Go to home</Button>
-    </Stack>
+    <div className={''}>
+      <h1>404</h1>
+      <h2>Page not found</h2>
+      <button onClick={() => router.push('/')}>Go to home</button>
+    </div>
   );
 };
 

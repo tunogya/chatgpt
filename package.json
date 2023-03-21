@@ -9,13 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^2.3.1",
     "@aws-sdk/lib-dynamodb": "^3.267.0",
-    "@chakra-ui/icons": "^2.0.17",
-    "@chakra-ui/react": "^2.4.6",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fortaine/openai": "^5.3.1",
-    "@next/font": "13.1.6",
     "@reduxjs/toolkit": "^1.9.2",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
@@ -27,7 +25,6 @@
     "react": "18.2.0",
     "react-components": "^0.5.1",
     "react-dom": "18.2.0",
-    "react-icons": "^4.7.1",
     "react-markdown": "^8.0.5",
     "react-redux": "^8.0.5",
     "react-scroll-to-bottom": "^4.2.0",

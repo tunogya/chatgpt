@@ -3,26 +3,21 @@
 A replica of a chatbot application powered by GPT-3.
 
 - Next.js
-- Tailwind CSS
 - DynamoDB
+- Auth0
 
 ## Start Wizard
 
-1. Create a DynamoDB table and set the partition key as PK, the sort key as SK, and the TTL field as TTL.
-2. Clone or download the project.
-3. Install the dependencies by running `npm install` or `yarn install`.
-4. Create a `.env.local` file and add the following environment variables:
-    
-    ```
-    JWT_SECRET=(required for Auth)
-    MY_AWS_ACCESS_KEY_ID=(required for DB)
-    MY_AWS_SECRET_ACCESS_KEY=(required for DB)
-    SALT=(required for Auth)
-    OPENAI_API_SECRET=(required for OpenAI)
-    BOT_TOKEN=(optional for Telegram login)
-    ```
+1. Create a DynamoDB table. 
    
-5. Run `npm run dev` or `yarn dev` to start the development server.
+   > Set the partition key as PK, the sort key as SK, and the TTL field as TTL.
+
+2. Create an OpenAI API key.
+3. Create an Auth0 account. 
+4. Clone or download the project. 
+5. Install the dependencies by running `npm install` or `yarn install`. 
+6. Create a `.env` file and edit the environment variables. 
+7. Run `npm run dev` or `yarn dev` to start the development server.
 
 ## Learn More
 
@@ -31,6 +26,7 @@ To learn more about this project, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [OpenAI API](https://beta.openai.com/docs/api-reference/introduction) - learn about OpenAI API.
 - [DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) - learn about DynamoDB.
+- [Auth0](https://auth0.com/docs) - learn about Auth0.
 
 ## Deployments
 
