@@ -36,9 +36,7 @@ export default function App({Component, pageProps}: AppProps) {
             <meta property='og:description'
                   content='A free conversational AI system that listens, learns, and challenges'/>
             <meta property='og:url' content='https://chatgpt.wizardingpay.com'/>
-            <link rel='icon' href='/favicon.ico'/>
             <link rel='icon' href={'/favicon.svg'} type='image/svg+xml'/>
-            <link rel='icon' href={'/favicon.png'} type='image/png'/>
             <link rel='apple-touch-icon' href={'/apple-touch-icon.png'} sizes={'180x180'} type='image/png'/>
             <link rel='mask-icon' href={'favicon.svg'} color='#343541' type='image/svg+xml'/>
             <link href="/fonts/Signifier-Regular.otf" as="font" crossOrigin=""/>
