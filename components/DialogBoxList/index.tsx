@@ -14,6 +14,7 @@ const DialogBoxListContent = () => {
   const session = useSelector((state: any) => state.session.session);
   const dispatch = useDispatch();
   const router = useRouter();
+  const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory);
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
   const conversation_id = router.query.id?.[0] || undefined;
@@ -67,7 +68,7 @@ const DialogBoxListContent = () => {
     <div className={"w-full"}>
       <div className="flex flex-col items-center text-sm dark:bg-gray-800">
         {
-          false ? (
+          isWaitHistory ? (
             <div className="flex flex-col items-center text-sm dark:bg-gray-800">
               <LoadingIcon/>
               <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
