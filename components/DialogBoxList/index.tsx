@@ -12,7 +12,6 @@ import useSWR from "swr";
 const DialogBoxListContent = () => {
   const bottomRef = useRef(null);
   const session = useSelector((state: any) => state.session.session);
-  const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory);
   const dispatch = useDispatch();
   const router = useRouter();
   const scrollToBottom = useScrollToBottom();
@@ -68,7 +67,7 @@ const DialogBoxListContent = () => {
     <div className={"w-full"}>
       <div className="flex flex-col items-center text-sm dark:bg-gray-800">
         {
-          isWaitHistory ? (
+          false ? (
             <div className="flex flex-col items-center text-sm dark:bg-gray-800">
               <LoadingIcon/>
               <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
