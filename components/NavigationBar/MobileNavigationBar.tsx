@@ -23,7 +23,7 @@ const MobileNavigationBar = () => {
       <button type="button" className="px-3"
               onClick={async () => {
                 dispatch(clearSession());
-                await router.push({
+                router.push({
                   pathname: `/chat`,
                 })
               }}>

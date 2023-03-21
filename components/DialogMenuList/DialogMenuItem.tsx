@@ -32,7 +32,7 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
       dispatch(deleteConversationById(props.id))
       if (router.query.id?.[0] === props.id.split('#').pop()) {
         dispatch(clearSession());
-        await router.push({
+        router.push({
           pathname: `/chat`,
         })
       }

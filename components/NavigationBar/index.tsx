@@ -6,7 +6,7 @@ import DialogMenuList from "@/components/DialogMenuList";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import {clearSession, setConversation} from "@/store/session";
+import {clearSession} from "@/store/session";
 import RightIcon from "@/components/SVG/RightIcon";
 
 const NavigationBar = () => {
@@ -56,7 +56,6 @@ const NavigationBar = () => {
     if (!response.ok) {
       return
     }
-    await getConversationHistory()
     dispatch(clearSession())
     setDeleteConfirm(false);
     await router.push({
@@ -64,25 +63,14 @@ const NavigationBar = () => {
     })
   }
 
-  const getConversationHistory = async () => {
-    const response = await fetch('/api/conversation', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await response.json();
-    dispatch(setConversation(data.items || []));
-  }
-
   return (
     <div className={'scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20'}>
       <nav className="flex h-full flex-1 flex-col space-y-1 p-2">
         <a className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
             duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 border border-white/20"
-           onClick={async () => {
+           onClick={() => {
              dispatch(clearSession());
-             await router.push({
+             router.push({
                pathname: `/chat`,
              })
            }}
