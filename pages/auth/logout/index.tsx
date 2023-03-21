@@ -5,13 +5,15 @@ import {useRouter} from "next/router";
 const Logout = () => {
   const router = useRouter();
 
+  const logout = async () => {
+    await fetch('/api/auth/logout')
+    setTimeout(() => {
+      router.push('/auth/login')
+    }, 1000)
+  }
+
   useEffect(() => {
-    fetch('/api/auth/logout')
-      .then(() => {
-        setTimeout(() => {
-          router.push('/auth/login')
-        }, 1000)
-      })
+    logout
   }, [])
 
   return (
