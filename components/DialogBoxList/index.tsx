@@ -1,12 +1,13 @@
 import {useCallback, useEffect, useMemo, useRef} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setIsWaitHistory, setSession} from "@/store/session";
+import {setSession} from "@/store/session";
 import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
 import {useRouter} from "next/router";
 import Placeholder from "@/components/DialogBoxList/PlaceHoder";
 import DownIcon from "@/components/SVG/DownIcon";
 import ScrollToBottom, {useScrollToBottom, useSticky} from "react-scroll-to-bottom";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
+import useSWR from "swr";
 
 const DialogBoxListContent = () => {
   const bottomRef = useRef(null);
@@ -16,38 +17,27 @@ const DialogBoxListContent = () => {
   const router = useRouter();
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
+  const conversation_id = router.query.id?.[0] || undefined;
+  const {data} = useSWR( conversation_id ? `/api/conversation/${conversation_id}` : null, (url: string) => fetch(url).then((res) => res.json()))
 
-  // get current conversation history
-  const getHistoryMessageOfSession = useCallback(async () => {
-    const conversation_id = router.query.id?.[0];
-    if (!conversation_id) {
-      return
+  const updateSession = useCallback(async () => {
+    if (data) {
+      dispatch(setSession({
+        // @ts-ignore
+        id: data.SK,
+        // @ts-ignore
+        title: data.title,
+        // @ts-ignore
+        mapping: data.mapping,
+        // @ts-ignore
+        create_time: new Date(data.created * 1000).toLocaleString(),
+      }))
     }
-    dispatch(setIsWaitHistory(true));
-    let res = await fetch(`/api/conversation/${conversation_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    res = await res.json()
-    dispatch(setSession({
-      // @ts-ignore
-      id: res.SK,
-      // @ts-ignore
-      title: res.title,
-      // @ts-ignore
-      mapping: res.mapping,
-      // @ts-ignore
-      create_time: new Date(res.created * 1000).toLocaleString(),
-    }))
-    dispatch(setIsWaitHistory(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router])
+  }, [data])
 
   useEffect(() => {
-    getHistoryMessageOfSession()
-  }, [getHistoryMessageOfSession])
+    updateSession()
+  }, [updateSession])
 
   // scroll to bottom when new message
   useEffect(() => {
