@@ -53,19 +53,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         <div
           className="text-base gap-4 md:gap-6 m-auto md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0">
           <div className="w-[30px] flex flex-col relative items-end">
-            <div className="relative flex">
-              <span>
-                {
-                  user?.picture ? (
-                    <img className={"h-[30px] w-[30px] rounded-sm"} src={user?.picture} alt={user?.name || ''}/>
-                  ) : (
-                    <div className={"relative h-[30px] w-[30px] p-1 rounded-sm text-white bg-gray-600 flex items-center justify-center"}>
-                      {user?.name?.slice(0, 1).toUpperCase()}
-                    </div>
-                  )
-                }
-              </span>
-            </div>
+            <img className="relative h-[30px] w-[30px] rounded-sm text-white flex items-center justify-center"
+                 src={user?.picture || ''} alt={user?.name || ''}/>
           </div>
           <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
             {

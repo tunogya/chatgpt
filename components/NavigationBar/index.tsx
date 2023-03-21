@@ -115,7 +115,7 @@ const NavigationBar = () => {
               duration-200 text-white cursor-pointer text-sm"
           onClick={async () => {
             dispatch(clearSession());
-            await router.push('/api/auth/logout')
+            await router.push('/auth/logout')
           }}
         >
           <LogoutIcon/>
