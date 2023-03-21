@@ -20,7 +20,7 @@ const Logout = () => {
         <div className="mb-5 w-[30px] h-[30px]">
           <OpenAIIcon/>
         </div>
-        <div className="mb-2 text-center">正在注销您的账户</div>
+        <div className="mb-2 text-center">正在注销您的账户...</div>
       </div>
     </div>
   )
