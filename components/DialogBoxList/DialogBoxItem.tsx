@@ -11,6 +11,7 @@ import {atomDark} from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from 'rehype-katex';
+import {useUser} from "@auth0/nextjs-auth0/client";
 
 export type Message = {
   id: string
@@ -32,7 +33,7 @@ export type BaseDialogBoxItemProps = {
 }
 
 const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
-  const username = useSelector((state: any) => state.user.username);
+  const {user} = useUser();
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete)
   const [editMode, setEditMode] = useState(false);
@@ -54,9 +55,15 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
           <div className="w-[30px] flex flex-col relative items-end">
             <div className="relative flex">
               <span>
-                <div className={"relative h-[30px] w-[30px] p-1 rounded-sm text-white bg-gray-600 flex items-center justify-center"}>
-                  {username.slice(0, 1).toUpperCase()}
-                </div>
+                {
+                  user?.picture ? (
+                    <img className={"h-[30px] w-[30px] rounded-sm"} src={user?.picture} alt={user?.name || ''}/>
+                  ) : (
+                    <div className={"relative h-[30px] w-[30px] p-1 rounded-sm text-white bg-gray-600 flex items-center justify-center"}>
+                      {user?.name?.slice(0, 1).toUpperCase()}
+                    </div>
+                  )
+                }
               </span>
             </div>
           </div>

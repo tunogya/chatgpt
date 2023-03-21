@@ -10,7 +10,6 @@ import LoadingIcon from "@/components/SVG/LoadingIcon";
 
 const DialogBoxListContent = () => {
   const bottomRef = useRef(null);
-  const accessToken = useSelector((state: any) => state.user.accessToken);
   const session = useSelector((state: any) => state.session.session);
   const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory);
   const dispatch = useDispatch();
@@ -29,7 +28,6 @@ const DialogBoxListContent = () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
       },
     })
     res = await res.json()
@@ -65,7 +63,7 @@ const DialogBoxListContent = () => {
       return '00000000-0000-0000-0000-000000000000'
     }
     // for those who has no root(00000000-0000-0000-0000-000000000000) message
-    const ids = Object?.keys(session.mapping) || []
+    const ids = Object?.keys(session?.mapping || {}) || []
     if (ids.length === 0) {
       return null
     }
@@ -82,7 +80,7 @@ const DialogBoxListContent = () => {
         {
           isWaitHistory ? (
             <div className="flex flex-col items-center text-sm dark:bg-gray-800">
-              <LoadingIcon />
+              <LoadingIcon/>
               <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
             </div>
           ) : (

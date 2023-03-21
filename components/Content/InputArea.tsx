@@ -3,13 +3,13 @@ import {updateMessageInSession, Message, updateSession, updateLastMessageId, set
 import {useEffect, useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
 import { v4 as uuidv4 } from 'uuid';
+import {useUser} from "@auth0/nextjs-auth0/client";
 
 const InputArea = () => {
+  const {user} = useUser();
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete);
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const session = useSelector((state: any) => state.session.session);
-  const accessToken = useSelector((state: any) => state.user.accessToken);
-  const username = useSelector((state: any) => state.user.username);
   const [input, setInput] = useState('');
   const dispatch = useDispatch();
 
@@ -24,7 +24,6 @@ const InputArea = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           conversation_id: session.id,
@@ -140,7 +139,7 @@ const InputArea = () => {
                   id: message_id,
                   author: {
                     role: 'user',
-                    name: username,
+                    name: user?.name || '',
                   },
                   role: 'user',
                   content: {

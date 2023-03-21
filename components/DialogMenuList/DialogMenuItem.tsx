@@ -2,7 +2,7 @@ import ConversationIcon from "@/components/SVG/ConversationIcon";
 import {FC, useMemo, useState} from "react";
 import RightIcon from "@/components/SVG/RightIcon";
 import CloseIcon from "@/components/SVG/CloseIcon";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useRouter} from "next/router";
 import {clearSession, deleteConversationById, updateConversationById} from "@/store/session";
 import DeleteIcon from "@/components/SVG/DeleteIcon";
@@ -17,7 +17,6 @@ export type ConversationItemProps = {
 const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [updateConfirm, setUpdateConfirm] = useState(false);
-  const accessToken = useSelector((state: any) => state.user.accessToken);
   const [title, setTitle] = useState(props.title);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -28,7 +27,6 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
         }
       })
       dispatch(deleteConversationById(props.id))
@@ -52,7 +50,6 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           title: title,

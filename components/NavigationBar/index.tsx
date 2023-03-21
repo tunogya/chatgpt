@@ -6,14 +6,12 @@ import DialogMenuList from "@/components/DialogMenuList";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import {logout} from "@/store/user";
 import {clearSession, setConversation} from "@/store/session";
 import RightIcon from "@/components/SVG/RightIcon";
 
 const NavigationBar = () => {
   const router = useRouter()
   const dispatch = useDispatch();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
   const conversation = useSelector((state: any) => state.session.conversation);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [colorMode, setColorMode] = useState('light');
@@ -49,7 +47,6 @@ const NavigationBar = () => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           ids: conversation.map((c: any) => c.id),
@@ -72,7 +69,6 @@ const NavigationBar = () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
       },
     });
     const data = await response.json();
@@ -118,9 +114,8 @@ const NavigationBar = () => {
           className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
               duration-200 text-white cursor-pointer text-sm"
           onClick={async () => {
-            await dispatch(logout())
             dispatch(clearSession());
-            await router.push('/auth/login')
+            await router.push('/api/auth/logout')
           }}
         >
           <LogoutIcon/>

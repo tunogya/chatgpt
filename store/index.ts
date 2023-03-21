@@ -1,5 +1,4 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
-import userReducer from './user'
 import sessionReducer from './session'
 import uiReducer from './ui'
 import storage from 'redux-persist/lib/storage'
@@ -9,12 +8,11 @@ import thunk from 'redux-thunk';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user']
+  whitelist: ['ui'],
 };
 
 const reducers = combineReducers({
   ui: uiReducer,
-  user: userReducer,
   session: sessionReducer,
 });
 
