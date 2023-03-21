@@ -1,6 +1,7 @@
 import Content from "@/components/Content";
 import MobileSideBar from "@/components/NavigationBar/MobileSideBar";
 import PCNavigation from "@/components/NavigationBar/PCNavigation";
+import WithPageAuthRequired from "@auth0/nextjs-auth0/src/client/with-page-auth-required";
 
 const Chat = () => {
   return (
@@ -14,4 +15,4 @@ const Chat = () => {
   )
 }
 
-export default Chat
+export default WithPageAuthRequired(Chat);
