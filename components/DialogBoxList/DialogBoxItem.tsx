@@ -6,14 +6,12 @@ import UnLikeIcon from "@/components/SVG/UnLikeIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {updateLastMessageId} from "@/store/session";
 import ReactMarkdown from "react-markdown";
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
-import {atomDark} from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from 'rehype-katex';
 import {useUser} from "@auth0/nextjs-auth0/client";
 import Image from 'next/image'
-import CopyIcon from "@/components/SVG/CopyIcon";
+import CodeFormat from "@/components/DialogBoxList/CodeFormat";
 
 export type Message = {
   id: string
@@ -126,39 +124,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[rehypeKatex]}
                 components={{
-                  code({node, inline, className, children, ...props}) {
-                    const match = /language-(\w+)/.exec(className || '')
-                    return !inline && match ? (
-                      // @ts-ignore
-                      <SyntaxHighlighter
-                        // @ts-ignore
-                        style={atomDark}
-                        language={match[1]}
-                        PreTag="div"
-                        {...props}
-                      >
-                        {String(children).replace(/\n$/, '')}
-                      </SyntaxHighlighter>
-                    ) : (
-                      <div className={'bg-black rounded-md mb-4'}>
-                        <div
-                          className="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md">
-                          <span>{match?.[1]}</span>
-                          <button className="flex ml-auto gap-2" onClick={() => {
-                            // copy children to clipboard
-
-                          }}>
-                            <CopyIcon/>
-                            Copy code
-                          </button>
-                        </div>
-                        <div className={'p-4 overflow-y-auto'}>
-                          <code className={className} {...props}>
-                            {children}
-                          </code>
-                        </div>
-                      </div>
-                    )
+                  code({...props}) {
+                    return <CodeFormat {...props} />
                   }
                 }}
                 className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
