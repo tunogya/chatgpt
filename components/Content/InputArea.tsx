@@ -1,5 +1,12 @@
 import {useDispatch, useSelector} from "react-redux";
-import {updateMessageInSession, Message, updateSession, updateLastMessageId, setIsWaitComplete} from "@/store/session";
+import {
+  updateMessageInSession,
+  Message,
+  updateSession,
+  updateLastMessageId,
+  setIsWaitComplete,
+  setConversation
+} from "@/store/session";
 import {useEffect, useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
 import { v4 as uuidv4 } from 'uuid';
@@ -12,6 +19,17 @@ const InputArea = () => {
   const session = useSelector((state: any) => state.session.session);
   const [input, setInput] = useState('');
   const dispatch = useDispatch();
+
+  const getConversationHistory = async () => {
+    const response = await fetch('/api/conversation', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    dispatch(setConversation(data.items || []));
+  }
 
   const complete = async (message: Message, parent: string) => {
     dispatch(setIsWaitComplete(true))
@@ -103,6 +121,7 @@ const InputArea = () => {
       dispatch(setIsWaitComplete(false))
       console.log(e)
     }
+    await getConversationHistory();
   }
 
   const [second, setSecond] = useState(0);
