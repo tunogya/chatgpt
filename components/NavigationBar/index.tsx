@@ -6,7 +6,7 @@ import DialogMenuList from "@/components/DialogMenuList";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import {clearSession} from "@/store/session";
+import {clearSession, setConversation} from "@/store/session";
 import RightIcon from "@/components/SVG/RightIcon";
 
 const NavigationBar = () => {
@@ -43,7 +43,7 @@ const NavigationBar = () => {
       setDeleteConfirm(true);
       return
     }
-    const response = await fetch('/api/conversation', {
+    await fetch('/api/conversation', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -53,14 +53,23 @@ const NavigationBar = () => {
         })
       }
     );
-    if (!response.ok) {
-      return
-    }
-    dispatch(clearSession())
     setDeleteConfirm(false);
+    dispatch(clearSession())
+    await getConversationHistory()
     await router.push({
       pathname: `/chat`,
     })
+  }
+
+  const getConversationHistory = async () => {
+    const response = await fetch('/api/conversation', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    dispatch(setConversation(data.items || []));
   }
 
   return (
