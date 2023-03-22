@@ -10,13 +10,6 @@ const nextConfig = {
     MY_AWS_ACCESS_KEY_ID: process.env.MY_AWS_ACCESS_KEY_ID,
     MY_AWS_SECRET_ACCESS_KEY: process.env.MY_AWS_SECRET_ACCESS_KEY,
     OPENAI_API_SECRET: process.env.OPENAI_API_SECRET
-  },
-  images: {
-    remotePatterns: [
-      {
-        hostname: 's.gravatar.com'
-      }
-    ]
   }
 }
 
