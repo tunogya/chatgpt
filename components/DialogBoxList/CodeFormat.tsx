@@ -19,34 +19,32 @@ const CodeFormat: FC<CodeProps> = ({className, inline, children, ...props}) => {
 
   if (!inline) {
     return (
-      <pre>
-        <div className={'bg-black rounded-md mb-4'}>
+      <div className={'bg-black rounded-md mb-4'}>
         <div
           className="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md">
-        <span>{match?.[1]}</span>
-        <button className="flex ml-auto gap-2" onClick={() => {
-          // copy children to clipboard
-          copy(String(children))
-          setCopied(true)
-          setTimeout(() => {
-            setCopied(false)
-          }, 1_000)
-        }}>
-          {
-            copied ? (
-              <RightIcon/>
-            ) : (
-              <CopyIcon/>
-            )
-          }
-          {copied ? 'Copied' : 'Copy code'}
-        </button>
-      </div>
+          <span>{match?.[1]}</span>
+          <button className="flex ml-auto gap-2" onClick={() => {
+            // copy children to clipboard
+            copy(String(children))
+            setCopied(true)
+            setTimeout(() => {
+              setCopied(false)
+            }, 1_000)
+          }}>
+            {
+              copied ? (
+                <RightIcon/>
+              ) : (
+                <CopyIcon/>
+              )
+            }
+            {copied ? 'Copied' : 'Copy code'}
+          </button>
+        </div>
         <div className={'p-4 overflow-y-auto'}>
-          <code className={className} {...props} ref={ref}/>
+          <code className={`!whitespace-pre hljs ${className}`} {...props} ref={ref}/>
         </div>
       </div>
-      </pre>
     )
   } else {
     return (
