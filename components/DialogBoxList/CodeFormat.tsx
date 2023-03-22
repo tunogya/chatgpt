@@ -17,9 +17,10 @@ const CodeFormat: FC<CodeProps> = ({className, inline, children, ...props}) => {
     }
   }, [ref, children])
 
-  return (
-    <pre>
-      <div className={'bg-black rounded-md mb-4'}>
+  if (!inline) {
+    return (
+      <pre>
+        <div className={'bg-black rounded-md mb-4'}>
         <div
           className="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md">
         <span>{match?.[1]}</span>
@@ -42,13 +43,18 @@ const CodeFormat: FC<CodeProps> = ({className, inline, children, ...props}) => {
         </button>
       </div>
         <div className={'p-4 overflow-y-auto'}>
-          <div className={'p-4 overflow-y-auto'}>
           <code className={className} {...props} ref={ref}/>
-          </div>
         </div>
       </div>
-    </pre>
-  )
+      </pre>
+    )
+  } else {
+    return (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    )
+  }
 }
 
 export default CodeFormat
