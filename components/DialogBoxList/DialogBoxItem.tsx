@@ -13,6 +13,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from 'rehype-katex';
 import {useUser} from "@auth0/nextjs-auth0/client";
 import Image from 'next/image'
+import CopyIcon from "@/components/SVG/CopyIcon";
 
 export type Message = {
   id: string
@@ -139,9 +140,24 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                         {String(children).replace(/\n$/, '')}
                       </SyntaxHighlighter>
                     ) : (
-                      <code className={className} {...props}>
-                        {children}
-                      </code>
+                      <div className={'bg-black rounded-md mb-4'}>
+                        <div
+                          className="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md">
+                          <span>{match?.[1]}</span>
+                          <button className="flex ml-auto gap-2" onClick={() => {
+                            // copy children to clipboard
+
+                          }}>
+                            <CopyIcon/>
+                            Copy code
+                          </button>
+                        </div>
+                        <div className={'p-4 overflow-y-auto'}>
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        </div>
+                      </div>
                     )
                   }
                 }}
