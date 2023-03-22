@@ -12,6 +12,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from 'rehype-katex';
 import {useUser} from "@auth0/nextjs-auth0/client";
+import Image from 'next/image'
 
 export type Message = {
   id: string
@@ -53,8 +54,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         <div
           className="text-base gap-4 md:gap-6 m-auto md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0">
           <div className="w-[30px] flex flex-col relative items-end">
-            <img className="relative h-[30px] w-[30px] rounded-sm text-white flex items-center justify-center"
-                 src={user?.picture || ''} alt={user?.name || ''}/>
+            <Image src={user?.picture || ''} alt={user?.name || ''} width={30} height={30}
+                   className="relative rounded-sm text-white flex items-center justify-center"/>
           </div>
           <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
             {
