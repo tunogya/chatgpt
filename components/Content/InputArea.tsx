@@ -11,13 +11,14 @@ import {useEffect, useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
 import { v4 as uuidv4 } from 'uuid';
 import {useUser} from "@auth0/nextjs-auth0/client";
+import {setInput} from "@/store/ui";
 
 const InputArea = () => {
   const {user} = useUser();
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete);
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const session = useSelector((state: any) => state.session.session);
-  const [input, setInput] = useState('');
+  const input = useSelector((state: any) => state.ui.input);
   const dispatch = useDispatch();
 
   const getConversationHistory = async () => {
@@ -144,7 +145,7 @@ const InputArea = () => {
                           onChange={(e) => {
                             e.target.style.height = 'auto';
                             e.target.style.height = e.target.scrollHeight + 'px';
-                            setInput(e.target.value)
+                            dispatch(setInput(e.target.value));
                           }} value={input}
                           className="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent md:pl-0"></textarea>
             <button
@@ -167,7 +168,7 @@ const InputArea = () => {
                   },
                 }
                 dispatch(updateLastMessageId(message_id));
-                setInput('');
+                dispatch(setInput(''));
                 await complete(message, message_id);
               }}>
               {

@@ -1,4 +1,9 @@
+import {useDispatch} from "react-redux";
+import {setInput} from "@/store/ui";
+
 const Placeholder = () => {
+  const dispatch = useDispatch()
+
   return (
     <div className="flex flex-col items-center text-sm dark:bg-gray-800">
       <div
@@ -27,16 +32,28 @@ const Placeholder = () => {
             </h2>
             <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
               <button
-                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">
-                用简单的术语解释量子计算
+                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
+                onClick={() => {
+                  dispatch(setInput('用简单的术语解释量子计算'))
+                }}
+              >
+                用简单的术语解释量子计算 →
               </button>
               <button
-                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">
-                对 10 岁生日有什么创意吗?
+                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
+                onClick={() => {
+                  dispatch(setInput('对 10 岁生日有什么创意吗?'))
+                }}
+              >
+                对 10 岁生日有什么创意吗? →
               </button>
               <button
-                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">
-                如何在 Javascript 中发出 HTTP 请求？
+                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
+                onClick={() => {
+                  dispatch(setInput('如何在 Javascript 中发出 HTTP 请求？'))
+                }}
+              >
+                如何在 Javascript 中发出 HTTP 请求？→
               </button>
             </ul>
           </div>
