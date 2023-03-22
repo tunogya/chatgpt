@@ -19,7 +19,7 @@ const MobileNavigationBar = () => {
         <span className="sr-only">打开侧边栏</span>
         <MenuIcon/>
       </button>
-      <h1 className="flex-1 text-center text-base font-normal">{isWaitHistory ? '...' : session?.title}</h1>
+      <h1 className="flex-1 text-center text-base font-normal">{isWaitHistory ? '...' : session?.title?.slice(0, 10)}</h1>
       <button type="button" className="px-3"
               onClick={async () => {
                 dispatch(clearSession());
