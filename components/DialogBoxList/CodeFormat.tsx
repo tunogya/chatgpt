@@ -1,18 +1,27 @@
 import CopyIcon from "@/components/SVG/CopyIcon";
-import {FC, useState} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import {CodeProps} from "react-markdown/lib/ast-to-react";
 import copy from 'copy-to-clipboard';
 import RightIcon from "@/components/SVG/RightIcon";
+import hljs from 'highlight.js';
 
 const CodeFormat: FC<CodeProps> = ({className, inline, children, ...props}) => {
   const match = /language-(\w+)/.exec(className || '')
   const [copied, setCopied] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (ref.current && children) {
+      // @ts-ignore
+      ref.current.innerHTML = hljs.highlightAuto(String(children)).value
+    }
+  }, [ref, children])
 
   return (
     <pre>
       <div className={'bg-black rounded-md mb-4'}>
-      <div
-        className="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md">
+        <div
+          className="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md">
         <span>{match?.[1]}</span>
         <button className="flex ml-auto gap-2" onClick={() => {
           // copy children to clipboard
@@ -32,14 +41,12 @@ const CodeFormat: FC<CodeProps> = ({className, inline, children, ...props}) => {
           {copied ? 'Copied' : 'Copy code'}
         </button>
       </div>
-      <div className={'p-4 overflow-y-auto'}>
         <div className={'p-4 overflow-y-auto'}>
-          <code className={className} {...props}>
-            {children}
-          </code>
+          <div className={'p-4 overflow-y-auto'}>
+          <code className={className} {...props} ref={ref}/>
+          </div>
         </div>
       </div>
-    </div>
     </pre>
   )
 }
