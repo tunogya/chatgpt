@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useRef} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setSession} from "@/store/session";
+import {setIsWaitHistory, setSession} from "@/store/session";
 import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
 import {useRouter} from "next/router";
 import Placeholder from "@/components/DialogBoxList/PlaceHoder";
@@ -18,7 +18,7 @@ const DialogBoxListContent = () => {
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
   const conversation_id = router.query.id?.[0] || undefined;
-  const {data} = useSWR( conversation_id ? `/api/conversation/${conversation_id}` : null, (url: string) => fetch(url).then((res) => res.json()))
+  const {data, isLoading} = useSWR( conversation_id ? `/api/conversation/${conversation_id}` : null, (url: string) => fetch(url).then((res) => res.json()))
 
   const updateSession = useCallback(async () => {
     if (data) {
@@ -33,7 +33,8 @@ const DialogBoxListContent = () => {
         create_time: new Date(data.created * 1000).toLocaleString(),
       }))
     }
-  }, [data])
+    dispatch(setIsWaitHistory(isLoading))
+  }, [data, isLoading])
 
   useEffect(() => {
     updateSession()
