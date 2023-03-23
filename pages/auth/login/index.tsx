@@ -13,8 +13,8 @@ const Login = () => {
               fill="currentColor"></path>
           </svg>
         </div>
-        <div className="mb-2 text-center">欢迎使用 ChatGPT</div>
-        <div className="mb-4 text-center">登陆你的 WizardingPay 账户以继续使用</div>
+        <div className="mb-2 text-center">abandon.chat</div>
+        <div className="mb-4 text-center italic">&quot;世上无难事，只要 abandon&quot;</div>
         <div className="flex flex-row gap-3">
           <button className="btn relative btn-primary" onClick={() => {
             router.push('/api/auth/login')

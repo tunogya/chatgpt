@@ -10,7 +10,7 @@ export default function App({Component, pageProps}: AppProps) {
   return (
     <Provider store={store}>
       <Head>
-        <title>ChatGPT</title>
+        <title>abandon.chat</title>
         <meta
           name='description'
           content='A free conversational AI system that listens, learns, and challenges'
@@ -20,12 +20,12 @@ export default function App({Component, pageProps}: AppProps) {
         <meta name={'apple-mobile-web-app-capable'} content={'yes'}/>
         <meta name={'mobile-web-app-capable'} content={'yes'}/>
         <meta name={'apple-mobile-web-app-status-bar-style'} content={'black'}/>
-        <meta name={'apple-mobile-web-app-title'} content={'ChatGPT'}/>
+        <meta name={'apple-mobile-web-app-title'} content={'abandon.chat'}/>
         <meta name={'format-detection'} content={'telephone=no'}/>
         <meta name={'format-detection'} content={'email=no'}/>
         <meta name='theme-color' content='#343541'/>
         <meta property='og:image' content='/apple-touch-icon.png'/>
-        <meta property='og:title' content='ChatGPT'/>
+        <meta property='og:title' content='abandon.chat'/>
         <meta property='og:description'
               content='A free conversational AI system that listens, learns, and challenges'/>
         <meta property='og:url' content='https://www.abandon.chat'/>
