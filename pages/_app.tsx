@@ -28,7 +28,7 @@ export default function App({Component, pageProps}: AppProps) {
         <meta property='og:title' content='ChatGPT'/>
         <meta property='og:description'
               content='A free conversational AI system that listens, learns, and challenges'/>
-        <meta property='og:url' content='https://chatgpt.wizardingpay.com'/>
+        <meta property='og:url' content='https://www.abandon.chat'/>
         <link rel='icon' href='/favicon.ico'/>
         <link rel='icon' href={'/favicon.svg'} type='image/svg+xml'/>
         <link rel='icon' href={'/favicon.png'} type='image/png'/>
