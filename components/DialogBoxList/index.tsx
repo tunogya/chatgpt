@@ -7,6 +7,7 @@ import Placeholder from "@/components/DialogBoxList/PlaceHoder";
 import DownIcon from "@/components/SVG/DownIcon";
 import ScrollToBottom, {useScrollToBottom, useSticky} from "react-scroll-to-bottom";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
+import dynamic from 'next/dynamic';
 import useSWR from "swr";
 
 const DialogBoxListContent = () => {
@@ -104,11 +105,13 @@ const DialogBoxListContent = () => {
 const WrapDialogBoxListContent = () => {
   return (
     <div className="flex-1 overflow-hidden">
-      <ScrollToBottom className="h-full w-full dark:bg-gray-800 overflow-y-auto">
+      <ScrollToBottom className="h-full w-full dark:bg-gray-800">
         <DialogBoxListContent/>
       </ScrollToBottom>
     </div>
   )
 }
 
-export default WrapDialogBoxListContent
+export default dynamic(() => Promise.resolve(WrapDialogBoxListContent), {
+  ssr: false
+})
