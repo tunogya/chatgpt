@@ -1,8 +1,3 @@
-<svg width='360' height='360' viewBox='0 0 360 360' fill='none' xmlns='http://www.w3.org/2000/svg'>
-<rect x='171' width='20' height='360' fill='white'/>
-<rect y='191' width='20' height='360' transform='rotate(-90 0 191)' fill='white'/>
-<rect x='91' y='20' width='20' height='180' transform='rotate(-90 91 20)' fill='white'/>
-<rect y='91' width='20' height='180' fill='white'/>
-<rect x='340' y='91' width='20' height='180' fill='white'/>
-<rect x='91' y='360' width='20' height='180' transform='rotate(-90 91 360)' fill='white'/>
+<svg width="281" height="291" viewBox="0 0 281 291" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.907671 291H66.8168L88.2877 225H23.6919L0.907671 291ZM193.541 225L214.97 291H280.879L258.127 225H193.541ZM241.236 176L180.595 0.0909004H101.334L40.6074 176H104.228L139.828 66.5682H142.101L177.632 176H241.236Z" fill="black"/>
 </svg>

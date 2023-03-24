@@ -1,6 +1,6 @@
 import {FC, useEffect, useMemo, useState} from "react";
 // import Edit2Icon from "@/components/SVG/Edit2Icon";
-import OpenAIIcon from "@/components/SVG/OpenAIIcon";
+import AbandonIcon from "@/components/SVG/AbandonIcon";
 import LikeIcon from "@/components/SVG/LikeIcon";
 import UnLikeIcon from "@/components/SVG/UnLikeIcon";
 import {useDispatch, useSelector} from "react-redux";
@@ -113,7 +113,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         <div className="w-[30px] flex flex-col relative items-end">
           <div className="relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center"
                style={{backgroundColor: 'rgb(16, 163, 127)'}}>
-            <OpenAIIcon/>
+            <AbandonIcon/>
           </div>
         </div>
         <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">

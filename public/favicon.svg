@@ -1,8 +1,11 @@
-<svg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1000' height='1000'><rect width='1000' height='1000' rx='200' ry='200' fill='#343541'></rect><g transform='matrix(1.6666666666666667,0,0,1.6666666666666667,200,200)'><svg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='360' height='360'><svg width='360' height='360' viewBox='0 0 360 360' fill='none' xmlns='http://www.w3.org/2000/svg'>
-    <rect x='171' width='20' height='360' fill='white'></rect>
-    <rect y='191' width='20' height='360' transform='rotate(-90 0 191)' fill='white'></rect>
-    <rect x='91' y='20' width='20' height='180' transform='rotate(-90 91 20)' fill='white'></rect>
-    <rect y='91' width='20' height='180' fill='white'></rect>
-    <rect x='340' y='91' width='20' height='180' fill='white'></rect>
-    <rect x='91' y='360' width='20' height='180' transform='rotate(-90 91 360)' fill='white'></rect>
-</svg></svg></g></svg>
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#clip0_825_2)">
+        <path d="M800 0H200C89.5431 0 0 89.5431 0 200V800C0 910.457 89.5431 1000 200 1000H800C910.457 1000 1000 910.457 1000 800V200C1000 89.5431 910.457 0 800 0Z" fill="#343541"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M157 856.839H318.729L371.656 694.146H213.164L157 856.839ZM629.447 694.146L682.271 856.839H844L787.915 694.146H629.447ZM746.466 573.908L597.921 143H403.428L254.672 573.908H410.771L497.886 306.123H503.463L590.408 573.908H746.466Z" fill="white"/>
+    </g>
+    <defs>
+        <clipPath id="clip0_825_2">
+            <rect width="1000" height="1000" fill="white"/>
+        </clipPath>
+    </defs>
+</svg>
