@@ -151,7 +151,6 @@ export default withApiAuthRequired(async function handler(
       }
       parent_ids.reverse().forEach((parent_id) => {
         const parent_message = old_mapping[parent_id].message;
-        console.log("parent_message", parent_message)
         full_old_messages.push({
           role: parent_message.role,
           content: parent_message.content.parts[0],
