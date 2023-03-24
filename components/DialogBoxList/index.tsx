@@ -103,8 +103,8 @@ const DialogBoxListContent = () => {
 
 const WrapDialogBoxListContent = () => {
   return (
-    <div className="flex-1 overflow-auto">
-      <ScrollToBottom className="h-full dark:bg-gray-800">
+    <div className="flex-1 overflow-hidden">
+      <ScrollToBottom className="h-full w-full dark:bg-gray-800 overflow-y-auto">
         <DialogBoxListContent/>
       </ScrollToBottom>
     </div>
