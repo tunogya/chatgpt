@@ -14,7 +14,7 @@ const Login = () => {
           </svg>
         </div>
         <div className="mb-2 text-center">abandon.chat</div>
-        <div className="mb-4 text-center italic">&quot;世上无难事，只要 abandon&quot;</div>
+        <div className="mb-4 text-center italic">&quot;To abandon yourself to a life of pleasure.&quot;</div>
         <div className="flex flex-row gap-3">
           <button className="btn relative btn-primary" onClick={() => {
             router.push('/api/auth/login')
