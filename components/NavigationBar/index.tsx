@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {clearSession, setConversation} from "@/store/session";
 import RightIcon from "@/components/SVG/RightIcon";
+import MoonIcon from "@/components/SVG/MoonIcon";
 
 const NavigationBar = () => {
   const router = useRouter()
@@ -104,7 +105,7 @@ const NavigationBar = () => {
           className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
               duration-200 text-white cursor-pointer text-sm" onClick={toggleColorMode}
         >
-          <SunIcon/>
+          {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
           {colorMode === 'light' ? '深色' : '浅色'}模式
         </a>
         <a
