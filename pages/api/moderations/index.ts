@@ -24,7 +24,7 @@ export default async function handler(
   })
   const response = await request.json();
   const flagged = response.results[0].flagged;
-  const blocked = Object.values(response.results[0].categories).reduce((acc, curr) => acc && curr);
+  const blocked = Object.values(response.results[0].categories).reduce((acc, curr) => acc || curr);
   res.status(200).json({
     id: response.id,
     model: response.model,
