@@ -14,7 +14,7 @@ const Login = () => {
         <div className="mb-4 text-center italic">&quot;To abandon yourself to a life of pleasure.&quot;</div>
         <div className="flex flex-row gap-3">
           <button className="btn relative btn-primary" onClick={() => {
-            router.push('/api/auth/login')
+            router.push('/api/auth/login?returnTo=/chat')
           }}>
             <div className="flex w-full items-center justify-center gap-2">登陆</div>
           </button>
