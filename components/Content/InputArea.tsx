@@ -12,6 +12,7 @@ import SendIcon from "@/components/SVG/SendIcon";
 import { v4 as uuidv4 } from 'uuid';
 import {useUser} from "@auth0/nextjs-auth0/client";
 import {setInput} from "@/store/ui";
+import {aws} from "@aws-sdk/util-endpoints/dist-types/lib";
 
 const InputArea = () => {
   const {user} = useUser();
@@ -169,11 +170,11 @@ const InputArea = () => {
           <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
                           rows={1} ref={inputRef}
-                          // 监听Enter键，发送消息；Shift+Enter换行
-                          onKeyDown={(e) => {
+                          onKeyDown={async (e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
+                              if (e.nativeEvent.isComposing) return;
                               e.preventDefault();
-                              handleSubmit();
+                              await handleSubmit();
                             } else if (e.key === 'Enter' && e.shiftKey) {
                               if (inputRef.current) {
                                 // @ts-ignore
