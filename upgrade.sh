@@ -1,12 +1,23 @@
 #!/bin/bash
 
-function check_command_exists() {
-command -v "1" >/dev/null 2>&1 || { echo >&2 "1 command is required but it's not installed. Aborting."; exit 1; }
-}
+# check git, npm, pm2 command exist
+if ! command -v git &> /dev/null
+then
+    echo "git could not be found"
+    exit
+fi
 
-check_command_exists "git"
-check_command_exists "npm"
-check_command_exists "pm2"
+if ! command -v npm &> /dev/null
+then
+    echo "npm could not be found"
+    exit
+fi
+
+if ! command -v pm2 &> /dev/null
+then
+    echo "pm2 could not be found"
+    exit
+fi
 
 # shellcheck disable=SC2034
 repo_url="git@github.com:tunogya/chatgpt.git"
