@@ -52,5 +52,5 @@ echo "============ 部署完成 ============"
 
 # 定时任务，每小时执行一次
 # crontab -e
-# 0 * * * * /home/opc/chatgpt/upgrade.sh
+# 0 * * * * /home/opc/chatgpt/upgrade.sh >> /home/opc/chatgpt/upgrade.log 2>&1
 
