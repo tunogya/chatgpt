@@ -20,28 +20,28 @@ then
 fi
 
 # shellcheck disable=SC2034
-repo_url="git@github.com:tunogya/chatgpt.git"
 repo_dir="/home/opc/chatgpt"
 # shellcheck disable=SC2164
 cd "$repo_dir"
 
-echo "============ 更新代码 ============"
-git checkout .
+echo "============ git pull ============"
+git fetch --all
+git reset --hard origin/main
 git pull origin main
 
 echo "============ upgrade +x ============"
 chmod +x upgrade.sh
 
-echo "============ 安装依赖 ============"
+echo "============ npm install ============"
 npm install
 
-echo "============ 构建项目 ============"
+echo "============ build ============"
 npm run build
 
-echo "============ 平滑重启服务 ============"
+echo "============ pm2 reload ============"
 pm2 reload "ChatGPT"
 
-echo "============ 部署完成 ============"
+echo "============ DONE ============"
 
 # 定时任务，每小时执行一次
 # crontab -e
