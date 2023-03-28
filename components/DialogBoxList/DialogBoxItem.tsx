@@ -11,6 +11,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from 'rehype-katex';
 import {useUser} from "@auth0/nextjs-auth0/client";
 import CodeFormat from "@/components/DialogBoxList/CodeFormat";
+import Image from "next/image";
 
 export type Message = {
   id: string
@@ -51,9 +52,10 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         className="w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800">
         <div
           className="text-base gap-4 md:gap-6 m-auto md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0">
-          <div className="w-[30px] flex flex-col relative items-end">
-            <img src={user?.picture || ''} alt={user?.name || ''}
-                   className="relative h-[30px] w-[30px] rounded-sm text-white flex items-center justify-center"/>
+          <div className="w-[30px] h-[30px] rounded-sm flex flex-col relative items-end overflow-hidden">
+            <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={30} height={30} quality={80} priority
+                   blurDataURL={`https://dummyimage.com/30x30/ffffff/000000.png&text=${user?.name?.[0] || 'A'}`}
+            />
           </div>
           <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
             {

@@ -2,6 +2,7 @@ import {useDispatch} from "react-redux";
 import {setInput} from "@/store/ui";
 import {useState} from "react";
 import {useUser} from "@auth0/nextjs-auth0/client";
+import Image from "next/image";
 
 const Dashboard = () => {
   const dispatch = useDispatch()
@@ -98,7 +99,9 @@ const Dashboard = () => {
               {
                 user?.picture && (
                   <div className={'h-6 w-6 overflow-hidden rounded-full'}>
-                    <img src={user.picture} alt={user?.name || 'user'} width={'24px'} height={'24px'}/>
+                    <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={24} height={24} quality={80}
+                           blurDataURL={`https://dummyimage.com/24x24/ffffff/000000.png&text=${user?.name?.[0] || 'A'}`}
+                           priority/>
                   </div>
                 )
               }
