@@ -31,6 +31,8 @@ git pull origin main
 
 if ! git diff-index --quiet HEAD --; then
     echo "============ 代码有更新 ============"
+    git log -1 --pretty=%cd
+    git log -1 --pretty=%B
 else
     echo "============ 代码无更新 ============"
     exit
