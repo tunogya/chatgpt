@@ -26,7 +26,20 @@ repo_dir="/home/opc/chatgpt"
 cd "$repo_dir"
 
 echo "============ 更新代码 ============"
+git checkout .
 git pull origin main
+
+if ! git diff-index --quiet HEAD --; then
+    echo "============ 代码有更新 ============"
+else
+    echo "============ 代码无更新 ============"
+    exit
+fi
+
+echo "============ upgrade +x ============"
+chmod +x upgrade.sh
+
+echo "============ 安装依赖 ============"
 npm install
 
 echo "============ 构建项目 ============"
