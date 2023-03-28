@@ -45,8 +45,8 @@ npm install
 echo "============ 构建项目 ============"
 npm run build
 
-echo "============ 重启服务 ============"
-pm2 restart "ChatGPT"
+echo "============ 平滑重启服务 ============"
+pm2 reload "ChatGPT"
 
 echo "============ 部署完成 ============"
 
