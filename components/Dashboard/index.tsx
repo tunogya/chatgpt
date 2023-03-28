@@ -7,7 +7,7 @@ const Dashboard = () => {
   const dispatch = useDispatch()
   const { user, isLoading } = useUser()
   const [demo, setDemo] = useState([
-    '用简单的术语解释量子计算', ' 10岁生日派对有哪些有趣的安排？', '如何在Javascript中发出HTTP请求？'
+    '用简单的术语解释量子计算', ' 10 岁生日派对有哪些有趣的安排？', '如何在 Javascript 中发出 HTTP 请求？'
   ])
 
   return (
@@ -75,21 +75,21 @@ const Dashboard = () => {
                 onClick={() => {
                 }}
               >
-                本周使用 2 天，<br/>领取 2 天体验卡 →
+                本周使用 2 天，<br/>领取 2 天体验卡
               </button>
               <button
                 className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
                 onClick={() => {
                 }}
               >
-                周一免费使用 →
+                周一免费使用
               </button>
               <button
                 className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
                 onClick={() => {
                 }}
               >
-                邀请朋友得体验卡 →
+                邀请朋友得体验卡
               </button>
             </ul>
           </div>
@@ -105,7 +105,13 @@ const Dashboard = () => {
               {user ? user.name : '请登录'}
             </h2>
             <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-              <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">账户</li>
+              <button
+                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
+                onClick={() => {
+                }}
+              >
+                {user?.email_verified ? '已验证' : '未验证邮件'}
+              </button>
               <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">付费会员卡</li>
               <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">免费体验卡</li>
             </ul>
