@@ -12,7 +12,6 @@ import SendIcon from "@/components/SVG/SendIcon";
 import { v4 as uuidv4 } from 'uuid';
 import {useUser} from "@auth0/nextjs-auth0/client";
 import {setInput} from "@/store/ui";
-import {aws} from "@aws-sdk/util-endpoints/dist-types/lib";
 
 const InputArea = () => {
   const {user} = useUser();
