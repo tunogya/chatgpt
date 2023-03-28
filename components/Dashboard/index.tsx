@@ -52,13 +52,6 @@ const Dashboard = () => {
                   </button>
                 ))
               }
-              <button
-                className="w-full p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900"
-                onClick={() => {
-                }}
-              >
-                换一批
-              </button>
             </ul>
           </div>
           <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
@@ -105,16 +98,14 @@ const Dashboard = () => {
                   </div>
                 )
               }
-              {user ? user.name : '请登录'}
+              {user ? user.nickname : '请登录'}
             </h2>
             <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-              <button
-                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
-                onClick={() => {
-                }}
-              >
-                {user?.email_verified ? '已验证' : '未验证邮件'}
-              </button>
+              {
+                !user?.email_verified && (
+                  <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">未验证邮箱</li>
+                )
+              }
               <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">付费会员卡</li>
               <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">免费体验卡</li>
             </ul>
