@@ -92,7 +92,7 @@ const DialogBoxListContent = () => {
       </div>
       {
         !sticky && (
-          <button onClick={scrollToBottom}
+          <button onClick={scrollToBottom} id={"scroll-to-bottom-button"}
                   className="cursor-pointer absolute right-6 bottom-[124px] md:bottom-[120px] z-10 rounded-full border border-gray-200 bg-gray-50 text-gray-600 dark:border-white/10 dark:bg-white/10 dark:text-gray-200">
             <DownIcon/>
           </button>

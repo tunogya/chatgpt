@@ -33,6 +33,32 @@ const InputArea = () => {
     dispatch(setConversation(data.items || []));
   }
 
+  const handleSubmit = async () => {
+    if (input === '') return;
+    const scroll_to_bottom_button = document.getElementById('scroll-to-bottom-button');
+    if (scroll_to_bottom_button) {
+      scroll_to_bottom_button.click();
+    }
+    const message_id = uuidv4();
+    const message: Message = {
+      id: message_id,
+      author: {
+        role: 'user',
+        name: user?.name || '',
+      },
+      role: 'user',
+      content: {
+        content_type: 'text',
+        parts: [input],
+      },
+    }
+    dispatch(updateLastMessageId(message_id));
+    dispatch(setInput(''));
+    // @ts-ignore
+    if (inputRef.current) inputRef.current.style.height = 'auto';
+    await complete(message, message_id);
+  }
+
   const complete = async (message: Message, parent: string) => {
     dispatch(setIsWaitComplete(true))
     dispatch(updateMessageInSession({
@@ -143,6 +169,20 @@ const InputArea = () => {
           <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
                           rows={1} ref={inputRef}
+                          // 监听Enter键，发送消息；Shift+Enter换行
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                              e.preventDefault();
+                              handleSubmit();
+                            } else if (e.key === 'Enter' && e.shiftKey) {
+                              if (inputRef.current) {
+                                // @ts-ignore
+                                inputRef.current.style.height = 'auto';
+                                // @ts-ignore
+                                inputRef.current.style.height = e.target.scrollHeight + 'px';
+                              }
+                            }
+                          }}
                           onChange={(e) => {
                             e.target.style.height = 'auto';
                             e.target.style.height = e.target.scrollHeight + 'px';
@@ -152,28 +192,7 @@ const InputArea = () => {
             <button
               className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent disabled:bottom-0.5 md:disabled:bottom-1"
               disabled={isWaitComplete}
-              onClick={async (e) => {
-                e.preventDefault();
-                if (input === '') return;
-                const message_id = uuidv4();
-                const message: Message = {
-                  id: message_id,
-                  author: {
-                    role: 'user',
-                    name: user?.name || '',
-                  },
-                  role: 'user',
-                  content: {
-                    content_type: 'text',
-                    parts: [input],
-                  },
-                }
-                dispatch(updateLastMessageId(message_id));
-                dispatch(setInput(''));
-                // @ts-ignore
-                inputRef.current?.style.height = 'auto';
-                await complete(message, message_id);
-              }}>
+              onClick={handleSubmit}>
               {
                 isWaitComplete ? (
                   <div className="text-2xl">
