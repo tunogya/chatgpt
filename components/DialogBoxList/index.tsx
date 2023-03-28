@@ -3,12 +3,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {setIsWaitHistory, setSession} from "@/store/session";
 import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
 import {useRouter} from "next/router";
-import Placeholder from "@/components/DialogBoxList/PlaceHoder";
 import DownIcon from "@/components/SVG/DownIcon";
 import ScrollToBottom, {useScrollToBottom, useSticky} from "react-scroll-to-bottom";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import dynamic from 'next/dynamic';
 import useSWR from "swr";
+import Dashboard from "@/components/Dashboard";
 
 const DialogBoxListContent = () => {
   const bottomRef = useRef(null);
@@ -85,7 +85,7 @@ const DialogBoxListContent = () => {
                   <DialogBoxItem id={rootMessageId}/>
                 )
               ) : (
-                <Placeholder/>
+                <Dashboard/>
               )
           )
         }
