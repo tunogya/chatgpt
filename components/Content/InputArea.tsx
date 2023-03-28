@@ -7,7 +7,7 @@ import {
   setIsWaitComplete,
   setConversation
 } from "@/store/session";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
 import { v4 as uuidv4 } from 'uuid';
 import {useUser} from "@auth0/nextjs-auth0/client";
@@ -20,6 +20,7 @@ const InputArea = () => {
   const session = useSelector((state: any) => state.session.session);
   const input = useSelector((state: any) => state.ui.input);
   const dispatch = useDispatch();
+  const inputRef = useRef(null);
 
   const getConversationHistory = async () => {
     const response = await fetch('/api/conversation', {
@@ -141,7 +142,7 @@ const InputArea = () => {
         <div className="relative flex h-full flex-1 md:flex-col">
           <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
-                          rows={1}
+                          rows={1} ref={inputRef}
                           onChange={(e) => {
                             e.target.style.height = 'auto';
                             e.target.style.height = e.target.scrollHeight + 'px';
@@ -169,6 +170,8 @@ const InputArea = () => {
                 }
                 dispatch(updateLastMessageId(message_id));
                 dispatch(setInput(''));
+                // @ts-ignore
+                inputRef.current?.style.height = 'auto';
                 await complete(message, message_id);
               }}>
               {
