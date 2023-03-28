@@ -51,6 +51,13 @@ const Dashboard = () => {
                   </button>
                 ))
               }
+              <button
+                className="w-full p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900"
+                onClick={() => {
+                }}
+              >
+                换一批
+              </button>
             </ul>
           </div>
           <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
