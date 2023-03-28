@@ -7,7 +7,7 @@ const Dashboard = () => {
   const dispatch = useDispatch()
   const { user, isLoading } = useUser()
   const [demo, setDemo] = useState([
-    '用简单的术语解释量子计算', ' 10岁生日排队有哪些有趣的安排？', '如何在Javascript中发出HTTP请求？'
+    '用简单的术语解释量子计算', ' 10岁生日派对有哪些有趣的安排？', '如何在Javascript中发出HTTP请求？'
   ])
 
   return (
