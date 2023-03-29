@@ -3,7 +3,7 @@ import {ddbDocClient} from "@/utils/DynamoDB";
 import {DeleteCommand, GetCommand, QueryCommand, UpdateCommand} from "@aws-sdk/lib-dynamodb";
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
-export default withApiAuthRequired(async  function handler(
+export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
