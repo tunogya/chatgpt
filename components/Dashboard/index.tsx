@@ -16,9 +16,9 @@ const Dashboard = () => {
 
   const backButton = () => (
     <button
-      className={"text-sm font-semibold mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center"}
+      className={"text-md underline font-semibold mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center"}
       onClick={() => {
-        router.back()
+        router.push('/chat')
       }}
     >
       返回首页
@@ -136,7 +136,7 @@ const Dashboard = () => {
     <>
       {backButton()}
       <div className={"w-screen max-w-xs"}>
-        <div className={"text-md font-bold pb-4"}>本周奖励</div>
+        <div className={"text-md font-bold pb-4"}>本周使用奖励</div>
         <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
           <div className={"flex justify-between items-center"}>
             <div>
@@ -157,6 +157,45 @@ const Dashboard = () => {
             </div>
             <button className={"bg-green-600 w-14 h-8 text-xs text-white rounded-full"}>
               领取
+            </button>
+          </div>
+          <div className={"flex justify-between items-center"}>
+            <div className={"flex flex-col gap-1"}>
+              <div>
+                使用 2 天
+              </div>
+              <div className={"text-xs text-black/50 dark:text-white/50"}>
+                可获得 1 天体验卡
+              </div>
+            </div>
+            <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
+              差 1 天
+            </button>
+          </div>
+          <div className={"flex justify-between items-center"}>
+            <div className={"flex flex-col gap-1"}>
+              <div>
+                使用 4 天
+              </div>
+              <div className={"text-xs text-black/50 dark:text-white/50"}>
+                可获得 1 天体验卡
+              </div>
+            </div>
+            <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
+              差 2 天
+            </button>
+          </div>
+          <div className={"flex justify-between items-center"}>
+            <div className={"flex flex-col gap-1"}>
+              <div>
+                使用 7 天
+              </div>
+              <div className={"text-xs text-black/50 dark:text-white/50"}>
+                可获得 1 天体验卡
+              </div>
+            </div>
+            <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
+              差 4 天
             </button>
           </div>
         </div>
