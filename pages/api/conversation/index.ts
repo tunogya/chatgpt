@@ -224,7 +224,7 @@ export default withApiAuthRequired(async function handler(
                 }
               }
               if (!data.choices?.[0].delta?.content) {
-                return;
+                continue;
               }
               const part = data.choices[0].delta.content
               full_callback_message = {
