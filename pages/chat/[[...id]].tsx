@@ -3,7 +3,7 @@ import MobileSideBar from "@/components/NavigationBar/MobileSideBar";
 import PCNavigation from "@/components/NavigationBar/PCNavigation";
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
-const Chat = () => {
+const Chat = ({user}: any) => {
   return (
     <>
       <div className={'overflow-hidden w-full h-full relative'}>

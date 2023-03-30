@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
-import {getCurrentWeekId} from "@/utils/date";
+import {getCurrentWeekId} from "@/utils/DateUtil";
 import {ddbDocClient} from "@/utils/DynamoDB";
 import {GetCommand, PutCommand} from "@aws-sdk/lib-dynamodb";
 
@@ -25,8 +25,24 @@ export default withApiAuthRequired(async function handler(
         PK: user_id,
         SK: `WEEK#${week}`,
         conversation: [0, 0, 0, 0, 0, 0, 0],
-        available: [0, 0, 0, 0, 0, 0, 0],
-        received: [0, 0, 0, 0, 0, 0, 0],
+        rewards: {
+          '1D': {
+            available: 0,
+            received: 0,
+          },
+          '2D': {
+            available: 0,
+            received: 0,
+          },
+          '4D': {
+            available: 0,
+            received: 0,
+          },
+          '7D': {
+            available: 0,
+            received: 0,
+          }
+        }
       }
       await ddbDocClient.send(new PutCommand({
         TableName: 'wizardingpay',
@@ -44,6 +60,22 @@ export default withApiAuthRequired(async function handler(
 // PK: user_id
 // SK: WEEK#2021-1
 // conversation: [0, 0, 0, 0, 0, 0, 0], // conversation count per day
-// available: [0, 0, 0, 0, 0, 0, 0], // available reward per day
-// received: [0, 0, 0, 0, 0, 0, 0], // received reward per day
+// rewards: {
+//   '1D': {
+//     available: 0,
+//       received: 0,
+//   },
+//   '2D': {
+//     available: 0,
+//       received: 0,
+//   },
+//   '4D': {
+//     available: 0,
+//       received: 0,
+//   },
+//   '7D': {
+//     available: 0,
+//       received: 0,
+//   }
+// }
 

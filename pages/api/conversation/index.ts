@@ -5,6 +5,8 @@ import {Readable} from "stream";
 import uid from "@/utils/uid";
 import { v4 as uuidv4 } from 'uuid';
 import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
+import {addConversationNow} from "@/utils/Report";
+import {getCurrentWeekId} from "@/utils/DateUtil";
 
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
@@ -163,6 +165,7 @@ export default withApiAuthRequired(async function handler(
         content: message.content.parts[0],
       })
     ))
+    addConversationNow(user_id);
     try {
       const result = await fetch('https://api.openai.com/v1/chat/completions', {
         headers: {
