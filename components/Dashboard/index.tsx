@@ -191,7 +191,7 @@ const Dashboard = () => {
                     使用 {value} 天
                   </div>
                   <div className={"text-xs text-black/50 dark:text-white/50"}>
-                    可获得 {data.rewards?.[label]?.available || '-'} 天体验卡
+                    可获得 1 天体验卡
                   </div>
                 </div>
                 {
