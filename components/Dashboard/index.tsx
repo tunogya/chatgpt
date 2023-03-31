@@ -5,6 +5,7 @@ import {useUser} from "@auth0/nextjs-auth0/client";
 import Image from "next/image";
 import {useRouter} from "next/router";
 import useSWR from "swr";
+import LoadingIcon from "@/components/SVG/LoadingIcon";
 
 const Dashboard = () => {
   const dispatch = useDispatch()
@@ -15,7 +16,7 @@ const Dashboard = () => {
   const router = useRouter()
   const to = router.query.to
 
-  const {data} = useSWR('/api/report', (url: string) => fetch(url).then((res) => res.json()))
+  const {data, isLoading} = useSWR('/api/report', (url: string) => fetch(url).then((res) => res.json()))
 
   const hasUsedDays = data?.conversation.filter((item: number) => item > 0).length || 0
 
@@ -34,8 +35,11 @@ const Dashboard = () => {
   const rewardKeys = useMemo(() => {
     if (!data) return []
     return Object.keys(data.rewards)
-      .map((key) => key.replace(/[^0-9]/ig, ''))
-      .sort((a, b) => parseInt(a) - parseInt(b))
+      .map((key) => ({
+        label: key,
+        value: parseInt(key.replace(/[^0-9]/ig, ''))
+      }))
+      .sort((a, b) => a.value - b.value)
   }, [data])
 
   const backButton = () => (
@@ -100,6 +104,11 @@ const Dashboard = () => {
             每日福利
           </h2>
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
+            {
+              !data && isLoading && (
+                <LoadingIcon/>
+              )
+            }
             {
               totalAvailableRewards > 0 && (
                 <button
@@ -175,34 +184,34 @@ const Dashboard = () => {
             </button>
           </div>
           {
-            rewardKeys.map((item) => (
-              <div key={item} className={"flex justify-between items-center"}>
+            rewardKeys.map(({label, value}) => (
+              <div key={label} className={"flex justify-between items-center"}>
                 <div className={"flex flex-col gap-1"}>
                   <div>
-                    使用 {item} 天
+                    使用 {value} 天
                   </div>
                   <div className={"text-xs text-black/50 dark:text-white/50"}>
-                    可获得 {data.rewards?.[`${item}D`]?.available || '-'} 天体验卡
+                    可获得 {data.rewards?.[label]?.available || '-'} 天体验卡
                   </div>
                 </div>
                 {
-                  (data.rewards?.[`${item}D`]?.available - data.rewards?.[`${item}D`]?.received > 0) && (
+                  (data.rewards?.[label]?.available - data.rewards?.[label]?.received > 0) && (
                     <button className={"bg-green-600 w-14 h-8 text-xs text-white rounded-full"}>
                       领取
                     </button>
                   )
                 }
                 {
-                  data.rewards?.[`${item}D`]?.available > 0 && data.rewards?.[`${item}D`]?.available === data.rewards?.[`${item}D`]?.received && (
+                  data.rewards?.[label]?.available > 0 && data.rewards?.[label]?.available === data.rewards?.[label]?.received && (
                     <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
                       已领取
                     </button>
                   )
                 }
                 {
-                  data.rewards?.[`${item}D`]?.available === 0 && (
+                  data.rewards?.[label]?.available === 0 && (
                     <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
-                      差 {Number(item) - hasUsedDays} 天
+                      差 {value - hasUsedDays} 天
                     </button>
                   )
                 }
