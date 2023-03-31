@@ -56,26 +56,3 @@ export default withApiAuthRequired(async function handler(
   }
 })
 
-// Table Design
-// PK: user_id
-// SK: WEEK#2021-1
-// conversation: [0, 0, 0, 0, 0, 0, 0], // conversation count per day
-// rewards: {
-//   '1D': {
-//     available: 0,
-//       received: 0,
-//   },
-//   '2D': {
-//     available: 0,
-//       received: 0,
-//   },
-//   '4D': {
-//     available: 0,
-//       received: 0,
-//   },
-//   '7D': {
-//     available: 0,
-//       received: 0,
-//   }
-// }
-

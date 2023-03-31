@@ -1,9 +1,10 @@
 import {useDispatch} from "react-redux";
 import {setInput} from "@/store/ui";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {useUser} from "@auth0/nextjs-auth0/client";
 import Image from "next/image";
 import {useRouter} from "next/router";
+import useSWR from "swr";
 
 const Dashboard = () => {
   const dispatch = useDispatch()
@@ -13,6 +14,29 @@ const Dashboard = () => {
   ])
   const router = useRouter()
   const to = router.query.to
+
+  const {data} = useSWR('/api/report', (url: string) => fetch(url).then((res) => res.json()))
+
+  const hasUsedDays = data?.conversation.filter((item: number) => item > 0).length || 0
+
+  const totalAvailableRewards = useMemo(() => {
+    if (!data) return 0
+    let total = 0
+    for (const key in data.rewards) {
+      if (Object.prototype.hasOwnProperty.call(data.rewards, key)) {
+        const element = data.rewards[key];
+        total += element.available - element.received
+      }
+    }
+    return total
+  }, [data])
+
+  const rewardKeys = useMemo(() => {
+    if (!data) return []
+    return Object.keys(data.rewards)
+      .map((key) => key.replace(/[^0-9]/ig, ''))
+      .sort((a, b) => parseInt(a) - parseInt(b))
+  }, [data])
 
   const backButton = () => (
     <button
@@ -76,19 +100,23 @@ const Dashboard = () => {
             每日福利
           </h2>
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-            <button
-              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
-              onClick={() => {
-                router.push({
-                  pathname: '/chat',
-                  query: {
-                    to: 'bonus'
-                  }
-                })
-              }}
-            >
-              本周使用 2 天<br/>领取 2 天体验卡
-            </button>
+            {
+              totalAvailableRewards > 0 && (
+                <button
+                  className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
+                  onClick={() => {
+                    router.push({
+                      pathname: '/chat',
+                      query: {
+                        to: 'bonus'
+                      }
+                    })
+                  }}
+                >
+                  本周使用 {hasUsedDays} 天<br/>领取 {totalAvailableRewards} 天体验卡
+                </button>
+              )
+            }
             <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">周一免费使用</li>
             <button
               className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
@@ -146,58 +174,41 @@ const Dashboard = () => {
               购买
             </button>
           </div>
-          <div className={"flex justify-between items-center"}>
-            <div className={"flex flex-col gap-1"}>
-              <div>
-                使用 1 天
+          {
+            rewardKeys.map((item) => (
+              <div key={item} className={"flex justify-between items-center"}>
+                <div className={"flex flex-col gap-1"}>
+                  <div>
+                    使用 {item} 天
+                  </div>
+                  <div className={"text-xs text-black/50 dark:text-white/50"}>
+                    可获得 {data.rewards?.[`${item}D`]?.available || '-'} 天体验卡
+                  </div>
+                </div>
+                {
+                  (data.rewards?.[`${item}D`]?.available - data.rewards?.[`${item}D`]?.received > 0) && (
+                    <button className={"bg-green-600 w-14 h-8 text-xs text-white rounded-full"}>
+                      领取
+                    </button>
+                  )
+                }
+                {
+                  data.rewards?.[`${item}D`]?.available > 0 && data.rewards?.[`${item}D`]?.available === data.rewards?.[`${item}D`]?.received && (
+                    <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
+                      已领取
+                    </button>
+                  )
+                }
+                {
+                  data.rewards?.[`${item}D`]?.available === 0 && (
+                    <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
+                      差 {Number(item) - hasUsedDays} 天
+                    </button>
+                  )
+                }
               </div>
-              <div className={"text-xs text-black/50 dark:text-white/50"}>
-                可获得 1 天体验卡
-              </div>
-            </div>
-            <button className={"bg-green-600 w-14 h-8 text-xs text-white rounded-full"}>
-              领取
-            </button>
-          </div>
-          <div className={"flex justify-between items-center"}>
-            <div className={"flex flex-col gap-1"}>
-              <div>
-                使用 2 天
-              </div>
-              <div className={"text-xs text-black/50 dark:text-white/50"}>
-                可获得 1 天体验卡
-              </div>
-            </div>
-            <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
-              差 1 天
-            </button>
-          </div>
-          <div className={"flex justify-between items-center"}>
-            <div className={"flex flex-col gap-1"}>
-              <div>
-                使用 4 天
-              </div>
-              <div className={"text-xs text-black/50 dark:text-white/50"}>
-                可获得 1 天体验卡
-              </div>
-            </div>
-            <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
-              差 2 天
-            </button>
-          </div>
-          <div className={"flex justify-between items-center"}>
-            <div className={"flex flex-col gap-1"}>
-              <div>
-                使用 7 天
-              </div>
-              <div className={"text-xs text-black/50 dark:text-white/50"}>
-                可获得 1 天体验卡
-              </div>
-            </div>
-            <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
-              差 4 天
-            </button>
-          </div>
+            ))
+          }
         </div>
       </div>
     </>
