@@ -23,7 +23,8 @@ const Dashboard = () => {
   } = useSWR('/api/report', (url: string) => fetch(url).then((res) => res.json()))
   const {
     data: dataOfMetadata,
-    isLoading: isLoadingOfMetadata
+    isLoading: isLoadingOfMetadata,
+    mutate: mutateMetadata
   } = useSWR('/api/app/metadata', (url: string) => fetch(url).then((res) => res.json()))
 
   const hasUsedDays = dataOfReport?.conversation.filter((item: number) => item > 0).length || 0
@@ -60,18 +61,19 @@ const Dashboard = () => {
         type: type
       })
     })
-    await mutateReport()
+    mutateReport()
+    mutateMetadata()
   }
 
   const freeUseLeft = useMemo(() => {
-    if (!dataOfMetadata.freeUseTTL) return 0
+    if (!dataOfMetadata?.freeUseTTL) return 0
     return ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400).toLocaleString('en-US', {
       maximumFractionDigits: 1
     })
   }, [dataOfMetadata])
 
   const paidUseLeft = useMemo(() => {
-    if (!dataOfMetadata.paidUseTTL) return 0
+    if (!dataOfMetadata?.paidUseTTL) return 0
     return ((dataOfMetadata.paidUseTTL - Date.now() / 1000) / 86400).toLocaleString('en-US', {
       maximumFractionDigits: 1
     })
