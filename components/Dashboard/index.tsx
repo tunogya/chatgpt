@@ -16,31 +16,66 @@ const Dashboard = () => {
   const router = useRouter()
   const to = router.query.to
 
-  const {data, isLoading} = useSWR('/api/report', (url: string) => fetch(url).then((res) => res.json()))
+  const {
+    data: dataOfReport,
+    isLoading: isLoadingOfReport,
+    mutate: mutateReport
+  } = useSWR('/api/report', (url: string) => fetch(url).then((res) => res.json()))
+  const {
+    data: dataOfMetadata,
+    isLoading: isLoadingOfMetadata
+  } = useSWR('/api/app/metadata', (url: string) => fetch(url).then((res) => res.json()))
 
-  const hasUsedDays = data?.conversation.filter((item: number) => item > 0).length || 0
+  const hasUsedDays = dataOfReport?.conversation.filter((item: number) => item > 0).length || 0
 
   const totalAvailableRewards = useMemo(() => {
-    if (!data) return 0
+    if (!dataOfReport) return 0
     let total = 0
-    for (const key in data.rewards) {
-      if (Object.prototype.hasOwnProperty.call(data.rewards, key)) {
-        const element = data.rewards[key];
+    for (const key in dataOfReport.rewards) {
+      if (Object.prototype.hasOwnProperty.call(dataOfReport.rewards, key)) {
+        const element = dataOfReport.rewards[key];
         total += element.available - element.received
       }
     }
     return total
-  }, [data])
+  }, [dataOfReport])
 
   const rewardKeys = useMemo(() => {
-    if (!data) return []
-    return Object.keys(data.rewards)
+    if (!dataOfReport) return []
+    return Object.keys(dataOfReport.rewards)
       .map((key) => ({
         label: key,
         value: parseInt(key.replace(/[^0-9]/ig, ''))
       }))
       .sort((a, b) => a.value - b.value)
-  }, [data])
+  }, [dataOfReport])
+
+  const requestFreeDays = async (type: string) => {
+    await fetch('/api/app/requestFreeDays', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        type: type
+      })
+    })
+    await mutateReport()
+  }
+
+  const freeUseLeft = useMemo(() => {
+    if (!dataOfMetadata.freeUseTTL) return 0
+    return ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400).toLocaleString('en-US', {
+      maximumFractionDigits: 1
+    })
+  }, [dataOfMetadata])
+
+  const paidUseLeft = useMemo(() => {
+    if (!dataOfMetadata.paidUseTTL) return 0
+    return ((dataOfMetadata.paidUseTTL - Date.now() / 1000) / 86400).toLocaleString('en-US', {
+      maximumFractionDigits: 1
+    })
+  }, [dataOfMetadata])
 
   const backButton = () => (
     <button
@@ -105,7 +140,7 @@ const Dashboard = () => {
           </h2>
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
             {
-              !data && isLoading && (
+              !dataOfReport && isLoadingOfReport && (
                 <LoadingIcon/>
               )
             }
@@ -161,8 +196,12 @@ const Dashboard = () => {
                 <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">未验证邮箱</li>
               )
             }
-            <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">付费会员卡</li>
-            <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">免费体验卡</li>
+            <li
+              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">付费会员卡: {isLoadingOfMetadata ? '-' : paidUseLeft} 天
+            </li>
+            <li
+              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">免费体验卡: {isLoadingOfMetadata ? '-' : freeUseLeft} 天
+            </li>
           </ul>
         </div>
       </div>
@@ -195,21 +234,26 @@ const Dashboard = () => {
                   </div>
                 </div>
                 {
-                  (data.rewards?.[label]?.available - data.rewards?.[label]?.received > 0) && (
-                    <button className={"bg-green-600 w-14 h-8 text-xs text-white rounded-full"}>
+                  (dataOfReport.rewards?.[label]?.available - dataOfReport.rewards?.[label]?.received > 0) && (
+                    <button
+                      className={"bg-green-600 w-14 h-8 text-xs text-white rounded-full"}
+                      onClick={() => {
+                        requestFreeDays(label)
+                      }}
+                    >
                       领取
                     </button>
                   )
                 }
                 {
-                  data.rewards?.[label]?.available > 0 && data.rewards?.[label]?.available === data.rewards?.[label]?.received && (
+                  dataOfReport.rewards?.[label]?.available > 0 && dataOfReport.rewards?.[label]?.available === dataOfReport.rewards?.[label]?.received && (
                     <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
                       已领取
                     </button>
                   )
                 }
                 {
-                  data.rewards?.[label]?.available === 0 && (
+                  dataOfReport.rewards?.[label]?.available === 0 && (
                     <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
                       差 {value - hasUsedDays} 天
                     </button>
