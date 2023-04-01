@@ -28,7 +28,9 @@ const Dashboard = () => {
   } = useSWR('/api/app/metadata', (url: string) => fetch(url).then((res) => res.json()))
 
   const hasUsedDays = dataOfReport?.conversation.filter((item: number) => item > 0).length || 0
-  const [isLoading, setIsLoading] = useState(false)
+  const [requestState, setRequestState] = useState<{
+    [key: string]: 'loading' | 'idle'
+  }>({})
 
   const totalAvailableRewards = useMemo(() => {
     if (!dataOfReport) return 0
@@ -53,7 +55,10 @@ const Dashboard = () => {
   }, [dataOfReport])
 
   const requestFreeDays = async (type: string) => {
-    setIsLoading(true)
+    setRequestState({
+      ...requestState,
+      [type]: 'loading'
+    })
     await fetch('/api/app/requestFreeDays', {
       method: 'POST',
       headers: {
@@ -63,7 +68,10 @@ const Dashboard = () => {
         type: type
       })
     })
-    setIsLoading(false)
+    setRequestState({
+      ...requestState,
+      [type]: 'idle'
+    })
     mutateReport()
     mutateMetadata()
   }
@@ -242,12 +250,12 @@ const Dashboard = () => {
                   (dataOfReport.rewards?.[label]?.available - dataOfReport.rewards?.[label]?.received > 0) && (
                     <button
                       className={"bg-green-600 w-14 h-8 text-xs text-white rounded-full"}
-                      disabled={isLoading}
+                      disabled={requestState?.[label] === 'loading'}
                       onClick={() => {
                         requestFreeDays(label)
                       }}
                     >
-                      领取
+                      {requestState?.[label] === 'loading' ? '...' : '领取'}
                     </button>
                   )
                 }
