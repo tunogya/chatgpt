@@ -68,12 +68,12 @@ const Dashboard = () => {
         type: type
       })
     })
+    await mutateReport()
+    await mutateMetadata()
     setRequestState({
       ...requestState,
       [type]: 'idle'
     })
-    mutateReport()
-    mutateMetadata()
   }
 
   const freeUseLeft = useMemo(() => {
