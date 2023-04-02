@@ -162,29 +162,30 @@ const Dashboard = () => {
           </h2>
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
             {
-              !dataOfReport && isLoadingOfReport && (
+              (!dataOfReport && isLoadingOfReport) || (!dataOfMetadata && isLoadingOfMetadata) ? (
                 <LoadingIcon/>
+              ) : (
+                <button
+                  className="w-full bg-green-600 hover:opacity-80 text-white p-3 rounded-md"
+                  onClick={() => {
+                    router.push({
+                      pathname: '/chat',
+                      query: {
+                        to: 'bonus'
+                      }
+                    })
+                  }}
+                >
+                  {totalAvailableRewards > 0 ? (
+                    <>
+                      本周使用 {hasUsedDays} 天<br/>领取 {totalAvailableRewards} 天体验卡
+                    </>
+                  ) : (
+                    nextRewardNeedDays > 0 && `再使用 ${nextRewardNeedDays} 天可领奖励`
+                  )}
+                </button>
               )
             }
-            <button
-              className="w-full bg-green-600 hover:opacity-80 text-white p-3 rounded-md"
-              onClick={() => {
-                router.push({
-                  pathname: '/chat',
-                  query: {
-                    to: 'bonus'
-                  }
-                })
-              }}
-            >
-              {totalAvailableRewards > 0 ? (
-                <>
-                  本周使用 {hasUsedDays} 天<br/>领取 {totalAvailableRewards} 天体验卡
-                </>
-              ) : (
-                nextRewardNeedDays > 0 && `再使用 ${nextRewardNeedDays} 天可领奖励`
-              )}
-            </button>
             <button
               className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
               onClick={() => {
