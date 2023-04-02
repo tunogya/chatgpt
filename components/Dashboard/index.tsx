@@ -167,7 +167,7 @@ const Dashboard = () => {
               )
             }
             <button
-              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
+              className="w-full bg-green-600 hover:opacity-80 text-white p-3 rounded-md"
               onClick={() => {
                 router.push({
                   pathname: '/chat',
@@ -237,14 +237,14 @@ const Dashboard = () => {
       <div className={"w-screen max-w-xs"}>
         <div className={"text-md font-bold pb-4"}>本周使用奖励</div>
         <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
-          <div className={"flex justify-between items-center"}>
-            <div>
-              购买 5 天付费会员卡
-            </div>
-            <button className={"bg-orange-500 w-14 h-8 text-xs text-white rounded-full"}>
-              购买
-            </button>
-          </div>
+          {/*<div className={"flex justify-between items-center"}>*/}
+          {/*  <div>*/}
+          {/*    购买 5 天付费会员卡*/}
+          {/*  </div>*/}
+          {/*  <button className={"bg-orange-500 w-14 h-8 text-xs text-white rounded-full"}>*/}
+          {/*    购买*/}
+          {/*  </button>*/}
+          {/*</div>*/}
           {
             rewardKeys.map(({label, value}) => (
               <div key={label} className={"flex justify-between items-center"}>
@@ -259,7 +259,7 @@ const Dashboard = () => {
                 {
                   (dataOfReport.rewards?.[label]?.available - dataOfReport.rewards?.[label]?.received > 0) && (
                     <button
-                      className={"bg-green-600 w-14 h-8 text-xs text-white rounded-full"}
+                      className={"bg-green-600 hover:opacity-80 w-14 h-8 text-xs text-white rounded-full"}
                       disabled={requestState?.[label] === 'loading'}
                       onClick={() => {
                         requestFreeDays(label)
