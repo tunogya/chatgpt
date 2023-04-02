@@ -291,6 +291,7 @@ export default withApiAuthRequired(async function handler(
           Item: {
             PK: user_id,
             SK: conversation.id,
+            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
             ...conversation,
           }
         }));
