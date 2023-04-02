@@ -44,6 +44,15 @@ const Dashboard = () => {
     return total
   }, [dataOfReport])
 
+  const nextRewardNeedDays = useMemo(() => {
+    const _1 = 1 - hasUsedDays
+    const _2 = 2 - hasUsedDays
+    const _4 = 4 - hasUsedDays
+    const _7 = 7 - hasUsedDays
+    const _1_2_4_7 = [_1, _2, _4, _7].filter((item) => item > 0)
+    return Math.min(..._1_2_4_7)
+  }, [hasUsedDays])
+
   const rewardKeys = useMemo(() => {
     if (!dataOfReport) return []
     return Object.keys(dataOfReport.rewards)
@@ -157,24 +166,24 @@ const Dashboard = () => {
                 <LoadingIcon/>
               )
             }
-            {
-              totalAvailableRewards > 0 && (
-                <button
-                  className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
-                  onClick={() => {
-                    router.push({
-                      pathname: '/chat',
-                      query: {
-                        to: 'bonus'
-                      }
-                    })
-                  }}
-                >
+            <button
+              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
+              onClick={() => {
+                router.push({
+                  pathname: '/chat',
+                  query: {
+                    to: 'bonus'
+                  }
+                })
+              }}
+            >
+              {totalAvailableRewards > 0 && (
+                <>
                   本周使用 {hasUsedDays} 天<br/>领取 {totalAvailableRewards} 天体验卡
-                </button>
-              )
-            }
-            <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">周一免费使用</li>
+                </>
+              )}
+              {nextRewardNeedDays > 0 && `再使用 ${nextRewardNeedDays} 天可领奖励`}
+            </button>
             <button
               className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
               onClick={() => {
