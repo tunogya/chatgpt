@@ -177,12 +177,13 @@ const Dashboard = () => {
                 })
               }}
             >
-              {totalAvailableRewards > 0 && (
+              {totalAvailableRewards > 0 ? (
                 <>
                   本周使用 {hasUsedDays} 天<br/>领取 {totalAvailableRewards} 天体验卡
                 </>
+              ) : (
+                nextRewardNeedDays > 0 && `再使用 ${nextRewardNeedDays} 天可领奖励`
               )}
-              {nextRewardNeedDays > 0 && `再使用 ${nextRewardNeedDays} 天可领奖励`}
             </button>
             <button
               className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
