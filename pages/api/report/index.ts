@@ -27,7 +27,7 @@ export default withApiAuthRequired(async function handler(
         conversation: [0, 0, 0, 0, 0, 0, 0],
         rewards: {
           '1D': {
-            available: 0,
+            available: 1,  // `1D` is a no-requirement reward
             received: 0,
           },
           '2D': {
