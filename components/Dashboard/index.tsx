@@ -87,14 +87,18 @@ const Dashboard = () => {
 
   const freeUseLeft = useMemo(() => {
     if (!dataOfMetadata?.freeUseTTL) return 0
-    return ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400).toLocaleString('en-US', {
+    const time = ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400)
+    if (time < 0) return 0
+    return time.toLocaleString('en-US', {
       maximumFractionDigits: 1
     })
   }, [dataOfMetadata])
 
   const paidUseLeft = useMemo(() => {
     if (!dataOfMetadata?.paidUseTTL) return 0
-    return ((dataOfMetadata.paidUseTTL - Date.now() / 1000) / 86400).toLocaleString('en-US', {
+    const time = ((dataOfMetadata.paidUseTTL - Date.now() / 1000) / 86400)
+    if (time < 0) return 0
+    return time.toLocaleString('en-US', {
       maximumFractionDigits: 1
     })
   }, [dataOfMetadata])
