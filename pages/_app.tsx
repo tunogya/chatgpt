@@ -23,12 +23,13 @@ export default function App({Component, pageProps}: AppProps) {
         <meta name={'apple-mobile-web-app-title'} content={'abandon.chat'}/>
         <meta name={'format-detection'} content={'telephone=no'}/>
         <meta name={'format-detection'} content={'email=no'}/>
-        <meta name='theme-color' content='#343541'/>
+        <meta name='theme-color' content='#202123'/>
         <meta property='og:image' content='/apple-touch-icon.png'/>
         <meta property='og:title' content='abandon.chat'/>
         <meta property='og:description'
               content='A free conversational AI system that listens, learns, and challenges'/>
         <meta property='og:url' content='https://www.abandon.chat'/>
+        <link rel="manifest" href={"manifest.json"}/>
         <link rel='icon' href='/favicon.ico'/>
         <link rel='icon' href={'/favicon.svg'} type='image/svg+xml'/>
         <link rel='icon' href={'/favicon.png'} type='image/png'/>
@@ -74,6 +75,19 @@ export default function App({Component, pageProps}: AppProps) {
                 
                 gtag('config', 'G-EDPQ3K7EN8');
               `}
+      </Script>
+      <Script id={'sw'}>
+        {`
+                if ('serviceWorker' in navigator) {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }, function(err) {
+                      console.log('ServiceWorker registration failed: ', err);
+                    });
+                  });
+                }
+        `}
       </Script>
       <UserProvider>
         <Component {...pageProps} />

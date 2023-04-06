@@ -1,0 +1,19 @@
+{
+  "name": "abandon.chat",
+  "short_name": "abandon.chat",
+  "description": "A free conversational AI system that listens, learns, and challenges",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "background_color": "#343541",
+  "theme_color": "#202123",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "scope": "/"
+}
