@@ -27,7 +27,7 @@ const Dashboard = () => {
     mutate: mutateMetadata
   } = useSWR('/api/app/metadata', (url: string) => fetch(url).then((res) => res.json()))
 
-  const hasUsedDays = dataOfReport?.conversation.filter((item: number) => item > 0).length || 0
+  const hasUsedDays = dataOfReport?.conversation?.filter((item: number) => item > 0).length || 0
   const [requestState, setRequestState] = useState<{
     [key: string]: 'loading' | 'idle'
   }>({})
@@ -54,7 +54,7 @@ const Dashboard = () => {
   }, [hasUsedDays])
 
   const rewardKeys = useMemo(() => {
-    if (!dataOfReport) return []
+    if (!dataOfReport?.rewards) return []
     return Object.keys(dataOfReport.rewards)
       .map((key) => ({
         label: key,
