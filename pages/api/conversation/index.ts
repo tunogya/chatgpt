@@ -159,6 +159,8 @@ export default withApiAuthRequired(async function handler(
         })
       })
     }
+    // only keep last 8 messages
+    full_old_messages.slice(-8);
     // put current messages to full_messages
     full_old_messages.push(...messages.map((message: any) => ({
         role: message.role,
