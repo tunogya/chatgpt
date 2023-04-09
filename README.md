@@ -34,3 +34,7 @@ npm install
 npm run build
 pm2 start ecosystem.config.js
 ```
+
+## Environment
+
+Node.js 16.18.1
