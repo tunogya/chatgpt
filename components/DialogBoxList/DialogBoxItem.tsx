@@ -173,8 +173,7 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
     if (children.length === 0) {
       dispatch(updateLastMessageId(id))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [children, id])
+  }, [children, dispatch, id])
 
   return (
     <>

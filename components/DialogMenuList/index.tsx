@@ -14,7 +14,7 @@ const DialogMenuList = () => {
     if (data) {
       dispatch(setConversation(data?.items || []));
     }
-  }, [data])
+  }, [data, dispatch])
 
   return (
     <div className="flex-col flex-1 overflow-y-auto border-b border-white/20">

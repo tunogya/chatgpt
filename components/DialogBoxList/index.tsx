@@ -35,7 +35,7 @@ const DialogBoxListContent = () => {
       }))
     }
     dispatch(setIsWaitHistory(isLoading))
-  }, [data, isLoading])
+  }, [data, dispatch, isLoading])
 
   useEffect(() => {
     updateSession()
