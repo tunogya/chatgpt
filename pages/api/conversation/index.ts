@@ -159,8 +159,16 @@ export default withApiAuthRequired(async function handler(
         })
       })
     }
-    // only keep last 8 messages
+    // only keep last 8 messages, and keep the last 2000 words
     full_old_messages.slice(-8);
+    let word_count = 0;
+    for (let i = full_old_messages.length - 1; i >= 0; i--) {
+      word_count += full_old_messages[i].content.split(' ').length;
+      if (word_count > 2000) {
+        full_old_messages.splice(0, i);
+        break;
+      }
+    }
     // put current messages to full_messages
     full_old_messages.push(...messages.map((message: any) => ({
         role: message.role,
