@@ -89,6 +89,9 @@ export default function App({Component, pageProps}: AppProps) {
                 }
         `}
       </Script>
+      <Script id={'google-adsense'} async={true} crossOrigin={'anonymous'}
+              src={"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9725847143123740"}>
+      </Script>
       <UserProvider>
         <Component {...pageProps} />
       </UserProvider>
