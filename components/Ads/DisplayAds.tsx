@@ -1,4 +1,4 @@
-const ShowAds = () => {
+const DisplayAds = () => {
   return (
     // @ts-ignore
     <amp-ad width="100vw" height="320"
@@ -11,4 +11,4 @@ const ShowAds = () => {
   )
 }
 
-export default ShowAds
+export default DisplayAds
