@@ -5,6 +5,7 @@ import {Provider} from 'react-redux'
 import store from "@/store";
 import "@/styles/index.css";
 import {UserProvider} from '@auth0/nextjs-auth0/client';
+import Adsense from "@eisberg-labs/next-google-adsense";
 
 export default function App({Component, pageProps}: AppProps) {
   return (
@@ -86,6 +87,7 @@ export default function App({Component, pageProps}: AppProps) {
                 }
         `}
       </Script>
+      <Adsense client_id="ca-pub-9725847143123740"/>
       <UserProvider>
         <Component {...pageProps} />
       </UserProvider>
