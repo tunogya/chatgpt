@@ -14,7 +14,7 @@ export default function App({Component, pageProps}: AppProps) {
         <title>abandon.chat</title>
         <meta
           name='description'
-          content='A free conversational AI system that listens, learns, and challenges'
+          content='一个可免费使用的 AI，它会倾听、学习、完成挑战'
         />
         <meta name='viewport'
               content='width=device-width, initial-scale=1, shrink-to-fit=no,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no'/>
