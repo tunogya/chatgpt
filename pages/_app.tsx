@@ -62,11 +62,13 @@ export default function App({Component, pageProps}: AppProps) {
               as="font"/>
         <link href="/fonts/KaTeX_Typewriter-Regular.woff"
               as="font"/>
+        <script id={'google-adsense'} async={true} crossOrigin={'anonymous'}
+                src={"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9725847143123740"}>
+        </script>
+        <script id={'telegram-web-app'} async={true}
+                src={'https://telegram.org/js/telegram-web-app.js'}/>
       </Head>
-      <Script src={'https://telegram.org/js/games.js'}/>
-      <Script id={'telegram-web-app'} src={'https://telegram.org/js/telegram-web-app.js'}/>
       <Script src={'https://www.googletagmanager.com/gtag/js?id=G-EDPQ3K7EN8'}/>
-      <Script id={'telegram'} src={'https://telegram.org/js/telegram-widget.js'}/>
       <Script id='google-tag-manager' strategy='afterInteractive'>
         {`
                 window.dataLayer = window.dataLayer || [];
@@ -88,9 +90,6 @@ export default function App({Component, pageProps}: AppProps) {
                   });
                 }
         `}
-      </Script>
-      <Script id={'google-adsense'} async={true} crossOrigin={'anonymous'}
-              src={"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9725847143123740"}>
       </Script>
       <UserProvider>
         <Component {...pageProps} />
