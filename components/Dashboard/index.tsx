@@ -6,6 +6,7 @@ import Image from "next/image";
 import {useRouter} from "next/router";
 import useSWR from "swr";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
+import ShowAds from "@/components/Ads/ShowAds";
 
 const Dashboard = () => {
   const dispatch = useDispatch()
@@ -233,6 +234,7 @@ const Dashboard = () => {
           </ul>
         </div>
       </div>
+      <ShowAds/>
     </>
   )
 

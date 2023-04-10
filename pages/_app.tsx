@@ -67,6 +67,7 @@ export default function App({Component, pageProps}: AppProps) {
         </script>
         <script id={'telegram-web-app'} async={true}
                 src={'https://telegram.org/js/telegram-web-app.js'}/>
+        <script async={true} custom-element="amp-ad" src={"https://cdn.ampproject.org/v0/amp-ad-0.1.js"}></script>
       </Head>
       <Script src={'https://www.googletagmanager.com/gtag/js?id=G-EDPQ3K7EN8'}/>
       <Script id='google-tag-manager' strategy='afterInteractive'>
