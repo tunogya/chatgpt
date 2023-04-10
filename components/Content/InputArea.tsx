@@ -12,6 +12,7 @@ import SendIcon from "@/components/SVG/SendIcon";
 import {v4 as uuidv4} from 'uuid';
 import {useUser} from "@auth0/nextjs-auth0/client";
 import {setInput} from "@/store/ui";
+import Beian from "@/components/Beian";
 
 const InputArea = () => {
   const {user} = useUser();
@@ -212,10 +213,7 @@ const InputArea = () => {
           </div>
         </div>
       </form>
-      <div className="px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6">
-        <a href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes" target="_blank" rel="noreferrer"
-           className="underline">abandon.chat 2.13</a>. 仅供学习交流，不得用于商业用途。
-      </div>
+      <Beian/>
     </div>
   )
 }

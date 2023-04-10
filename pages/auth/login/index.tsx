@@ -1,5 +1,6 @@
 import {useRouter} from "next/router";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
+import Beian from "@/components/Beian";
 
 const Login = () => {
   const router = useRouter()
@@ -24,6 +25,10 @@ const Login = () => {
             <div className="flex w-full items-center justify-center gap-2">注册</div>
           </button>
         </div>
+      </div>
+
+      <div className={"fixed bottom-0"}>
+        <Beian />
       </div>
     </div>
   )

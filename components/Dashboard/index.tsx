@@ -224,9 +224,9 @@ const Dashboard = () => {
                 <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">未验证邮箱</li>
               )
             }
-            <li
-              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">付费会员卡: {isLoadingOfMetadata ? '-' : paidUseLeft} 天
-            </li>
+            {/*<li*/}
+            {/*  className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">付费会员卡: {isLoadingOfMetadata ? '-' : paidUseLeft} 天*/}
+            {/*</li>*/}
             <li
               className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">免费体验卡: {isLoadingOfMetadata ? '-' : freeUseLeft} 天
             </li>
