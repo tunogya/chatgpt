@@ -5,19 +5,8 @@ import {Provider} from 'react-redux'
 import store from "@/store";
 import "@/styles/index.css";
 import {UserProvider} from '@auth0/nextjs-auth0/client';
-import {useEffect} from "react";
 
 export default function App({Component, pageProps}: AppProps) {
-  useEffect(() => {
-    const ads = document.getElementsByClassName("adsbygoogle").length;
-    for (let i = 0; i < ads; i++) {
-      try {
-        // @ts-ignore
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (e) { }
-    }
-  }, [])
-
   return (
     <Provider store={store}>
       <Head>
@@ -73,15 +62,7 @@ export default function App({Component, pageProps}: AppProps) {
               as="font"/>
         <link href="/fonts/KaTeX_Typewriter-Regular.woff"
               as="font"/>
-        <script async={true} custom-element="amp-ad" src={"https://cdn.ampproject.org/v0/amp-ad-0.1.js"}></script>
       </Head>
-      <Script
-        id="Adsense-id"
-        data-ad-client="ca-pub-9725847143123740"
-        async
-        strategy="beforeInteractive"
-        src={"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"}
-      />
       <Script src={'https://www.googletagmanager.com/gtag/js?id=G-EDPQ3K7EN8'}/>
       <Script id='google-tag-manager' strategy='afterInteractive'>
         {`
