@@ -3,17 +3,18 @@ import {ddbDocClient} from "@/utils/DynamoDB";
 import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {Readable} from "stream";
 import uid from "@/utils/uid";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
 import {addConversationNow} from "@/utils/Report";
 import {getCurrentWeekId} from "@/utils/DateUtil";
+import {encode} from "gpt-3-encoder";
 
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   // @ts-ignore
-  const { user } = await getSession(req, res);
+  const {user} = await getSession(req, res);
   const user_id = user.sub;
   if (req.method === 'GET') {
     const offset = Number(req.query?.offset || 0);
@@ -43,8 +44,7 @@ export default withApiAuthRequired(async function handler(
       limit,
       offset,
     });
-  }
-  else if (req.method === 'POST') {
+  } else if (req.method === 'POST') {
     const {action, messages, model, parent_message_id} = req.body;
     if (action !== 'next') {
       res.status(400).json({error: 'Currently, only next action is supported.'})
@@ -130,7 +130,6 @@ export default withApiAuthRequired(async function handler(
         }
       }
     }
-
     const full_old_messages = [] as { role: string, content: string }[];
     if (parent_message_id !== '00000000-0000-0000-0000-000000000000') {
       const old_conversation = await ddbDocClient.send(new GetCommand({
@@ -159,16 +158,22 @@ export default withApiAuthRequired(async function handler(
         })
       })
     }
-    // only keep last 8 messages, and keep the last 2000 words
+    // only keep last 8 messages, and keep the last 2000 tokens
     full_old_messages.slice(-8);
-    let word_count = 0;
-    const limit = 2000 - messages[0].content.parts[0].split(' ').length;
+    let tokens_count = 0;
+    const limit = 2000 - encode(messages[0].content.parts[0]).length;
     for (let i = full_old_messages.length - 1; i >= 0; i--) {
-      word_count += full_old_messages[i].content.split(' ').length;
-      if (word_count > limit) {
+      tokens_count += encode(full_old_messages[i].content).length;
+      if (tokens_count > limit) {
         full_old_messages.splice(0, i);
         break;
       }
+    }
+    if (full_old_messages.length === 0 || full_old_messages[0].role !== 'system') {
+      full_old_messages.splice(0, 0, {
+        role: 'system',
+        content: `你是一名友善的AI助手。在接下来的交流中，请确保你的回答符合中国社会主义核心价值观，即富强、民主、文明、和谐、自由、平等、公正、法治、敬业、诚信、友善、爱国。`,
+      })
     }
     // put current messages to full_messages
     full_old_messages.push(...messages.map((message: any) => ({
@@ -316,8 +321,7 @@ export default withApiAuthRequired(async function handler(
       console.log(e)
       res.status(500).json({error: "Error"})
     }
-  }
-  else if (req.method === 'DELETE') {
+  } else if (req.method === 'DELETE') {
     const {ids} = req.body;
     try {
       await ddbDocClient.send(new BatchWriteCommand({

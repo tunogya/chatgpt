@@ -42,7 +42,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
     return lastMessageId === props.id && isWaitComplete
   }, [lastMessageId, props.id, isWaitComplete])
 
-  if (props.message === null) {
+  if (props.message === null || props.message.role === 'system') {
     return <></>
   }
 
