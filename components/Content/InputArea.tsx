@@ -20,6 +20,7 @@ const InputArea = () => {
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const session = useSelector((state: any) => state.session.session);
   const input = useSelector((state: any) => state.ui.input);
+  const off_protected = useSelector((state: any) => state.ui.off_protected);
   const dispatch = useDispatch();
   const inputRef = useRef(null);
 
@@ -73,6 +74,7 @@ const InputArea = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          off_protected,
           conversation_id: session.id,
           action: 'next',
           model: 'gpt-3.5-turbo',

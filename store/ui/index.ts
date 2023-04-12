@@ -5,6 +5,7 @@ export const index = createSlice({
   initialState: {
     isOpenSidebar: false,
     input: '',
+    off_protected: false,
   },
   reducers: {
     setIsOpenSidebar: (state, action) => {
@@ -12,6 +13,9 @@ export const index = createSlice({
     },
     setInput: (state, action) => {
       state.input = action.payload
+    },
+    setOffProtected: (state, action) => {
+      state.off_protected = action.payload
     }
   }
 })
@@ -19,6 +23,7 @@ export const index = createSlice({
 export const {
   setIsOpenSidebar,
   setInput,
+  setOffProtected
 } = index.actions
 
 export default index.reducer
