@@ -10,11 +10,20 @@ const Beian = () => {
         </a>
       </div>
       <div className={'flex space-x-1.5'}>
-        <a href={"https://beian.miit.gov.cn"} target={'_blank'} rel={'noreferrer'}>
-          <Image src={"/images/beian.png"} width={16} height={16} alt={"备案图标"}/>
+        <a href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32068202000378"} target={'_blank'} rel={'noreferrer'}>
+          <div className={"flex space-x-1.5"}>
+            <Image src={"/images/beian.png"} width={16} height={16} alt={"备案图标"}/>
+            <p>
+              苏公网安备32068202000378号
+            </p>
+          </div>
         </a>
         <a href={"https://beian.miit.gov.cn"} target={'_blank'} rel={'noreferrer'}>
-          苏ICP备2023010308号-1
+          <div className={"flex space-x-1.5"}>
+            <p>
+              苏ICP备2023010308号-1
+            </p>
+          </div>
         </a>
       </div>
     </div>
