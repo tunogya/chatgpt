@@ -9,13 +9,24 @@ import {useEffect, useState} from "react";
 import {clearSession, setConversation} from "@/store/session";
 import RightIcon from "@/components/SVG/RightIcon";
 import MoonIcon from "@/components/SVG/MoonIcon";
+import {setOffProtected} from "@/store/ui";
+import LikeIcon from "@/components/SVG/LikeIcon";
 
 const NavigationBar = () => {
   const router = useRouter()
   const dispatch = useDispatch();
   const conversation = useSelector((state: any) => state.session.conversation);
+  const off_protected = useSelector((state: any) => state.ui.off_protected);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [colorMode, setColorMode] = useState('light');
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (count >= 10) {
+      dispatch(setOffProtected(true))
+      setCount(0)
+    }
+  }, [count, dispatch])
 
   useEffect(() => {
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -37,6 +48,7 @@ const NavigationBar = () => {
       document.documentElement.classList.remove('dark')
       localStorage.theme = 'light'
     }
+    setCount(count + 1);
   }
 
   const clearConversationList = async () => {
@@ -101,13 +113,25 @@ const NavigationBar = () => {
             </a>
           )
         }
-        <a
-          className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
+        {
+          off_protected ? (
+            <a
+              className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
+              duration-200 text-white cursor-pointer text-sm"
+            >
+              <LikeIcon/>
+              暗黑模式
+            </a>
+          ) : (
+            <a
+              className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
               duration-200 text-white cursor-pointer text-sm" onClick={toggleColorMode}
-        >
-          {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
-          {colorMode === 'light' ? '深色' : '浅色'}模式
-        </a>
+            >
+              {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
+              {colorMode === 'light' ? '深色' : '浅色'}模式
+            </a>
+          )
+        }
         <a
           className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
               duration-200 text-white cursor-pointer text-sm"
