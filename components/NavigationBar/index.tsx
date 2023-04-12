@@ -88,7 +88,7 @@ const NavigationBar = () => {
   return (
     <div className={'scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20'}>
       <nav className="flex h-full flex-1 flex-col space-y-1 p-2">
-        <a className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
+        <a className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none
             duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 border border-white/20"
            onClick={() => {
              dispatch(clearSession());
@@ -104,7 +104,7 @@ const NavigationBar = () => {
         {
           conversation && conversation.length > 0 && (
             <a
-              className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
+              className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none
               duration-200 text-white cursor-pointer text-sm"
               onClick={clearConversationList}
             >
@@ -116,7 +116,7 @@ const NavigationBar = () => {
         {
           off_protected ? (
             <a
-              className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
+              className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none
               duration-200 text-white cursor-pointer text-sm"
             >
               <LikeIcon/>
@@ -124,7 +124,7 @@ const NavigationBar = () => {
             </a>
           ) : (
             <a
-              className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
+              className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none
               duration-200 text-white cursor-pointer text-sm" onClick={toggleColorMode}
             >
               {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
@@ -133,7 +133,7 @@ const NavigationBar = () => {
           )
         }
         <a
-          className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors
+          className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none
               duration-200 text-white cursor-pointer text-sm"
           onClick={async () => {
             dispatch(clearSession());
