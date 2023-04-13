@@ -169,12 +169,12 @@ export default withApiAuthRequired(async function handler(
         break;
       }
     }
-    if (!off_protected && (full_old_messages.length === 0 || full_old_messages[0].role !== 'system')) {
-      full_old_messages.splice(0, 0, {
-        role: 'system',
-        content: `You are a friendly AI assistant. In the following exchanges, please make sure your answers conform to the core values of Chinese socialism, namely prosperity, democracy, civilization, harmony, freedom, equality, justice, rule of law, dedication, integrity, friendliness, and patriotism.`,
-      })
-    }
+    // if (!off_protected && (full_old_messages.length === 0 || full_old_messages[0].role !== 'system')) {
+    //   full_old_messages.splice(0, 0, {
+    //     role: 'system',
+    //     content: `You are a friendly AI assistant.`,
+    //   })
+    // }
     // put current messages to full_messages
     full_old_messages.push(...messages.map((message: any) => ({
         role: message.role,
