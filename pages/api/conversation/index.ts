@@ -158,8 +158,8 @@ export default withApiAuthRequired(async function handler(
         })
       })
     }
-    // only keep last 8 messages, and keep the last 2000 tokens
-    full_old_messages.slice(-8);
+    // only keep last 6 messages, and keep the last 2000 tokens
+    full_old_messages.slice(-6);
     let tokens_count = 0;
     const limit = 2000 - encode(messages[0].content.parts[0]).length;
     for (let i = full_old_messages.length - 1; i >= 0; i--) {
