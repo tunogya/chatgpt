@@ -50,6 +50,7 @@ const Dashboard = () => {
     const _4 = 4 - hasUsedDays
     const _7 = 7 - hasUsedDays
     const _1_2_4_7 = [_1, _2, _4, _7].filter((item) => item > 0)
+    if (_1_2_4_7.length === 0) return 0
     return Math.min(..._1_2_4_7)
   }, [hasUsedDays])
 
@@ -213,13 +214,19 @@ const Dashboard = () => {
                     })
                   }}
                 >
-                  {totalAvailableRewards > 0 ? (
-                    <>
-                      本周使用 {hasUsedDays} 天<br/>领取 {totalAvailableRewards} 天体验卡
-                    </>
-                  ) : (
-                    nextRewardNeedDays > 0 && `再使用 ${nextRewardNeedDays} 天可领奖励`
-                  )}
+                  { totalAvailableRewards > 0 && (
+                    `本周使用 ${hasUsedDays} 天\n领取 ${totalAvailableRewards} 天体验卡`
+                  )  }
+                  {
+                    nextRewardNeedDays > 0 && (
+                      `再使用 ${nextRewardNeedDays} 天可领奖励`
+                    )
+                  }
+                  {
+                    totalAvailableRewards === 0 && nextRewardNeedDays === 0 && (
+                      `本周已领取 ${hasUsedDays} 天体验卡`
+                    )
+                  }
                 </button>
               )
             }
