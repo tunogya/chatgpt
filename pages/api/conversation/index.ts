@@ -43,7 +43,7 @@ export default withApiAuthRequired(async function handler(
       offset,
     });
   } else if (req.method === 'POST') {
-    const {action, messages, model, parent_message_id, off_protected} = req.body;
+    const {action, messages, model, parent_message_id} = req.body;
     if (action !== 'next') {
       res.status(400).json({error: 'Currently, only next action is supported.'})
       return
@@ -167,7 +167,7 @@ export default withApiAuthRequired(async function handler(
         break;
       }
     }
-    if (!off_protected && (full_old_messages.length === 0 || full_old_messages[0].role !== 'system')) {
+    if (full_old_messages.length === 0 || full_old_messages[0].role !== 'system') {
       full_old_messages.splice(0, 0, {
         role: 'system',
         content: `You are a friendly AI assistant.`,
