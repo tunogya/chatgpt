@@ -57,7 +57,7 @@ const Dashboard = () => {
           description: `ChatGPT ${count} 天体验卡: ${user?.name}`,
           out_trade_no,
           attach: JSON.stringify({
-            topic: 'CHATGPT',
+            topic: 'chatgpt',
             count,
             user: user?.sub,
           })
