@@ -1,27 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import WxPay from 'wechatpay-node-v3';
-import fs from 'fs';
-
-const pay = new WxPay({
-  appid: 'wxc7d6f9e23b346d39',
-  mchid: '1642508849',
-  publicKey: fs.readFileSync('./apiclient_cert.pem'),
-  privateKey: fs.readFileSync('./apiclient_key.pem'),
-});
+import pay from "@/utils/WxPay";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== 'POST') {
+    res.status(405).json({error: 'Method Not Allowed'});
+    return;
+  }
+  const {total, description, trade_no} = req.body;
   try {
     const params = {
       appid: 'wxc7d6f9e23b346d39',
       mchid: '1642508849',
-      description: '测试',
-      out_trade_no: '123456789',
-      notify_url: 'http://localhost:3000/api/pay/weixin/notify',
+      description,
+      out_trade_no: trade_no,
+      notify_url: 'https://www.abandon.chat/api/pay/weixin/notify',
       amount: {
-        total: 1,
+        total,
       },
     };
     const data = await pay.transactions_native(params)

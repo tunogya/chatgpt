@@ -5,8 +5,6 @@ import {Readable} from "stream";
 import uid from "@/utils/uid";
 import {v4 as uuidv4} from 'uuid';
 import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
-import {addConversationNow} from "@/utils/Report";
-import {getCurrentWeekId} from "@/utils/DateUtil";
 import {encode} from "gpt-3-encoder";
 
 export default withApiAuthRequired(async function handler(
@@ -169,19 +167,18 @@ export default withApiAuthRequired(async function handler(
         break;
       }
     }
-    // if (!off_protected && (full_old_messages.length === 0 || full_old_messages[0].role !== 'system')) {
-    //   full_old_messages.splice(0, 0, {
-    //     role: 'system',
-    //     content: `You are a friendly AI assistant.`,
-    //   })
-    // }
+    if (!off_protected && (full_old_messages.length === 0 || full_old_messages[0].role !== 'system')) {
+      full_old_messages.splice(0, 0, {
+        role: 'system',
+        content: `You are a friendly AI assistant.`,
+      })
+    }
     // put current messages to full_messages
     full_old_messages.push(...messages.map((message: any) => ({
         role: message.role,
         content: message.content.parts[0],
       })
     ))
-    addConversationNow(user_id);
     try {
       const result = await fetch('https://api.openai.com/v1/chat/completions', {
         headers: {

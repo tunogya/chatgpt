@@ -6,6 +6,10 @@ import Image from "next/image";
 import {useRouter} from "next/router";
 import useSWR from "swr";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
+import {v4 as uuidv4} from 'uuid';
+import {QRCodeSVG} from 'qrcode.react';
+import WeixinPayLogo from "@/components/SVG/WeixinPayLogo";
+import WeixinPayText from "@/components/SVG/WeixinPayText";
 
 const Dashboard = () => {
   const dispatch = useDispatch()
@@ -15,85 +19,16 @@ const Dashboard = () => {
   ])
   const router = useRouter()
   const to = router.query.to
+  const [codeUrl, setCodeUrl] = useState<undefined | string>(undefined)
+  const [count, setCount] = useState<undefined | number>(undefined)
+  const [status, setStatus] = useState<string>('idle')
+  const [trade_no, setTradeNo] = useState<undefined | string>(undefined)
 
-  const {
-    data: dataOfReport,
-    isLoading: isLoadingOfReport,
-    mutate: mutateReport
-  } = useSWR('/api/report', (url: string) => fetch(url).then((res) => res.json()))
   const {
     data: dataOfMetadata,
     isLoading: isLoadingOfMetadata,
     mutate: mutateMetadata
   } = useSWR('/api/app/metadata', (url: string) => fetch(url).then((res) => res.json()))
-
-  const hasUsedDays = dataOfReport?.conversation?.filter((item: number) => item > 0).length || 0
-  const [requestState, setRequestState] = useState<{
-    [key: string]: 'loading' | 'idle'
-  }>({})
-
-  const totalAvailableRewards = useMemo(() => {
-    if (!dataOfReport) return 0
-    let total = 0
-    for (const key in dataOfReport.rewards) {
-      if (Object.prototype.hasOwnProperty.call(dataOfReport.rewards, key)) {
-        const element = dataOfReport.rewards[key];
-        total += element.available - element.received
-      }
-    }
-    return total
-  }, [dataOfReport])
-
-  const nextRewardNeedDays = useMemo(() => {
-    const _1 = 1 - hasUsedDays
-    const _2 = 2 - hasUsedDays
-    const _4 = 4 - hasUsedDays
-    const _7 = 7 - hasUsedDays
-    const _1_2_4_7 = [_1, _2, _4, _7].filter((item) => item > 0)
-    if (_1_2_4_7.length === 0) return 0
-    return Math.min(..._1_2_4_7)
-  }, [hasUsedDays])
-
-  const rewardKeys = useMemo(() => {
-    if (!dataOfReport?.rewards) return []
-    return Object.keys(dataOfReport.rewards)
-      .map((key) => ({
-        label: key,
-        value: parseInt(key.replace(/[^0-9]/ig, ''))
-      }))
-      .sort((a, b) => a.value - b.value)
-  }, [dataOfReport])
-
-  const requestFreeDays = async (type: string) => {
-    setRequestState({
-      ...requestState,
-      [type]: 'loading'
-    })
-    await fetch('/api/app/requestFreeDays', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        type: type
-      })
-    })
-    await mutateReport()
-    await mutateMetadata()
-    setRequestState({
-      ...requestState,
-      [type]: 'idle'
-    })
-  }
-
-  const freeUseLeft = useMemo(() => {
-    if (!dataOfMetadata?.freeUseTTL) return 0
-    const time = ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400)
-    if (time < 0) return 0
-    return time.toLocaleString('en-US', {
-      maximumFractionDigits: 1
-    })
-  }, [dataOfMetadata])
 
   const paidUseLeft = useMemo(() => {
     if (!dataOfMetadata?.paidUseTTL) return 0
@@ -104,10 +39,59 @@ const Dashboard = () => {
     })
   }, [dataOfMetadata])
 
+  // 查询订单状态
+  const {data} = useSWR(trade_no ? `/api/pay/weixin/query?out_trade_no=${trade_no}` : null, (url: string) => fetch(url).then((res) => res.json()))
+
+  const getCodeUrl = async (count: number, total: number) => {
+    setStatus('loading')
+    setCodeUrl(undefined)
+    const trade_no = uuidv4().replace(/-/g, '')
+    setTradeNo(trade_no)
+    try {
+      const res = await fetch('/api/pay/weixin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          total,
+          description: `ChatGPT ${count} 天体验卡`,
+          trade_no,
+        })
+      })
+      const data = await res.json()
+      if (data.data.status === 200) {
+        setCodeUrl(data.data.code_url)
+        setStatus('success')
+        setTimeout(() => {
+          setStatus('idle')
+        }, 3_000)
+      } else {
+        setCodeUrl(undefined)
+        setTradeNo(undefined)
+        setStatus('error')
+        setTimeout(() => {
+          setStatus('idle')
+        }, 3_000)
+      }
+    } catch (e) {
+      setCodeUrl(undefined)
+      setTradeNo(undefined)
+      setStatus('error')
+      setTimeout(() => {
+        setStatus('idle')
+      }, 3_000)
+    }
+  }
+
   const backButton = () => (
     <button
       className={"text-md underline font-semibold mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center"}
       onClick={() => {
+        setCodeUrl(undefined)
+        setCount(undefined)
+        setTradeNo(undefined)
+        setStatus('idle')
         router.push('/chat')
       }}
     >
@@ -137,7 +121,7 @@ const Dashboard = () => {
               <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
               <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             </svg>
-            为你推荐
+            推荐
           </h2>
           {/*TODO: 使用推荐算法生成一些用例*/}
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
@@ -182,25 +166,24 @@ const Dashboard = () => {
         </div>
         <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
           <h2 className="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
-            {
-              user?.picture && (
-                <div className={'h-6 w-6 overflow-hidden rounded-full'}>
+            <div className={'h-6 w-6 overflow-hidden rounded-full'}>
+              {
+                user?.picture && (
                   <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={24} height={24} quality={80}
                          blurDataURL={`https://dummyimage.com/24x24/ffffff/000000.png&text=${user?.name?.[0] || 'A'}`}
                          priority/>
-                </div>
-              )
-            }
-            {user?.nickname ? (user.nickname?.slice(0,1).toUpperCase() + user.nickname?.slice(1)) : '请登录'}
+                )}
+            </div>
+            账户
           </h2>
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
             {
-              !user?.email_verified && (
-                <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">未验证邮箱</li>
+              user?.email_verified && (
+                <li className="w-full bg-orange-500 text-white p-3 rounded-md">邮箱未验证</li>
               )
             }
             {
-              (!dataOfReport && isLoadingOfReport) || (!dataOfMetadata && isLoadingOfMetadata) ? (
+              isLoadingOfMetadata ? (
                 <LoadingIcon/>
               ) : (
                 <button
@@ -209,114 +192,92 @@ const Dashboard = () => {
                     router.push({
                       pathname: '/chat',
                       query: {
-                        to: 'bonus'
+                        to: 'purchase'
                       }
                     })
                   }}
                 >
-                  { totalAvailableRewards > 0 && (
-                    `本周使用 ${hasUsedDays} 天\n领取 ${totalAvailableRewards} 天体验卡`
-                  )  }
-                  {
-                    nextRewardNeedDays > 0 && (
-                      `再使用 ${nextRewardNeedDays} 天可领奖励`
-                    )
-                  }
-                  {
-                    totalAvailableRewards === 0 && nextRewardNeedDays === 0 && (
-                      `本周已领取 ${hasUsedDays} 天体验卡`
-                    )
-                  }
+                  {paidUseLeft > 0 ? `体验卡: {paidUseLeft} 天` : '😭 没有体验卡'}
                 </button>
               )
             }
             <li
-              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">体验卡: {isLoadingOfMetadata ? '-' : freeUseLeft} 天
+              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">😱 周五免费用
             </li>
-            <button
-              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
-              onClick={() => {
-                router.push({
-                  pathname: '/chat',
-                  query: {
-                    to: 'invite'
-                  }
-                })
-              }}
-            >
-              邀请朋友得体验卡
-            </button>
           </ul>
         </div>
       </div>
     </>
   )
 
-  const bonusPage = () => (
+  const purchasePage = () => (
     <>
       {backButton()}
       <div className={"w-screen max-w-xs"}>
-        <div className={"text-md font-bold pb-4"}>本周使用奖励</div>
-        <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
-          {/*<div className={"flex justify-between items-center"}>*/}
-          {/*  <div>*/}
-          {/*    购买 5 天付费会员卡*/}
-          {/*  </div>*/}
-          {/*  <button className={"bg-orange-500 w-14 h-8 text-xs text-white rounded-full"}>*/}
-          {/*    购买*/}
-          {/*  </button>*/}
-          {/*</div>*/}
-          {
-            rewardKeys.map(({label, value}) => (
-              <div key={label} className={"flex justify-between items-center"}>
-                <div className={"flex flex-col gap-1"}>
-                  <div>
-                    使用 {value} 天
-                  </div>
-                  <div className={"text-xs text-black/50 dark:text-white/50"}>
-                    可获得 1 天体验卡
-                  </div>
-                </div>
-                {
-                  (dataOfReport.rewards?.[label]?.available - dataOfReport.rewards?.[label]?.received > 0) && (
-                    <button
-                      className={"bg-green-600 hover:opacity-80 w-14 h-8 text-xs text-white rounded-full"}
-                      disabled={requestState?.[label] === 'loading'}
-                      onClick={() => {
-                        requestFreeDays(label)
-                      }}
-                    >
-                      {requestState?.[label] === 'loading' ? '...' : '领取'}
-                    </button>
-                  )
-                }
-                {
-                  dataOfReport.rewards?.[label]?.available > 0 && dataOfReport.rewards?.[label]?.available === dataOfReport.rewards?.[label]?.received && (
-                    <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
-                      已领取
-                    </button>
-                  )
-                }
-                {
-                  dataOfReport.rewards?.[label]?.available === 0 && (
-                    <button className={"bg-gray-100 w-14 h-8 text-xs text-black/50 rounded-full"}>
-                      差 {value - hasUsedDays} 天
-                    </button>
-                  )
-                }
+        <div className={"text-md font-bold pb-4"}>充值体验卡</div>
+        <div className={"flex flex-col gap-2"}>
+          <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
+            <div className={"flex justify-between items-center"}>
+              <div className={`${count === 1 ? "text-green-600 font-bold" : ""}`}>
+                兑换 1 天体验卡
               </div>
-            ))
+              <button
+                className={`${count === 1 ? "bg-green-500 text-white" : "bg-gray-200"} w-14 h-8 text-xs rounded-full`}
+                onClick={() => {
+                  setCount(1)
+                  getCodeUrl(1, 200)
+                }}>
+                ¥ 2
+              </button>
+            </div>
+          </div>
+          <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
+            <div className={"flex justify-between items-center"}>
+              <div className={`${count === 7 ? "text-green-600 font-bold" : ""}`}>
+                兑换 7 天体验卡
+              </div>
+              <button
+                className={`${count === 7 ? "bg-green-500 text-white" : "bg-gray-200"} w-14 h-8 text-xs rounded-full`}
+                onClick={() => {
+                  setCount(7)
+                  getCodeUrl(7, 1000)
+                }}>
+                ¥ 10
+              </button>
+            </div>
+          </div>
+          <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
+            <div className={"flex justify-between items-center"}>
+              <div className={`${count === 30 ? "text-green-600 font-bold" : ""}`}>
+                兑换 30 天体验卡
+              </div>
+              <button
+                className={`${count === 30 ? "bg-green-500 text-white" : "bg-gray-200"} w-14 h-8 text-xs rounded-full`}
+                onClick={() => {
+                  setCount(30)
+                  getCodeUrl(30, 3000)
+                }}>
+                ¥ 30
+              </button>
+            </div>
+          </div>
+          {
+            status === 'loading' && (
+              <LoadingIcon/>
+            )
+          }
+          {
+            codeUrl && (
+              <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
+                <QRCodeSVG value={codeUrl} size={200} includeMargin/>
+                <div className={"flex gap-2 justify-center items-center"}>
+                  <WeixinPayLogo/>
+                  <WeixinPayText/>
+                </div>
+              </div>
+            )
           }
         </div>
-      </div>
-    </>
-  )
-
-  const invitePage = () => (
-    <>
-      {backButton()}
-      <div>
-
       </div>
     </>
   )
@@ -326,8 +287,7 @@ const Dashboard = () => {
       <div
         className="text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 dark:text-gray-100">
         {!to && chatPage()}
-        {to === 'bonus' && bonusPage()}
-        {to === 'invite' && invitePage()}
+        {to === 'purchase' && purchasePage()}
       </div>
       <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
     </div>
