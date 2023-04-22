@@ -27,7 +27,7 @@ export default async function handler(
   }
   const resource = await pay.decipher_gcm(req.body.resource.ciphertext, req.body.resource.associated_data, req.body.resource.nonce);
   // @ts-ignore
-  const {topic, count, user} = JSON.parse(resource.attach);
+  const {topic, quantity, user} = JSON.parse(resource.attach);
   try {
     const metadata = await ddbDocClient.send(new GetCommand({
       TableName: 'wizardingpay',
@@ -61,7 +61,7 @@ export default async function handler(
             },
             UpdateExpression: `SET paidUseTTL = :newPaidUseTTL`,
             ExpressionAttributeValues: {
-              ':newPaidUseTTL': Math.max(oldPaidUseTTL, Math.floor(Date.now() / 1000)) + count * 24 * 60 * 60,
+              ':newPaidUseTTL': Math.max(oldPaidUseTTL, Math.floor(Date.now() / 1000)) + quantity * 24 * 60 * 60,
             }
           }
         }

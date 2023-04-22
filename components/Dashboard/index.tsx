@@ -20,7 +20,7 @@ const Dashboard = () => {
   const router = useRouter()
   const to = router.query.to
   const [codeUrl, setCodeUrl] = useState<undefined | string>(undefined)
-  const [count, setCount] = useState<undefined | number>(undefined)
+  const [quantity, setQuantity] = useState<undefined | number>(undefined)
   const [qrStatus, setQrStatus] = useState<string>('idle')
   const [trade_no, setTradeNo] = useState<undefined | string>(undefined)
 
@@ -39,8 +39,11 @@ const Dashboard = () => {
     })
   }, [dataOfMetadata])
 
-  const {data: dataOfOrder, mutate: mutateOrder} = useSWR(trade_no ? `/api/pay/weixin/query?out_trade_no=${trade_no}` : null, (url: string) => fetch(url).then((res) => res.json()))
-  const getCodeUrl = async (count: number, total: number) => {
+  const {
+    data: dataOfOrder,
+    mutate: mutateOrder
+  } = useSWR(trade_no ? `/api/pay/weixin/query?out_trade_no=${trade_no}` : null, (url: string) => fetch(url).then((res) => res.json()))
+  const getCodeUrl = async (quantity: number) => {
     setQrStatus('loading')
     setCodeUrl(undefined)
     const out_trade_no = uuidv4().replace(/-/g, '')
@@ -52,12 +55,13 @@ const Dashboard = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          total,
-          description: `ChatGPT ${count} 天体验卡: ${user?.name}`,
+          description: `ChatGPT ${quantity} 天体验卡: ${user?.name}`,
           out_trade_no,
+          quantity,
+          topic: 'chatgpt',
           attach: JSON.stringify({
             topic: 'chatgpt',
-            count,
+            quantity,
             user: user?.sub,
           })
         })
@@ -83,7 +87,7 @@ const Dashboard = () => {
       className={"text-md underline font-semibold mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center"}
       onClick={() => {
         setCodeUrl(undefined)
-        setCount(undefined)
+        setQuantity(undefined)
         setTradeNo(undefined)
         setQrStatus('idle')
         mutateMetadata()
@@ -210,63 +214,35 @@ const Dashboard = () => {
       <div className={"w-screen max-w-xs"}>
         <div className={"text-md font-bold pb-4"}>我的账户：{user?.name}</div>
         <div className={"flex flex-col gap-2"}>
-          <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
-            <div className={"flex justify-between items-center"}>
-              <div className={`${count === 1 ? "text-green-600 font-bold" : ""}`}>
-                充值 1 天体验卡
+          {
+            [
+              {quantity: 28, total: 24.99},
+              {quantity: 180, total: 129.99},
+              {quantity: 365, total: 199.99},
+            ].map((item, index) => (
+              <div key={index} className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
+                <div className={"flex justify-between items-center"}>
+                  <div className={`${quantity === item.quantity ? "text-green-600 font-bold" : ""}`}>
+                    充值 {item.quantity} 天体验卡 ({(item.total / item.quantity).toLocaleString("en-US", {
+                    maximumFractionDigits: 2
+                  })}/天)
+                  </div>
+                  <button
+                    className={`${quantity === item.quantity ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
+                    onClick={() => {
+                      if (quantity === item.quantity) {
+                        mutateOrder()
+                        return
+                      }
+                      setQuantity(item.quantity)
+                      getCodeUrl(item.quantity)
+                    }}>
+                    {item.total}
+                  </button>
+                </div>
               </div>
-              <button
-                className={`${count === 1 ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
-                onClick={() => {
-                  if (count === 1) {
-                    mutateOrder()
-                    return
-                  }
-                  setCount(1)
-                  getCodeUrl(1, 99)
-                }}>
-                ¥ 0.99
-              </button>
-            </div>
-          </div>
-          <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
-            <div className={"flex justify-between items-center"}>
-              <div className={`${count === 7 ? "text-green-600 font-bold" : ""}`}>
-                充值 7 天体验卡
-              </div>
-              <button
-                className={`${count === 7 ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
-                onClick={() => {
-                  if (count === 7) {
-                    mutateOrder()
-                    return
-                  }
-                  setCount(7)
-                  getCodeUrl(7, 699)
-                }}>
-                ¥ 6.99
-              </button>
-            </div>
-          </div>
-          <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
-            <div className={"flex justify-between items-center"}>
-              <div className={`${count === 30 ? "text-green-600 font-bold" : ""}`}>
-                充值 30 天体验卡
-              </div>
-              <button
-                className={`${count === 30 ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
-                onClick={() => {
-                  if (count === 30) {
-                    mutateOrder()
-                    return
-                  }
-                  setCount(30)
-                  getCodeUrl(30, 2999)
-                }}>
-                ¥ 29.99
-              </button>
-            </div>
-          </div>
+            ))
+          }
           {
             qrStatus === 'loading' && (
               <LoadingIcon/>
@@ -275,19 +251,23 @@ const Dashboard = () => {
           {
             qrStatus === 'error' && (
               <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
-                <div className={"flex justify-center items-center text-red-600 font-bold text-center"} style={{ height: '200px' }}>获取二维码失败，请刷新重试</div>
+                <div className={"flex justify-center items-center text-red-600 font-bold text-center"}
+                     style={{height: '200px'}}>获取二维码失败，请刷新重试
+                </div>
               </div>
             )
           }
           {
             dataOfOrder?.data?.trade_state === 'SUCCESS' && (
               <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
-                <div className={"flex justify-center items-center text-green-600 font-bold text-center"} style={{ height: '200px' }}>支付成功，<br/>我们将立即为您充值！</div>
+                <div className={"flex justify-center items-center text-green-600 font-bold text-center"}
+                     style={{height: '200px'}}>支付成功，<br/>我们将立即为您充值！
+                </div>
               </div>
             )
           }
           {
-            codeUrl && (!dataOfOrder?.data?.trade_state || dataOfOrder.data.trade_state === "NOTPAY" ) && (
+            codeUrl && (!dataOfOrder?.data?.trade_state || dataOfOrder.data.trade_state === "NOTPAY") && (
               <div className={"flex flex-col items-center justify-center gap-4"} style={{paddingTop: "20px"}}>
                 <div className={"flex gap-2 justify-center items-center"}>
                   <WeixinPayLogo/>
