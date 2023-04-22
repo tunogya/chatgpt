@@ -56,6 +56,11 @@ const Dashboard = () => {
           total,
           description: `ChatGPT ${count} 天体验卡: ${user?.name}`,
           out_trade_no,
+          attach: JSON.stringify({
+            topic: 'ChatGPT 体验卡',
+            count,
+            user: user?.sub,
+          })
         })
       })
       const data = await res.json()
@@ -228,7 +233,7 @@ const Dashboard = () => {
                     return
                   }
                   setCount(1)
-                  getCodeUrl(1, 200)
+                  getCodeUrl(1, 2)
                 }}>
                 ¥ 2
               </button>
@@ -247,7 +252,7 @@ const Dashboard = () => {
                     return
                   }
                   setCount(7)
-                  getCodeUrl(7, 1000)
+                  getCodeUrl(7, 10)
                 }}>
                 ¥ 10
               </button>
@@ -266,7 +271,7 @@ const Dashboard = () => {
                     return
                   }
                   setCount(30)
-                  getCodeUrl(30, 3000)
+                  getCodeUrl(30, 30)
                 }}>
                 ¥ 30
               </button>
