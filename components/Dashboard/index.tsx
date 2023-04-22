@@ -223,9 +223,9 @@ const Dashboard = () => {
                     return
                   }
                   setCount(1)
-                  getCodeUrl(1, 200)
+                  getCodeUrl(1, 99)
                 }}>
-                ¥ 2
+                ¥ 0.99
               </button>
             </div>
           </div>
@@ -242,9 +242,9 @@ const Dashboard = () => {
                     return
                   }
                   setCount(7)
-                  getCodeUrl(7, 1000)
+                  getCodeUrl(7, 699)
                 }}>
-                ¥ 10
+                ¥ 6.99
               </button>
             </div>
           </div>
@@ -261,9 +261,9 @@ const Dashboard = () => {
                     return
                   }
                   setCount(30)
-                  getCodeUrl(30, 3000)
+                  getCodeUrl(30, 2999)
                 }}>
-                ¥ 30
+                ¥ 29.99
               </button>
             </div>
           </div>
