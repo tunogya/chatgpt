@@ -187,16 +187,16 @@ const Dashboard = () => {
               ) : (
                 <button
                   className="w-full bg-green-600 hover:opacity-80 text-white p-3 rounded-md"
-                  onClick={() => {
-                    router.push({
-                      pathname: '/chat',
-                      query: {
-                        to: 'purchase'
-                      }
-                    })
-                  }}
+                  // onClick={() => {
+                  //   router.push({
+                  //     pathname: '/chat',
+                  //     query: {
+                  //       to: 'purchase'
+                  //     }
+                  //   })
+                  // }}
                 >
-                  {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天` : '没有体验卡，立即兑换'}
+                  {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天` : '我还没有体验卡'}
                 </button>
               )
             }
