@@ -39,8 +39,7 @@ const Dashboard = () => {
     })
   }, [dataOfMetadata])
 
-  // 查询订单状态
-  const {data, mutate} = useSWR(trade_no ? `/api/pay/weixin/query?out_trade_no=${trade_no}` : null, (url: string) => fetch(url).then((res) => res.json()))
+  const {data: dataOfOrder, mutate: mutateOrder} = useSWR(trade_no ? `/api/pay/weixin/query?out_trade_no=${trade_no}` : null, (url: string) => fetch(url).then((res) => res.json()))
   const getCodeUrl = async (count: number, total: number) => {
     setQrStatus('loading')
     setCodeUrl(undefined)
@@ -67,24 +66,15 @@ const Dashboard = () => {
       if (data.data.status === 200) {
         setCodeUrl(data.data.code_url)
         setQrStatus('success')
-        setTimeout(() => {
-          setQrStatus('idle')
-        }, 3_000)
       } else {
         setCodeUrl(undefined)
         setTradeNo(undefined)
         setQrStatus('error')
-        setTimeout(() => {
-          setQrStatus('idle')
-        }, 3_000)
       }
     } catch (e) {
       setCodeUrl(undefined)
       setTradeNo(undefined)
       setQrStatus('error')
-      setTimeout(() => {
-        setQrStatus('idle')
-      }, 3_000)
     }
   }
 
@@ -96,6 +86,7 @@ const Dashboard = () => {
         setCount(undefined)
         setTradeNo(undefined)
         setQrStatus('idle')
+        mutateMetadata()
         router.push('/chat')
       }}
     >
@@ -127,7 +118,6 @@ const Dashboard = () => {
             </svg>
             推荐
           </h2>
-          {/*TODO: 使用推荐算法生成一些用例*/}
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
             {
               demo.map((item, index) => (
@@ -192,14 +182,14 @@ const Dashboard = () => {
               ) : (
                 <button
                   className="w-full bg-green-600 hover:opacity-80 text-white p-3 rounded-md"
-                  // onClick={() => {
-                  //   router.push({
-                  //     pathname: '/chat',
-                  //     query: {
-                  //       to: 'purchase'
-                  //     }
-                  //   })
-                  // }}
+                  onClick={() => {
+                    router.push({
+                      pathname: '/chat',
+                      query: {
+                        to: 'purchase'
+                      }
+                    })
+                  }}
                 >
                   {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天` : '我还没有体验卡'}
                 </button>
@@ -229,11 +219,11 @@ const Dashboard = () => {
                 className={`${count === 1 ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
                 onClick={() => {
                   if (count === 1) {
-                    mutate()
+                    mutateOrder()
                     return
                   }
                   setCount(1)
-                  getCodeUrl(1, 2)
+                  getCodeUrl(1, 200)
                 }}>
                 ¥ 2
               </button>
@@ -248,11 +238,11 @@ const Dashboard = () => {
                 className={`${count === 7 ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
                 onClick={() => {
                   if (count === 7) {
-                    mutate()
+                    mutateOrder()
                     return
                   }
                   setCount(7)
-                  getCodeUrl(7, 10)
+                  getCodeUrl(7, 1000)
                 }}>
                 ¥ 10
               </button>
@@ -267,11 +257,11 @@ const Dashboard = () => {
                 className={`${count === 30 ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
                 onClick={() => {
                   if (count === 30) {
-                    mutate()
+                    mutateOrder()
                     return
                   }
                   setCount(30)
-                  getCodeUrl(30, 30)
+                  getCodeUrl(30, 3000)
                 }}>
                 ¥ 30
               </button>
@@ -290,14 +280,14 @@ const Dashboard = () => {
             )
           }
           {
-            data?.data?.trade_state === 'SUCCESS' && (
+            dataOfOrder?.data?.trade_state === 'SUCCESS' && (
               <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
                 <div className={"flex justify-center items-center text-green-600 font-bold text-center"} style={{ height: '200px' }}>支付成功，<br/>我们将立即为您充值！</div>
               </div>
             )
           }
           {
-            codeUrl && (!data?.data?.trade_state || data.data.trade_state === "NOTPAY" ) && (
+            codeUrl && (!dataOfOrder?.data?.trade_state || dataOfOrder.data.trade_state === "NOTPAY" ) && (
               <div className={"flex flex-col items-center justify-center gap-4"} style={{paddingTop: "20px"}}>
                 <div className={"flex gap-2 justify-center items-center"}>
                   <WeixinPayLogo/>
@@ -306,7 +296,10 @@ const Dashboard = () => {
                 <div className={'p-2 rounded bg-white'}>
                   <QRCodeSVG value={codeUrl} size={160}/>
                 </div>
-                <button className={"text-xs underline"} onClick={mutate}>
+                <button className={"text-xs underline"} onClick={() => {
+                  mutateOrder()
+                  mutateMetadata()
+                }}>
                   确认，我已支付
                 </button>
               </div>
