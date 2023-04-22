@@ -21,7 +21,7 @@ const Dashboard = () => {
   const to = router.query.to
   const [codeUrl, setCodeUrl] = useState<undefined | string>(undefined)
   const [count, setCount] = useState<undefined | number>(undefined)
-  const [status, setStatus] = useState<string>('idle')
+  const [qrStatus, setQrStatus] = useState<string>('idle')
   const [trade_no, setTradeNo] = useState<undefined | string>(undefined)
 
   const {
@@ -40,13 +40,12 @@ const Dashboard = () => {
   }, [dataOfMetadata])
 
   // 查询订单状态
-  const {data} = useSWR(trade_no ? `/api/pay/weixin/query?out_trade_no=${trade_no}` : null, (url: string) => fetch(url).then((res) => res.json()))
-
+  const {data, mutate} = useSWR(trade_no ? `/api/pay/weixin/query?out_trade_no=${trade_no}` : null, (url: string) => fetch(url).then((res) => res.json()))
   const getCodeUrl = async (count: number, total: number) => {
-    setStatus('loading')
+    setQrStatus('loading')
     setCodeUrl(undefined)
-    const trade_no = uuidv4().replace(/-/g, '')
-    setTradeNo(trade_no)
+    const out_trade_no = uuidv4().replace(/-/g, '')
+    setTradeNo(out_trade_no)
     try {
       const res = await fetch('/api/pay/weixin', {
         method: 'POST',
@@ -55,31 +54,31 @@ const Dashboard = () => {
         },
         body: JSON.stringify({
           total,
-          description: `ChatGPT ${count} 天体验卡`,
-          trade_no,
+          description: `ChatGPT ${count} 天体验卡: ${user?.name}`,
+          out_trade_no,
         })
       })
       const data = await res.json()
       if (data.data.status === 200) {
         setCodeUrl(data.data.code_url)
-        setStatus('success')
+        setQrStatus('success')
         setTimeout(() => {
-          setStatus('idle')
+          setQrStatus('idle')
         }, 3_000)
       } else {
         setCodeUrl(undefined)
         setTradeNo(undefined)
-        setStatus('error')
+        setQrStatus('error')
         setTimeout(() => {
-          setStatus('idle')
+          setQrStatus('idle')
         }, 3_000)
       }
     } catch (e) {
       setCodeUrl(undefined)
       setTradeNo(undefined)
-      setStatus('error')
+      setQrStatus('error')
       setTimeout(() => {
-        setStatus('idle')
+        setQrStatus('idle')
       }, 3_000)
     }
   }
@@ -91,7 +90,7 @@ const Dashboard = () => {
         setCodeUrl(undefined)
         setCount(undefined)
         setTradeNo(undefined)
-        setStatus('idle')
+        setQrStatus('idle')
         router.push('/chat')
       }}
     >
@@ -178,7 +177,7 @@ const Dashboard = () => {
           </h2>
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
             {
-              user?.email_verified && (
+              !user?.email_verified && (
                 <li className="w-full bg-orange-500 text-white p-3 rounded-md">邮箱未验证</li>
               )
             }
@@ -197,12 +196,12 @@ const Dashboard = () => {
                     })
                   }}
                 >
-                  {paidUseLeft > 0 ? `体验卡: {paidUseLeft} 天` : '😭 没有体验卡'}
+                  {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天` : '没有体验卡，立即兑换'}
                 </button>
               )
             }
             <li
-              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">😱 周五免费用
+              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">😱每周五，免费用一天！
             </li>
           </ul>
         </div>
@@ -214,16 +213,20 @@ const Dashboard = () => {
     <>
       {backButton()}
       <div className={"w-screen max-w-xs"}>
-        <div className={"text-md font-bold pb-4"}>充值体验卡</div>
+        <div className={"text-md font-bold pb-4"}>我的账户：{user?.name}</div>
         <div className={"flex flex-col gap-2"}>
           <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
             <div className={"flex justify-between items-center"}>
               <div className={`${count === 1 ? "text-green-600 font-bold" : ""}`}>
-                兑换 1 天体验卡
+                充值 1 天体验卡
               </div>
               <button
-                className={`${count === 1 ? "bg-green-500 text-white" : "bg-gray-200"} w-14 h-8 text-xs rounded-full`}
+                className={`${count === 1 ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
                 onClick={() => {
+                  if (count === 1) {
+                    mutate()
+                    return
+                  }
                   setCount(1)
                   getCodeUrl(1, 200)
                 }}>
@@ -234,11 +237,15 @@ const Dashboard = () => {
           <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
             <div className={"flex justify-between items-center"}>
               <div className={`${count === 7 ? "text-green-600 font-bold" : ""}`}>
-                兑换 7 天体验卡
+                充值 7 天体验卡
               </div>
               <button
-                className={`${count === 7 ? "bg-green-500 text-white" : "bg-gray-200"} w-14 h-8 text-xs rounded-full`}
+                className={`${count === 7 ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
                 onClick={() => {
+                  if (count === 7) {
+                    mutate()
+                    return
+                  }
                   setCount(7)
                   getCodeUrl(7, 1000)
                 }}>
@@ -249,11 +256,15 @@ const Dashboard = () => {
           <div className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
             <div className={"flex justify-between items-center"}>
               <div className={`${count === 30 ? "text-green-600 font-bold" : ""}`}>
-                兑换 30 天体验卡
+                充值 30 天体验卡
               </div>
               <button
-                className={`${count === 30 ? "bg-green-500 text-white" : "bg-gray-200"} w-14 h-8 text-xs rounded-full`}
+                className={`${count === 30 ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
                 onClick={() => {
+                  if (count === 30) {
+                    mutate()
+                    return
+                  }
                   setCount(30)
                   getCodeUrl(30, 3000)
                 }}>
@@ -262,18 +273,37 @@ const Dashboard = () => {
             </div>
           </div>
           {
-            status === 'loading' && (
+            qrStatus === 'loading' && (
               <LoadingIcon/>
             )
           }
           {
-            codeUrl && (
+            qrStatus === 'error' && (
               <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
-                <QRCodeSVG value={codeUrl} size={200} includeMargin/>
+                <div className={"flex justify-center items-center text-red-600 font-bold text-center"} style={{ height: '200px' }}>获取二维码失败，请刷新重试</div>
+              </div>
+            )
+          }
+          {
+            data?.data?.trade_state === 'SUCCESS' && (
+              <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
+                <div className={"flex justify-center items-center text-green-600 font-bold text-center"} style={{ height: '200px' }}>支付成功，<br/>我们将立即为您充值！</div>
+              </div>
+            )
+          }
+          {
+            codeUrl && (!data?.data?.trade_state || data.data.trade_state === "NOTPAY" ) && (
+              <div className={"flex flex-col items-center justify-center gap-4"} style={{paddingTop: "20px"}}>
                 <div className={"flex gap-2 justify-center items-center"}>
                   <WeixinPayLogo/>
                   <WeixinPayText/>
                 </div>
+                <div className={'p-2 rounded bg-white'}>
+                  <QRCodeSVG value={codeUrl} size={160}/>
+                </div>
+                <button className={"text-xs underline"} onClick={mutate}>
+                  确认，我已支付
+                </button>
               </div>
             )
           }
