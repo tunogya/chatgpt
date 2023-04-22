@@ -17,7 +17,7 @@ export default withApiAuthRequired(async function handler(
       mchid: '1642508849',
       description,
       out_trade_no: out_trade_no,
-      notify_url: 'https://www.abandon.chat/api/pay/weixin/notify',
+      notify_url: 'https://www.abandon.chat/api/pay/weixin/callback',
       amount: {
         total,
       },
