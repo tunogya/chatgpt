@@ -1,12 +1,13 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import pay from "@/utils/WxPay";
 
-const APIV3_KEY = process.env.APIV3_KEY || "";
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log("收到微信支付的回调请求")
+  console.log(req.headers)
+  console.log(req.body)
   // Only accept POST requests
   if (req.method !== 'POST') {
     res.status(405).json({error: 'Method Not Allowed'});
@@ -33,7 +34,7 @@ export default async function handler(
     res.status(500).json({error: e});
     return;
   }
-  const resource = await pay.decipher_gcm(req.body.resource.ciphertext, req.body.resource.associated_data, req.body.resource.nonce, APIV3_KEY);
+  const resource = await pay.decipher_gcm(req.body.resource.ciphertext, req.body.resource.associated_data, req.body.resource.nonce);
   console.log("resource", resource)
   console.log("准备更新用户的metadata信息")
   try {
