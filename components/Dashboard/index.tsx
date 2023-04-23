@@ -195,7 +195,7 @@ const Dashboard = () => {
                     })
                   }}
                 >
-                  {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天` : '我还没有体验卡'}
+                  {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天 →` : '我还没有体验卡 →'}
                 </button>
               )
             }
@@ -261,7 +261,7 @@ const Dashboard = () => {
             dataOfOrder?.data?.trade_state === 'SUCCESS' && (
               <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
                 <div className={"flex justify-center items-center text-green-600 font-bold text-center"}
-                     style={{height: '200px'}}>支付成功，<br/>我们将立即为您充值！
+                     style={{height: '200px'}}>支付成功，<br/>我们将立即为您充值！<br/>现在你可以返回首页了
                 </div>
               </div>
             )
