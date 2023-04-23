@@ -176,7 +176,7 @@ const Dashboard = () => {
           </h2>
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
             {
-              !user?.email_verified && (
+              user?.email_verified === false  && (
                 <li className="w-full bg-orange-500 text-white p-3 rounded-md">邮箱未验证</li>
               )
             }
