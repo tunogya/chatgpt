@@ -319,18 +319,14 @@ const Dashboard = () => {
     </>
   )
 
-  const refUrl = `https://abandon.chat/ref/${user?.sub}`
+  const refUrl = `https://www.abandon.chat/ref/${user?.sub}`
 
   const freePage = () => (
     <>
       {backButton()}
       <div className={"w-screen max-w-xs"}>
-        <div className={"flex pb-4 items-center gap-2"}>
-          <div className={"text-md font-bold"}>我的邀请链接</div>
-          {/*<button*/}
-          {/*  className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400">*/}
-          {/*  <CopyIcon/>*/}
-          {/*</button>*/}
+        <div className={"flex pb-4 items-center gap-2 text-md font-bold"}>
+          我的邀请链接
         </div>
         <div className={"flex flex-col gap-4"}>
           <div>
@@ -352,7 +348,7 @@ const Dashboard = () => {
           >
             <div className={"flex justify-center items-center gap-2 text-white"}>
               { copied ? <RightIcon/> : <CopyIcon/> }
-              { copied ? "复制成功" : "复制并分享" }
+              { copied ? "复制成功，快去分享吧" : "复制并分享" }
             </div>
           </button>
         </div>
