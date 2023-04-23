@@ -195,13 +195,13 @@ const Dashboard = () => {
                     })
                   }}
                 >
-                  {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天 →` : '我还没有体验卡，立即兑换 →'}
+                  {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天 →` : '没有体验卡，立即兑换 →'}
                 </button>
               )
             }
-            <li
-              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">😱每周五，免费用一天！
-            </li>
+            <a href={"https://support.qq.com/products/566478"} target={"_blank"}
+              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">发起工单 →
+            </a>
           </ul>
         </div>
       </div>
