@@ -10,6 +10,9 @@ import {v4 as uuidv4} from 'uuid';
 import {QRCodeSVG} from 'qrcode.react';
 import WeixinPayLogo from "@/components/SVG/WeixinPayLogo";
 import WeixinPayText from "@/components/SVG/WeixinPayText";
+import CopyIcon from "@/components/SVG/CopyIcon";
+import copy from "copy-to-clipboard";
+import RightIcon from "@/components/SVG/RightIcon";
 
 const Dashboard = () => {
   const dispatch = useDispatch()
@@ -23,6 +26,7 @@ const Dashboard = () => {
   const [quantity, setQuantity] = useState<undefined | number>(undefined)
   const [qrStatus, setQrStatus] = useState<string>('idle')
   const [trade_no, setTradeNo] = useState<undefined | string>(undefined)
+  const [copied, setCopied] = useState<boolean>(false)
 
   const {
     data: dataOfMetadata,
@@ -33,6 +37,15 @@ const Dashboard = () => {
   const paidUseLeft = useMemo(() => {
     if (!dataOfMetadata?.paidUseTTL) return 0
     const time = ((dataOfMetadata.paidUseTTL - Date.now() / 1000) / 86400)
+    if (time < 0) return 0
+    return time.toLocaleString('en-US', {
+      maximumFractionDigits: 1
+    })
+  }, [dataOfMetadata])
+
+  const freeUseLeft = useMemo(() => {
+    if (!dataOfMetadata?.freeUseLeft) return 0
+    const time = ((dataOfMetadata.freeUseLeft - Date.now() / 1000) / 86400)
     if (time < 0) return 0
     return time.toLocaleString('en-US', {
       maximumFractionDigits: 1
@@ -84,7 +97,7 @@ const Dashboard = () => {
 
   const backButton = () => (
     <button
-      className={"text-md underline font-semibold mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center"}
+      className={"text-md underline font-semibold mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center hover:opacity-80"}
       onClick={() => {
         setCodeUrl(undefined)
         setQuantity(undefined)
@@ -172,35 +185,46 @@ const Dashboard = () => {
                          priority/>
                 )}
             </div>
-            账户
+            账户 {user?.email_verified === false && '(未验证邮箱)'}
           </h2>
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-            {
-              user?.email_verified === false && (
-                <li className="w-full bg-orange-500 text-white p-3 rounded-md">邮箱未验证</li>
-              )
-            }
             {
               isLoadingOfMetadata ? (
                 <LoadingIcon/>
               ) : (
-                <button
-                  className="w-full bg-green-600 hover:opacity-80 text-white p-3 rounded-md"
-                  onClick={() => {
-                    router.push({
-                      pathname: '/chat',
-                      query: {
-                        to: 'purchase'
-                      }
-                    })
-                  }}
-                >
-                  {paidUseLeft > 0 ? `我的会员卡: ${paidUseLeft} 天 →` : '立即开通会员卡 →'}
-                </button>
+                <>
+                  <button
+                    className="w-full bg-green-600 hover:opacity-80 text-white p-3 rounded-md"
+                    onClick={() => {
+                      router.push({
+                        pathname: '/chat',
+                        query: {
+                          to: 'free'
+                        }
+                      })
+                    }}
+                  >
+                    {freeUseLeft > 0 ? `免费体验卡: ${freeUseLeft} 天 →` : '领取免费体验卡 →'}
+                  </button>
+                  <button
+                    className="w-full bg-orange-500 hover:opacity-80 text-white p-3 rounded-md"
+                    onClick={() => {
+                      router.push({
+                        pathname: '/chat',
+                        query: {
+                          to: 'purchase'
+                        }
+                      })
+                    }}
+                  >
+                    {paidUseLeft > 0 ? `付费会员卡: ${paidUseLeft} 天 →` : '付费会员卡，最低9.7元/月 →'}
+                  </button>
+                </>
               )
             }
             <a href={"https://support.qq.com/products/566478"} target={"_blank"} rel={"noreferrer"}
-              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">发起工单 →
+               className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">发起工单
+              →
             </a>
           </ul>
         </div>
@@ -226,12 +250,14 @@ const Dashboard = () => {
                     <div className={`${quantity === item.quantity ? "text-green-600 font-bold" : ""}`}>
                       购买{item.title}
                     </div>
-                    <div className={`${quantity === item.quantity ? "text-green-600 font-bold" : ""} text-xs`}>({(item.total / item.quantity * 30).toLocaleString("en-US", {
+                    <div
+                      className={`${quantity === item.quantity ? "text-green-600 font-bold" : ""} text-xs`}>({(item.total / item.quantity * 30).toLocaleString("en-US", {
                       maximumFractionDigits: 2
-                    })}元/月)</div>
+                    })}元/月)
+                    </div>
                   </div>
                   <button
-                    className={`${quantity === item.quantity ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
+                    className={`${quantity === item.quantity ? "bg-green-500 hover:opacity-80 text-white" : "bg-gray-100 dark:bg-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200"} w-14 h-8 text-xs rounded-full`}
                     onClick={() => {
                       if (quantity === item.quantity) {
                         mutateOrder()
@@ -264,7 +290,7 @@ const Dashboard = () => {
             dataOfOrder?.data?.trade_state === 'SUCCESS' && (
               <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
                 <div className={"flex justify-center items-center text-green-600 font-bold text-center"}
-                     style={{height: '200px'}}>支付成功，<br/>我们将立即为您充值！<br/>现在你可以返回首页了
+                     style={{height: '200px'}}>支付成功<br/>立即为您充值<br/>您可返回首页以继续使用
                 </div>
               </div>
             )
@@ -279,7 +305,7 @@ const Dashboard = () => {
                 <div className={'p-2 rounded bg-white'}>
                   <QRCodeSVG value={codeUrl} size={160}/>
                 </div>
-                <button className={"text-xs underline"} onClick={() => {
+                <button className={"text-xs underline hover:opacity-80"} onClick={() => {
                   mutateOrder()
                   mutateMetadata()
                 }}>
@@ -293,12 +319,54 @@ const Dashboard = () => {
     </>
   )
 
+  const refUrl = `https://abandon.chat/ref/${user?.sub}`
+
+  const freePage = () => (
+    <>
+      {backButton()}
+      <div className={"w-screen max-w-xs"}>
+        <div className={"flex pb-4 items-center gap-2"}>
+          <div className={"text-md font-bold"}>我的邀请链接</div>
+          {/*<button*/}
+          {/*  className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400">*/}
+          {/*  <CopyIcon/>*/}
+          {/*</button>*/}
+        </div>
+        <div className={"flex flex-col gap-4"}>
+          <div>
+            好友点击你的邀请链接后，双方都将获得1天免费体验卡。
+          </div>
+          <a href={refUrl} target={'_blank'} rel={"noreferrer"} className={'text-xs underline'}>
+            {refUrl}
+          </a>
+          <button
+            className="w-full bg-green-600 dark:bg-white/5 p-3 rounded-md hover:opacity-80"
+            onClick={() => {
+              setCopied(true)
+              copy(refUrl)
+              setTimeout(() => {
+                setCopied(false)
+              }, 3_000)
+            }}
+            disabled={copied}
+          >
+            <div className={"flex justify-center items-center gap-2 text-white"}>
+              { copied ? <RightIcon/> : <CopyIcon/> }
+              { copied ? "复制成功" : "复制并分享" }
+            </div>
+          </button>
+        </div>
+      </div>
+    </>
+  )
+
   return (
     <div className="flex flex-col items-center text-sm dark:bg-gray-800">
       <div
         className="text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 dark:text-gray-100">
         {!to && chatPage()}
         {to === 'purchase' && purchasePage()}
+        {to === 'free' && freePage()}
       </div>
       <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
     </div>
