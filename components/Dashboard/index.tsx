@@ -195,7 +195,7 @@ const Dashboard = () => {
                     })
                   }}
                 >
-                  {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天 →` : '我还没有体验卡 →'}
+                  {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天 →` : '我还没有体验卡，立即兑换 →'}
                 </button>
               )
             }
