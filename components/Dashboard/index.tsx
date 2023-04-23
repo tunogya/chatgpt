@@ -55,7 +55,7 @@ const Dashboard = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          description: `ChatGPT ${quantity} 天体验卡: ${user?.name}`,
+          description: `ChatGPT ${quantity} 天会员卡: ${user?.name}`,
           out_trade_no,
           quantity,
           topic: 'chatgpt',
@@ -195,7 +195,7 @@ const Dashboard = () => {
                     })
                   }}
                 >
-                  {paidUseLeft > 0 ? `我的体验卡: ${paidUseLeft} 天 →` : '没有体验卡，立即兑换 →'}
+                  {paidUseLeft > 0 ? `我的会员卡: ${paidUseLeft} 天 →` : '立即开通会员卡 →'}
                 </button>
               )
             }
@@ -212,21 +212,23 @@ const Dashboard = () => {
     <>
       {backButton()}
       <div className={"w-screen max-w-xs"}>
-        <div className={"text-md font-bold pb-4"}>我的账户：{user?.name}</div>
+        <div className={"text-md font-bold pb-4"}>账户：{user?.name}</div>
         <div className={"flex flex-col gap-2"}>
           {
             [
-              {quantity: 30, total: 18},
-              {quantity: 90, total: 45},
-              {quantity: 180, total: 78},
-              {quantity: 365, total: 118},
+              {title: '年卡', quantity: 365, total: 118},
+              {title: '季卡', quantity: 90, total: 45},
+              {title: '月卡', quantity: 30, total: 18},
             ].map((item, index) => (
               <div key={index} className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
                 <div className={"flex justify-between items-center"}>
-                  <div className={`${quantity === item.quantity ? "text-green-600 font-bold" : ""}`}>
-                    充值 {item.quantity} 天体验卡 ({(item.total / item.quantity).toLocaleString("en-US", {
-                    maximumFractionDigits: 2
-                  })}/天)
+                  <div className={'flex justify-center items-center gap-1.5'}>
+                    <div className={`${quantity === item.quantity ? "text-green-600 font-bold" : ""}`}>
+                      购买{item.title}
+                    </div>
+                    <div className={`${quantity === item.quantity ? "text-green-600 font-bold" : ""} text-xs`}>({(item.total / item.quantity * 30).toLocaleString("en-US", {
+                      maximumFractionDigits: 2
+                    })}元/月)</div>
                   </div>
                   <button
                     className={`${quantity === item.quantity ? "bg-green-500 text-white" : "bg-gray-200 dark:bg-gray-500"} w-14 h-8 text-xs rounded-full`}
@@ -238,7 +240,7 @@ const Dashboard = () => {
                       setQuantity(item.quantity)
                       getCodeUrl(item.quantity)
                     }}>
-                    {item.total}
+                    ¥ {item.total}
                   </button>
                 </div>
               </div>
