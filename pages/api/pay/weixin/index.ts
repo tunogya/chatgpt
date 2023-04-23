@@ -14,17 +14,20 @@ export default withApiAuthRequired(async function handler(
   let total = 0;
   if (topic === 'chatgpt' && quantity > 0) {
     switch (quantity) {
-      case 28:
-        total = 25 * 100 - 1;
+      case 30:
+        total = 1800;
+        break;
+      case 90:
+        total = 4500;
         break;
       case 180:
-        total = 130 * 100 - 1;
+        total = 7800;
         break;
-      case 360:
-        total = 200 * 100 - 1;
+      case 365:
+        total = 11800;
         break;
       default:
-        total = quantity * 100 - 1;
+        total = quantity;
     }
   } else {
     res.status(400).json({error: 'Bad Request'});

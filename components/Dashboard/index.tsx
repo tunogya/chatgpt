@@ -176,7 +176,7 @@ const Dashboard = () => {
           </h2>
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
             {
-              user?.email_verified === false  && (
+              user?.email_verified === false && (
                 <li className="w-full bg-orange-500 text-white p-3 rounded-md">邮箱未验证</li>
               )
             }
@@ -216,9 +216,10 @@ const Dashboard = () => {
         <div className={"flex flex-col gap-2"}>
           {
             [
-              {quantity: 28, total: 24.99},
-              {quantity: 180, total: 129.99},
-              {quantity: 365, total: 199.99},
+              {quantity: 30, total: 18},
+              {quantity: 90, total: 45},
+              {quantity: 180, total: 78},
+              {quantity: 365, total: 118},
             ].map((item, index) => (
               <div key={index} className={"flex flex-col gap-3.5 w-full sm:max-w-md m-auto"}>
                 <div className={"flex justify-between items-center"}>
