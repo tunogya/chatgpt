@@ -113,18 +113,18 @@ const NavigationBar = () => {
         }
         <a
           className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none
-              duration-200 text-white cursor-pointer text-sm"
-          href={"https://support.qq.com/products/566478"} target={"_blank"} rel={"noreferrer"}
-        >
-          <AddIcon/>
-          发起工单
-        </a>
-        <a
-          className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none
               duration-200 text-white cursor-pointer text-sm" onClick={toggleColorMode}
         >
           {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
           {colorMode === 'light' ? '深色' : '浅色'}模式
+        </a>
+        <a
+          className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none
+              duration-200 text-white cursor-pointer text-sm"
+          href={"https://support.qq.com/products/566478"} target={"_blank"} rel={"noreferrer"}
+        >
+          <AddIcon/>
+          创建工单
         </a>
         <a
           className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none

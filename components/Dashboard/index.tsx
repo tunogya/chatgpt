@@ -223,7 +223,7 @@ const Dashboard = () => {
               )
             }
             <a href={"https://support.qq.com/products/566478"} target={"_blank"} rel={"noreferrer"}
-               className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">发起工单
+               className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">创建工单
               →
             </a>
           </ul>
