@@ -44,8 +44,8 @@ const Dashboard = () => {
   }, [dataOfMetadata])
 
   const freeUseLeft = useMemo(() => {
-    if (!dataOfMetadata?.freeUseLeft) return 0
-    const time = ((dataOfMetadata.freeUseLeft - Date.now() / 1000) / 86400)
+    if (!dataOfMetadata?.freeUseTTL) return 0
+    const time = ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400)
     if (time < 0) return 0
     return time.toLocaleString('en-US', {
       maximumFractionDigits: 1
@@ -217,7 +217,7 @@ const Dashboard = () => {
                       })
                     }}
                   >
-                    {paidUseLeft > 0 ? `付费会员卡: ${paidUseLeft} 天 →` : '付费会员卡，最低9.7元/月 →'}
+                    {paidUseLeft > 0 ? `付费会员卡: ${paidUseLeft} 天 →` : '付费会员卡，最低 9.7 元/月 →'}
                   </button>
                 </>
               )
