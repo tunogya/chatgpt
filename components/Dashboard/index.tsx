@@ -222,6 +222,19 @@ const Dashboard = () => {
                 </>
               )
             }
+            <button
+              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
+              onClick={() => {
+                router.push({
+                  pathname: '/chat',
+                  query: {
+                    to: 'redeem'
+                  }
+                })
+              }}
+            >
+              CDKEY 兑换中心 →
+            </button>
             <a href={"https://support.qq.com/products/566478"} target={"_blank"} rel={"noreferrer"}
                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">创建工单
               →
@@ -356,6 +369,30 @@ const Dashboard = () => {
     </>
   )
 
+  const redeemPage = () => (
+    <>
+      {backButton()}
+      <div className={"w-screen max-w-xs"}>
+        <div className={"flex pb-4 items-center gap-2 text-md font-bold"}>
+          CDKEYS 兑换
+        </div>
+        <div className={"flex flex-col gap-4"}>
+          <div>
+            兑换付费会员卡后立即生效
+          </div>
+          <input className={"p-3 border-2 rounded"} placeholder={'输入CDKEY'}/>
+          {/*<button*/}
+          {/*  className="w-full btn-primary p-3 rounded-md"*/}
+          {/*  onClick={() => {*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  立即兑换*/}
+          {/*</button>*/}
+        </div>
+      </div>
+    </>
+  )
+
   return (
     <div className="flex flex-col items-center text-sm dark:bg-gray-800">
       <div
@@ -363,6 +400,7 @@ const Dashboard = () => {
         {!to && chatPage()}
         {to === 'purchase' && purchasePage()}
         {to === 'free' && freePage()}
+        {to === 'redeem' && redeemPage()}
       </div>
       <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
     </div>

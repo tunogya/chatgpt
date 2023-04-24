@@ -35,7 +35,6 @@ export default withApiAuthRequired(async function handler(
       res.status(404).json({error: 'User not found'});
       return;
     }
-    console.log(referrer, `REF#${date}#${user}`)
     const transactionRequest: any = {
       TransactItems: [
         {
