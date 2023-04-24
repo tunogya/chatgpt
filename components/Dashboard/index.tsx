@@ -332,7 +332,7 @@ const Dashboard = () => {
           <div>
             好友点击你的邀请链接后，双方都将获得1天免费体验卡。
           </div>
-          <a href={refUrl} target={'_blank'} rel={"noreferrer"} className={'text-xs underline'}>
+          <a href={refUrl} target={'_blank'} rel={"noreferrer"} className={'text-xs underline break-words'}>
             {refUrl}
           </a>
           <button
