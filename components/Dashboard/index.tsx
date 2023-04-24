@@ -194,7 +194,7 @@ const Dashboard = () => {
               ) : (
                 <>
                   <button
-                    className="w-full bg-green-600 hover:opacity-80 text-white p-3 rounded-md"
+                    className="w-full btn-primary p-3 rounded-md"
                     onClick={() => {
                       router.push({
                         pathname: '/chat',
@@ -257,7 +257,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <button
-                    className={`${quantity === item.quantity ? "bg-green-500 hover:opacity-80 text-white" : "bg-gray-100 dark:bg-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200"} w-14 h-8 text-xs rounded-full`}
+                    className={`${quantity === item.quantity ? "btn-primary" : "bg-gray-100 dark:bg-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 "} w-14 h-8 text-xs rounded-full`}
                     onClick={() => {
                       if (quantity === item.quantity) {
                         mutateOrder()
@@ -336,7 +336,7 @@ const Dashboard = () => {
             {refUrl}
           </a>
           <button
-            className="w-full bg-green-600 dark:bg-white/5 p-3 rounded-md hover:opacity-80"
+            className="w-full btn-primary p-3 rounded-md"
             onClick={() => {
               setCopied(true)
               copy(refUrl)

@@ -13,7 +13,6 @@ export default withApiAuthRequired(async function handler(
   }
   const {user, referrer} = req.body;
   if (user && referrer) {
-    res.status(200).json({status: 'ok'});
     if (referrer === user) {
       res.status(400).json({error: 'You cannot refer yourself'});
     }
@@ -36,6 +35,7 @@ export default withApiAuthRequired(async function handler(
       res.status(404).json({error: 'User not found'});
       return;
     }
+    console.log(referrer, `REF#${date}#${user}`)
     const transactionRequest: any = {
       TransactItems: [
         {
@@ -60,7 +60,6 @@ export default withApiAuthRequired(async function handler(
             ExpressionAttributeValues: {
               ':newFreeUseTTL': Math.max(referrerMetadata.Item.freeUseTTL, Math.floor(Date.now() / 1000)) + 24 * 60 * 60,
             },
-            ConditionExpression: 'attribute_exists(PK)',
           }
         },
         {
@@ -74,7 +73,6 @@ export default withApiAuthRequired(async function handler(
             ExpressionAttributeValues: {
               ':newFreeUseTTL': Math.max(userMetadata.Item.freeUseTTL, Math.floor(Date.now() / 1000)) + 24 * 60 * 60,
             },
-            ConditionExpression: 'attribute_exists(PK)',
           }
         }
       ]
