@@ -2,15 +2,15 @@ import {useRouter} from 'next/router';
 import AbandonIcon from "@/components/SVG/AbandonIcon";
 import {withPageAuthRequired} from "@auth0/nextjs-auth0";
 
-const Ref = ({user}: any) => {
+const Referrer = ({user}: any) => {
   const router = useRouter()
-  const ref = router.query.ref || undefined;
+  const referrer = router.query.referrer || undefined;
 
   return (
     <div className={"flex flex-col justify-center items-center h-full w-full gap-4"}>
       <AbandonIcon/>
       {
-        user?.sub === ref ? (
+        user?.sub === referrer ? (
           <div className={"flex flex-col justify-center items-center gap-4"}>
             <div className={"text-sm"}>
               不能自己邀请自己哦！
@@ -35,4 +35,4 @@ const Ref = ({user}: any) => {
 
 export const getServerSideProps = withPageAuthRequired();
 
-export default Ref
+export default Referrer

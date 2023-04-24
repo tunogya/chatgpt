@@ -319,7 +319,7 @@ const Dashboard = () => {
     </>
   )
 
-  const refUrl = `https://www.abandon.chat/ref/${user?.sub}`
+  const refUrl = `https://www.abandon.chat/referrer/${user?.sub}`
 
   const freePage = () => (
     <>
