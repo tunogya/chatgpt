@@ -162,13 +162,13 @@ const Dashboard = () => {
     <button
       className={"text-md underline font-semibold mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center hover:opacity-80"}
       onClick={() => {
+        router.push('/chat')
+        mutateMetadata()
         setCodeUrl(undefined)
         setQuantity(undefined)
         setTradeNo(undefined)
         setQrStatus('idle')
         setCdKey('')
-        mutateMetadata()
-        router.push('/chat')
       }}
     >
       返回首页
