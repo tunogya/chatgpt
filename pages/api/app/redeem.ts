@@ -20,11 +20,11 @@ export default withApiAuthRequired(async function handler(
         SK: cdkey,
       }
     }))
-    if (!data.Item || data.Item.used === true) {
+    if (!data.Item) {
       res.status(400).json({error: 'Invalid cdkey'})
       return
     }
-    res.status(200).json({status: 'ok'})
+    res.status(200).json({status: 'ok', data: data.Item})
     return
   }
 
@@ -47,7 +47,7 @@ export default withApiAuthRequired(async function handler(
     const userMetadata = await ddbDocClient.send(new GetCommand({
       TableName: 'wizardingpay',
       Key: {
-        PK: user,
+        PK: user.sub,
         SK: `METADATA#chatgpt`,
       }
     }))
@@ -65,7 +65,7 @@ export default withApiAuthRequired(async function handler(
               PK: 'CHATGPT#CDKEY',
               SK: cdkey,
             },
-            UpdateExpression: `SET used = :newUsed, user = :newUser, updated = :newUpdated`,
+            UpdateExpression: `SET #used = :newUsed, #user = :newUser, #updated = :newUpdated`,
             ConditionExpression: 'used = :oldUsed AND attribute_exists(PK)',
             ExpressionAttributeValues: {
               ':newUsed': true,
@@ -73,13 +73,18 @@ export default withApiAuthRequired(async function handler(
               ':newUpdated': Math.floor(Date.now() / 1000),
               ':oldUsed': false,
             },
+            ExpressionAttributeNames: {
+              '#used': 'used',
+              '#user': 'user',
+              '#updated': 'updated',
+            }
           }
         },
         {
           Update: {
             TableName: 'wizardingpay',
             Key: {
-              PK: user,
+              PK: user.sub,
               SK: `METADATA#chatgpt`,
             },
             UpdateExpression: `SET freeUseTTL = :newFreeUseTTL`,
