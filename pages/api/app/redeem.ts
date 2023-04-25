@@ -87,9 +87,9 @@ export default withApiAuthRequired(async function handler(
               PK: user.sub,
               SK: `METADATA#chatgpt`,
             },
-            UpdateExpression: `SET freeUseTTL = :newFreeUseTTL`,
+            UpdateExpression: `SET paidUseTTL = :newPaidUseTTL`,
             ExpressionAttributeValues: {
-              ':newFreeUseTTL': Math.max(userMetadata.Item.freeUseTTL, Math.floor(Date.now() / 1000)) + 24 * 60 * 60 * quantity,
+              ':newPaidUseTTL': Math.max(userMetadata.Item.paidUseTTL, Math.floor(Date.now() / 1000)) + 24 * 60 * 60 * quantity,
             },
           }
         }
