@@ -112,7 +112,7 @@ const Dashboard = () => {
     setCdKeyStatus('loading')
     setCdKeyData(undefined)
     try {
-      const res = await fetch(`/api/app/redeem?cdkey=${cdKey}`)
+      const res = await fetch(`/api/app/redeem?cdkey=${cdKey.toLowerCase()}`)
       const data = await res.json()
       if (data?.data) {
         setCdKeyData(data.data)
@@ -144,7 +144,7 @@ const Dashboard = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          cdkey: cdKey,
+          cdkey: cdKey.toLowerCase(),
         })
       })
       const data = await res.json()
