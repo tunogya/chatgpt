@@ -41,18 +41,14 @@ const Dashboard = () => {
     if (!dataOfMetadata?.paidUseTTL) return 0
     const time = ((dataOfMetadata.paidUseTTL - Date.now() / 1000) / 86400)
     if (time < 0) return 0
-    return time.toLocaleString('en-US', {
-      maximumFractionDigits: 1
-    })
+    return time
   }, [dataOfMetadata])
 
   const freeUseLeft = useMemo(() => {
     if (!dataOfMetadata?.freeUseTTL) return 0
     const time = ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400)
     if (time < 0) return 0
-    return time.toLocaleString('en-US', {
-      maximumFractionDigits: 1
-    })
+    return time
   }, [dataOfMetadata])
 
   const {
@@ -268,7 +264,9 @@ const Dashboard = () => {
                       })
                     }}
                   >
-                    {freeUseLeft > 0 ? `免费体验卡: ${freeUseLeft} 天 →` : '领取免费体验卡 →'}
+                    {freeUseLeft > 0 ? `免费体验卡: ${freeUseLeft.toLocaleString('en-US', {
+                      maximumFractionDigits: 1
+                    })} 天 →` : '领取免费体验卡 →'}
                   </button>
                   <button
                     className="w-full bg-orange-500 hover:opacity-80 text-white p-3 rounded-md"
@@ -281,7 +279,9 @@ const Dashboard = () => {
                       })
                     }}
                   >
-                    {paidUseLeft > 0 ? `付费会员卡: ${paidUseLeft} 天 →` : '付费会员卡，最低 9.7 元/月 →'}
+                    {paidUseLeft > 0 ? `付费会员卡: ${paidUseLeft.toLocaleString('en-US', {
+                      maximumFractionDigits: 1
+                    })} 天 →` : '付费会员卡，最低 9.7 元/月 →'}
                   </button>
                 </>
               )
