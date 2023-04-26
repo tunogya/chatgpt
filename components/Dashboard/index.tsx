@@ -290,7 +290,7 @@ const Dashboard = () => {
                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">创建工单
               →
             </a>
-            <div className={'text-xs text-red-300'}>{user?.email_verified === true && '提示: 请完成邮箱验证'}</div>
+            <div className={'text-xs text-red-300'}>{user?.email_verified === false && '提示: 请完成邮箱验证'}</div>
           </ul>
         </div>
       </div>
