@@ -245,7 +245,7 @@ const Dashboard = () => {
                          priority/>
                 )}
             </div>
-            账户 {user?.email_verified === false && '(未验证邮箱)'}
+            账户
           </h2>
           <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
             {
@@ -266,7 +266,7 @@ const Dashboard = () => {
                   >
                     {freeUseLeft > 0 ? `免费体验卡: ${freeUseLeft.toLocaleString('en-US', {
                       maximumFractionDigits: 1
-                    })} 天 →` : '领取免费体验卡 →'}
+                    })} 天` : '领取免费体验卡 →'}
                   </button>
                   <button
                     className="w-full bg-orange-500 hover:opacity-80 text-white p-3 rounded-md"
@@ -281,28 +281,16 @@ const Dashboard = () => {
                   >
                     {paidUseLeft > 0 ? `付费会员卡: ${paidUseLeft.toLocaleString('en-US', {
                       maximumFractionDigits: 1
-                    })} 天 →` : '付费会员卡，最低 9.7 元/月 →'}
+                    })} 天` : '付费会员卡，最低 9.7 元/月 →'}
                   </button>
                 </>
               )
             }
-            <button
-              className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
-              onClick={() => {
-                router.push({
-                  pathname: '/chat',
-                  query: {
-                    to: 'redeem'
-                  }
-                })
-              }}
-            >
-              CDKEY 兑换中心 →
-            </button>
             <a href={"https://support.qq.com/products/566478"} target={"_blank"} rel={"noreferrer"}
                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">创建工单
               →
             </a>
+            <div className={'text-xs text-red-300'}>{user?.email_verified === true && '提示: 请完成邮箱验证'}</div>
           </ul>
         </div>
       </div>
@@ -312,8 +300,8 @@ const Dashboard = () => {
   const purchasePage = () => (
     <>
       {backButton()}
-      <div className={"w-screen max-w-xs"}>
-        <div className={"text-md font-bold pb-4"}>账户：{user?.name}</div>
+      <div className={"flex flex-col w-screen max-w-xs gap-4"}>
+        <div className={"text-md font-bold"}>账户：{user?.name}</div>
         <div className={"flex flex-col gap-2"}>
           {
             [
@@ -349,6 +337,19 @@ const Dashboard = () => {
               </div>
             ))
           }
+          <a
+            className="text-xs underline cursor-pointer"
+            onClick={() => {
+              router.push({
+                pathname: '/chat',
+                query: {
+                  to: 'redeem'
+                }
+              })
+            }}
+          >
+            CDKEY 兑换中心 →
+          </a>
           {
             qrStatus === 'loading' && (
               <LoadingIcon/>
@@ -446,10 +447,25 @@ const Dashboard = () => {
           </div>
           <div
             className="flex flex-col w-full flex-grow relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
-            <input className={'p-3 overflow-hidden rounded-md bg-transparent'} placeholder={'输入CDKEY'} onChange={(e) => {
-              setCdKey(e.target.value)
-            }} value={cdKey}/>
+            <input className={'p-3 overflow-hidden rounded-md bg-transparent'} placeholder={'输入CDKEY'}
+                   onChange={(e) => {
+                     setCdKey(e.target.value)
+                   }} value={cdKey}/>
           </div>
+          {
+            cdKeyStatus === 'idle' && (
+              <div className={'text-xs'}>
+                没有CDKEY？<button className={'underline'} onClick={() => {
+                  router.push({
+                    pathname: '/chat',
+                    query: {
+                      to: 'purchase'
+                    }
+                  })
+              }}>直接支付</button>
+              </div>
+            )
+          }
           {
             cdKeyStatus === 'loading' && (
               <LoadingIcon/>
@@ -478,7 +494,7 @@ const Dashboard = () => {
                   onClick={redeem}
                   disabled={cdKeyData.used}
                 >
-                  { cdKeyData.used ? 'CDKEY 已兑换' : `立即兑换 ${cdKeyData.quantity} 天付费会员` }
+                  {cdKeyData.used ? 'CDKEY 已兑换' : `立即兑换 ${cdKeyData.quantity} 天付费会员`}
                 </button>
                 {
                   cdKeyData.used && (
