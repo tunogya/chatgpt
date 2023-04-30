@@ -7,7 +7,7 @@ import {
   setIsWaitComplete,
   setConversation
 } from "@/store/session";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import SendIcon from "@/components/SVG/SendIcon";
 import {v4 as uuidv4} from 'uuid';
 import {useUser} from "@auth0/nextjs-auth0/client";
@@ -21,8 +21,16 @@ const InputArea = () => {
   const session = useSelector((state: any) => state.session.session);
   const input = useSelector((state: any) => state.ui.input);
   const off_protected = useSelector((state: any) => state.ui.off_protected);
+  const freeUseTTL = useSelector((state: any) => state.ui.freeUseTTL);
+  const paidUseTTL = useSelector((state: any) => state.ui.paidUseTTL);
   const dispatch = useDispatch();
   const inputRef = useRef(null);
+
+  const membershipState = useMemo(() => {
+    const freeUseLeft = ((freeUseTTL - Date.now() / 1000) / 86400)
+    const paidUseLeft = ((paidUseTTL - Date.now() / 1000) / 86400)
+    return freeUseLeft > 0 || paidUseLeft > 0;
+  }, [freeUseTTL, paidUseTTL])
 
   const getConversationHistory = async () => {
     const response = await fetch('/api/conversation', {
@@ -172,7 +180,8 @@ const InputArea = () => {
           <div
             className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
-                          rows={1} ref={inputRef}
+                          disabled={!membershipState}
+                          rows={1} ref={inputRef} placeholder={membershipState ? '' : '请兑换免费体验卡或直接充值付费会员卡使用'}
                           onKeyDown={async (e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                               if (e.nativeEvent.isComposing) return;
@@ -193,25 +202,29 @@ const InputArea = () => {
                             dispatch(setInput(e.target.value));
                           }} value={input}
                           className="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent md:pl-0"></textarea>
-            <button
-              className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent disabled:bottom-0.5 md:disabled:bottom-1"
-              disabled={isWaitComplete}
-              onClick={async (event) => {
-                event.preventDefault();
-                await handleSubmit()
-              }}>
-              {
-                isWaitComplete ? (
-                  <div className="text-2xl">
-                    <span className={''}>·</span>
-                    <span className={`${second % 3 === 1 && 'invisible'}`}>·</span>
-                    <span className={`${second % 3 >= 1 && 'invisible'}`}>·</span>
-                  </div>
-                ) : (
-                  <SendIcon/>
-                )
-              }
-            </button>
+            {
+              membershipState && (
+                <button
+                  className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent disabled:bottom-0.5 md:disabled:bottom-1"
+                  disabled={isWaitComplete}
+                  onClick={async (event) => {
+                    event.preventDefault();
+                    await handleSubmit()
+                  }}>
+                  {
+                    isWaitComplete ? (
+                      <div className="text-2xl">
+                        <span className={''}>·</span>
+                        <span className={`${second % 3 === 1 && 'invisible'}`}>·</span>
+                        <span className={`${second % 3 >= 1 && 'invisible'}`}>·</span>
+                      </div>
+                    ) : (
+                      <SendIcon/>
+                    )
+                  }
+                </button>
+              )
+            }
           </div>
         </div>
       </form>

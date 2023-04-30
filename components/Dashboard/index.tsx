@@ -1,5 +1,5 @@
 import {useDispatch} from "react-redux";
-import {setInput} from "@/store/ui";
+import {setInput, setPaidUseTTL, setFreeUseTTL} from "@/store/ui";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {useUser} from "@auth0/nextjs-auth0/client";
 import Image from "next/image";
@@ -38,16 +38,30 @@ const Dashboard = () => {
   } = useSWR('/api/app/metadata', (url: string) => fetch(url).then((res) => res.json()))
 
   const paidUseLeft = useMemo(() => {
-    if (!dataOfMetadata?.paidUseTTL) return 0
+    if (!dataOfMetadata?.paidUseTTL) {
+      dispatch(setPaidUseTTL(0))
+      return 0
+    }
+    dispatch(setPaidUseTTL(dataOfMetadata.paidUseTTL))
     const time = ((dataOfMetadata.paidUseTTL - Date.now() / 1000) / 86400)
-    if (time < 0) return 0
+    if (time < 0) {
+      dispatch(setPaidUseTTL(0))
+      return 0
+    }
     return time
   }, [dataOfMetadata])
 
   const freeUseLeft = useMemo(() => {
-    if (!dataOfMetadata?.freeUseTTL) return 0
+    if (!dataOfMetadata?.freeUseTTL) {
+      dispatch(setFreeUseTTL(0))
+      return 0
+    }
+    dispatch(setFreeUseTTL(dataOfMetadata.freeUseTTL))
     const time = ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400)
-    if (time < 0) return 0
+    if (time < 0) {
+      dispatch(setFreeUseTTL(0))
+      return 0
+    }
     return time
   }, [dataOfMetadata])
 
