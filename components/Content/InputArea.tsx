@@ -181,7 +181,7 @@ const InputArea = () => {
             className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
                           disabled={!membershipState}
-                          rows={1} ref={inputRef} placeholder={membershipState ? '' : '请兑换免费体验卡或直接充值付费会员卡使用'}
+                          rows={1} ref={inputRef} placeholder={membershipState ? '输入你感兴趣的问题...' : '正在检查你的免费体验卡和付费会员卡...'}
                           onKeyDown={async (e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                               if (e.nativeEvent.isComposing) return;
