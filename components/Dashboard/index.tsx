@@ -167,9 +167,10 @@ const Dashboard = () => {
       setCdKeyStatus('redeemError')
     }
     // @ts-ignore
-    window.gtag('event', 'custom_button_click', {
+    window.gtag('event', 'in_app_purchase', {
       'event_category': '按钮',
       'event_label': 'CDKEY 立即兑换',
+      'value': 'CDKEY'
     })
   }
 
