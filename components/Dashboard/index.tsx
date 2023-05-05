@@ -166,6 +166,11 @@ const Dashboard = () => {
     } catch (e) {
       setCdKeyStatus('redeemError')
     }
+    // @ts-ignore
+    window.gtag('event', 'custom_button_click', {
+      'event_category': '按钮',
+      'event_label': 'CDKEY 立即兑换',
+    })
   }
 
   const backButton = () => (
