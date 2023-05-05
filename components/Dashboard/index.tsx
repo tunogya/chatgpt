@@ -366,7 +366,7 @@ const Dashboard = () => {
                       setQuantity(item.quantity)
                       getCodeUrl(item.quantity)
                       // @ts-ignore
-                      window.gtag('event', 'custom_button_click', {
+                      window.gtag('event', 'in_app_purchase', {
                         'event_category': '按钮',
                         'event_label': '微信支付二维码',
                         'value': item.title,
