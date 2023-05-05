@@ -93,6 +93,11 @@ const NavigationBar = () => {
              router.push({
                pathname: `/chat`,
              })
+             // @ts-ignore
+             window.gtag('event', 'custom_button_click', {
+               'event_category': '按钮',
+               'event_label': '新会话',
+             })
            }}
         >
           <AddIcon/>
@@ -104,7 +109,15 @@ const NavigationBar = () => {
             <a
               className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none
               duration-200 text-white cursor-pointer text-sm"
-              onClick={clearConversationList}
+              onClick={() => {
+                clearConversationList()
+                // @ts-ignore
+                window.gtag('event', 'custom_button_click', {
+                  'event_category': '按钮',
+                  'event_label': '清空会话',
+                  'value': deleteConfirm ? '确认清空' : '清空会话'
+                })
+              }}
             >
               {deleteConfirm ? <RightIcon/> : <DeleteIcon/>}
               {deleteConfirm ? '确认清空（最多25条）' : '清空会话'}
@@ -113,7 +126,15 @@ const NavigationBar = () => {
         }
         <a
           className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors select-none
-              duration-200 text-white cursor-pointer text-sm" onClick={toggleColorMode}
+              duration-200 text-white cursor-pointer text-sm" onClick={() => {
+          toggleColorMode()
+          // @ts-ignore
+          window.gtag('event', 'custom_button_click', {
+            'event_category': '按钮',
+            'event_label': '切换显示模式',
+            'value': colorMode === 'light' ? '深色' : '浅色',
+          })
+        }}
         >
           {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
           {colorMode === 'light' ? '深色' : '浅色'}模式
@@ -131,6 +152,11 @@ const NavigationBar = () => {
               duration-200 text-white cursor-pointer text-sm"
           onClick={async () => {
             dispatch(clearSession());
+            // @ts-ignore
+            window.gtag('event', 'custom_button_click', {
+              'event_category': '按钮',
+              'event_label': '退出登陆',
+            })
           }}
           href={'/api/auth/logout'}
         >

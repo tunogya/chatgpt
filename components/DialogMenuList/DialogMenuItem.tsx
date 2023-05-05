@@ -39,6 +39,11 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
     } catch (e) {
       console.log(e)
     }
+    // @ts-ignore
+    window.gtag('event', 'custom_button_click', {
+      'event_category': '按钮',
+      'event_label': '删除会话',
+    })
   }
 
   const updateConversationItemTitle = async () => {
@@ -63,6 +68,11 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
     } catch (e) {
       console.log(e)
     }
+    // @ts-ignore
+    window.gtag('event', 'custom_button_click', {
+      'event_category': '按钮',
+      'event_label': '编辑会话标题',
+    })
   }
 
   const isSelected = useMemo(() => {
@@ -75,6 +85,11 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
       onClick={() => {
         router.push({
           pathname: `/chat/${props.id.split('#').pop()}`,
+        })
+        // @ts-ignore
+        window.gtag('event', 'custom_button_click', {
+          'event_category': '按钮',
+          'event_label': '切换会话',
         })
       }}
     >

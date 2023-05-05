@@ -179,6 +179,11 @@ const Dashboard = () => {
         setTradeNo(undefined)
         setQrStatus('idle')
         setCdKey('')
+        // @ts-ignore
+        window.gtag('event', 'custom_button_click', {
+          'event_category': '按钮',
+          'event_label': '返回首页',
+        })
       }}
     >
       返回首页
@@ -217,6 +222,12 @@ const Dashboard = () => {
                   className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
                   onClick={() => {
                     dispatch(setInput(item))
+                    // @ts-ignore
+                    window.gtag('event', 'custom_button_click', {
+                      'event_category': '按钮',
+                      'event_label': '点击推荐案例',
+                      'value': item,
+                    })
                   }}
                 >
                   &quot;{item}&quot; →
@@ -276,6 +287,11 @@ const Dashboard = () => {
                           to: 'free'
                         }
                       })
+                      // @ts-ignore
+                      window.gtag('event', 'custom_button_click', {
+                        'event_category': '按钮',
+                        'event_label': '查看免费体验卡',
+                      })
                     }}
                   >
                     {freeUseLeft > 0 ? `免费体验卡: ${freeUseLeft.toLocaleString('en-US', {
@@ -290,6 +306,11 @@ const Dashboard = () => {
                         query: {
                           to: 'purchase'
                         }
+                      })
+                      // @ts-ignore
+                      window.gtag('event', 'custom_button_click', {
+                        'event_category': '按钮',
+                        'event_label': '查看付费会员卡',
                       })
                     }}
                   >
@@ -344,6 +365,12 @@ const Dashboard = () => {
                       }
                       setQuantity(item.quantity)
                       getCodeUrl(item.quantity)
+                      // @ts-ignore
+                      window.gtag('event', 'custom_button_click', {
+                        'event_category': '按钮',
+                        'event_label': '微信支付二维码',
+                        'value': item.title,
+                      })
                     }}>
                     ¥ {item.total}
                   </button>
@@ -359,6 +386,11 @@ const Dashboard = () => {
                 query: {
                   to: 'redeem'
                 }
+              })
+              // @ts-ignore
+              window.gtag('event', 'custom_button_click', {
+                'event_category': '按钮',
+                'event_label': 'CDKEY 兑换中心',
               })
             }}
           >
@@ -400,6 +432,11 @@ const Dashboard = () => {
                 <button className={"text-xs underline hover:opacity-80"} onClick={() => {
                   mutateOrder()
                   mutateMetadata()
+                  // @ts-ignore
+                  window.gtag('event', 'custom_button_click', {
+                    'event_category': '按钮',
+                    'event_label': '确认支付',
+                  })
                 }}>
                   确认，我已支付
                 </button>
@@ -432,6 +469,11 @@ const Dashboard = () => {
             onClick={() => {
               setCopied(true)
               copy(refUrl)
+              // @ts-ignore
+              window.gtag('event', 'custom_button_click', {
+                'event_category': '按钮',
+                'event_label': '复制邀请链接',
+              })
               setTimeout(() => {
                 setCopied(false)
               }, 3_000)
