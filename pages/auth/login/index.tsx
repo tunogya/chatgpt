@@ -12,7 +12,7 @@ const Login = () => {
           <AbandonIcon/>
         </div>
         <div className="mb-2 text-center">abandon.chat</div>
-        <div className="mb-4 text-center italic">&quot;To abandon yourself to a life of pleasure.&quot;</div>
+        <div className="mb-4 text-center">世上无难事，只要 ABANDON！</div>
         <div className="flex flex-row gap-3">
           <button className="btn relative btn-primary" onClick={() => {
             router.push('/api/auth/login?returnTo=/chat')
