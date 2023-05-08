@@ -7,7 +7,6 @@ import {clearSession, setConversation} from "@/store/session";
 import {setFreeUseTTL, setOffProtected, setPaidUseTTL} from "@/store/ui";
 import MoreIcon from "@/components/SVG/MoreIcon";
 import UserIcon from "@/components/SVG/UserIcon";
-import {useUser} from "@auth0/nextjs-auth0/client";
 import Image from "next/image";
 import useSWR from "swr";
 import LogoutIcon from "@/components/SVG/LogoutIcon";
@@ -15,14 +14,13 @@ import DeleteIcon from "@/components/SVG/DeleteIcon";
 import ShareIcon from "@/components/SVG/ShareIcon";
 import {Menu} from '@headlessui/react'
 
-const NavigationBar = () => {
+const NavigationBar = ({user}: any) => {
   const router = useRouter()
   const dispatch = useDispatch();
   const conversation = useSelector((state: any) => state.session.conversation);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [colorMode, setColorMode] = useState('light');
   const [count, setCount] = useState(0);
-  const {user} = useUser();
 
   const {
     data: dataOfMetadata,
@@ -161,7 +159,8 @@ const NavigationBar = () => {
             user && (
               <Menu as={"div"} className={'group relative'}>
                 <Menu.Button className={'w-full'}>
-                  <button
+                  {/*@ts-ignore*/}
+                  <a as={"button"}
                     className="flex w-full items-center gap-2.5 rounded-md px-3 py-3 text-sm transition-colors duration-200 hover:bg-gray-800 group-ui-open:bg-gray-800">
                     <div className="-ml-0.5 w-5 flex-shrink-0">
                       <div className="relative flex rounded-sm overflow-hidden">
@@ -174,32 +173,29 @@ const NavigationBar = () => {
                     <div
                       className="grow overflow-hidden pl-3 text-ellipsis whitespace-nowrap text-left text-white">{user?.name}</div>
                     <MoreIcon/>
-                  </button>
+                  </a>
                 </Menu.Button>
                 <Menu.Items className={'absolute bottom-full left-0 z-20 mb-2 w-full overflow-hidden rounded-md bg-[#050509] py-1.5 outline-none opacity-100 translate-y-0'}>
                   <div>
                     <Menu.Item>
                       <a href="https://help.openai.com/en/collections/3742473-chatgpt" target="_blank" rel={'noreferrer'}
-                         className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
-                         id="headlessui-menu-item-:r2q:" role="menuitem" tabIndex={-1}
-                         data-headlessui-state="">
+                         className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
                         <ShareIcon/>
                         帮助问答</a>
                     </Menu.Item>
                     <div className="my-1.5 h-px bg-white/20" role="none"></div>
-                    <Menu.Item disabled>
-                      <button
-                        className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
-                        id="headlessui-menu-item-:r2r:" role="menuitem" tabIndex={-1} data-headlessui-state="">
+                    <Menu.Item>
+                      {/*@ts-ignore*/}
+                      <a as={"button"}
+                        className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
                         <DeleteIcon/>
                         清空记录
-                      </button>
+                      </a>
                     </Menu.Item>
                     <Menu.Item>
-                      <button
-                        className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
-                        id="headlessui-menu-item-:r2s:" role="menuitem" tabIndex={-1}
-                        data-headlessui-state="">
+                      {/*@ts-ignore*/}
+                      <a as={"button"}
+                        className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
                         <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round"
                              strokeLinejoin="round" className="h-4 w-4" height="1em" width="1em"
                              xmlns="http://www.w3.org/2000/svg">
@@ -208,16 +204,16 @@ const NavigationBar = () => {
                             d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                         </svg>
                         设置
-                      </button>
+                      </a>
                     </Menu.Item>
                     <div className="my-1.5 h-px bg-white/20" role="none"></div>
                     <Menu.Item>
-                      <button
-                        className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
-                        id="headlessui-menu-item-:r2t:" role="menuitem" tabIndex={-1} data-headlessui-state="">
+                      {/*@ts-ignore*/}
+                      <a as={"button"}
+                        className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
                         <LogoutIcon/>
                         退出登陆
-                      </button>
+                      </a>
                     </Menu.Item>
                   </div>
                 </Menu.Items>
