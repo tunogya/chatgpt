@@ -450,12 +450,7 @@ const Chat = ({user}: any) => {
                 </div>
               </form>
               <div
-                className="flex flex-col items-center px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6 space-y-1">
-                <div className={'flex space-x-1.5'}>
-                  <a href={"/doc/PrivacyPolicy"} target={'_blank'} rel={'noreferrer'}>
-                    隐私政策
-                  </a>
-                </div>
+                className="flex justify-center px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6 space-y-1">
                 <div className={'flex space-x-1.5'}>
                   <a href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32068202000378"} target={'_blank'} rel={'noreferrer'}>
                     <div className={"flex space-x-1.5"}>
@@ -472,6 +467,12 @@ const Chat = ({user}: any) => {
                       </p>
                     </div>
                   </a>
+                  <div>|</div>
+                  <div className={'flex space-x-1.5'}>
+                    <a href={"/doc/PrivacyPolicy"} target={'_blank'} rel={'noreferrer'}>
+                      隐私政策
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
