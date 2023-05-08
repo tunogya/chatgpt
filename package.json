@@ -15,6 +15,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fortaine/openai": "^5.3.1",
+    "@headlessui/react": "^1.7.14",
     "@reduxjs/toolkit": "^1.9.2",
     "copy-to-clipboard": "^3.3.3",
     "dotenv": "^16.0.3",
