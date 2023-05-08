@@ -1,14 +1,12 @@
 import {useDispatch} from "react-redux";
 import {setInput} from "@/store/ui";
 import {useState} from "react";
-import {useUser} from "@auth0/nextjs-auth0/client";
-import Image from "next/image";
+import LightingIcon from "@/components/SVG/LightingIcon";
 
 const Dashboard = () => {
   const dispatch = useDispatch()
-  const {user} = useUser()
   const [demo, setDemo] = useState([
-    '用简单的术语解释量子计算', ' 10 岁生日派对有哪些有趣的安排？', '如何在 Javascript 中发出 HTTP 请求？'
+    '请扮演塔罗牌占卜师，由我的问题，抽三张牌进行解答', '请为我写一则论文大纲，主题是...', '如何在 Javascript 中发出 HTTP 请求？'
   ])
 
   return (
@@ -61,6 +59,23 @@ const Dashboard = () => {
           </div>
           <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
             <h2 className="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
+              <LightingIcon/>
+              能力
+            </h2>
+            <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
+              <li
+                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">记住用户早些时候在对话中说的话
+              </li>
+              <li
+                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">允许用户提供后续更正
+              </li>
+              <li
+                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">接受过拒绝不当请求的培训
+              </li>
+            </ul>
+          </div>
+          <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
+            <h2 className="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
               <svg stroke="currentColor" fill="none" strokeWidth="1.5" viewBox="0 0 24 24"
                    strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" height="1em" width="1em"
                    xmlns="http://www.w3.org/2000/svg">
@@ -82,19 +97,6 @@ const Dashboard = () => {
                 className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">对 2021 年后的世界和事件的了解有限
               </li>
             </ul>
-          </div>
-          <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
-            <h2 className="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
-              <div className={'h-6 w-6 overflow-hidden rounded-full'}>
-                {
-                  user?.picture && (
-                    <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={24} height={24} quality={80}
-                           blurDataURL={`https://dummyimage.com/24x24/ffffff/000000.png&text=${user?.name?.[0] || 'A'}`}
-                           priority/>
-                  )}
-              </div>
-              账户
-            </h2>
           </div>
         </div>
       </div>
