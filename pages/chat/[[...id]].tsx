@@ -473,6 +473,12 @@ const Chat = ({user}: any) => {
                       隐私政策
                     </a>
                   </div>
+                  <div>|</div>
+                  <div className={"flex space-x-1.5"}>
+                    <p>
+                      OpenAI 提供技术支持
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
