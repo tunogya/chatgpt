@@ -32,40 +32,6 @@ const Dashboard = () => {
   const [cdKeyData, setCdKeyData] = useState<any>(undefined)
 
   const {
-    data: dataOfMetadata,
-    isLoading: isLoadingOfMetadata,
-    mutate: mutateMetadata
-  } = useSWR('/api/app/metadata', (url: string) => fetch(url).then((res) => res.json()))
-
-  const paidUseLeft = useMemo(() => {
-    if (!dataOfMetadata?.paidUseTTL) {
-      dispatch(setPaidUseTTL(0))
-      return 0
-    }
-    dispatch(setPaidUseTTL(dataOfMetadata.paidUseTTL))
-    const time = ((dataOfMetadata.paidUseTTL - Date.now() / 1000) / 86400)
-    if (time < 0) {
-      dispatch(setPaidUseTTL(0))
-      return 0
-    }
-    return time
-  }, [dataOfMetadata])
-
-  const freeUseLeft = useMemo(() => {
-    if (!dataOfMetadata?.freeUseTTL) {
-      dispatch(setFreeUseTTL(0))
-      return 0
-    }
-    dispatch(setFreeUseTTL(dataOfMetadata.freeUseTTL))
-    const time = ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400)
-    if (time < 0) {
-      dispatch(setFreeUseTTL(0))
-      return 0
-    }
-    return time
-  }, [dataOfMetadata])
-
-  const {
     data: dataOfOrder,
     mutate: mutateOrder
   } = useSWR(trade_no ? `/api/pay/weixin/query?out_trade_no=${trade_no}` : null, (url: string) => fetch(url).then((res) => res.json()))
@@ -179,7 +145,6 @@ const Dashboard = () => {
       className={"text-md underline font-semibold mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center hover:opacity-80"}
       onClick={() => {
         router.push('/chat')
-        mutateMetadata()
         setCodeUrl(undefined)
         setQuantity(undefined)
         setTradeNo(undefined)
@@ -278,61 +243,6 @@ const Dashboard = () => {
             </div>
             账户
           </h2>
-          <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-            {
-              isLoadingOfMetadata ? (
-                <LoadingIcon/>
-              ) : (
-                <>
-                  <button
-                    className="w-full btn-primary p-3 rounded-md"
-                    onClick={() => {
-                      router.push({
-                        pathname: '/chat',
-                        query: {
-                          to: 'free'
-                        }
-                      })
-                      // @ts-ignore
-                      window.gtag('event', 'custom_button_click', {
-                        'event_category': '按钮',
-                        'event_label': '查看免费体验卡',
-                      })
-                    }}
-                  >
-                    {freeUseLeft > 0 ? `免费体验卡: ${freeUseLeft.toLocaleString('en-US', {
-                      maximumFractionDigits: 1
-                    })} 天` : '领取免费体验卡 →'}
-                  </button>
-                  <button
-                    className="w-full bg-orange-500 hover:opacity-80 text-white p-3 rounded-md"
-                    onClick={() => {
-                      router.push({
-                        pathname: '/chat',
-                        query: {
-                          to: 'purchase'
-                        }
-                      })
-                      // @ts-ignore
-                      window.gtag('event', 'custom_button_click', {
-                        'event_category': '按钮',
-                        'event_label': '查看付费会员卡',
-                      })
-                    }}
-                  >
-                    {paidUseLeft > 0 ? `付费会员卡: ${paidUseLeft.toLocaleString('en-US', {
-                      maximumFractionDigits: 1
-                    })} 天` : '付费会员卡，最低 9.7 元/月 →'}
-                  </button>
-                </>
-              )
-            }
-            <a href={"https://support.qq.com/products/566478"} target={"_blank"} rel={"noreferrer"}
-               className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">创建工单
-              →
-            </a>
-            <div className={'text-xs text-red-300'}>{user?.email_verified === false && '提示: 请完成邮箱验证'}</div>
-          </ul>
         </div>
       </div>
     </>
@@ -437,7 +347,6 @@ const Dashboard = () => {
                 </div>
                 <button className={"text-xs underline hover:opacity-80"} onClick={() => {
                   mutateOrder()
-                  mutateMetadata()
                   // @ts-ignore
                   window.gtag('event', 'custom_button_click', {
                     'event_category': '按钮',

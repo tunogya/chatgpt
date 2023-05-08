@@ -15,6 +15,14 @@ html {
     tab-size: 4
 }
 
+bottom-full {
+    bottom: 100%;
+}
+
+bg-[#050509] {
+    background-color: #050509;
+}
+
 body {
     line-height: inherit;
     margin: 0
