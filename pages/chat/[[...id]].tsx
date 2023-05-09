@@ -1,5 +1,5 @@
 import {withPageAuthRequired} from '@auth0/nextjs-auth0';
-import {setFreeUseTTL, setInput, setIsOpenSidebar, setOffProtected, setPaidUseTTL} from "@/store/ui";
+import {setInput} from "@/store/ui";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -29,26 +29,17 @@ import DialogMenuItem, {DialogMenuItemProps} from "@/components/DialogMenuItem";
 import RightIcon from "@/components/SVG/RightIcon";
 
 const Chat = ({user}: any) => {
-  const isOpenSidebar = useSelector((state: any) => state.ui.isOpenSidebar)
   const dispatch = useDispatch();
   const router = useRouter()
-  const [count, setCount] = useState(0);
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete);
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const session = useSelector((state: any) => state.session.session);
   const input = useSelector((state: any) => state.ui.input);
-  const off_protected = useSelector((state: any) => state.ui.off_protected);
-  const freeUseTTL = useSelector((state: any) => state.ui.freeUseTTL);
-  const paidUseTTL = useSelector((state: any) => state.ui.paidUseTTL);
   const inputRef = useRef(null);
   const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory)
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-
-  const membershipState = useMemo(() => {
-    const freeUseLeft = ((freeUseTTL - Date.now() / 1000) / 86400)
-    const paidUseLeft = ((paidUseTTL - Date.now() / 1000) / 86400)
-    return freeUseLeft > 0 || paidUseLeft > 0;
-  }, [freeUseTTL, paidUseTTL])
+  const [isOpenSetting, setIsOpenSetting] = useState(false);
+  const [isOpenSidebar, setIsOpenSidebar] = useState(false);
 
   const {
     data: conversationData,
@@ -95,7 +86,7 @@ const Chat = ({user}: any) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          off_protected,
+          off_protected: false,
           conversation_id: session.id,
           action: 'next',
           model: 'gpt-3.5-turbo',
@@ -193,31 +184,25 @@ const Chat = ({user}: any) => {
 
   const paidUseLeft = useMemo(() => {
     if (!dataOfMetadata?.paidUseTTL) {
-      dispatch(setPaidUseTTL(0))
       return 0
     }
-    dispatch(setPaidUseTTL(dataOfMetadata.paidUseTTL))
     const time = ((dataOfMetadata.paidUseTTL - Date.now() / 1000) / 86400)
     if (time < 0) {
-      dispatch(setPaidUseTTL(0))
       return 0
     }
     return time
-  }, [dataOfMetadata])
+  }, [dataOfMetadata?.paidUseTTL])
 
   const freeUseLeft = useMemo(() => {
     if (!dataOfMetadata?.freeUseTTL) {
-      dispatch(setFreeUseTTL(0))
       return 0
     }
-    dispatch(setFreeUseTTL(dataOfMetadata.freeUseTTL))
     const time = ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400)
     if (time < 0) {
-      dispatch(setFreeUseTTL(0))
       return 0
     }
     return time
-  }, [dataOfMetadata])
+  }, [dataOfMetadata?.freeUseTTL])
 
   const clearConversationList = async () => {
     if (!deleteConfirm) {
@@ -241,13 +226,6 @@ const Chat = ({user}: any) => {
     })
     await mutateConversation();
   }
-
-  useEffect(() => {
-    if (count >= 10) {
-      dispatch(setOffProtected(true))
-      setCount(0)
-    }
-  }, [count, dispatch])
 
   const getNavigation = () => {
     return (
@@ -343,14 +321,16 @@ const Chat = ({user}: any) => {
                               }}
                             >
                               {deleteConfirm ? <RightIcon/> : <DeleteIcon/>}
-                              {deleteConfirm ? '确认清空（最多25条）' : '清空会话'}
+                              {deleteConfirm ? '确认清空' : '清空会话'}
                             </a>
                           </Menu.Item>
                         )
                       }
                       <Menu.Item>
                         <a
-                          className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
+                          className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
+                          onClick={() => setIsOpenSetting(true)}
+                        >
                           <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round"
                                strokeLinejoin="round" className="h-4 w-4" height="1em" width="1em"
                                xmlns="http://www.w3.org/2000/svg">
@@ -358,7 +338,7 @@ const Chat = ({user}: any) => {
                             <path
                               d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                           </svg>
-                          产品设置
+                          系统设置
                         </a>
                       </Menu.Item>
                       <div className="my-1.5 h-px bg-white/20" role="none"></div>
@@ -401,7 +381,7 @@ const Chat = ({user}: any) => {
         <div className="relative flex h-full max-w-full flex-1">
           <div
             className="sticky top-0 z-10 flex items-center border-b border-white/20 bg-gray-800 pl-1 pt-1 text-gray-200 sm:pl-3 md:hidden">
-            <button type="button" onClick={() => dispatch(setIsOpenSidebar(true))}
+            <button type="button" onClick={() => setIsOpenSidebar(true)}
                     className="-ml-0.5 -mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white">
               <span className="sr-only">打开侧边栏</span>
               <MenuIcon/>
@@ -428,9 +408,9 @@ const Chat = ({user}: any) => {
                   <div
                     className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
-                          disabled={!membershipState}
+                          disabled={!(freeUseLeft || paidUseLeft)}
                           rows={1} ref={inputRef}
-                          placeholder={membershipState ? '输入你感兴趣的问题...' : '提示：如果你的试用结束，请获取免费体验卡，或付费会员卡以继续...'}
+                          placeholder={(freeUseLeft > 0 || paidUseLeft > 0) ? '输入你感兴趣的问题...' : '提示：如果你的试用结束，请获取免费体验卡，或付费会员卡以继续...'}
                           onKeyDown={async (e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                               if (e.nativeEvent.isComposing) return;
@@ -452,7 +432,7 @@ const Chat = ({user}: any) => {
                           }} value={input}
                           className="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent md:pl-0"></textarea>
                     {
-                      membershipState && (
+                      (freeUseLeft > 0 || paidUseLeft > 0) && (
                         <button
                           className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent disabled:bottom-0.5 md:disabled:bottom-1"
                           disabled={isWaitComplete}
@@ -521,7 +501,7 @@ const Chat = ({user}: any) => {
             <div className="fixed inset-0 z-40 flex">
               <div className="relative flex w-full max-w-xs flex-1 flex-col bg-gray-900 translate-x-0">
                 <div className="absolute top-0 right-0 -mr-12 pt-2 opacity-100">
-                  <button type="button" onClick={() => dispatch(setIsOpenSidebar(false))} tabIndex={0}
+                  <button type="button" onClick={() => setIsOpenSidebar(false)} tabIndex={0}
                           className="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="sr-only">关闭侧边栏</span>
                     <CloseIcon className={"h-6 w-6 text-white"} strokeWidth={"1.5"}/>
@@ -532,6 +512,117 @@ const Chat = ({user}: any) => {
               <div className="w-14 flex-shrink-0"></div>
             </div>
           </div>
+        </Dialog.Panel>
+      </Dialog>
+      <Dialog open={isOpenSetting} onClose={() => setIsOpenSetting(false)}>
+        <Dialog.Panel>
+          <button type="button" aria-hidden="true"
+                  style={{
+                    position: "fixed",
+                    top: "1px",
+                    left: "1px",
+                    width: "1px",
+                    height: "0px",
+                    padding: "0px",
+                    margin: "-1px",
+                    overflow: "hidden",
+                    clip: "(0px, 0px, 0px, 0px)",
+                    whiteSpace: "nowrap",
+                    borderWidth: "0px"
+                  }}
+                  onClick={() => setIsOpenSetting(false)}
+          ></button>
+          <div>
+            <div className="relative z-50" id="headlessui-dialog-:rr:" role="dialog" aria-modal="true"
+                 data-headlessui-state="open" aria-labelledby="headlessui-dialog-title-:rt:">
+              <div className="fixed inset-0 bg-gray-500/90 transition-opacity dark:bg-gray-800/90"></div>
+              <div className="fixed inset-0 z-50 overflow-y-auto">
+                <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                  <div
+                    className="relative w-full transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all dark:bg-gray-900 sm:my-8 sm:max-w-2xl"
+                    id="headlessui-dialog-panel-:rs:" data-headlessui-state="open">
+                    <div
+                      className="flex items-center justify-between border-b-[1px] border-black/10 dark:border-white/10 px-4 pb-4 pt-5 sm:p-6">
+                      <div className="flex items-center">
+                        <div className="text-center sm:text-left"><h3
+                          className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200"
+                          id="headlessui-dialog-title-:rt:" data-headlessui-state="open">系统设置</h3></div>
+                      </div>
+                      <div>
+                        <div className="sm:mt-0">
+                          <button className="inline-block text-gray-500 hover:text-gray-700">
+                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 className="text-gray-900 dark:text-gray-200" height="20" width="20"
+                                 xmlns="http://www.w3.org/2000/svg">
+                              <line x1="18" y1="6" x2="6" y2="18"></line>
+                              <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-4 sm:p-6 sm:pt-4">
+                      <div dir="ltr" data-orientation="vertical" className="flex flex-col gap-6 md:flex-row">
+                        <div role="tablist" aria-orientation="vertical"
+                             className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-col">
+                          <button type="button" role="tab" aria-selected="true"
+                                  aria-controls="radix-:ru:-content-General" data-state="active"
+                                  id="radix-:ru:-trigger-General"
+                                  className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
+                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
+                                 stroke-linecap="round" stroke-linejoin="round" className="h-4 w-4" height="1em"
+                                 width="1em" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="12" cy="12" r="3"></circle>
+                              <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            <div>常规</div>
+                          </button>
+                          <button
+                            className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
+                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
+                                 stroke-linecap="round" stroke-linejoin="round" className="h-4 w-4" height="1em"
+                                 width="1em" xmlns="http://www.w3.org/2000/svg">
+                              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                            </svg>
+                            <div>数据</div>
+                          </button>
+                        </div>
+                        <div className="w-full md:min-h-[300px]">
+                          <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
+                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                              <div className="flex items-center justify-between">
+                                <div>主题</div>
+                                <select
+                                  className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20">
+                                  <option value="system">跟随系统</option>
+                                  <option value="dark">暗黑模式</option>
+                                  <option value="light">浅色模式</option>
+                                </select></div>
+                            </div>
+                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                              <div className="flex items-center justify-between">
+                                <div>清空所有记录</div>
+                                <button className="btn relative btn-danger">
+                                  <div className="flex w-full gap-2 items-center justify-center">清空</div>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" aria-hidden="true"
+            // style="position: fixed; top: 1px; left: 1px; width: 1px; height: 0px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px;"
+          ></button>
         </Dialog.Panel>
       </Dialog>
     </>
