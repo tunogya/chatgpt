@@ -284,7 +284,7 @@ const Chat = ({user}: any) => {
                         </div>
                       </div>
                       <div
-                        className="grow overflow-hidden pl-3 text-ellipsis whitespace-nowrap text-left text-white">{user?.name}</div>
+                        className="grow overflow-hidden text-ellipsis whitespace-nowrap text-left text-white">{user?.name}</div>
                       <MoreIcon/>
                     </a>
                   </Menu.Button>
@@ -341,13 +341,13 @@ const Chat = ({user}: any) => {
 
   return (
     <>
-      <div className={'overflow-hidden w-full h-full relative'}>
-        <div className={'dark hidden bg-gray-900 md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col'}>
+      <div className={'overflow-hidden w-full h-full relative flex z-0'}>
+        <div className={'dark flex-shrink-0 overflow-x-hidden bg-gray-900'} style={{ width: "260px" }}>
           <div className={'flex h-full min-h-0 flex-col '}>
             {getNavigation()}
           </div>
         </div>
-        <div className="flex h-full flex-1 flex-col md:pl-[260px]">
+        <div className="relative flex h-full max-w-full flex-1">
           <div
             className="sticky top-0 z-10 flex items-center border-b border-white/20 bg-gray-800 pl-1 pt-1 text-gray-200 sm:pl-3 md:hidden">
             <button type="button" onClick={() => dispatch(setIsOpenSidebar(true))}
