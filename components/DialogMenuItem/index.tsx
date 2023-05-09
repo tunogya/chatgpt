@@ -8,14 +8,14 @@ import {clearSession} from "@/store/session";
 import DeleteIcon from "@/components/SVG/DeleteIcon";
 import EditIcon from "@/components/SVG/EditIcon";
 
-export type ConversationItemProps = {
+export type DialogMenuItemProps = {
   id: string,
   title: string,
   create_time: string,
   callback?: () => void,
 }
 
-const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
+const DialogMenuItem: FC<DialogMenuItemProps> = ({...props}) => {
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [updateConfirm, setUpdateConfirm] = useState(false);
   const [title, setTitle] = useState(props.title);

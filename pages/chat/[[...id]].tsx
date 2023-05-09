@@ -25,7 +25,7 @@ import SendIcon from "@/components/SVG/SendIcon";
 import {v4 as uuidv4} from "uuid";
 import MenuIcon from "@/components/SVG/MenuIcon";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
-import DialogMenuItem, {ConversationItemProps} from "@/components/DialogMenuList/DialogMenuItem";
+import DialogMenuItem, {DialogMenuItemProps} from "@/components/DialogMenuItem";
 
 const Chat = ({user}: any) => {
   const isOpenSidebar = useSelector((state: any) => state.ui.isOpenSidebar)
@@ -247,7 +247,7 @@ const Chat = ({user}: any) => {
                 conversationData && conversationData.length === 0 && isConversationLoading ? (
                   <LoadingIcon/>
                 ) : (
-                  conversationData && conversationData.items?.map((item: ConversationItemProps) => (
+                  conversationData && conversationData.items?.map((item: DialogMenuItemProps) => (
                     <DialogMenuItem key={item.id} {...item} callback={mutateConversation}/>
                   ))
                 )
