@@ -11,7 +11,7 @@ import {
 } from "@/store/session";
 import AddIcon from "@/components/SVG/AddIcon";
 import UserIcon from "@/components/SVG/UserIcon";
-import {Dialog, Menu} from "@headlessui/react";
+import {Dialog, Menu, Tab} from "@headlessui/react";
 import Image from "next/image";
 import MoreIcon from "@/components/SVG/MoreIcon";
 import ShareIcon from "@/components/SVG/ShareIcon";
@@ -535,41 +535,49 @@ const Chat = ({user}: any) => {
                 </div>
                 <div className="p-4 sm:p-6 sm:pt-4">
                   <div dir="ltr" data-orientation="vertical" className="flex flex-col gap-6 md:flex-row">
-                    <div role="tablist" aria-orientation="vertical"
-                         className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-col">
-                      <button
-                        className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
-                        <SettingIcon/>
-                        <div>常规</div>
-                      </button>
-                      <button
-                        className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
-                        <DataIcon/>
-                        <div>数据</div>
-                      </button>
-                    </div>
-                    <div className="w-full md:min-h-[300px]">
-                      <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
-                        <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
-                          <div className="flex items-center justify-between">
-                            <div>主题</div>
-                            <select
-                              className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20">
-                              <option value="system">跟随系统</option>
-                              <option value="dark">暗黑模式</option>
-                              <option value="light">浅色模式</option>
-                            </select></div>
-                        </div>
-                        <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
-                          <div className="flex items-center justify-between">
-                            <div>清空所有记录</div>
-                            <button className="btn relative btn-danger">
-                              <div className="flex w-full gap-2 items-center justify-center">清空</div>
-                            </button>
+                    <Tab.Group>
+                      <Tab.List aria-orientation="vertical" data-orientation="vertical" className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-col">
+                        <Tab>
+                          <button
+                                  className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
+                            <SettingIcon/>
+                            <div>常规</div>
+                          </button>
+                        </Tab>
+                        <Tab>
+                          <button
+                            className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
+                            <DataIcon/>
+                            <div>数据</div>
+                          </button>
+                        </Tab>
+                      </Tab.List>
+                      <Tab.Panels className="w-full md:min-h-[300px]">
+                        <Tab.Panel>
+                          <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
+                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                              <div className="flex items-center justify-between">
+                                <div>主题</div>
+                                <select
+                                  className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20">
+                                  <option value="system">跟随系统</option>
+                                  <option value="dark">暗黑模式</option>
+                                  <option value="light">浅色模式</option>
+                                </select></div>
+                            </div>
+                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                              <div className="flex items-center justify-between">
+                                <div>清空所有记录</div>
+                                <button className="btn relative btn-danger">
+                                  <div className="flex w-full gap-2 items-center justify-center">清空</div>
+                                </button>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
+                        </Tab.Panel>
+                        <Tab.Panel>Content 2</Tab.Panel>
+                      </Tab.Panels>
+                    </Tab.Group>
                   </div>
                 </div>
               </div>
