@@ -22,12 +22,6 @@ export type Message = {
 export const index = createSlice({
   name: 'session',
   initialState: {
-    // conversation is used to store the conversation list
-    conversation: [] as {
-      id: string, // conversation id
-      title: string, // conversation title
-      create_time: string, // conversation create time
-    }[],
     // session is used to store the current conversation
     session: {
       id: null, // conversation id
@@ -49,51 +43,6 @@ export const index = createSlice({
     isWaitHistory: false,
   },
   reducers: {
-    // setConversation is used to set the conversation list
-    setConversation: (state, action: {
-      payload: {
-        id: string,
-        title: string,
-        create_time: string,
-      }[]
-    }) => {
-      state.conversation = action.payload;
-    },
-    // updateConversationById is used to update the conversation list by id
-    updateConversationById: (state, action: {
-      payload: {
-        id: string,
-        title?: string,
-        create_time?: string,
-      }
-    }) => {
-      const newConversation = action.payload
-      const index = state.conversation.findIndex((c: any) => c.id === newConversation.id)
-      if (index !== -1) {
-        state.conversation[index] = {
-          ...state.conversation[index],
-          ...newConversation
-        }
-      }
-    },
-    deleteConversationById: (state, action: {
-      payload: string
-    }) => {
-      const id = action.payload
-      const index = state.conversation.findIndex((c: any) => c.id === id)
-      if (index !== -1) {
-        // @ts-ignore
-        state.conversation.splice(index, 1)
-      }
-      if (id === state.session.id) {
-        state.session = {
-          id: null,
-          title: '新会话',
-          create_time: "",
-          mapping: {},
-        }
-      }
-    },
     // setSession is used to set the current session
     setSession: (state, action) => {
       state.session = action.payload
@@ -177,9 +126,6 @@ export const index = createSlice({
 })
 
 export const {
-  setConversation,
-  updateConversationById,
-  deleteConversationById,
   setSession,
   updateSession,
   updateMessageInSession,

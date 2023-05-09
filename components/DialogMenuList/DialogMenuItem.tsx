@@ -4,7 +4,7 @@ import RightIcon from "@/components/SVG/RightIcon";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch} from "react-redux";
 import {useRouter} from "next/router";
-import {clearSession, deleteConversationById, updateConversationById} from "@/store/session";
+import {clearSession} from "@/store/session";
 import DeleteIcon from "@/components/SVG/DeleteIcon";
 import EditIcon from "@/components/SVG/EditIcon";
 
@@ -29,7 +29,6 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
           'Content-Type': 'application/json',
         }
       })
-      dispatch(deleteConversationById(props.id))
       if (router.query.id?.[0] === props.id.split('#').pop()) {
         dispatch(clearSession());
         router.push({
@@ -61,10 +60,6 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
         })
       })
       setUpdateConfirm(false)
-      dispatch(updateConversationById({
-        id: props.id,
-        title: title,
-      }))
     } catch (e) {
       console.log(e)
     }
