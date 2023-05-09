@@ -12,6 +12,7 @@ export type ConversationItemProps = {
   id: string,
   title: string,
   create_time: string,
+  callback?: () => void,
 }
 
 const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
@@ -29,6 +30,7 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
           'Content-Type': 'application/json',
         }
       })
+      props.callback?.()
       if (router.query.id?.[0] === props.id.split('#').pop()) {
         dispatch(clearSession());
         router.push({
@@ -59,6 +61,7 @@ const DialogMenuItem: FC<ConversationItemProps> = ({...props}) => {
           title: title,
         })
       })
+      props.callback?.()
       setUpdateConfirm(false)
     } catch (e) {
       console.log(e)

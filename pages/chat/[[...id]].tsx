@@ -5,7 +5,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {
   clearSession,
   Message,
-  setConversation,
   setIsWaitComplete,
   updateLastMessageId,
   updateMessageInSession, updateSession
@@ -49,7 +48,7 @@ const Chat = ({user}: any) => {
     return freeUseLeft > 0 || paidUseLeft > 0;
   }, [freeUseTTL, paidUseTTL])
 
-  const {data: conversationData, isLoading: isConversationLoading, mutate: getConversation} = useSWR('/api/conversation', (url: string) => fetch(url).then((res) => res.json()))
+  const {data: conversationData, isLoading: isConversationLoading, mutate: mutateConversation} = useSWR('/api/conversation', (url: string) => fetch(url).then((res) => res.json()))
 
   const handleSubmit = async () => {
     if (input === '') return;
@@ -168,7 +167,7 @@ const Chat = ({user}: any) => {
       dispatch(setIsWaitComplete(false))
       console.log(e)
     }
-    await getConversation();
+    await mutateConversation();
   }
 
   const [second, setSecond] = useState(0);
@@ -249,7 +248,7 @@ const Chat = ({user}: any) => {
                   <LoadingIcon/>
                 ) : (
                   conversationData && conversationData.items?.map((item: ConversationItemProps) => (
-                    <DialogMenuItem key={item.id} {...item}/>
+                    <DialogMenuItem key={item.id} {...item} callback={mutateConversation}/>
                   ))
                 )
               }
