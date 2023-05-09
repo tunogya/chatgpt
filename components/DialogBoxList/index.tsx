@@ -80,7 +80,9 @@ const DialogBoxListContent = () => {
         {
           isWaitHistory ? (
             <div className="flex flex-col items-center text-sm text-gray-800 dark:text-gray-100 dark:bg-gray-800">
-              <LoadingIcon/>
+              <div className={"pt-4"}>
+                <LoadingIcon/>
+              </div>
               <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
             </div>
           ) : (
