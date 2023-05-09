@@ -549,6 +549,11 @@ const Chat = ({user}: any) => {
                           <DataIcon/>
                           <div>数据</div>
                         </Tab>
+                        <Tab as={"button"}
+                             className={`${selectedIndex === 2 ? 'bg-gray-800 text-white' : ''} flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                          <UserIcon/>
+                          <div>账户</div>
+                        </Tab>
                       </Tab.List>
                       <Tab.Panels className="w-full md:min-h-[300px]">
                         <Tab.Panel>
@@ -573,7 +578,44 @@ const Chat = ({user}: any) => {
                             </div>
                           </div>
                         </Tab.Panel>
-                        <Tab.Panel>Content 2</Tab.Panel>
+                        <Tab.Panel>
+                          <div className="w-full md:min-h-[300px]">
+                            <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
+                              <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                                <div className="flex items-center justify-between">
+                                  <div>云聊天记录</div>
+                                </div>
+                                <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
+                                  我们将为您云端保存您的聊天记录，以便您在任何设备上使用。
+                                  <a
+                                    href="/doc/PrivacyPolicy" target="_blank"
+                                    className="underline" rel="noreferrer">隐私政策</a></div>
+                              </div>
+                              <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                                <div className="flex items-center justify-between">
+                                  <div>导出数据</div>
+                                  <button className="btn relative btn-neutral">
+                                    <div className="flex w-full gap-2 items-center justify-center">导出</div>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Tab.Panel>
+                        <Tab.Panel>
+                          <div className="w-full md:min-h-[300px]">
+                            <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
+                              <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                                <div className="flex items-center justify-between">
+                                  <div>删除账户</div>
+                                  <button className="btn relative btn-danger">
+                                    <div className="flex w-full gap-2 items-center justify-center">删除</div>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Tab.Panel>
                       </Tab.Panels>
                     </Tab.Group>
                   </div>
