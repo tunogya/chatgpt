@@ -35,33 +35,6 @@ export default function App({Component, pageProps}: AppProps) {
         <link rel='icon' href={'/favicon.png'} type='image/png'/>
         <link rel='apple-touch-icon' href={'/apple-touch-icon.png'} sizes={'180x180'} type='image/png'/>
         <link rel='mask-icon' href={'favicon.svg'} color='#343541' type='image/svg+xml'/>
-        <link href="/fonts/Signifier-Regular.otf" as="font" crossOrigin=""/>
-        <link href="/fonts/Sohne-Buch.otf" as="font" crossOrigin=""/>
-        <link href="/fonts/Sohne-Halbfett.otf" as="font" crossOrigin=""/>
-        <link href="/fonts/SohneMono-Buch.otf" as="font" crossOrigin=""/>
-        <link href="/fonts/SohneMono-Halbfett.otf" as="font" crossOrigin=""/>
-        <link href="/fonts/KaTeX_Caligraphic-Bold.woff" as="font"/>
-        <link href="/fonts/KaTeX_Caligraphic-Regular.woff" as="font"/>
-        <link href="/fonts/KaTeX_Fraktur-Bold.woff" as="font"/>
-        <link href="/fonts/KaTeX_Fraktur-Regular.woff" as="font"/>
-        <link href="/fonts/KaTeX_Main-Bold.woff" as="font"/>
-        <link href="/fonts/KaTeX_Main-BoldItalic.woff" as="font"/>
-        <link href="/fonts/KaTeX_Main-Italic.woff" as="font"/>
-        <link href="/fonts/KaTeX_Main-Regular.woff" as="font"/>
-        <link href="/fonts/KaTeX_Math-BoldItalic.woff" as="font"/>
-        <link href="/fonts/KaTeX_Math-Italic.woff" as="font"/>
-        <link href="/fonts/KaTeX_SansSerif-Bold.woff" as="font"/>
-        <link href="/fonts/KaTeX_SansSerif-Italic.woff" as="font"/>
-        <link href="/fonts/KaTeX_SansSerif-Regular.woff" as="font"/>
-        <link href="/fonts/KaTeX_Script-Regular.woff" as="font"/>
-        <link href="/fonts/KaTeX_Size1-Regular.woff" as="font"/>
-        <link href="/fonts/KaTeX_Size2-Regular.woff" as="font"/>
-        <link href="/fonts/KaTeX_Size3-Regular.woff"
-              as="font"/>
-        <link href="/fonts/KaTeX_Size4-Regular.woff"
-              as="font"/>
-        <link href="/fonts/KaTeX_Typewriter-Regular.woff"
-              as="font"/>
       </Head>
       <Script src={'https://www.googletagmanager.com/gtag/js?id=G-EDPQ3K7EN8'}/>
       <Script id='google-tag-manager' strategy='afterInteractive'>
