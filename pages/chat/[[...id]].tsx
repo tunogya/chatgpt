@@ -27,6 +27,8 @@ import MenuIcon from "@/components/SVG/MenuIcon";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import DialogMenuItem, {DialogMenuItemProps} from "@/components/DialogMenuItem";
 import RightIcon from "@/components/SVG/RightIcon";
+import SettingIcon from "@/components/SVG/SettingIcon";
+import DataIcon from "@/components/SVG/DataIcon";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -495,122 +497,81 @@ const Chat = ({user}: any) => {
         </div>
       </div>
       <Dialog open={isOpenSidebar} onClose={() => setIsOpenSidebar(false)}>
-        <Dialog.Panel>
-          <div className="relative z-40 md:hidden">
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-75 opacity-100"></div>
-            <div className="fixed inset-0 z-40 flex">
-              <div className="relative flex w-full max-w-xs flex-1 flex-col bg-gray-900 translate-x-0">
-                <div className="absolute top-0 right-0 -mr-12 pt-2 opacity-100">
-                  <button type="button" onClick={() => setIsOpenSidebar(false)} tabIndex={0}
-                          className="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                    <span className="sr-only">关闭侧边栏</span>
-                    <CloseIcon className={"h-6 w-6 text-white"} strokeWidth={"1.5"}/>
-                  </button>
-                </div>
-                {getNavigation()}
+        <div className="relative z-40 md:hidden">
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-75 opacity-100"></div>
+          <div className="fixed inset-0 z-40 flex">
+            <div className="relative flex w-full max-w-xs flex-1 flex-col bg-gray-900 translate-x-0">
+              <div className="absolute top-0 right-0 -mr-12 pt-2 opacity-100">
+                <button type="button" onClick={() => setIsOpenSidebar(false)} tabIndex={0}
+                        className="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <span className="sr-only">关闭侧边栏</span>
+                  <CloseIcon className={"h-6 w-6 text-white"} strokeWidth={"1.5"}/>
+                </button>
               </div>
-              <div className="w-14 flex-shrink-0"></div>
+              {getNavigation()}
             </div>
+            <div className="w-14 flex-shrink-0"></div>
           </div>
-        </Dialog.Panel>
+        </div>
       </Dialog>
       <Dialog open={isOpenSetting} onClose={() => setIsOpenSetting(false)}>
-        <Dialog.Panel>
-          <button type="button" aria-hidden="true"
-                  style={{
-                    position: "fixed",
-                    top: "1px",
-                    left: "1px",
-                    width: "1px",
-                    height: "0px",
-                    padding: "0px",
-                    margin: "-1px",
-                    overflow: "hidden",
-                    clip: "(0px, 0px, 0px, 0px)",
-                    whiteSpace: "nowrap",
-                    borderWidth: "0px"
-                  }}
-                  onClick={() => setIsOpenSetting(false)}
-          ></button>
-          <div>
-            <div className="relative z-50" id="headlessui-dialog-:rr:" role="dialog" aria-modal="true"
-                 data-headlessui-state="open" aria-labelledby="headlessui-dialog-title-:rt:">
-              <div className="fixed inset-0 bg-gray-500/90 transition-opacity dark:bg-gray-800/90"></div>
-              <div className="fixed inset-0 z-50 overflow-y-auto">
-                <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                  <div
-                    className="relative w-full transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all dark:bg-gray-900 sm:my-8 sm:max-w-2xl"
-                    id="headlessui-dialog-panel-:rs:" data-headlessui-state="open">
-                    <div
-                      className="flex items-center justify-between border-b-[1px] border-black/10 dark:border-white/10 px-4 pb-4 pt-5 sm:p-6">
-                      <div className="flex items-center">
-                        <div className="text-center sm:text-left"><h3
-                          className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200"
-                          id="headlessui-dialog-title-:rt:" data-headlessui-state="open">系统设置</h3></div>
-                      </div>
-                      <div>
-                        <div className="sm:mt-0">
-                          <button className="inline-block text-gray-500 hover:text-gray-700">
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
-                                 stroke-linecap="round" stroke-linejoin="round"
-                                 className="text-gray-900 dark:text-gray-200" height="20" width="20"
-                                 xmlns="http://www.w3.org/2000/svg">
-                              <line x1="18" y1="6" x2="6" y2="18"></line>
-                              <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
+        <div className="relative z-50">
+          <div className="fixed inset-0 bg-gray-500/90 transition-opacity dark:bg-gray-800/90"></div>
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <div
+                className="relative w-full transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all dark:bg-gray-900 sm:my-8 sm:max-w-2xl">
+                <div
+                  className="flex items-center justify-between border-b-[1px] border-black/10 dark:border-white/10 px-4 pb-4 pt-5 sm:p-6">
+                  <div className="flex items-center">
+                    <div className="text-center sm:text-left">
+                      <h3
+                        className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">系统设置
+                      </h3>
                     </div>
-                    <div className="p-4 sm:p-6 sm:pt-4">
-                      <div dir="ltr" data-orientation="vertical" className="flex flex-col gap-6 md:flex-row">
-                        <div role="tablist" aria-orientation="vertical"
-                             className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-col">
-                          <button type="button" role="tab" aria-selected="true"
-                                  aria-controls="radix-:ru:-content-General" data-state="active"
-                                  id="radix-:ru:-trigger-General"
-                                  className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
-                                 stroke-linecap="round" stroke-linejoin="round" className="h-4 w-4" height="1em"
-                                 width="1em" xmlns="http://www.w3.org/2000/svg">
-                              <circle cx="12" cy="12" r="3"></circle>
-                              <path
-                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                            </svg>
-                            <div>常规</div>
-                          </button>
-                          <button
-                            className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
-                                 stroke-linecap="round" stroke-linejoin="round" className="h-4 w-4" height="1em"
-                                 width="1em" xmlns="http://www.w3.org/2000/svg">
-                              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-                              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-                              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-                            </svg>
-                            <div>数据</div>
-                          </button>
+                  </div>
+                  <div>
+                    <div className="sm:mt-0">
+                      <button className="inline-block text-gray-500 hover:text-gray-700"
+                              onClick={() => setIsOpenSetting(false)}>
+                        <CloseIcon className={"text-gray-900 dark:text-gray-200 h-5 w-5"}/>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 sm:p-6 sm:pt-4">
+                  <div dir="ltr" data-orientation="vertical" className="flex flex-col gap-6 md:flex-row">
+                    <div role="tablist" aria-orientation="vertical"
+                         className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-col">
+                      <button
+                        className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
+                        <SettingIcon/>
+                        <div>常规</div>
+                      </button>
+                      <button
+                        className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
+                        <DataIcon/>
+                        <div>数据</div>
+                      </button>
+                    </div>
+                    <div className="w-full md:min-h-[300px]">
+                      <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                          <div className="flex items-center justify-between">
+                            <div>主题</div>
+                            <select
+                              className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20">
+                              <option value="system">跟随系统</option>
+                              <option value="dark">暗黑模式</option>
+                              <option value="light">浅色模式</option>
+                            </select></div>
                         </div>
-                        <div className="w-full md:min-h-[300px]">
-                          <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
-                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
-                              <div className="flex items-center justify-between">
-                                <div>主题</div>
-                                <select
-                                  className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20">
-                                  <option value="system">跟随系统</option>
-                                  <option value="dark">暗黑模式</option>
-                                  <option value="light">浅色模式</option>
-                                </select></div>
-                            </div>
-                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
-                              <div className="flex items-center justify-between">
-                                <div>清空所有记录</div>
-                                <button className="btn relative btn-danger">
-                                  <div className="flex w-full gap-2 items-center justify-center">清空</div>
-                                </button>
-                              </div>
-                            </div>
+                        <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                          <div className="flex items-center justify-between">
+                            <div>清空所有记录</div>
+                            <button className="btn relative btn-danger">
+                              <div className="flex w-full gap-2 items-center justify-center">清空</div>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -620,10 +581,7 @@ const Chat = ({user}: any) => {
               </div>
             </div>
           </div>
-          <button type="button" aria-hidden="true"
-            // style="position: fixed; top: 1px; left: 1px; width: 1px; height: 0px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px;"
-          ></button>
-        </Dialog.Panel>
+        </div>
       </Dialog>
     </>
   )
