@@ -369,12 +369,12 @@ const Chat = ({user}: any) => {
   return (
     <>
       <div className={'overflow-hidden w-full h-full relative flex z-0'}>
-        <div className={'dark flex-shrink-0 overflow-x-hidden bg-gray-900'} style={{width: "260px"}}>
+        <div className={'dark flex-shrink-0 overflow-x-hidden bg-gray-900 hidden md:inline-block'} style={{width: "260px"}}>
           <div className={'flex h-full min-h-0 flex-col '}>
             {getNavigation()}
           </div>
         </div>
-        <div className="relative flex h-full max-w-full flex-1">
+        <div className="flex h-full max-w-full flex-1 flex-col overflow-hidden">
           <div
             className="sticky top-0 z-10 flex items-center border-b border-white/20 bg-gray-800 pl-1 pt-1 text-gray-200 sm:pl-3 md:hidden">
             <button type="button" onClick={() => setIsOpenSidebar(true)}
