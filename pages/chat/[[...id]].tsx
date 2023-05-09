@@ -331,8 +331,9 @@ const Chat = ({user}: any) => {
                           <Menu.Item>
                             <a
                               className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
-                              onClick={() => {
-                                clearConversationList()
+                              onClick={async (e) => {
+                                e.preventDefault()
+                                await clearConversationList()
                                 // @ts-ignore
                                 window.gtag('event', 'custom_button_click', {
                                   'event_category': '按钮',
@@ -410,7 +411,7 @@ const Chat = ({user}: any) => {
             <button type="button" className="px-3"
                     onClick={async () => {
                       dispatch(clearSession());
-                      router.push({
+                      await router.push({
                         pathname: `/chat`,
                       })
                     }}>
