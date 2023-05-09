@@ -42,6 +42,7 @@ const Chat = ({user}: any) => {
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [isOpenSetting, setIsOpenSetting] = useState(false);
   const [isOpenSidebar, setIsOpenSidebar] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const {
     data: conversationData,
@@ -369,7 +370,8 @@ const Chat = ({user}: any) => {
   return (
     <>
       <div className={'overflow-hidden w-full h-full relative flex z-0'}>
-        <div className={'dark flex-shrink-0 overflow-x-hidden bg-gray-900 hidden md:inline-block'} style={{width: "260px"}}>
+        <div className={'dark flex-shrink-0 overflow-x-hidden bg-gray-900 hidden md:inline-block'}
+             style={{width: "260px"}}>
           <div className={'flex h-full min-h-0 flex-col '}>
             {getNavigation()}
           </div>
@@ -535,21 +537,17 @@ const Chat = ({user}: any) => {
                 </div>
                 <div className="p-4 sm:p-6 sm:pt-4">
                   <div dir="ltr" data-orientation="vertical" className="flex flex-col gap-6 md:flex-row">
-                    <Tab.Group>
-                      <Tab.List aria-orientation="vertical" data-orientation="vertical" className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-col">
-                        <Tab>
-                          <button
-                                  className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
-                            <SettingIcon/>
-                            <div>常规</div>
-                          </button>
+                    <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
+                      <Tab.List className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-col">
+                        <Tab as={"button"}
+                             className={`${selectedIndex === 0 ? 'bg-gray-800 text-white' : ''} flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                          <SettingIcon/>
+                          <div>常规</div>
                         </Tab>
-                        <Tab>
-                          <button
-                            className="flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm radix-state-active:bg-gray-800 radix-state-active:text-white">
-                            <DataIcon/>
-                            <div>数据</div>
-                          </button>
+                        <Tab as={"button"}
+                             className={`${selectedIndex === 1 ? 'bg-gray-800 text-white' : ''} flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                          <DataIcon/>
+                          <div>数据</div>
                         </Tab>
                       </Tab.List>
                       <Tab.Panels className="w-full md:min-h-[300px]">
