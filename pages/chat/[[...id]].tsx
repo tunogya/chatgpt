@@ -1,4 +1,4 @@
-import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import {withPageAuthRequired} from '@auth0/nextjs-auth0';
 import {setFreeUseTTL, setInput, setIsOpenSidebar, setOffProtected, setPaidUseTTL} from "@/store/ui";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch, useSelector} from "react-redux";
@@ -26,6 +26,7 @@ import {v4 as uuidv4} from "uuid";
 import MenuIcon from "@/components/SVG/MenuIcon";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import DialogMenuItem, {DialogMenuItemProps} from "@/components/DialogMenuItem";
+import RightIcon from "@/components/SVG/RightIcon";
 
 const Chat = ({user}: any) => {
   const isOpenSidebar = useSelector((state: any) => state.ui.isOpenSidebar)
@@ -41,6 +42,7 @@ const Chat = ({user}: any) => {
   const paidUseTTL = useSelector((state: any) => state.ui.paidUseTTL);
   const inputRef = useRef(null);
   const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory)
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   const membershipState = useMemo(() => {
     const freeUseLeft = ((freeUseTTL - Date.now() / 1000) / 86400)
@@ -48,7 +50,11 @@ const Chat = ({user}: any) => {
     return freeUseLeft > 0 || paidUseLeft > 0;
   }, [freeUseTTL, paidUseTTL])
 
-  const {data: conversationData, isLoading: isConversationLoading, mutate: mutateConversation} = useSWR('/api/conversation', (url: string) => fetch(url).then((res) => res.json()))
+  const {
+    data: conversationData,
+    isLoading: isConversationLoading,
+    mutate: mutateConversation
+  } = useSWR('/api/conversation', (url: string) => fetch(url).then((res) => res.json()))
 
   const handleSubmit = async () => {
     if (input === '') return;
@@ -213,6 +219,29 @@ const Chat = ({user}: any) => {
     return time
   }, [dataOfMetadata])
 
+  const clearConversationList = async () => {
+    if (!deleteConfirm) {
+      setDeleteConfirm(true);
+      return
+    }
+    await fetch('/api/conversation', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ids: conversationData.items.map((c: any) => c.id),
+        })
+      }
+    );
+    setDeleteConfirm(false);
+    dispatch(clearSession())
+    await router.push({
+      pathname: `/chat`,
+    })
+    await mutateConversation();
+  }
+
   useEffect(() => {
     if (count >= 10) {
       dispatch(setOffProtected(true))
@@ -272,9 +301,8 @@ const Chat = ({user}: any) => {
               user && (
                 <Menu as={"div"} className={'group relative'}>
                   <Menu.Button className={'w-full'}>
-                    {/*@ts-ignore*/}
-                    <a as={"button"}
-                       className="flex w-full items-center gap-2.5 rounded-md px-3 py-3 text-sm transition-colors duration-200 hover:bg-gray-800 group-ui-open:bg-gray-800">
+                    <a
+                      className="flex w-full items-center gap-2.5 rounded-md px-3 py-3 text-sm transition-colors duration-200 hover:bg-gray-800 group-ui-open:bg-gray-800">
                       <div className="-ml-0.5 w-5 flex-shrink-0">
                         <div className="relative flex rounded-sm overflow-hidden">
                           <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={24} height={24}
@@ -288,27 +316,40 @@ const Chat = ({user}: any) => {
                       <MoreIcon/>
                     </a>
                   </Menu.Button>
-                  <Menu.Items className={'absolute bottom-full left-0 z-20 mb-2 w-full overflow-hidden rounded-md bg-[#050509] py-1.5 outline-none opacity-100 translate-y-0'}>
+                  <Menu.Items
+                    className={'absolute bottom-full left-0 z-20 mb-2 w-full overflow-hidden rounded-md bg-[#050509] py-1.5 outline-none opacity-100 translate-y-0'}>
                     <div>
                       <Menu.Item>
-                        <a href="https://help.openai.com/en/collections/3742473-chatgpt" target="_blank" rel={'noreferrer'}
+                        <a href="https://support.qq.com/products/566478" target="_blank" rel={'noreferrer'}
                            className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
                           <ShareIcon/>
-                          帮助问答</a>
+                          常见问答</a>
                       </Menu.Item>
                       <div className="my-1.5 h-px bg-white/20" role="none"></div>
+                      {
+                        conversationData && conversationData.items.length > 0 && (
+                          <Menu.Item>
+                            <a
+                              className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
+                              onClick={() => {
+                                clearConversationList()
+                                // @ts-ignore
+                                window.gtag('event', 'custom_button_click', {
+                                  'event_category': '按钮',
+                                  'event_label': '清空会话',
+                                  'value': deleteConfirm ? '确认清空' : '清空会话'
+                                })
+                              }}
+                            >
+                              {deleteConfirm ? <RightIcon/> : <DeleteIcon/>}
+                              {deleteConfirm ? '确认清空（最多25条）' : '清空会话'}
+                            </a>
+                          </Menu.Item>
+                        )
+                      }
                       <Menu.Item>
-                        {/*@ts-ignore*/}
-                        <a as={"button"}
-                           className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
-                          <DeleteIcon/>
-                          清空记录
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item>
-                        {/*@ts-ignore*/}
-                        <a as={"button"}
-                           className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
+                        <a
+                          className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
                           <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round"
                                strokeLinejoin="round" className="h-4 w-4" height="1em" width="1em"
                                xmlns="http://www.w3.org/2000/svg">
@@ -316,14 +357,23 @@ const Chat = ({user}: any) => {
                             <path
                               d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                           </svg>
-                          设置
+                          产品设置
                         </a>
                       </Menu.Item>
                       <div className="my-1.5 h-px bg-white/20" role="none"></div>
                       <Menu.Item>
-                        {/*@ts-ignore*/}
-                        <a as={"button"}
-                           className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
+                        <a
+                          className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
+                          onClick={async () => {
+                            dispatch(clearSession());
+                            // @ts-ignore
+                            window.gtag('event', 'custom_button_click', {
+                              'event_category': '按钮',
+                              'event_label': '退出登陆',
+                            })
+                          }}
+                          href={'/api/auth/logout'}
+                        >
                           <LogoutIcon/>
                           退出登陆
                         </a>
@@ -342,7 +392,7 @@ const Chat = ({user}: any) => {
   return (
     <>
       <div className={'overflow-hidden w-full h-full relative flex z-0'}>
-        <div className={'dark flex-shrink-0 overflow-x-hidden bg-gray-900'} style={{ width: "260px" }}>
+        <div className={'dark flex-shrink-0 overflow-x-hidden bg-gray-900'} style={{width: "260px"}}>
           <div className={'flex h-full min-h-0 flex-col '}>
             {getNavigation()}
           </div>
@@ -355,7 +405,8 @@ const Chat = ({user}: any) => {
               <span className="sr-only">打开侧边栏</span>
               <MenuIcon/>
             </button>
-            <h1 className="flex-1 text-center text-base font-normal">{isWaitHistory ? '...' : session?.title?.slice(0, 10)}</h1>
+            <h1
+              className="flex-1 text-center text-base font-normal">{isWaitHistory ? '...' : session?.title?.slice(0, 10)}</h1>
             <button type="button" className="px-3"
                     onClick={async () => {
                       dispatch(clearSession());
@@ -370,7 +421,8 @@ const Chat = ({user}: any) => {
             <DialogBoxList/>
             <div
               className="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient">
-              <form className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
+              <form
+                className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
                 <div className="relative flex h-full flex-1 md:flex-col">
                   <div
                     className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
@@ -427,7 +479,8 @@ const Chat = ({user}: any) => {
               <div
                 className="flex justify-center px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6 space-y-1">
                 <div className={'flex space-x-1.5'}>
-                  <a href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32068202000378"} target={'_blank'} rel={'noreferrer'}>
+                  <a href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32068202000378"}
+                     target={'_blank'} rel={'noreferrer'}>
                     <div className={"flex space-x-1.5"}>
                       <Image src={"/images/beian.png"} width={16} height={16} alt={"备案图标"}/>
                       {/*<p>*/}
