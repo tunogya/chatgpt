@@ -11,7 +11,7 @@ import {
 } from "@/store/session";
 import AddIcon from "@/components/SVG/AddIcon";
 import UserIcon from "@/components/SVG/UserIcon";
-import {Menu} from "@headlessui/react";
+import {Dialog, Menu} from "@headlessui/react";
 import Image from "next/image";
 import MoreIcon from "@/components/SVG/MoreIcon";
 import ShareIcon from "@/components/SVG/ShareIcon";
@@ -460,14 +460,12 @@ const Chat = ({user}: any) => {
           </main>
         </div>
       </div>
-      <div id="headlessui-portal-root" hidden={!isOpenSidebar}>
-        <div data-headlessui-portal="">
-          <div className="relative z-40 md:hidden" id="headlessui-dialog-:r4:" role="dialog" aria-modal="true"
-               data-headlessui-state="open">
+      <Dialog open={isOpenSidebar} onClose={() => setIsOpenSidebar(false)}>
+        <Dialog.Panel>
+          <div className="relative z-40 md:hidden">
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75 opacity-100"></div>
             <div className="fixed inset-0 z-40 flex">
-              <div className="relative flex w-full max-w-xs flex-1 flex-col bg-gray-900 translate-x-0"
-                   id="headlessui-dialog-panel-:r5:" data-headlessui-state="open">
+              <div className="relative flex w-full max-w-xs flex-1 flex-col bg-gray-900 translate-x-0">
                 <div className="absolute top-0 right-0 -mr-12 pt-2 opacity-100">
                   <button type="button" onClick={() => dispatch(setIsOpenSidebar(false))} tabIndex={0}
                           className="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
@@ -480,8 +478,8 @@ const Chat = ({user}: any) => {
               <div className="w-14 flex-shrink-0"></div>
             </div>
           </div>
-        </div>
-      </div>
+        </Dialog.Panel>
+      </Dialog>
     </>
   )
 }
