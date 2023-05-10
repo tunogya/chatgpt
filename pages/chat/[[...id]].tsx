@@ -29,6 +29,7 @@ import DialogMenuItem, {DialogMenuItemProps} from "@/components/DialogMenuItem";
 import RightIcon from "@/components/SVG/RightIcon";
 import SettingIcon from "@/components/SVG/SettingIcon";
 import DataIcon from "@/components/SVG/DataIcon";
+import OptionIcon from "@/components/SVG/OptionIcon";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const Chat = ({user}: any) => {
   const [isOpenSetting, setIsOpenSetting] = useState(false);
   const [isOpenSidebar, setIsOpenSidebar] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isOpenPayment, setIsOpenPayment] = useState(false);
 
   const {
     data: conversationData,
@@ -212,16 +214,18 @@ const Chat = ({user}: any) => {
       setDeleteConfirm(true);
       return
     }
-    await fetch('/api/conversation', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ids: conversationData.items.map((c: any) => c.id),
-        })
-      }
-    );
+    if (conversationData.items.length > 0) {
+      await fetch('/api/conversation', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ids: conversationData.items.map((c: any) => c.id),
+          })
+        }
+      );
+    }
     setDeleteConfirm(false);
     dispatch(clearSession())
     await router.push({
@@ -266,7 +270,16 @@ const Chat = ({user}: any) => {
           </div>
           <div className="border-t border-white/20 pt-2">
             <a
-              className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-800 rounded-md">
+              className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-800 rounded-md"
+              onClick={() => {
+                setIsOpenPayment(true)
+                // @ts-ignore
+                window.gtag('event', 'custom_button_click', {
+                  'event_category': '按钮',
+                  'event_label': '会员菜单',
+                })
+              }}
+            >
               <div
                 className="flex w-full flex-row justify-between">
                 <div className="gold-new-button flex items-center gap-3">
@@ -381,7 +394,7 @@ const Chat = ({user}: any) => {
             className="sticky top-0 z-10 flex items-center border-b border-white/20 bg-gray-800 pl-1 pt-1 text-gray-200 sm:pl-3 md:hidden">
             <button type="button" onClick={() => setIsOpenSidebar(true)}
                     className="-ml-0.5 -mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white">
-              <span className="sr-only">打开侧边栏</span>
+              <div className="sr-only">打开侧边栏</div>
               <MenuIcon/>
             </button>
             <h1
@@ -441,9 +454,9 @@ const Chat = ({user}: any) => {
                           {
                             isWaitComplete ? (
                               <div className="text-2xl">
-                                <span className={''}>·</span>
-                                <span className={`${second % 3 === 1 && 'invisible'}`}>·</span>
-                                <span className={`${second % 3 >= 1 && 'invisible'}`}>·</span>
+                                <div className={''}>·</div>
+                                <div className={`${second % 3 === 1 && 'invisible'}`}>·</div>
+                                <div className={`${second % 3 >= 1 && 'invisible'}`}>·</div>
                               </div>
                             ) : (
                               <SendIcon/>
@@ -493,29 +506,31 @@ const Chat = ({user}: any) => {
         </div>
       </div>
       <Dialog open={isOpenSidebar} onClose={() => setIsOpenSidebar(false)}>
-        <div className="relative z-40 md:hidden">
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-75 opacity-100"></div>
-          <div className="fixed inset-0 z-40 flex">
-            <div className="relative flex w-full max-w-xs flex-1 flex-col bg-gray-900 translate-x-0">
-              <div className="absolute top-0 right-0 -mr-12 pt-2 opacity-100">
-                <button type="button" onClick={() => setIsOpenSidebar(false)} tabIndex={0}
-                        className="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                  <span className="sr-only">关闭侧边栏</span>
-                  <CloseIcon className={"h-6 w-6 text-white"} strokeWidth={"1.5"}/>
-                </button>
+        <Dialog.Panel>
+          <div className="relative z-40 md:hidden">
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75 opacity-100"></div>
+            <div className="fixed inset-0 z-40 flex">
+              <div className="relative flex w-full max-w-xs flex-1 flex-col bg-gray-900 translate-x-0">
+                <div className="absolute top-0 right-0 -mr-12 pt-2 opacity-100">
+                  <button type="button" onClick={() => setIsOpenSidebar(false)} tabIndex={0}
+                          className="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                    <div className="sr-only">关闭侧边栏</div>
+                    <CloseIcon className={"h-6 w-6 text-white"} strokeWidth={"1.5"}/>
+                  </button>
+                </div>
+                {getNavigation()}
               </div>
-              {getNavigation()}
+              <div className="w-14 flex-shrink-0"></div>
             </div>
-            <div className="w-14 flex-shrink-0"></div>
           </div>
-        </div>
+        </Dialog.Panel>
       </Dialog>
       <Dialog open={isOpenSetting} onClose={() => setIsOpenSetting(false)}>
         <div className="relative z-50">
-          <div className="fixed inset-0 bg-gray-500/90 transition-opacity dark:bg-gray-800/90"></div>
+          <div className="fixed inset-0 bg-gray-500/90 transition-opacity dark:bg-gray-800/90" aria-hidden="true"></div>
           <div className="fixed inset-0 z-50 overflow-y-auto">
             <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-              <div
+              <Dialog.Panel
                 className="relative w-full transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all dark:bg-gray-900 sm:my-8 sm:max-w-2xl">
                 <div
                   className="flex items-center justify-between border-b-[1px] border-black/10 dark:border-white/10 px-4 pb-4 pt-5 sm:p-6">
@@ -571,8 +586,20 @@ const Chat = ({user}: any) => {
                             <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
                               <div className="flex items-center justify-between">
                                 <div>清空所有记录</div>
-                                <button className="btn relative btn-danger">
-                                  <div className="flex w-full gap-2 items-center justify-center">清空</div>
+                                <button className="btn relative btn-danger"
+                                        disabled={conversationData?.items.length === 0}
+                                        onClick={async () => {
+                                          await clearConversationList()
+                                          // @ts-ignore
+                                          window.gtag('event', 'custom_button_click', {
+                                            'event_category': '按钮',
+                                            'event_label': '清空会话',
+                                            'value': deleteConfirm ? '确认清空' : '清空会话'
+                                          })
+                                        }}>
+                                  <div className="flex w-full gap-2 items-center justify-center">
+                                    {deleteConfirm ? '确认清空' : '清空会话'}
+                                  </div>
                                 </button>
                               </div>
                             </div>
@@ -594,7 +621,9 @@ const Chat = ({user}: any) => {
                               <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
                                 <div className="flex items-center justify-between">
                                   <div>导出数据</div>
-                                  <button className="btn relative btn-neutral">
+                                  <button className="btn relative btn-neutral"
+                                          disabled={conversationData?.items.length === 0}
+                                  >
                                     <div className="flex w-full gap-2 items-center justify-center">导出</div>
                                   </button>
                                 </div>
@@ -618,6 +647,110 @@ const Chat = ({user}: any) => {
                         </Tab.Panel>
                       </Tab.Panels>
                     </Tab.Group>
+                  </div>
+                </div>
+              </Dialog.Panel>
+            </div>
+          </div>
+        </div>
+      </Dialog>
+      <Dialog open={isOpenPayment} onClose={() => setIsOpenPayment(false)}>
+        <div className="relative z-50">
+          <div className="fixed inset-0 bg-gray-500/90 transition-opacity dark:bg-gray-800/90 opacity-100"
+               aria-hidden="true"></div>
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0 !p-0">
+              <div
+                className="relative w-full transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all dark:bg-gray-900 sm:my-8 !my-0 flex min-h-screen flex-col items-center justify-center !rounded-none !py-0 bg-transparent dark:bg-transparent opacity-100 translate-y-0 sm:scale-100">
+                <div
+                  className="flex items-center justify-between border-b-[1px] border-black/10 dark:border-white/10 px-4 pb-4 pt-5 sm:p-6">
+                  <div className="flex items-center">
+                    <div className="text-center sm:text-left">
+                      <div className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 sm:p-6 sm:pt-4">
+                  <div className="flex h-full flex-col items-center justify-start">
+                    <div className="relative">
+                      <div
+                        className="grow justify-center bg-white dark:bg-gray-900 rounded-md flex flex-col items-start overflow-hidden border shadow-md dark:border-gray-700">
+                        <div
+                          className="flex w-full flex-row items-center justify-between border-b px-4 py-3 dark:border-gray-700">
+                          <div className="text-base font-semibold sm:text-base">ChatGPT</div>
+                          <button className="text-gray-700 opacity-50 transition hover:opacity-75 dark:text-white"
+                                  onClick={() => setIsOpenPayment(false)}>
+                            <CloseIcon/>
+                          </button>
+                        </div>
+                        <div className="grid sm:grid-cols-2">
+                          <div
+                            className="relative order-2 col-div-1 border-r-0 border-t dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0">
+                            <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
+                              <div className="text-xl font-semibold justify-between items-center flex">
+                                <div>免费体验卡</div>
+                                <div
+                                  className="font-semibold text-gray-500">0 天
+                                </div>
+                              </div>
+                              <button
+                                className="btn relative btn-primary dark:text-gray-white border-none bg-gray-300 py-3 font-semibold text-gray-800 hover:bg-gray-300 dark:bg-gray-500 dark:opacity-100">
+                                <div className="flex w-full gap-2 items-center justify-center">
+                                  <div className="inline-block">立即邀请</div>
+                                </div>
+                              </button>
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
+                                <div>有效期内可用，但高峰期可能会受影响</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
+                                <div>尽力在最短的时间内回复</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm sm:pb-2">
+                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
+                                <div>可免费体验部分功能</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="relative order-1 col-div-1 sm:order-2">
+                            <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
+                              <div className="text-xl font-semibold justify-between items-center flex">
+                                <div>会员卡</div>
+                                <div
+                                  className="font-semibold text-gray-500">18元/月
+                                </div>
+                              </div>
+                              <button className="btn relative btn-primary border-none py-3 font-semibold">
+                                <div className="flex w-full gap-2 items-center justify-center">
+                                  <div
+                                    className="inline-block text-white">立即购买
+                                  </div>
+                                </div>
+                              </button>
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
+                                <div>随时畅玩，高峰期仍然高可用</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
+                                <div>享受更快的回复速度</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm sm:pb-2">
+                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
+                                <div>可享全部功能，并第一时间体验新功能</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm sm:pb-1">
+                                <a rel={'noreferrer'} target="_blank" href=""
+                                   className="flex flex-row items-center space-x-1 underline">
+                                  <div>CDKEY 兑换中心</div>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
