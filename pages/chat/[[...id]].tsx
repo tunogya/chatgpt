@@ -287,7 +287,8 @@ const Chat = ({user}: any) => {
                   付费会员卡
                 </div>
                 <div
-                  className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-800">{paidUseLeft.toFixed(0)}天
+                  className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-800">
+                  {paidUseLeft > 0 ? `${Math.ceil(paidUseLeft)}天` : `18元/月`}
                 </div>
               </div>
             </a>
@@ -669,7 +670,9 @@ const Chat = ({user}: any) => {
                         className="grow justify-center bg-white dark:bg-gray-900 rounded-md flex flex-col items-start overflow-hidden border shadow-md dark:border-gray-700">
                         <div
                           className="flex w-full flex-row items-center justify-between border-b px-4 py-3 dark:border-gray-700">
-                          <div className="text-base font-semibold sm:text-base">探索我们的付费计划，国内使用 ChatGPT 的最佳选择。</div>
+                          <div className="text-base font-semibold sm:text-base">探索我们的付费计划，国内使用 ChatGPT
+                            的最佳选择。
+                          </div>
                           <button className="text-gray-700 opacity-50 transition hover:opacity-75 dark:text-white"
                                   onClick={() => setIsOpenPayment(false)}>
                             <CloseIcon/>
