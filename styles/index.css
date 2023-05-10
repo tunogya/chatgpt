@@ -5498,6 +5498,14 @@ button.scroll-convo {
         display: flex
     }
 
+    .md\:justify-start {
+        justify-content: flex-start
+    }
+
+    .md\:flex-grow-0 {
+        flex-grow: 0
+    }
+
     .md\:hidden {
         display: none
     }

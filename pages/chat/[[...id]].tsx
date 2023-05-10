@@ -538,19 +538,19 @@ const Chat = ({user}: any) => {
                 <div className="p-4 sm:p-6 sm:pt-4">
                   <div dir="ltr" data-orientation="vertical" className="flex flex-col gap-6 md:flex-row">
                     <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-                      <Tab.List className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-col">
+                      <Tab.List className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-row md:flex-col">
                         <Tab as={"button"}
-                             className={`${selectedIndex === 0 ? 'bg-gray-800 text-white' : ''} flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                             className={`${selectedIndex === 0 ? 'bg-gray-800 text-white' : ''} flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center  gap-2 rounded-md px-2 py-1.5 text-sm`}>
                           <SettingIcon/>
                           <div>常规</div>
                         </Tab>
                         <Tab as={"button"}
-                             className={`${selectedIndex === 1 ? 'bg-gray-800 text-white' : ''} flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                             className={`${selectedIndex === 1 ? 'bg-gray-800 text-white' : ''} flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center gap-2 rounded-md px-2 py-1.5 text-sm`}>
                           <DataIcon/>
                           <div>数据</div>
                         </Tab>
                         <Tab as={"button"}
-                             className={`${selectedIndex === 2 ? 'bg-gray-800 text-white' : ''} flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                             className={`${selectedIndex === 2 ? 'bg-gray-800 text-white' : ''} flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center gap-2 rounded-md px-2 py-1.5 text-sm`}>
                           <UserIcon/>
                           <div>账户</div>
                         </Tab>
