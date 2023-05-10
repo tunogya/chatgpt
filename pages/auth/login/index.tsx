@@ -10,8 +10,8 @@ const Login = () => {
         <div className="mb-5 text-gray-800 dark:text-gray-100">
           <AbandonIcon/>
         </div>
-        <div className="mb-2 text-center">abandon.chat</div>
-        <div className="mb-4 text-center">世上无难事，只要 ABANDON！</div>
+        <div className="mb-2 text-center">www.abandon.chat</div>
+        <div className="mb-4 text-center">由 OpenAI 提供技术支持</div>
         <div className="flex flex-row gap-3">
           <button className="btn relative btn-primary" onClick={() => {
             router.push('/api/auth/login?returnTo=/chat')

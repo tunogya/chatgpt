@@ -489,9 +489,7 @@ const Chat = ({user}: any) => {
                   </a>
                   <div>|</div>
                   <div className={"flex space-x-1.5"}>
-                    <p>
-                      OpenAI 提供技术支持
-                    </p>
+                    由 OpenAI 提供技术支持
                   </div>
                 </div>
               </div>
