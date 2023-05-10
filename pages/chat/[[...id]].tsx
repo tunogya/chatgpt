@@ -671,7 +671,7 @@ const Chat = ({user}: any) => {
                         className="grow justify-center bg-white dark:bg-gray-900 rounded-md flex flex-col items-start overflow-hidden border shadow-md dark:border-gray-700">
                         <div
                           className="flex w-full flex-row items-center justify-between border-b px-4 py-3 dark:border-gray-700">
-                          <div className="text-base font-semibold sm:text-base">ChatGPT</div>
+                          <div className="text-base font-semibold sm:text-base">探索我们的付费计划，国内使用 ChatGPT 的最佳选择。</div>
                           <button className="text-gray-700 opacity-50 transition hover:opacity-75 dark:text-white"
                                   onClick={() => setIsOpenPayment(false)}>
                             <CloseIcon/>
@@ -690,9 +690,13 @@ const Chat = ({user}: any) => {
                               <button
                                 className="btn relative btn-primary dark:text-gray-white border-none bg-gray-300 py-3 font-semibold text-gray-800 hover:bg-gray-300 dark:bg-gray-500 dark:opacity-100">
                                 <div className="flex w-full gap-2 items-center justify-center">
-                                  <div className="inline-block">立即邀请</div>
+                                  <div className="inline-block">立即邀请好友</div>
                                 </div>
                               </button>
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
+                                <div>云同步的会话记录，多个设备轻松访问</div>
+                              </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-sm">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>有效期内可用，但高峰期可能会受影响</div>
@@ -701,16 +705,26 @@ const Chat = ({user}: any) => {
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>尽力在最短的时间内回复</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm sm:pb-2">
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>可免费体验部分功能</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm sm:pb-2">
+                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
+                                <div>提供在线的社区支持</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-1">
+                                <a rel={'noreferrer'} target="_blank" href=""
+                                   className="flex flex-row items-center space-x-1">
+                                  <div>每成功邀请 1 位好友解锁，双方都将立即获得 1 天体验卡</div>
+                                </a>
                               </div>
                             </div>
                           </div>
                           <div className="relative order-1 col-div-1 sm:order-2">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div>会员卡</div>
+                                <div>付费会员卡</div>
                                 <div
                                   className="font-semibold text-gray-500">18元/月
                                 </div>
@@ -724,17 +738,25 @@ const Chat = ({user}: any) => {
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-sm">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
+                                <div>云同步的会话记录，提供企业级的可用和冗余</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
                                 <div>随时畅玩，高峰期仍然高可用</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-sm">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
                                 <div>享受更快的回复速度</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm sm:pb-2">
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
                                 <div>可享全部功能，并第一时间体验新功能</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm sm:pb-1">
+                              <div className="gap-2 flex flex-row justify-start items-center text-sm sm:pb-2">
+                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
+                                <div>拥有我们一流工程师团队的直接支持</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-1">
                                 <a rel={'noreferrer'} target="_blank" href=""
                                    className="flex flex-row items-center space-x-1 underline">
                                   <div>CDKEY 兑换中心</div>
