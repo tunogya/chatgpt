@@ -488,12 +488,6 @@ const Chat = ({user}: any) => {
                     </div>
                   </a>
                   <div>|</div>
-                  <div className={'flex space-x-1.5'}>
-                    <a href={"/doc/PrivacyPolicy"} target={'_blank'} rel={'noreferrer'}>
-                      隐私政策
-                    </a>
-                  </div>
-                  <div>|</div>
                   <div className={"flex space-x-1.5"}>
                     <p>
                       OpenAI 提供技术支持
