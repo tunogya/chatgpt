@@ -496,7 +496,7 @@ const Chat = ({user}: any) => {
                 </div>
               </form>
               <div
-                className="flex justify-center px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6 space-y-1">
+                className="flex justify-center px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-gray-500 md:px-4 md:pt-3 md:pb-6 space-y-1">
                 <div className={'flex space-x-1.5'}>
                   <a href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32068202000378"}
                      target={'_blank'} rel={'noreferrer'}>
