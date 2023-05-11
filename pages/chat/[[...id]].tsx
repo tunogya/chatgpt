@@ -45,6 +45,7 @@ const Chat = ({user}: any) => {
   const [isOpenSidebar, setIsOpenSidebar] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isOpenPayment, setIsOpenPayment] = useState(false);
+  const [theme, setTheme] = useState('light');
 
   const {
     data: conversationData,
@@ -381,6 +382,20 @@ const Chat = ({user}: any) => {
     )
   }
 
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else if (theme === 'light') {
+      document.documentElement.classList.remove('dark')
+    } else if (theme === 'system') {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    }
+  }, [theme])
+
   return (
     <>
       <div className={'overflow-hidden w-full h-full relative flex z-0'}>
@@ -548,17 +563,17 @@ const Chat = ({user}: any) => {
                     <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
                       <Tab.List className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-row md:flex-col">
                         <Tab as={"button"}
-                             className={`${selectedIndex === 0 ? 'bg-gray-800 text-white' : ''} flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center  gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                             className={`${selectedIndex === 0 ? 'bg-gray-800 text-white' : ''} dark:text-white flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center  gap-2 rounded-md px-2 py-1.5 text-sm`}>
                           <SettingIcon/>
                           <div>常规</div>
                         </Tab>
                         <Tab as={"button"}
-                             className={`${selectedIndex === 1 ? 'bg-gray-800 text-white' : ''} flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                             className={`${selectedIndex === 1 ? 'bg-gray-800 text-white' : ''} dark:text-white flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center gap-2 rounded-md px-2 py-1.5 text-sm`}>
                           <DataIcon/>
                           <div>数据</div>
                         </Tab>
                         <Tab as={"button"}
-                             className={`${selectedIndex === 2 ? 'bg-gray-800 text-white' : ''} flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                             className={`${selectedIndex === 2 ? 'bg-gray-800 text-white' : ''} dark:text-white flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center gap-2 rounded-md px-2 py-1.5 text-sm`}>
                           <UserIcon/>
                           <div>账户</div>
                         </Tab>
@@ -570,7 +585,18 @@ const Chat = ({user}: any) => {
                               <div className="flex items-center justify-between">
                                 <div>主题</div>
                                 <select
-                                  className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20">
+                                  className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20"
+                                  value={theme}
+                                  onChange={(e) => {
+                                    setTheme(e.target.value)
+                                    //   @ts-ignore
+                                    window.gtag('event', 'custom_button_click', {
+                                      'event_category': '按钮',
+                                      'event_label': '主题',
+                                      'value': e.target.value
+                                    })
+                                  }}
+                                >
                                   <option value="system">跟随系统</option>
                                   <option value="dark">暗黑模式</option>
                                   <option value="light">浅色模式</option>
