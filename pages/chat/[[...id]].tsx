@@ -640,10 +640,10 @@ const Chat = ({user}: any) => {
                             <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
                               <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
                                 <div className="flex items-center justify-between">
-                                  <div>云聊天记录</div>
+                                  <div>聊天记录</div>
                                 </div>
                                 <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
-                                  我们将为您云端保存您的聊天记录，以便您在任何设备上使用。
+                                  我们将为您云同步聊天记录，以便您在任何设备上使用。
                                   <a
                                     href="/doc/PrivacyPolicy" target="_blank"
                                     className="underline" rel="noreferrer">隐私政策</a></div>
