@@ -14,7 +14,7 @@ const persistor = persistStore(store);
 export default function App({Component, pageProps}: AppProps) {
   return (
     <Provider store={store}>
-      <PersistGate persistor={persistor} loading={<LoadingIcon/>}>
+      <PersistGate persistor={persistor} loading={<div className={'pt-4'}><LoadingIcon/></div>}>
         <Head>
           <title>ChatGPT</title>
           <meta
