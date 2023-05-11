@@ -1,5 +1,5 @@
 import {withPageAuthRequired} from '@auth0/nextjs-auth0';
-import {setInput} from "@/store/ui";
+import {setInput, setTheme} from "@/store/ui";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -38,6 +38,7 @@ const Chat = ({user}: any) => {
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const session = useSelector((state: any) => state.session.session);
   const input = useSelector((state: any) => state.ui.input);
+  const theme = useSelector((state: any) => state.ui.theme);
   const inputRef = useRef(null);
   const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory)
   const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -45,7 +46,6 @@ const Chat = ({user}: any) => {
   const [isOpenSidebar, setIsOpenSidebar] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isOpenPayment, setIsOpenPayment] = useState(false);
-  const [theme, setTheme] = useState('light');
 
   const {
     data: conversationData,
@@ -319,7 +319,15 @@ const Chat = ({user}: any) => {
                         <a href="https://support.qq.com/products/566478" target="_blank" rel={'noreferrer'}
                            className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
                           <ShareIcon/>
-                          常见问答</a>
+                          指令大全
+                        </a>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <a href="https://support.qq.com/products/566478" target="_blank" rel={'noreferrer'}
+                           className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
+                          <ShareIcon/>
+                          帮助和反馈
+                        </a>
                       </Menu.Item>
                       <div className="my-1.5 h-px bg-white/20" role="none"></div>
                       {
@@ -596,7 +604,7 @@ const Chat = ({user}: any) => {
                                   className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20"
                                   value={theme}
                                   onChange={(e) => {
-                                    setTheme(e.target.value)
+                                    dispatch(setTheme(e.target.value))
                                     //   @ts-ignore
                                     window.gtag('event', 'custom_button_click', {
                                       'event_category': '按钮',
