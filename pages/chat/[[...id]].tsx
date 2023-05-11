@@ -722,7 +722,7 @@ const Chat = ({user}: any) => {
                               <div className="text-xl font-semibold justify-between items-center flex">
                                 <div>免费体验卡</div>
                                 <div
-                                  className="font-semibold text-gray-500">0 天
+                                  className="font-semibold text-gray-500">{Math.ceil(freeUseLeft)} 天
                                 </div>
                               </div>
                               <button
