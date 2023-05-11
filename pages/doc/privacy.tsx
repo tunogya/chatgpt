@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 
-const PrivacyPolicy = () => {
+const Privacy = () => {
   return (
     <div className={'px-2 py-2'}>
       <ReactMarkdown>
@@ -50,4 +50,4 @@ const PrivacyPolicy = () => {
   )
 }
 
-export default PrivacyPolicy
+export default Privacy

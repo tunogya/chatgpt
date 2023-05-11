@@ -2546,6 +2546,10 @@ h2, h3 {
     width: 260px
 }
 
+.w-\[380px\] {
+    width: 380px
+}
+
 .w-\[30px\] {
     width: 30px
 }
@@ -5633,6 +5637,10 @@ button.scroll-convo {
 
     .md\:pb-6 {
         padding-bottom: 1.5rem
+    }
+
+    .md\:w-\[380px\] {
+        width: 380px
     }
 
     .md\:pl-0 {

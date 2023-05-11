@@ -385,34 +385,12 @@ const Chat = ({user}: any) => {
     )
   }
 
-  useEffect(() => {
-    const handleChangeColorScheme = (e: any) => {
-      if (e.matches) {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
-    }
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else if (theme === 'light') {
-      document.documentElement.classList.remove('dark')
-    } else if (theme === 'system') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      handleChangeColorScheme(mediaQuery)
-      mediaQuery.addEventListener('change', handleChangeColorScheme);
-      return () => {
-        mediaQuery.removeEventListener('change', handleChangeColorScheme);
-      };
-    }
-  }, [theme])
-
   return (
     <>
       <div className={'overflow-hidden w-full h-full relative flex z-0'}>
         <div className={'dark flex-shrink-0 overflow-x-hidden bg-gray-900 hidden md:inline-block'}
              style={{width: "260px"}}>
-          <div className={'flex h-full min-h-0 flex-col '}>
+          <div className={'flex h-full min-h-0 flex-col'}>
             {getNavigation()}
           </div>
         </div>
@@ -645,7 +623,7 @@ const Chat = ({user}: any) => {
                                 <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
                                   我们将为您云同步聊天记录，以便您在任何设备上使用。
                                   <a
-                                    href="/doc/PrivacyPolicy" target="_blank"
+                                    href="/doc/privacy.tsx" target="_blank"
                                     className="underline" rel="noreferrer">隐私政策</a></div>
                               </div>
                               <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
@@ -720,13 +698,13 @@ const Chat = ({user}: any) => {
                             className="relative order-2 col-div-1 border-r-0 border-t dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div>免费体验卡</div>
+                                <div className={"text-gray-800 dark:text-gray-200"}>免费体验卡</div>
                                 <div
                                   className="font-semibold text-gray-500">{Math.ceil(freeUseLeft)} 天
                                 </div>
                               </div>
                               <button
-                                className="btn relative btn-primary dark:text-gray-white border-none bg-gray-300 py-3 font-semibold text-gray-800 hover:bg-gray-300 dark:bg-gray-500 dark:opacity-100"
+                                className="btn relative btn-primary dark:text-gray-white border-none bg-gray-300 py-3 hover:opacity-80 dark:hover:text-white font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:opacity-100"
                                 onClick={() => {
                                   setCopied(true)
                                   const refUrl = `https://www.abandon.chat/referrer/${user?.sub}`;
@@ -747,23 +725,23 @@ const Chat = ({user}: any) => {
                                   </div>
                                 </div>
                               </button>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>云同步的会话记录，多个设备轻松访问</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>有效期内可用，但高峰期可能会受影响</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>尽力在最短的时间内回复</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>可免费体验部分功能</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm sm:pb-2">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>提供在线的社区支持</div>
                               </div>
@@ -783,30 +761,34 @@ const Chat = ({user}: any) => {
                                   className="font-semibold text-gray-500">18元/月
                                 </div>
                               </div>
-                              <button className="btn relative btn-primary border-none py-3 font-semibold">
+                              <button className="btn relative btn-primary border-none py-3 font-semibold"
+                                      onClick={async () => {
+                                        await router.push('/pay/1234')
+                                      }}
+                              >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
                                     className="inline-block text-white">购买或续费
                                   </div>
                                 </div>
                               </button>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
                                 <div>云同步的会话记录，提供企业级的可用和冗余</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
                                 <div>随时畅玩，高峰期仍然高可用</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
                                 <div>享受更快的回复速度</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
                                 <div>可享全部功能，并第一时间体验新功能</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-sm sm:pb-2">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
                                 <div>拥有我们一流工程师团队的直接支持</div>
                               </div>

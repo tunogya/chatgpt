@@ -20,7 +20,7 @@ const Index = () => {
   }, [error, isLoading, router, user]);
 
   return (
-    <div className="w-full h-full flex justify-center items-center flex-col bg-gray-50 dark:bg-gray-800">
+    <div className="w-full h-full flex justify-center items-center flex-col bg-gray-50 dark:bg-gray-800 dark:text-white">
       <div className="w-96 flex flex-col justify-center items-center">
         <div className="mb-5">
           <AbandonIcon/>

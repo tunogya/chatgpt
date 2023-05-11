@@ -1,19 +1,49 @@
 import type {AppProps} from 'next/app'
 import Script from 'next/script';
 import Head from 'next/head';
-import {Provider} from 'react-redux'
+import {Provider, useSelector} from 'react-redux'
 import store from "@/store";
 import {PersistGate} from "redux-persist/integration/react";
 import {persistStore} from "redux-persist";
 import "@/styles/index.css";
 import {UserProvider} from '@auth0/nextjs-auth0/client';
 import LoadingIcon from "@/components/SVG/LoadingIcon";
+import {useEffect} from "react";
 
 const persistor = persistStore(store);
+
+const AutoTheme = () => {
+  const theme = useSelector((state: any) => state.ui.theme);
+
+  useEffect(() => {
+    const handleChangeColorScheme = (e: any) => {
+      if (e.matches) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    }
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else if (theme === 'light') {
+      document.documentElement.classList.remove('dark')
+    } else if (theme === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      handleChangeColorScheme(mediaQuery)
+      mediaQuery.addEventListener('change', handleChangeColorScheme);
+      return () => {
+        mediaQuery.removeEventListener('change', handleChangeColorScheme);
+      };
+    }
+  }, [theme])
+
+  return null
+}
 
 export default function App({Component, pageProps}: AppProps) {
   return (
     <Provider store={store}>
+      <AutoTheme />
       <PersistGate persistor={persistor} loading={<div className={'pt-4'}><LoadingIcon/></div>}>
         <Head>
           <title>abandon.chat</title>
