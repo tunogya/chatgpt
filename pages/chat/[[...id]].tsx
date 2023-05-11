@@ -30,6 +30,7 @@ import RightIcon from "@/components/SVG/RightIcon";
 import SettingIcon from "@/components/SVG/SettingIcon";
 import DataIcon from "@/components/SVG/DataIcon";
 import OptionIcon from "@/components/SVG/OptionIcon";
+import copy from "copy-to-clipboard";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ const Chat = ({user}: any) => {
   const [isOpenSidebar, setIsOpenSidebar] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isOpenPayment, setIsOpenPayment] = useState(false);
+  const [copied, setCopied] = useState<boolean>(false);
 
   const {
     data: conversationData,
@@ -724,9 +726,25 @@ const Chat = ({user}: any) => {
                                 </div>
                               </div>
                               <button
-                                className="btn relative btn-primary dark:text-gray-white border-none bg-gray-300 py-3 font-semibold text-gray-800 hover:bg-gray-300 dark:bg-gray-500 dark:opacity-100">
+                                className="btn relative btn-primary dark:text-gray-white border-none bg-gray-300 py-3 font-semibold text-gray-800 hover:bg-gray-300 dark:bg-gray-500 dark:opacity-100"
+                                onClick={() => {
+                                  setCopied(true)
+                                  const refUrl = `https://www.abandon.chat/referrer/${user?.sub}`;
+                                  copy(refUrl);
+                                //   @ts-ignore
+                                  window.gtag('event', 'custom_button_click', {
+                                    'event_category': '按钮',
+                                    'event_label': '复制邀请链接',
+                                  })
+                                  setTimeout(() => {
+                                    setCopied(false)
+                                  }, 3_000)
+                                }}
+                              >
                                 <div className="flex w-full gap-2 items-center justify-center">
-                                  <div className="inline-block">立即邀请好友</div>
+                                  <div className="inline-block">
+                                    {copied ? '复制链接成功' : '邀请好友解锁'}
+                                  </div>
                                 </div>
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-sm">
@@ -768,7 +786,7 @@ const Chat = ({user}: any) => {
                               <button className="btn relative btn-primary border-none py-3 font-semibold">
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-white">立即购买
+                                    className="inline-block text-white">购买或续费
                                   </div>
                                 </div>
                               </button>
