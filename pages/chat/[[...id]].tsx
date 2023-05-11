@@ -1,5 +1,5 @@
 import {withPageAuthRequired} from '@auth0/nextjs-auth0';
-import {setInput, setTheme} from "@/store/ui";
+import {setTheme} from "@/store/ui";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -37,10 +37,10 @@ const Chat = ({user}: any) => {
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete);
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const session = useSelector((state: any) => state.session.session);
-  const input = useSelector((state: any) => state.ui.input);
   const theme = useSelector((state: any) => state.ui.theme);
   const inputRef = useRef(null);
   const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory)
+  const [input, setInput] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [isOpenSetting, setIsOpenSetting] = useState(false);
   const [isOpenSidebar, setIsOpenSidebar] = useState(false);
@@ -73,7 +73,7 @@ const Chat = ({user}: any) => {
       },
     }
     dispatch(updateLastMessageId(message_id));
-    dispatch(setInput(''));
+    setInput('')
     // @ts-ignore
     if (inputRef.current) inputRef.current.style.height = 'auto';
     await complete(message, message_id);
@@ -319,13 +319,6 @@ const Chat = ({user}: any) => {
                         <a href="https://support.qq.com/products/566478" target="_blank" rel={'noreferrer'}
                            className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
                           <ShareIcon/>
-                          指令大全
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <a href="https://support.qq.com/products/566478" target="_blank" rel={'noreferrer'}
-                           className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
-                          <ShareIcon/>
                           帮助和反馈
                         </a>
                       </Menu.Item>
@@ -471,7 +464,7 @@ const Chat = ({user}: any) => {
                           onChange={(e) => {
                             e.target.style.height = 'auto';
                             e.target.style.height = e.target.scrollHeight + 'px';
-                            dispatch(setInput(e.target.value));
+                            setInput(e.target.value)
                           }} value={input}
                           className="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent md:pl-0"></textarea>
                     {

@@ -8,7 +8,6 @@ import ScrollToBottom, {useScrollToBottom, useSticky} from "react-scroll-to-bott
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import dynamic from 'next/dynamic';
 import useSWR from "swr";
-import {setInput} from "@/store/ui";
 import LightingIcon from "@/components/SVG/LightingIcon";
 
 const DialogBoxListContent = () => {
@@ -24,10 +23,6 @@ const DialogBoxListContent = () => {
     data,
     isLoading
   } = useSWR(conversation_id ? `/api/conversation/${conversation_id}` : null, (url: string) => fetch(url).then((res) => res.json()))
-
-  const [demo, setDemo] = useState([
-    '请扮演塔罗牌占卜师，由我的问题，抽三张牌进行解答', '请为我写一则论文大纲，主题是...', '如何在 Javascript 中发出 HTTP 请求？'
-  ])
 
   const updateSession = useCallback(async () => {
     if (data) {
@@ -118,28 +113,18 @@ const DialogBoxListContent = () => {
                             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                           </svg>
-                          推荐
+                          快速入门
                         </h2>
                         <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                          {
-                            demo.map((item, index) => (
-                              <button
-                                key={index}
-                                className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900"
-                                onClick={() => {
-                                  dispatch(setInput(item))
-                                  // @ts-ignore
-                                  window.gtag('event', 'custom_button_click', {
-                                    'event_category': '按钮',
-                                    'event_label': '点击推荐案例',
-                                    'value': item,
-                                  })
-                                }}
-                              >
-                                &quot;{item}&quot; →
-                              </button>
-                            ))
-                          }
+                          <a href={'https://www.explainthis.io/zh-hans/chatgpt/start'} rel={'noreferrer'} target={'_blank'}
+                             className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">应用和教学 →
+                          </a>
+                          <a href={'https://www.explainthis.io/zh-hans/chatgpt'} rel={'noreferrer'} target={'_blank'}
+                            className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">ChatGPT 指令大全 →
+                          </a>
+                          <a href={'https://promptperfect.jina.ai'} rel={'noreferrer'} target={'_blank'}
+                             className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">优化提示词 Prompt →
+                          </a>
                         </ul>
                       </div>
                       <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
