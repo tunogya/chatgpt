@@ -383,16 +383,24 @@ const Chat = ({user}: any) => {
   }
 
   useEffect(() => {
+    const handleChangeColorScheme = (e: any) => {
+      if (e.matches) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    }
     if (theme === 'dark') {
       document.documentElement.classList.add('dark')
     } else if (theme === 'light') {
       document.documentElement.classList.remove('dark')
     } else if (theme === 'system') {
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      handleChangeColorScheme(mediaQuery)
+      mediaQuery.addEventListener('change', handleChangeColorScheme);
+      return () => {
+        mediaQuery.removeEventListener('change', handleChangeColorScheme);
+      };
     }
   }, [theme])
 
