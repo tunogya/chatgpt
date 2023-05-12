@@ -203,7 +203,7 @@ const Redeem = ({user}: any) => {
                     <button
                       className={`w-full btn-primary p-3 rounded-md`}
                       onClick={redeem}
-                      disabled={cdKeyData.used}
+                      disabled={cdKeyData.used || !checked}
                     >
                       {cdKeyData.used ? 'CDKEY 已兑换' : `立即兑换 ${cdKeyData.quantity} 天付费会员`}
                     </button>
