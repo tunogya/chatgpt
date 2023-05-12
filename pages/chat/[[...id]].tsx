@@ -624,16 +624,21 @@ const Chat = ({user}: any) => {
                                   我们将为您云同步聊天记录，以便您在任何设备上使用。
                                   <a
                                     href="/doc/privacy.tsx" target="_blank"
-                                    className="underline" rel="noreferrer">隐私政策</a></div>
+                                    className="underline" rel="noreferrer">隐私政策</a>
+                                </div>
                               </div>
                               <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
                                 <div className="flex items-center justify-between">
                                   <div>导出数据</div>
                                   <button className="btn relative btn-neutral"
-                                          disabled={conversationData?.items.length === 0}
+                                    // disabled={conversationData?.items.length === 0}
+                                          disabled={true}
                                   >
                                     <div className="flex w-full gap-2 items-center justify-center">导出</div>
                                   </button>
+                                </div>
+                                <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
+                                  该功能即将上线
                                 </div>
                               </div>
                             </div>
@@ -645,9 +650,12 @@ const Chat = ({user}: any) => {
                               <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
                                 <div className="flex items-center justify-between">
                                   <div>删除账户</div>
-                                  <button className="btn relative btn-danger">
+                                  <button className="btn relative btn-danger" disabled={true}>
                                     <div className="flex w-full gap-2 items-center justify-center">删除</div>
                                   </button>
+                                </div>
+                                <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
+                                  该功能即将上线
                                 </div>
                               </div>
                             </div>
@@ -709,7 +717,7 @@ const Chat = ({user}: any) => {
                                   setCopied(true)
                                   const refUrl = `https://www.abandon.chat/referrer/${user?.sub}`;
                                   copy(refUrl);
-                                //   @ts-ignore
+                                  //   @ts-ignore
                                   window.gtag('event', 'custom_button_click', {
                                     'event_category': '按钮',
                                     'event_label': '复制邀请链接',
