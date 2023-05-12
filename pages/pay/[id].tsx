@@ -13,17 +13,17 @@ const plans = [
   {
     name: '30 天月卡',
     quantity: 30,
-    ram: '18',
+    total: 18,
   },
   {
     name: '90 天季卡',
     quantity: 90,
-    ram: '45',
+    total: 45,
   },
   {
     name: '365 天年卡',
     quantity: 365,
-    ram: '118',
+    total: 118,
   },
 ]
 
@@ -99,7 +99,7 @@ const Pay = ({user}: any) => {
   }, [getCodeUrl, qrStatus, checked])
 
   return (
-    <div className={"overflow-hidden w-full h-full relative flex z-0"}>
+    <div className={"overflow-scroll w-full h-full relative flex z-0"}>
       <div className={"flex w-full h-full fixed z-0 flex-shrink-0 overflow-x-hidden"}>
         <div className={"w-full"}/>
         <div className={"w-full shadow-xl hidden md:inline-block"}/>
@@ -119,12 +119,15 @@ const Pay = ({user}: any) => {
                 <div className={"py-8"}>
                   <div className={"text-gray-500"}>购买 ChatGPT</div>
                   <div className={"flex items-center gap-4"}>
-                    <div className={"text-4xl font-semibold text-black dark:text-white"}>RMB 18</div>
+                    <div
+                      className={"text-4xl font-semibold text-black dark:text-white"}>RMB {(selected.total / selected.quantity * 30).toLocaleString("en-US", {
+                      maximumFractionDigits: 2
+                    })}</div>
                     <div className={"text-gray-500 text-sm"}>每<br/>个月</div>
                   </div>
                 </div>
                 <div className={"pb-4"}>
-                  <div className={"pt-5 text-sm"}>ChatGPT 30 天会员卡</div>
+                  <div className={"pt-5 text-sm"}>ChatGPT {selected.quantity} 天会员卡</div>
                   <div className={"text-xs text-gray-500"}>按月收费</div>
                 </div>
                 <div className={"text-sm py-4 flex justify-between text-black dark:text-white"}>
@@ -132,7 +135,7 @@ const Pay = ({user}: any) => {
                     小计
                   </div>
                   <div className={"font-semibold"}>
-                    18 元
+                    {selected.total} 元
                   </div>
                 </div>
                 <div className={"text-sm py-4 text-gray-500 border-t-[1px] flex justify-between"}>
@@ -147,14 +150,14 @@ const Pay = ({user}: any) => {
                     今日应付合计
                   </div>
                   <div className={"font-semibold"}>
-                    18 元
+                    {selected.total} 元
                   </div>
                 </div>
-                <div className={"flex flex-col py-4 gap-4 pt-4 lg:pt-32"}>
-                  <div className={"text-sm"}>更多方案</div>
+                <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
+                  <div className={"text-sm"}>所有方案</div>
                   <div className={"flex gap-4 text-sm w-full"}>
-                    <div className="mx-auto w-full max-w-md">
-                      <RadioGroup value={selected} onChange={setSelected}>
+                    <div className="w-full">
+                      <RadioGroup value={selected} onChange={setSelected} defaultValue={selected}>
                         <RadioGroup.Label className="sr-only">方案</RadioGroup.Label>
                         <div className="space-y-2">
                           {plans.map((plan) => (
@@ -162,18 +165,14 @@ const Pay = ({user}: any) => {
                               key={plan.name}
                               value={plan}
                               className={({active, checked}) =>
-                                `${
-                                  active
-                                    ? 'ring-2 ring-white focus:ring-offset-2:focus'
-                                    : ''
-                                }
-                  ${
-                                  checked ? 'bg-green-600' : 'bg-gray-50 dark:bg-gray-600'
-                                }
+                                `${active
+                                  ? 'ring-2 ring-white focus:ring-offset-2:focus'
+                                  : ''}
+                                ${checked ? 'bg-green-600' : 'bg-gray-50 dark:bg-gray-600'}
                     relative flex cursor-pointer rounded-lg p-3 bg-gray-50 dark:bg-gray-600 rounded-md border shadow-sm`
                               }
                             >
-                              {({active, checked}) => (
+                              {({checked}) => (
                                 <>
                                   <div className="flex w-full items-center justify-between">
                                     <div className="flex items-center">
@@ -190,12 +189,11 @@ const Pay = ({user}: any) => {
                                           as="span"
                                           className={`inline ${
                                             checked ? 'text-white' : 'text-gray-500'
-                                          }`}
+                                          } text-xs`}
                                         >
-                            <span>
-                              {plan.ram}
-                            </span>{' '}
-                                          <span aria-hidden="true">&middot;</span>{' '}
+                                          {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
+                                            maximumFractionDigits: 2
+                                          })}元/月
                                         </RadioGroup.Description>
                                       </div>
                                     </div>
@@ -218,7 +216,7 @@ const Pay = ({user}: any) => {
             </div>
           </div>
           <div className={"px-6 lg:px-14 w-full flex flex-col items-start"}>
-            <div className={"dark:text-white w-full md:w-[380px] md:py-6 py-3 text-gray-600 dark:text-gray-200"}>
+            <div className={"dark:text-white w-full md:w-[380px] md:py-6 py-3 text-gray-600 dark:text-gray-200 w-full"}>
               <div className={"flex flex-col py-4 gap-4"}>
                 <div className={""}>联系信息</div>
                 <div className={"flex gap-6 text-sm bg-gray-50 dark:bg-gray-600 p-3 rounded-md border shadow-sm"}>
@@ -258,8 +256,10 @@ const Pay = ({user}: any) => {
               }
               {
                 codeUrl && checked && (!dataOfOrder?.data?.trade_state || dataOfOrder.data.trade_state === "NOTPAY") ? (
-                  <div className={'p-2 rounded bg-white'}>
-                    <QRCodeSVG value={codeUrl} size={160}/>
+                  <div className={'flex p-2 rounded justify-center'}>
+                    <div className={"p-4 bg-white border rounded-md"}>
+                      <QRCodeSVG value={codeUrl} size={160}/>
+                    </div>
                   </div>
                 ) : (
                   <div className={"h-32"}>
