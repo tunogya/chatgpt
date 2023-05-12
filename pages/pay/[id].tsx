@@ -45,6 +45,10 @@ const Pay = ({user}: any) => {
   const getCodeUrl = useCallback(() => {
     setQrStatus('loading')
     setCodeUrl(undefined)
+    if (!user?.name || !user?.sub) {
+      setQrStatus('error')
+      return
+    }
     const out_trade_no = uuidv4().replace(/-/g, '')
     fetch('/api/pay/weixin', {
       method: 'POST',
@@ -76,7 +80,7 @@ const Pay = ({user}: any) => {
         setCodeUrl(undefined)
         setQrStatus('error')
       })
-  }, [])
+  }, [user?.name, user?.sub])
 
   useEffect(() => {
     if (checked && !codeUrl && qrStatus === 'idle') {
