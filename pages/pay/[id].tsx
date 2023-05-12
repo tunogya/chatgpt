@@ -12,17 +12,17 @@ import CheckIcon from "@/components/SVG/CheckIcon";
 
 const plans = [
   {
-    name: '30 天月卡',
+    name: '月卡 · 30天',
     quantity: 30,
     total: 18,
   },
   {
-    name: '90 天季卡',
+    name: '季卡 · 90天',
     quantity: 90,
     total: 45,
   },
   {
-    name: '365 天年卡',
+    name: '年卡 · 365天',
     quantity: 365,
     total: 118,
   },
