@@ -164,47 +164,38 @@ const Pay = ({user}: any) => {
                             <RadioGroup.Option
                               key={plan.name}
                               value={plan}
-                              className={({active, checked}) =>
-                                `${active
-                                  ? 'ring-2 ring-white focus:ring-offset-2:focus'
-                                  : ''}
-                                ${checked ? 'bg-green-600' : 'bg-gray-50 dark:bg-gray-600'}
-                    relative flex cursor-pointer rounded-lg p-3 bg-gray-50 dark:bg-gray-600 rounded-md border shadow-sm`
-                              }
+                              className={`${plan.name === selected.name ? 'bg-green-600' : 'bg-gray-50 dark:bg-gray-600'}
+                    relative flex cursor-pointer rounded-lg p-3 bg-gray-50 dark:bg-gray-600 rounded-md border shadow-sm`}
                             >
-                              {({checked}) => (
-                                <>
-                                  <div className="flex w-full items-center justify-between">
-                                    <div className="flex items-center">
-                                      <div className="text-sm">
-                                        <RadioGroup.Label
-                                          as="p"
-                                          className={`font-medium  ${
-                                            checked ? 'text-white' : 'text-gray-900'
-                                          }`}
-                                        >
-                                          {plan.name}
-                                        </RadioGroup.Label>
-                                        <RadioGroup.Description
-                                          as="span"
-                                          className={`inline ${
-                                            checked ? 'text-white' : 'text-gray-500'
-                                          } text-xs`}
-                                        >
-                                          {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
-                                            maximumFractionDigits: 2
-                                          })}元/月
-                                        </RadioGroup.Description>
-                                      </div>
-                                    </div>
-                                    {checked && (
-                                      <div className="shrink-0 text-white">
-                                        <CheckIcon className="h-6 w-6"/>
-                                      </div>
-                                    )}
+                              <div className="flex w-full items-center justify-between">
+                                <div className="flex items-center">
+                                  <div className="text-sm">
+                                    <RadioGroup.Label
+                                      as="p"
+                                      className={`font-medium  ${
+                                        plan.name === selected.name ? 'text-white' : 'text-gray-900'
+                                      }`}
+                                    >
+                                      {plan.name}
+                                    </RadioGroup.Label>
+                                    <RadioGroup.Description
+                                      as="span"
+                                      className={`inline ${
+                                        plan.name === selected.name ? 'text-white' : 'text-gray-500'
+                                      } text-xs`}
+                                    >
+                                      {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
+                                        maximumFractionDigits: 2
+                                      })}元/月
+                                    </RadioGroup.Description>
                                   </div>
-                                </>
-                              )}
+                                </div>
+                                {plan.name === selected.name && (
+                                  <div className="shrink-0 text-white">
+                                    <CheckIcon className="h-6 w-6"/>
+                                  </div>
+                                )}
+                              </div>
                             </RadioGroup.Option>
                           ))}
                         </div>
@@ -273,8 +264,11 @@ const Pay = ({user}: any) => {
                            onChange={(e) => {
                              setChecked(e.target.checked)
                            }}/>
-                    <div className={"text-xs cursor-pointer"} onClick={(e) => {
+                    <div className={"text-xs"} onClick={(e) => {
                       if (checkBoxRef) {
+                        if (checked) {
+                          return
+                        }
                         // @ts-ignore
                         checkBoxRef.current.click()
                       }
