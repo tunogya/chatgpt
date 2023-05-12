@@ -102,13 +102,13 @@ const Pay = ({user}: any) => {
               </a>
               <div className={"md:px-4"}>
                 <div className={"py-8"}>
-                  <div className={"text-gray-500"}>购买 ChatGPT</div>
+                  <div className={"text-gray-600"}>购买 ChatGPT</div>
                   <div className={"flex items-center gap-4"}>
                     <div
                       className={"text-4xl font-semibold text-black dark:text-white"}>RMB {(selected.total / selected.quantity * 30).toLocaleString("en-US", {
                       maximumFractionDigits: 2
                     })}</div>
-                    <div className={"text-gray-500 text-sm"}>每<br/>个月</div>
+                    <div className={"text-gray-600 text-sm"}>每<br/>个月</div>
                   </div>
                 </div>
                 <div className={"pb-4"}>
@@ -116,18 +116,18 @@ const Pay = ({user}: any) => {
                   <div className={"text-xs text-gray-500"}>按月收费</div>
                 </div>
                 <div className={"text-sm py-4 flex justify-between text-black dark:text-white"}>
-                  <div className={"font-semibold"}>
+                  <div>
                     小计
                   </div>
-                  <div className={"font-semibold"}>
+                  <div>
                     {selected.total} 元
                   </div>
                 </div>
                 <div className={"text-sm py-4 text-gray-500 border-t-[1px] flex justify-between"}>
-                  <div className={"font-semibold"}>
+                  <div className={""}>
                     税
                   </div>
-                  <div className={"font-semibold"}>0 元
+                  <div className={""}>0 元
                   </div>
                 </div>
                 <div className={"text-sm py-4 border-t-[1px] flex justify-between text-black dark:text-white"}>
@@ -139,11 +139,11 @@ const Pay = ({user}: any) => {
                   </div>
                 </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
-                  <div className={"text-sm"}>所有方案</div>
+                  <div className={"text-gray-600 dark:text-gray-200"}>所有方案</div>
                   <div className={"flex gap-4 text-sm w-full"}>
                     <div className="w-full">
                       <RadioGroup value={selected} onChange={setSelected} defaultValue={selected}>
-                        <RadioGroup.Label className="sr-only">方案</RadioGroup.Label>
+                        <RadioGroup.Label className="sr-only">所有方案</RadioGroup.Label>
                         <div className="space-y-2">
                           {plans.map((plan) => (
                             <RadioGroup.Option
@@ -157,7 +157,7 @@ const Pay = ({user}: any) => {
                                   <div className="text-sm">
                                     <RadioGroup.Label
                                       as="p"
-                                      className={`font-medium text-gray-800 ${
+                                      className={`text-sm text-gray-800 ${
                                         plan.name === selected.name ? '' : 'dark:text-gray-200'
                                       }`}
                                     >
