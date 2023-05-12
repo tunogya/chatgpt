@@ -134,10 +134,10 @@ const DialogBoxListContent = () => {
                         </h2>
                         <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
                           <li
-                            className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">记住用户早些时候在对话中说的话
+                            className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">记住用户早些时候说过的话
                           </li>
                           <li
-                            className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">允许用户提供后续更正
+                            className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">允许用户持续对话
                           </li>
                           <li
                             className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">接受过拒绝不当请求的培训
