@@ -217,7 +217,7 @@ export default withApiAuthRequired(async function handler(
         role: '',
       };
       const stream = result.body as any as Readable;
-      stream.on('data', (chunk: any) => {
+      stream.addListener('data', (chunk: any) => {
         const lines = chunk
           .toString()
           .split('\n\n')
@@ -278,7 +278,7 @@ export default withApiAuthRequired(async function handler(
           }
         }
       });
-      stream.on('end', async () => {
+      stream.addListener('end', async () => {
         // add ai callback message to conversation and add to user children
         conversation = {
           ...conversation,
@@ -311,7 +311,7 @@ export default withApiAuthRequired(async function handler(
         res.write('data: [DONE]\n\n');
         res.end();
       });
-      stream.on('error', (error: any) => {
+      stream.addListener('error', (error: any) => {
         res.end(`data: ${JSON.stringify({error})}\n\n`);
       });
     } catch (e) {
