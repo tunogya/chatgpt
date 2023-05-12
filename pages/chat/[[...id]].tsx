@@ -762,9 +762,9 @@ const Chat = ({user}: any) => {
                                 </div>
                               </div>
                               <button className="btn relative btn-primary border-none py-3 font-semibold"
-                                      onClick={async () => {
+                                      onClick={() => {
                                         const out_trade_no = uuidv4()
-                                        await router.push(`/pay/${out_trade_no}`)
+                                        window.open(`/pay/${out_trade_no}`, '_blank')
                                       }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
@@ -794,7 +794,7 @@ const Chat = ({user}: any) => {
                                 <div>拥有我们一流工程师团队的直接支持</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-1">
-                                <a rel={'noreferrer'} target="_blank" href=""
+                                <a rel={'noreferrer'} target="_blank" href="/redeem"
                                    className="flex flex-row items-center space-x-1 underline">
                                   <div>CDKEY 兑换中心</div>
                                 </a>

@@ -20,13 +20,12 @@ const Redeem = ({user}: any) => {
         <div className={"flex flex-col md:flex-row md:gap-6 w-full"}>
           <div className={"px-6 lg:px-14 w-full flex flex-col items-end"}>
             <div className={"dark:text-white w-full md:w-[380px] md:py-6 py-3"}>
-              <button className={"btn font-semibold text-gray-800 dark:text-white"}
-                      onClick={router.back}>
+              <a className={"font-semibold text-gray-800 dark:text-white cursor-pointer"} href={'/chat'} rel={'noreferrer'}>
                 <div className={"flex gap-2"}>
                   <div>←</div>
                   <div>abandon.chat</div>
                 </div>
-              </button>
+              </a>
               <div className={"md:px-4"}>
                 <div className={"py-8"}>
                   <div className={"text-gray-500"}>兑换你的 ChatGPT 会员卡</div>
