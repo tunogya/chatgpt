@@ -165,15 +165,15 @@ const Pay = ({user}: any) => {
                               key={plan.name}
                               value={plan}
                               className={`${plan.name === selected.name ? 'bg-green-600' : 'bg-gray-50 dark:bg-gray-600'}
-                    relative flex cursor-pointer rounded-lg p-3 bg-gray-50 dark:bg-gray-600 rounded-md border shadow-sm`}
+                    relative flex cursor-pointer rounded-lg p-3 bg-gray-50 rounded-md border shadow-sm`}
                             >
                               <div className="flex w-full items-center justify-between">
                                 <div className="flex items-center">
                                   <div className="text-sm">
                                     <RadioGroup.Label
                                       as="p"
-                                      className={`font-medium  ${
-                                        plan.name === selected.name ? 'text-white' : 'text-gray-900'
+                                      className={`font-medium ${
+                                        plan.name === selected.name ? 'text-white' : 'text-gray-800 dark:text-gray-200'
                                       }`}
                                     >
                                       {plan.name}
