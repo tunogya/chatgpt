@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "invalidate": "aws cloudfront create-invalidation --distribution-id E1OJS4HKGAM28B --paths '/*'"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.3.1",

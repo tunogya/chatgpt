@@ -42,8 +42,3 @@ echo "============ pm2 reload ============"
 pm2 reload "ChatGPT"
 
 echo "============ DONE ============"
-
-# 定时任务，每小时执行一次
-# crontab -e
-# 0 * * * * /home/opc/chatgpt/upgrade.sh >> /home/opc/chatgpt/upgrade.log 2>&1
-
