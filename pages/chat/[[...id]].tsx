@@ -458,7 +458,7 @@ const Chat = ({user}: any) => {
                           }}>
                           {
                             isWaitComplete ? (
-                              <div className="text-2xl">
+                              <div className="flex text-2xl">
                                 <div className={''}>·</div>
                                 <div className={`${second % 3 === 1 && 'invisible'}`}>·</div>
                                 <div className={`${second % 3 >= 1 && 'invisible'}`}>·</div>
