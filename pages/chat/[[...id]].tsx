@@ -763,7 +763,8 @@ const Chat = ({user}: any) => {
                               </div>
                               <button className="btn relative btn-primary border-none py-3 font-semibold"
                                       onClick={async () => {
-                                        await router.push('/pay/1234')
+                                        const out_trade_no = uuidv4()
+                                        await router.push(`/pay/${out_trade_no}`)
                                       }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">

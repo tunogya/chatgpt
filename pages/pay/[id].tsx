@@ -1,10 +1,67 @@
 import {withPageAuthRequired} from "@auth0/nextjs-auth0";
 import {useRouter} from "next/router";
-import {useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
+import useSWR from "swr";
+import {v4 as uuidv4} from 'uuid';
+import WeixinPayLogo from "@/components/SVG/WeixinPayLogo";
+import WeixinPayText from "@/components/SVG/WeixinPayText";
+import {QRCodeSVG} from "qrcode.react";
+import LoadingIcon from "@/components/SVG/LoadingIcon";
 
 const Pay = ({user}: any) => {
   const router = useRouter()
   const [checked, setChecked] = useState(false)
+  const [codeUrl, setCodeUrl] = useState<undefined | string>(undefined)
+  const [qrStatus, setQrStatus] = useState<string>('idle')
+  const trade_no = router.query.id
+  const checkBoxRef = useRef(null)
+
+  const {
+    data: dataOfOrder,
+    mutate: mutateOrder
+  } = useSWR(trade_no ? `/api/pay/weixin/query?out_trade_no=${trade_no}` : null, (url: string) => fetch(url).then((res) => res.json()))
+
+  const getCodeUrl = useCallback(() => {
+    setQrStatus('loading')
+    setCodeUrl(undefined)
+    const out_trade_no = uuidv4().replace(/-/g, '')
+    fetch('/api/pay/weixin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        description: `ChatGPT 30 天会员卡: ${user?.name}`,
+        out_trade_no,
+        quantity: 1800,
+        topic: 'chatgpt',
+        attach: JSON.stringify({
+          topic: 'chatgpt',
+          quantity: 30,
+          user: user?.sub,
+        })
+      })
+    }).then((res) => res.json())
+      .then((data) => {
+        if (data.data.status === 200) {
+          setCodeUrl(data.data.code_url)
+          setQrStatus('success')
+        } else {
+          setCodeUrl(undefined)
+          setQrStatus('error')
+        }
+      })
+      .catch(e => {
+        setCodeUrl(undefined)
+        setQrStatus('error')
+      })
+  }, [])
+
+  useEffect(() => {
+    if (checked && !codeUrl && qrStatus === 'idle') {
+      getCodeUrl()
+    }
+  }, [getCodeUrl, qrStatus, checked])
 
   return (
     <div className={"overflow-hidden w-full h-full relative flex z-0"}>
@@ -32,7 +89,7 @@ const Pay = ({user}: any) => {
                   </div>
                 </div>
                 <div className={"pb-4"}>
-                  <div className={"pt-5 text-sm"}>Abandon Chat 月卡</div>
+                  <div className={"pt-5 text-sm"}>ChatGPT 30 天会员卡</div>
                   <div className={"text-xs text-gray-500"}>按月收费</div>
                 </div>
                 <div className={"text-sm py-4 flex justify-between text-black dark:text-white"}>
@@ -72,27 +129,71 @@ const Pay = ({user}: any) => {
               </div>
               <div className={"flex flex-col py-4 gap-4"}>
                 <div className={""}>支付方式</div>
-                <div className={"text-xs"}>微信扫码支付</div>
+                <div className={"flex gap-2 items-center"}>
+                  <WeixinPayLogo/>
+                  <WeixinPayText/>
+                </div>
               </div>
-              <div className={"pt-20 flex flex-col gap-2"}>
-                <div className={"flex gap-2"}>
-                  <input type="checkbox" className={"rounded-sm text-green-600"}
-                         onChange={(e) => {
-                            setChecked(e.target.checked)
-                         }}/>
-                  <div className={"text-xs"}>
-                    我已阅读并同意 <a href={"https://abandon.chat/term"} rel={'noreferrer'} target={'_blank'}
-                                      className={"underline"}>服务条款</a> 和 <a
-                    href={"https://abandon.chat/privacy"} rel={'noreferrer'} target={'_blank'}
-                    className={"underline"}>隐私政策</a>。
+              {
+                qrStatus === 'loading' && (
+                  <LoadingIcon/>
+                )
+              }
+              {
+                qrStatus === 'error' && (
+                  <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
+                    <div className={"flex justify-center items-center text-red-600 font-bold text-center"}
+                         style={{height: '200px'}}>获取二维码失败，请刷新重试
+                    </div>
                   </div>
-                </div>
+                )
+              }
+              {
+                dataOfOrder?.data?.trade_state === 'SUCCESS' && (
+                  <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
+                    <div className={"flex justify-center items-center text-green-600 font-bold text-center"}
+                         style={{height: '200px'}}>支付成功<br/>返回首页以继续使用
+                    </div>
+                  </div>
+                )
+              }
+              {
+                codeUrl && checked && (!dataOfOrder?.data?.trade_state || dataOfOrder.data.trade_state === "NOTPAY") ? (
+                  <div className={'p-2 rounded bg-white'}>
+                    <QRCodeSVG value={codeUrl} size={160}/>
+                  </div>
+                ) : (
+                  <div className={"h-32"}>
+                  </div>
+                )
+              }
+              <div className={"py-8 flex flex-col gap-2"}>
+                <form>
+                  <div className={"flex gap-2"}>
+                    <input type="checkbox" className={"rounded-sm text-green-600"} ref={checkBoxRef}
+                           onChange={(e) => {
+                             setChecked(e.target.checked)
+                           }}/>
+                    <div className={"text-xs cursor-pointer"} onClick={(e) => {
+                      if (checkBoxRef) {
+                        // @ts-ignore
+                        checkBoxRef.current.click()
+                      }
+                    }}>
+                      我已阅读并同意 abandon.chat <a href={"/doc/term"} rel={'noreferrer'} target={'_blank'}
+                                        className={"underline"}>服务条款</a> 和 <a
+                      href={"/doc/privacy"} rel={'noreferrer'} target={'_blank'}
+                      className={"underline"}>隐私政策</a>。
+                    </div>
+                  </div>
+                </form>
                 <div className={`text-xs text-red-500 ${checked ? 'opacity-0' : 'opacity-100'}`}>
-                  ☹︎ 同意 Abandon chat 的条款以完成支付
+                  请同意 Abandon chat 的条款以完成支付
                 </div>
               </div>
-              <div className={"py-8"}>
-                <button className={"btn relative btn-primary w-full md:w-auto"} disabled={!checked}>
+              <div>
+                <button className={"btn relative btn-primary w-full md:w-auto"} disabled={!checked}
+                        onClick={mutateOrder}>
                   我已支付完成
                 </button>
               </div>
