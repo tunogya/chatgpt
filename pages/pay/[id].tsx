@@ -7,6 +7,40 @@ import WeixinPayLogo from "@/components/SVG/WeixinPayLogo";
 import WeixinPayText from "@/components/SVG/WeixinPayText";
 import {QRCodeSVG} from "qrcode.react";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
+import {RadioGroup} from "@headlessui/react";
+
+const plans = [
+  {
+    name: '30 天月卡',
+    quantity: 30,
+    ram: '18',
+  },
+  {
+    name: '90 天季卡',
+    quantity: 90,
+    ram: '45',
+  },
+  {
+    name: '365 天年卡',
+    quantity: 365,
+    ram: '118',
+  },
+]
+
+function CheckIcon(props: any) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" {...props}>
+      <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2"/>
+      <path
+        d="M7 13l3 3 7-7"
+        stroke="#fff"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
 
 const Pay = ({user}: any) => {
   const router = useRouter()
@@ -15,6 +49,7 @@ const Pay = ({user}: any) => {
   const [qrStatus, setQrStatus] = useState<string>('idle')
   const trade_no = router.query.id
   const checkBoxRef = useRef(null)
+  const [selected, setSelected] = useState(plans[0])
 
   const {
     data: dataOfOrder,
@@ -115,6 +150,70 @@ const Pay = ({user}: any) => {
                     18 元
                   </div>
                 </div>
+                <div className={"flex flex-col py-4 gap-4 pt-4 lg:pt-32"}>
+                  <div className={"text-sm"}>更多方案</div>
+                  <div className={"flex gap-4 text-sm w-full"}>
+                    <div className="mx-auto w-full max-w-md">
+                      <RadioGroup value={selected} onChange={setSelected}>
+                        <RadioGroup.Label className="sr-only">方案</RadioGroup.Label>
+                        <div className="space-y-2">
+                          {plans.map((plan) => (
+                            <RadioGroup.Option
+                              key={plan.name}
+                              value={plan}
+                              className={({active, checked}) =>
+                                `${
+                                  active
+                                    ? 'ring-2 ring-white focus:ring-offset-2:focus'
+                                    : ''
+                                }
+                  ${
+                                  checked ? 'bg-green-600' : 'bg-gray-50 dark:bg-gray-600'
+                                }
+                    relative flex cursor-pointer rounded-lg p-3 bg-gray-50 dark:bg-gray-600 rounded-md border shadow-sm`
+                              }
+                            >
+                              {({active, checked}) => (
+                                <>
+                                  <div className="flex w-full items-center justify-between">
+                                    <div className="flex items-center">
+                                      <div className="text-sm">
+                                        <RadioGroup.Label
+                                          as="p"
+                                          className={`font-medium  ${
+                                            checked ? 'text-white' : 'text-gray-900'
+                                          }`}
+                                        >
+                                          {plan.name}
+                                        </RadioGroup.Label>
+                                        <RadioGroup.Description
+                                          as="span"
+                                          className={`inline ${
+                                            checked ? 'text-white' : 'text-gray-500'
+                                          }`}
+                                        >
+                            <span>
+                              {plan.ram}
+                            </span>{' '}
+                                          <span aria-hidden="true">&middot;</span>{' '}
+                                        </RadioGroup.Description>
+                                      </div>
+                                    </div>
+                                    {checked && (
+                                      <div className="shrink-0 text-white">
+                                        <CheckIcon className="h-6 w-6"/>
+                                      </div>
+                                    )}
+                                  </div>
+                                </>
+                              )}
+                            </RadioGroup.Option>
+                          ))}
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -181,7 +280,7 @@ const Pay = ({user}: any) => {
                       }
                     }}>
                       我已阅读并同意 abandon.chat <a href={"/doc/term"} rel={'noreferrer'} target={'_blank'}
-                                        className={"underline"}>服务条款</a> 和 <a
+                                                     className={"underline"}>服务条款</a> 和 <a
                       href={"/doc/privacy"} rel={'noreferrer'} target={'_blank'}
                       className={"underline"}>隐私政策</a>。
                     </div>
