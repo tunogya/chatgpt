@@ -82,7 +82,7 @@ const Pay = ({user}: any) => {
     if (checked && !codeUrl && qrStatus === 'idle') {
       getCodeUrl()
     }
-  }, [getCodeUrl, qrStatus, checked])
+  }, [getCodeUrl, qrStatus, checked, codeUrl])
 
   return (
     <div className={"overflow-scroll w-full h-full relative flex z-0"}>
