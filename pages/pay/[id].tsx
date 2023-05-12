@@ -10,7 +10,7 @@ import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {RadioGroup} from "@headlessui/react";
 import CheckIcon from "@/components/SVG/CheckIcon";
 
-const plans = [
+export const PLANS = [
   {
     name: '月卡 · 30天',
     quantity: 30,
@@ -35,7 +35,7 @@ const Pay = ({user}: any) => {
   const [qrStatus, setQrStatus] = useState<string>('idle')
   const trade_no = router.query.id
   const checkBoxRef = useRef(null)
-  const [selected, setSelected] = useState(plans[0])
+  const [selected, setSelected] = useState(PLANS[0])
 
   const {
     data: dataOfOrder,
@@ -145,7 +145,7 @@ const Pay = ({user}: any) => {
                       <RadioGroup value={selected} onChange={setSelected} defaultValue={selected}>
                         <RadioGroup.Label className="sr-only">所有方案</RadioGroup.Label>
                         <div className="space-y-2">
-                          {plans.map((plan) => (
+                          {PLANS.map((plan) => (
                             <RadioGroup.Option
                               key={plan.name}
                               value={plan}
@@ -191,8 +191,8 @@ const Pay = ({user}: any) => {
             <div className={"dark:text-white w-full md:w-[380px] md:py-6 py-3 text-gray-600 dark:text-gray-200 w-full"}>
               <div className={"flex flex-col py-4 gap-4"}>
                 <div className={""}>联系信息</div>
-                <div className={"flex gap-6 text-sm bg-gray-50 dark:bg-gray-600 p-3 rounded-md border shadow-sm"}>
-                  <div>账户</div>
+                <div className={"flex gap-2 text-sm bg-gray-50 dark:bg-gray-600 p-3 rounded-md border shadow-sm"}>
+                  <div className={"flex gap-2"}>账户</div>
                   <div>{user.name}</div>
                 </div>
               </div>
