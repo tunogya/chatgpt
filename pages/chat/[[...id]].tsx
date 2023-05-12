@@ -503,24 +503,22 @@ const Chat = ({user}: any) => {
         </div>
       </div>
       <Dialog open={isOpenSidebar} onClose={() => setIsOpenSidebar(false)}>
-        <Dialog.Panel>
-          <div className="relative z-40 md:hidden">
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-75 opacity-100"></div>
-            <div className="fixed inset-0 z-40 flex">
-              <div className="relative flex w-full max-w-xs flex-1 flex-col bg-gray-900 translate-x-0">
-                <div className="absolute top-0 right-0 -mr-12 pt-2 opacity-100">
-                  <button type="button" onClick={() => setIsOpenSidebar(false)} tabIndex={0}
-                          className="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                    <div className="sr-only">关闭侧边栏</div>
-                    <CloseIcon className={"h-6 w-6 text-white"} strokeWidth={"1.5"}/>
-                  </button>
-                </div>
-                {getNavigation()}
+        <div className="relative z-40 md:hidden">
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-75 opacity-100"></div>
+          <div className="fixed inset-0 z-40 flex">
+            <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-gray-900 translate-x-0">
+              <div className="absolute top-0 right-0 -mr-12 pt-2 opacity-100">
+                <button type="button" onClick={() => setIsOpenSidebar(false)} tabIndex={0}
+                        className="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <div className="sr-only">关闭侧边栏</div>
+                  <CloseIcon className={"h-6 w-6 text-white"} strokeWidth={"1.5"}/>
+                </button>
               </div>
+              {getNavigation()}
               <div className="w-14 flex-shrink-0"></div>
-            </div>
+            </Dialog.Panel>
           </div>
-        </Dialog.Panel>
+        </div>
       </Dialog>
       <Dialog open={isOpenSetting} onClose={() => setIsOpenSetting(false)}>
         <div className="relative z-50">
