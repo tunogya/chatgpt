@@ -686,7 +686,7 @@ const Chat = ({user}: any) => {
                         <div
                           className="flex w-full flex-row items-center justify-between border-b px-4 py-3 dark:border-gray-700">
                           <div className="text-base font-semibold sm:text-base">
-                            探索我们的付费计划，国内使用 ChatGPT 的最佳选择。
+                            探索我们的付费计划<br/>国内使用 ChatGPT 的最佳选择
                           </div>
                           <button className="text-gray-700 opacity-50 transition hover:opacity-75 dark:text-white"
                                   onClick={() => setIsOpenPayment(false)}>
