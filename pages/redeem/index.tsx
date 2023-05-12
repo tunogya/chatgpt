@@ -1,14 +1,79 @@
 import {withPageAuthRequired} from "@auth0/nextjs-auth0";
 import {useRouter} from "next/router";
-import {useRef, useState} from "react";
-import WeixinPayLogo from "@/components/SVG/WeixinPayLogo";
-import WeixinPayText from "@/components/SVG/WeixinPayText";
+import {useCallback, useEffect, useRef, useState} from "react";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 
 const Redeem = ({user}: any) => {
   const router = useRouter()
   const [checked, setChecked] = useState(false)
+  const [cdKey, setCdKey] = useState('')
+  const [cdKeyStatus, setCdKeyStatus] = useState('idle')
+  const [cdKeyData, setCdKeyData] = useState<any>(undefined)
   const checkBoxRef = useRef(null)
+
+  const checkCdKey = useCallback(async () => {
+    if (!cdKey || cdKey.length === 0) {
+      setCdKeyStatus('idle')
+      setCdKeyData(undefined)
+      return
+    }
+    if (cdKey.length > 0 && cdKey.length !== 36) {
+      setCdKeyStatus('error')
+      setCdKeyData(undefined)
+      return
+    }
+    setCdKeyStatus('loading')
+    setCdKeyData(undefined)
+    try {
+      const res = await fetch(`/api/app/redeem?cdkey=${cdKey.toLowerCase()}`)
+      const data = await res.json()
+      if (data?.data) {
+        setCdKeyData(data.data)
+        setCdKeyStatus('pending')
+      } else {
+        setCdKeyStatus('error')
+        setCdKeyData(undefined)
+      }
+    } catch (_) {
+      setCdKeyStatus('error')
+      setCdKeyData(undefined)
+    }
+  }, [cdKey])
+  const redeem = async () => {
+    if (!cdKey || cdKey.length === 0) {
+      setCdKeyStatus('idle')
+      return
+    }
+    try {
+      const res = await fetch(`/api/app/redeem`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cdkey: cdKey.toLowerCase(),
+        })
+      })
+      const data = await res.json()
+      if (data.status === 'ok') {
+        setCdKeyStatus('success')
+      } else {
+        setCdKeyStatus('redeemError')
+      }
+    } catch (e) {
+      setCdKeyStatus('redeemError')
+    }
+    // @ts-ignore
+    window.gtag('event', 'in_app_purchase', {
+      'event_category': '按钮',
+      'event_label': 'CDKEY 立即兑换',
+      'value': 'CDKEY'
+    })
+  }
+
+  useEffect(() => {
+    checkCdKey()
+  }, [checkCdKey])
 
   return (
     <div className={"overflow-hidden w-full h-full relative flex z-0"}>
@@ -20,7 +85,8 @@ const Redeem = ({user}: any) => {
         <div className={"flex flex-col md:flex-row md:gap-6 w-full"}>
           <div className={"px-6 lg:px-14 w-full flex flex-col items-end"}>
             <div className={"dark:text-white w-full md:w-[380px] md:py-6 py-3"}>
-              <a className={"font-semibold text-gray-800 dark:text-white cursor-pointer"} href={'/chat'} rel={'noreferrer'}>
+              <a className={"font-semibold text-gray-800 dark:text-white cursor-pointer"} href={'/chat'}
+                 rel={'noreferrer'}>
                 <div className={"flex gap-2"}>
                   <div>←</div>
                   <div>abandon.chat</div>
@@ -70,7 +136,39 @@ const Redeem = ({user}: any) => {
                 </div>
               </div>
               <div className={"flex flex-col py-4 gap-4"}>
-                <div className={""}>CDKEY</div>
+                <div className={""}>兑换会员卡后立即生效</div>
+                <input className={"p-3 rounded-md border shadow-sm text-black"} placeholder={"CDKEY"}
+                       onChange={(e) => {
+                         setCdKey(e.target.value)
+                       }} value={cdKey}/>
+                {
+                  cdKeyStatus === 'loading' && (
+                    <LoadingIcon/>
+                  )
+                }
+                {
+                  cdKeyStatus === 'error' && cdKey.length === 36 && (
+                    <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
+                      <div className={"flex justify-center items-center text-red-600 font-bold text-center"}>CDKEY 有误，请检查后重试
+                      </div>
+                    </div>
+                  )
+                }
+                {
+                  cdKeyStatus === 'success' && (
+                    <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
+                      <div className={"flex justify-center items-center text-green-600 font-bold text-center"}>兑换成功
+                      </div>
+                    </div>)
+                }
+                {
+                  cdKeyStatus === 'redeemError' && (
+                    <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
+                      <div className={"flex justify-center items-center text-red-600 font-bold text-center"}>兑换失败，请稍后重试
+                      </div>
+                    </div>
+                  )
+                }
               </div>
               <div className={"py-8 flex flex-col gap-2"}>
                 <form>
@@ -81,6 +179,9 @@ const Redeem = ({user}: any) => {
                            }}/>
                     <div className={"text-xs cursor-pointer"} onClick={(e) => {
                       if (checkBoxRef) {
+                        if (checked) {
+                          return
+                        }
                         // @ts-ignore
                         checkBoxRef.current.click()
                       }
@@ -96,11 +197,27 @@ const Redeem = ({user}: any) => {
                   请同意 Abandon chat 的条款以完成兑换
                 </div>
               </div>
-              <div>
-                <button className={"btn relative btn-primary w-full md:w-auto"} disabled={!checked}>
-                  确认兑换
-                </button>
-              </div>
+              {
+                cdKeyStatus === 'pending' && cdKeyData && (
+                  <>
+                    <button
+                      className={`w-full btn-primary p-3 rounded-md`}
+                      onClick={redeem}
+                      disabled={cdKeyData.used}
+                    >
+                      {cdKeyData.used ? 'CDKEY 已兑换' : `立即兑换 ${cdKeyData.quantity} 天付费会员`}
+                    </button>
+                    {
+                      cdKeyData.used && (
+                        <div className={"flex flex-col gap-2 text-xs"}>
+                          <div>使用人: {cdKeyData.user.name}</div>
+                          <div>使用时间: {new Date(cdKeyData?.updated * 1000).toLocaleString()}</div>
+                        </div>
+                      )
+                    }
+                  </>
+                )
+              }
             </div>
           </div>
         </div>

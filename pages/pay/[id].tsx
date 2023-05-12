@@ -8,6 +8,7 @@ import WeixinPayText from "@/components/SVG/WeixinPayText";
 import {QRCodeSVG} from "qrcode.react";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {RadioGroup} from "@headlessui/react";
+import CheckIcon from "@/components/SVG/CheckIcon";
 
 const plans = [
   {
@@ -26,21 +27,6 @@ const plans = [
     total: 118,
   },
 ]
-
-function CheckIcon(props: any) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2"/>
-      <path
-        d="M7 13l3 3 7-7"
-        stroke="#fff"
-        strokeWidth={1.5}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
 
 const Pay = ({user}: any) => {
   const router = useRouter()
@@ -163,7 +149,7 @@ const Pay = ({user}: any) => {
                             <RadioGroup.Option
                               key={plan.name}
                               value={plan}
-                              className={`${plan.name === selected.name ? 'bg-green-600' : 'bg-gray-50 dark:bg-gray-600'}
+                              className={`${plan.name === selected.name ? 'bg-yellow-200' : 'bg-gray-50 dark:bg-gray-600'}
                     relative flex cursor-pointer rounded-lg p-3 bg-gray-50 rounded-md border shadow-sm`}
                             >
                               <div className="flex w-full items-center justify-between">
@@ -171,17 +157,15 @@ const Pay = ({user}: any) => {
                                   <div className="text-sm">
                                     <RadioGroup.Label
                                       as="p"
-                                      className={`font-medium ${
-                                        plan.name === selected.name ? 'text-white' : 'text-gray-800 dark:text-gray-200'
+                                      className={`font-medium text-gray-800 ${
+                                        plan.name === selected.name ? '' : 'dark:text-gray-200'
                                       }`}
                                     >
                                       {plan.name}
                                     </RadioGroup.Label>
                                     <RadioGroup.Description
                                       as="span"
-                                      className={`inline ${
-                                        plan.name === selected.name ? 'text-white' : 'text-gray-500'
-                                      } text-xs`}
+                                      className={`inline text-gray-500 text-xs`}
                                     >
                                       {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
                                         maximumFractionDigits: 2
@@ -190,9 +174,7 @@ const Pay = ({user}: any) => {
                                   </div>
                                 </div>
                                 {plan.name === selected.name && (
-                                  <div className="shrink-0 text-white">
-                                    <CheckIcon className="h-6 w-6"/>
-                                  </div>
+                                  <CheckIcon className={"h-6 w-6"}/>
                                 )}
                               </div>
                             </RadioGroup.Option>
@@ -279,16 +261,13 @@ const Pay = ({user}: any) => {
                     </div>
                   </div>
                 </form>
-                <div className={`text-xs text-red-500 ${checked ? 'opacity-0' : 'opacity-100'}`}>
+                <div className={`text-xs text-red-500 ${checked ? 'hidden' : ''}`}>
                   请同意 Abandon chat 的条款以完成支付
                 </div>
               </div>
-              <div>
-                <button className={"btn relative btn-primary w-full md:w-auto"} disabled={!checked}
-                        onClick={mutateOrder}>
-                  我已支付完成
-                </button>
-              </div>
+              <button className={"w-full btn-primary p-3 rounded-md"} disabled={!checked} onClick={mutateOrder}>
+                若您已支付完成，请点这里确认
+              </button>
             </div>
           </div>
         </div>
