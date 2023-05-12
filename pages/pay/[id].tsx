@@ -56,13 +56,13 @@ const Pay = ({user}: any) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        description: `ChatGPT 30 天会员卡: ${user?.name}`,
+        description: `ChatGPT ${selected.quantity} 天会员卡: ${user?.name}`,
         out_trade_no,
-        quantity: 1800,
+        quantity: selected.total * 100,
         topic: 'chatgpt',
         attach: JSON.stringify({
           topic: 'chatgpt',
-          quantity: 30,
+          quantity: selected.quantity,
           user: user?.sub,
         })
       })
@@ -80,13 +80,13 @@ const Pay = ({user}: any) => {
         setCodeUrl(undefined)
         setQrStatus('error')
       })
-  }, [user?.name, user?.sub])
+  }, [user?.name, user?.sub, selected])
 
   useEffect(() => {
-    if (checked && !codeUrl && qrStatus === 'idle') {
+    if (checked) {
       getCodeUrl()
     }
-  }, [getCodeUrl, qrStatus, checked, codeUrl])
+  }, [getCodeUrl, checked])
 
   return (
     <div className={"overflow-scroll w-full h-full relative flex z-0"}>
