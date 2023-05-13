@@ -1,8 +1,8 @@
 import {withPageAuthRequired} from "@auth0/nextjs-auth0";
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
-import {PLANS} from "@/pages/pay/[id]";
 import {useRouter} from "next/router";
+import {PLANS} from "@/pages/pay/[id]";
 
 const Redeem = ({user}: any) => {
   const router = useRouter()
@@ -76,6 +76,13 @@ const Redeem = ({user}: any) => {
     checkCdKey()
   }, [checkCdKey])
 
+  const price = useMemo(() => {
+    if (cdKeyData?.quantity) {
+      return PLANS.find((p) => p.quantity === cdKeyData.quantity)?.total || '-'
+    }
+    return '-'
+  }, [cdKeyData?.quantity])
+
   return (
     <div className={"overflow-hidden w-full h-full relative flex z-0"}>
       <div className={"flex w-full h-full fixed z-0 flex-shrink-0 overflow-x-hidden"}>
@@ -108,14 +115,14 @@ const Redeem = ({user}: any) => {
                     小计
                   </div>
                   <div className={"font-semibold"}>
-                    {PLANS.filter((item) => item.quantity = cdKeyData?.quantity)?.[0]?.total || '-'} 元
+                    {price} 元
                   </div>
                 </div>
                 <div className={"text-sm py-4 text-gray-500 border-t-[1px] flex justify-between"}>
                   <div className={"font-semibold"}>
                     减免
                   </div>
-                  <div className={"font-semibold"}>{PLANS.filter((item) => item.quantity = cdKeyData?.quantity)?.[0]?.total || '-'} 元
+                  <div className={"font-semibold"}>{price} 元
                   </div>
                 </div>
                 <div className={"text-sm py-4 border-t-[1px] flex justify-between text-black dark:text-white"}>
