@@ -8,6 +8,11 @@ services:
       - "3000"
     deploy:
       replicas: 4
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
     volumes:
       - ./apiclient_cert.pem:/app/apiclient_cert.pem
       - ./apiclient_key.pem:/app/apiclient_key.pem
