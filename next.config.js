@@ -10,7 +10,7 @@ const nextConfig = {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     OPENAI_API_SECRET: process.env.OPENAI_API_SECRET,
-    WINXIN_APIV3_KEY: process.env.WINXIN_APIV3_KEY,
+    WEIXIN_APIV3_KEY: process.env.WEIXIN_APIV3_KEY,
   },
   images: {
     remotePatterns: [
