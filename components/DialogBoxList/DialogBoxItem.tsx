@@ -12,6 +12,7 @@ import rehypeKatex from 'rehype-katex';
 import {useUser} from "@auth0/nextjs-auth0/client";
 import CodeFormat from "@/components/DialogBoxList/CodeFormat";
 import Image from "next/image";
+import CopyIcon from "@/components/SVG/CopyIcon";
 
 export type Message = {
   id: string
@@ -106,13 +107,15 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
               ) : (
                 <>
                   <div className="flex flex-grow flex-col gap-3">
-                    <div className={`min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap ${blocked ? 'text-orange-500' : ''}`}>
+                    <div
+                      className={`min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap ${blocked ? 'text-orange-500' : ''}`}>
                       {props?.message?.content?.parts?.[0]?.trim() || '...'}
                     </div>
                     {blocked && (
                       <div
                         className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
-                        此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a className={'underline'}>提交您的反馈</a>，您的意见将有助于我们在该领域的研究。
+                        此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a
+                        className={'underline'}>提交您的反馈</a>，您的意见将有助于我们在该领域的研究。
                       </div>
                     )}
                   </div>
@@ -164,9 +167,14 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
               </ReactMarkdown>
             </div>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between lg:block">
+            <div/>
             <div
               className="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible">
+              <button
+                className="flex ml-auto gap-2 rounded-md p-1 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400">
+                <CopyIcon/>
+              </button>
               <button
                 className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400">
                 <LikeIcon/>
