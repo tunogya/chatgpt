@@ -1,13 +1,16 @@
 version: '3'
 services:
   chatgpt:
-    image: chatgpt
+    build: .
     env_file:
       - .env
     ports:
       - "3000"
     deploy:
       replicas: 4
+    volumes:
+      - ./apiclient_cert.pem:/app/apiclient_cert.pem
+      - ./apiclient_key.pem:/app/apiclient_key.pem
   nginx:
     image: nginx
     ports:
