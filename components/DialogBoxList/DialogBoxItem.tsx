@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo, useState} from "react";
+import {FC, useCallback, useEffect, useMemo, useState} from "react";
 // import Edit2Icon from "@/components/SVG/Edit2Icon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
 import LikeIcon from "@/components/SVG/LikeIcon";
@@ -37,10 +37,34 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete)
   const [editMode, setEditMode] = useState(false);
+  const [blocked, setBlocked] = useState(false);
 
   const showStreaming = useMemo(() => {
     return lastMessageId === props.id && isWaitComplete
   }, [lastMessageId, props.id, isWaitComplete])
+
+  const moderator = useCallback(async () => {
+    if (props?.message?.role !== 'user') {
+      return;
+    }
+    const res = await fetch('/api/moderations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        input: props.message?.content.parts[0].trim()
+      })
+    });
+    const data = await res.json();
+    if (data?.blocked || data?.flagged) {
+      setBlocked(true)
+    }
+  }, [isWaitComplete, props.message?.content.parts])
+
+  useEffect(() => {
+    moderator()
+  }, [moderator])
 
   if (props.message === null || props.message.role === 'system') {
     return <></>
@@ -82,9 +106,15 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
               ) : (
                 <>
                   <div className="flex flex-grow flex-col gap-3">
-                    <div className=" min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
-                      {props.message.content.parts[0].trim()}
+                    <div className={`min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap ${blocked ? 'text-orange-500' : ''}`}>
+                      {props?.message?.content?.parts?.[0]?.trim() || '...'}
                     </div>
+                    {blocked && (
+                      <div
+                        className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
+                        此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a className={'underline'}>提交您的反馈</a>，您的意见将有助于我们在该领域的研究。
+                      </div>
+                    )}
                   </div>
                   {/*<div*/}
                   {/*  className="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible">*/}
@@ -113,7 +143,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
       <div
         className="text-base gap-4 md:gap-6 m-auto md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0">
         <div className="w-[30px] flex flex-col relative items-end">
-          <div className="relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center bg-gray-900">
+          <div
+            className="relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center bg-gray-900">
             <AbandonIcon/>
           </div>
         </div>
@@ -129,7 +160,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                   }
                 }}
                 className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                {props.message.content.parts[0].trim().replace(/[\n\r]+/g, '\n')}
+                {props?.message?.content?.parts?.[0]?.trim()?.replace(/[\n\r]+/g, '\n') || '...'}
               </ReactMarkdown>
             </div>
           </div>
