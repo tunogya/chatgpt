@@ -319,11 +319,11 @@ export default withApiAuthRequired(async function handler(
       res.status(500).json({error: "Error"})
     }
   } else if (req.method === 'DELETE') {
-    const {ids} = req.body;
+    const ids = req.body?.ids || [];
     try {
       await ddbDocClient.send(new BatchWriteCommand({
         RequestItems: {
-          'wizardingpay': ids.slice(0, 25).map((id: string) => ({
+          'wizardingpay': ids?.slice(0, 25).map((id: string) => ({
             DeleteRequest: {
               Key: {
                 PK: user_id,
