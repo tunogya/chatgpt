@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import pay from "@/utils/WxPay";
-import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
-
+import {withApiAuthRequired} from "@auth0/nextjs-auth0";
+import {PLANS} from "@/pages/pay/[id]";
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -13,21 +13,9 @@ export default withApiAuthRequired(async function handler(
   const {description, out_trade_no, quantity, topic, attach} = req.body;
   let total = 0;
   if (topic === 'chatgpt' && quantity > 0) {
-    switch (quantity) {
-      case 30:
-        total = 1800;
-        break;
-      case 90:
-        total = 4500;
-        break;
-      case 180:
-        total = 7800;
-        break;
-      case 365:
-        total = 11800;
-        break;
-      default:
-        total = quantity;
+    total = (PLANS.find((p) => p.quantity === quantity)?.total || 0) * 100;
+    if (total <= 0) {
+      total = quantity * 100;
     }
   } else {
     res.status(400).json({error: 'Bad Request'});

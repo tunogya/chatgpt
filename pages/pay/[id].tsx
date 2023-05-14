@@ -12,19 +12,19 @@ import CheckIcon from "@/components/SVG/CheckIcon";
 
 export const PLANS = [
   {
-    name: '月卡 · 30天',
+    name: '月卡',
     quantity: 30,
-    total: 18,
+    total: 30,
   },
   {
-    name: '季卡 · 90天',
+    name: '季卡',
     quantity: 90,
-    total: 45,
+    total: 60,
   },
   {
-    name: '年卡 · 365天',
+    name: '年卡',
     quantity: 365,
-    total: 118,
+    total: 228,
   },
 ]
 
@@ -35,7 +35,7 @@ const Pay = ({user}: any) => {
   const [qrStatus, setQrStatus] = useState<string>('idle')
   const trade_no = router.query.id
   const checkBoxRef = useRef(null)
-  const [selected, setSelected] = useState(PLANS[0])
+  const [selected, setSelected] = useState(PLANS[2])
 
   const {
     data: dataOfOrder,
@@ -56,9 +56,9 @@ const Pay = ({user}: any) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        description: `ChatGPT ${selected.quantity} 天会员卡: ${user?.name}`,
+        description: `ChatGPT会员卡-${selected.name}: ${user?.name}`,
         out_trade_no,
-        quantity: selected.total * 100,
+        quantity: selected.quantity,
         topic: 'chatgpt',
         attach: JSON.stringify({
           topic: 'chatgpt',

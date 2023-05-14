@@ -299,7 +299,7 @@ const Chat = ({user}: any) => {
                 </div>
                 <div
                   className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-800">
-                  {paidUseLeft > 0 ? `${Math.ceil(paidUseLeft)}天` : `18元/月`}
+                  {paidUseLeft > 0 ? `${Math.ceil(paidUseLeft)}天` : `每月19元起`}
                 </div>
               </div>
             </a>
@@ -799,7 +799,7 @@ const Chat = ({user}: any) => {
                               <div className="text-xl font-semibold justify-between items-center flex">
                                 <div>付费会员卡</div>
                                 <div
-                                  className="font-semibold text-gray-500">18元/月
+                                  className="font-semibold text-gray-500">每月19元起
                                 </div>
                               </div>
                               <button className="btn relative btn-primary border-none py-3 font-semibold"
