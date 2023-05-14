@@ -13,6 +13,7 @@ import {useUser} from "@auth0/nextjs-auth0/client";
 import CodeFormat from "@/components/DialogBoxList/CodeFormat";
 import Image from "next/image";
 import CopyIcon from "@/components/SVG/CopyIcon";
+import copy from "copy-to-clipboard";
 
 export type Message = {
   id: string
@@ -196,7 +197,15 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
             <div
               className="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible">
               <button
-                className="flex ml-auto gap-2 rounded-md p-1 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400">
+                className="flex ml-auto gap-2 rounded-md p-1 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400"
+                onClick={() => {
+                  if (props?.message?.content?.parts?.[0]?.trim()) {
+                    copy(props?.message?.content?.parts?.[0]?.trim())
+                  } else {
+                    copy('...')
+                  }
+                }}
+              >
                 <CopyIcon/>
               </button>
               <button
