@@ -49,7 +49,6 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
       return
     }
     if (props?.message?.role !== 'user') {
-      console.log(props.message?.content.parts[0])
       return;
     }
     const res = await fetch('/api/moderations', {
