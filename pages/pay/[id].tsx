@@ -235,11 +235,16 @@ const Pay = ({user}: any) => {
               }
               {
                 codeUrl && checked && (!dataOfOrder?.data?.trade_state || dataOfOrder.data.trade_state === "NOTPAY") ? (
-                  <div className={'flex p-2 rounded justify-center'}>
-                    <div className={"p-4 bg-white border rounded-md"}>
-                      <QRCodeSVG value={codeUrl} size={160}/>
+                  <>
+                    <div className={'flex p-2 rounded justify-center'}>
+                      <div className={"p-4 bg-white border rounded-md"}>
+                        <QRCodeSVG value={codeUrl} size={160}/>
+                      </div>
                     </div>
-                  </div>
+                    <div className={`text-xs text-center md:hidden`}>
+                      可截屏后在微信中打开以完成支付
+                    </div>
+                  </>
                 ) : (
                   <div className={"h-32"}>
                   </div>
