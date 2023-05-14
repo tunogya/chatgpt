@@ -40,6 +40,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete)
   const [editMode, setEditMode] = useState(false);
   const [blocked, setBlocked] = useState(false);
+  const [flagged, setFlagged] = useState(false);
 
   const showStreaming = useMemo(() => {
     return lastMessageId === props.id && isWaitComplete
@@ -58,14 +59,17 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        input: props.message?.content.parts[0].trim()
+        input: props.message.content.parts[0]
       })
     });
     const data = await res.json();
-    if (data?.blocked || data?.flagged) {
+    if (data?.blocked) {
       setBlocked(true)
     }
-  }, [isWaitComplete, props.message?.content.parts])
+    if (data?.flagged) {
+      setFlagged(true)
+    }
+  }, [props.message])
 
   useEffect(() => {
     moderator()
@@ -132,7 +136,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                       <div
                         className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
                         此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a
-                        className={'underline'}>提交您的反馈</a>。若多次违规，您的账号可能会被封禁。
+                        className={'underline'}>提交您的反馈</a>。若多次违规，您的账号会被封禁。
                       </div>
                     )}
                   </div>
