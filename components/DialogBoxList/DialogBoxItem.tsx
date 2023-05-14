@@ -45,7 +45,11 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   }, [lastMessageId, props.id, isWaitComplete])
 
   const moderator = useCallback(async () => {
+    if (!props.message || !props.message?.content?.parts?.[0]) {
+      return
+    }
     if (props?.message?.role !== 'user') {
+      console.log(props.message?.content.parts[0])
       return;
     }
     const res = await fetch('/api/moderations', {
@@ -77,10 +81,23 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         className="w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800">
         <div
           className="text-base gap-4 md:gap-6 m-auto md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0">
-          <div className="w-[30px] h-[30px] rounded-sm flex flex-col relative items-end overflow-hidden">
-            <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={30} height={30} quality={80} priority
-                   blurDataURL={`https://dummyimage.com/30x30/ffffff/000000.png&text=${user?.name?.[0] || 'A'}`}
-            />
+          <div className={'w-[30px]'}>
+            <div className={'relative flex'}>
+              <div className={'rounded-sm overflow-hidden'}>
+                <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={30} height={30} quality={80}
+                       priority
+                       blurDataURL={`https://dummyimage.com/30x30/ffffff/000000.png&text=${user?.name?.[0] || 'A'}`}
+                />
+              </div>
+              {
+                blocked && (
+                  <div
+                    className="absolute w-4 h-4 rounded-full text-[10px] flex justify-center items-center right-0 top-[20px] -mr-2 border border-white bg-orange-500 text-white">
+                    <div>!</div>
+                  </div>
+                )
+              }
+            </div>
           </div>
           <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
             {
@@ -115,7 +132,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                       <div
                         className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
                         此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a
-                        className={'underline'}>提交您的反馈</a>，您的意见将有助于我们在该领域的研究。
+                        className={'underline'}>提交您的反馈</a>。若多次违规，您的账号可能会被封禁。
                       </div>
                     )}
                   </div>
@@ -165,6 +182,14 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                 className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
                 {props?.message?.content?.parts?.[0]?.trim()?.replace(/[\n\r]+/g, '\n') || '...'}
               </ReactMarkdown>
+              {
+                !props?.message?.content?.parts?.[0]?.trim().replace(/[\n\r]+/g, '\n') && (
+                  <div
+                    className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
+                    对不起，这不是你的错。服务器响应失败，请稍后重试。
+                  </div>
+                )
+              }
             </div>
           </div>
           <div className="flex justify-between lg:block">
