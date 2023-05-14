@@ -94,7 +94,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                 />
               </div>
               {
-                blocked && (
+                flagged && (
                   <div
                     className="absolute w-4 h-4 rounded-full text-[10px] flex justify-center items-center right-0 top-[20px] -mr-2 border border-white bg-orange-500 text-white">
                     <div>!</div>
@@ -129,10 +129,10 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                 <>
                   <div className="flex flex-grow flex-col gap-3">
                     <div
-                      className={`min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap ${blocked ? 'text-orange-500' : ''}`}>
+                      className={`min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap ${flagged ? 'text-orange-500' : ''}`}>
                       {props?.message?.content?.parts?.[0]?.trim() || '...'}
                     </div>
-                    {blocked && (
+                    {flagged && (
                       <div
                         className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
                         此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a
