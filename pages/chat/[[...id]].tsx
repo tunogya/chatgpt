@@ -31,6 +31,8 @@ import SettingIcon from "@/components/SVG/SettingIcon";
 import DataIcon from "@/components/SVG/DataIcon";
 import OptionIcon from "@/components/SVG/OptionIcon";
 import copy from "copy-to-clipboard";
+import StopIcon from "@/components/SVG/StopIcon";
+// import ReIcon from "@/components/SVG/ReIcon";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -48,6 +50,7 @@ const Chat = ({user}: any) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isOpenPayment, setIsOpenPayment] = useState(false);
   const [copied, setCopied] = useState<boolean>(false);
+  const controllerRef = useRef(null);
 
   const {
     data: conversationData,
@@ -82,6 +85,9 @@ const Chat = ({user}: any) => {
   }
 
   const complete = async (message: Message, parent: string) => {
+    const controller = new AbortController();
+    // @ts-ignore
+    controllerRef.current = controller;
     dispatch(setIsWaitComplete(true))
     dispatch(updateMessageInSession({
       message,
@@ -101,6 +107,7 @@ const Chat = ({user}: any) => {
           messages: [message],
           parent_message_id: lastMessageId,
         }),
+        signal: controller.signal,
       })
       // @ts-ignore
       const reader = res.body.getReader();
@@ -170,6 +177,7 @@ const Chat = ({user}: any) => {
       await readChunk();
     } catch (e) {
       dispatch(setIsWaitComplete(false))
+      controller.abort();
       console.log(e)
     }
     await mutateConversation();
@@ -421,6 +429,33 @@ const Chat = ({user}: any) => {
               <form
                 className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
                 <div className="relative flex h-full flex-1 md:flex-col">
+                  <div className="flex ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center">
+                    {/*{*/}
+                    {/*  session.messages.length >= 2 && (*/}
+                    {/*    <button className="btn relative btn-neutral border-0 md:border" onClick={() => {*/}
+                    {/*      // dispatch(setIsShowRegenerate(false))*/}
+                    {/*    }}>*/}
+                    {/*      <div className="flex w-full items-center justify-center gap-2">*/}
+                    {/*        <ReIcon/>*/}
+                    {/*        重新生成对话*/}
+                    {/*      </div>*/}
+                    {/*    </button>*/}
+                    {/*  )*/}
+                    {/*}*/}
+                    {isWaitComplete && (
+                      <button className="btn relative btn-neutral border-0 md:border rounded-md" onClick={() => {
+                        if (isWaitComplete && controllerRef) {
+                          // @ts-ignore
+                          controllerRef?.current?.abort()
+                        }
+                      }}>
+                        <div className="flex w-full items-center justify-center gap-2">
+                          <StopIcon/>
+                          停止对话
+                        </div>
+                      </button>
+                    )}
+                  </div>
                   <div
                     className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}

@@ -179,6 +179,7 @@ export default withApiAuthRequired(async function handler(
         content: message.content.parts[0],
       })
     ))
+    const abortController = new AbortController();
     try {
       const result = await fetch('https://api.openai.com/v1/chat/completions', {
         headers: {
@@ -197,8 +198,8 @@ export default withApiAuthRequired(async function handler(
           n: 1,
           user: user_id,
         }),
+        signal: abortController.signal,
       });
-
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Content-Type', 'text/event-stream');
       res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -314,8 +315,43 @@ export default withApiAuthRequired(async function handler(
       stream.on('error', (error: any) => {
         res.end(`data: ${JSON.stringify({error})}\n\n`);
       });
+      req.socket.on('close', () => {
+        console.log('[DONE]')
+        abortController.abort();
+        conversation = {
+          ...conversation,
+          mapping: {
+            ...conversation.mapping,
+            [message_id]: {
+              id: message_id,
+              message: full_callback_message,
+              parent: messages[0].id,
+              children: []
+            },
+            [messages[0].id]: {
+              ...conversation.mapping[messages[0].id],
+              children: [
+                ...conversation.mapping[messages[0].id].children,
+                message_id,
+              ]
+            }
+          }
+        }
+        ddbDocClient.send(new PutCommand({
+          TableName: 'wizardingpay',
+          Item: {
+            PK: user_id,
+            SK: conversation.id,
+            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
+            ...conversation,
+          }
+        }));
+        res.write('data: [DONE]\n\n');
+        res.end();
+      })
     } catch (e) {
       console.log(e)
+      abortController.abort();
       res.status(500).json({error: "Error"})
     }
   } else if (req.method === 'DELETE') {
