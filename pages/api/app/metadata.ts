@@ -9,7 +9,7 @@ export default withApiAuthRequired(async function handler(
 ) {
   if (req.method === 'GET') {
     // @ts-ignore
-    const { user } = await getSession(req, res);
+    const {user} = await getSession(req, res);
     const user_id = user.sub;
     try {
       const response = await ddbDocClient.send(new GetCommand({
@@ -27,7 +27,7 @@ export default withApiAuthRequired(async function handler(
           PK: user_id,
           SK: 'METADATA#chatgpt',
           freeUseTTL: 0,
-          paidUseTTL: Date.now() + 60 * 60 * 24 * 3,
+          paidUseTTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 3,
         }
         await ddbDocClient.send(new PutCommand({
           TableName: 'wizardingpay',
