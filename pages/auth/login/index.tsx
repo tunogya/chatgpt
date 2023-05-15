@@ -7,11 +7,13 @@ const Login = () => {
   return (
     <div className="w-full h-full flex justify-center items-center flex-col bg-gray-50 dark:bg-gray-800">
       <div className="w-96 flex flex-col justify-center items-center">
-        <div className="mb-5 text-gray-800 dark:text-gray-100">
+        <div className="mb-5 text-gray-700 dark:text-gray-100 flex items-center gap-2">
           <AbandonIcon/>
+          <div>
+            Chat
+          </div>
         </div>
-        <div className="mb-2 text-center">www.abandon.chat</div>
-        <div className="mb-4 text-center">由 OpenAI 提供技术支持</div>
+        <div className="mb-4 text-center text-xs">由 OpenAI 提供技术支持</div>
         <div className="flex flex-row gap-3">
           <button className="btn relative btn-primary" onClick={() => {
             router.push('/api/auth/login?returnTo=/chat')
