@@ -85,6 +85,19 @@ export default function App({Component, pageProps}: AppProps) {
                 gtag('config', 'G-EDPQ3K7EN8');
               `}
         </Script>
+        <Script id={'sw'}>
+          {`
+                if ('serviceWorker' in navigator) {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }, function(err) {
+                      console.log('ServiceWorker registration failed: ', err);
+                    });
+                  });
+                }
+        `}
+        </Script>
         <UserProvider>
           <Component {...pageProps} />
         </UserProvider>
