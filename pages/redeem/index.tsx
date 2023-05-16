@@ -100,7 +100,7 @@ const Redeem = ({user}: any) => {
                       }}>
                 <div className={"flex gap-2 justify-center items-center"}>
                   <div>←</div>
-                  <AbandonIcon width={100}/>
+                  <AbandonIcon width={'100'}/>
                 </div>
               </button>
               <div className={"md:px-4"}>
