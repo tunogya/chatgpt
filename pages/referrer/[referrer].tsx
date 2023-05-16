@@ -37,7 +37,7 @@ const Referrer = ({user}: any) => {
 
   return (
     <div className={"flex flex-col justify-center items-center h-full w-full gap-4"}>
-      <AbandonIcon/>
+      <AbandonIcon width={'140'}/>
       {
         user?.sub === referrer ? (
           <div className={"flex flex-col justify-center items-center gap-4"}>
