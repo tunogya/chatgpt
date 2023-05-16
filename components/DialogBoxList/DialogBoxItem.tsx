@@ -14,6 +14,7 @@ import CodeFormat from "@/components/DialogBoxList/CodeFormat";
 import Image from "next/image";
 import CopyIcon from "@/components/SVG/CopyIcon";
 import copy from "copy-to-clipboard";
+import AbIcon from "@/components/SVG/AbIcon";
 
 export type Message = {
   id: string
@@ -169,7 +170,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         <div className="w-[30px] flex flex-col relative items-end">
           <div
             className="relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center bg-gray-900">
-            <AbandonIcon/>
+            <AbIcon width={'30'}/>
           </div>
         </div>
         <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">

@@ -3,6 +3,7 @@ import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {useRouter} from "next/router";
 import {PLANS} from "@/pages/pay/[id]";
+import AbandonIcon from "@/components/SVG/AbandonIcon";
 
 const Redeem = ({user}: any) => {
   const router = useRouter()
@@ -94,12 +95,12 @@ const Redeem = ({user}: any) => {
           <div className={"px-6 lg:px-14 w-full flex flex-col items-end"}>
             <div className={"dark:text-white w-full md:w-[380px] md:py-6 py-3"}>
               <button className={"font-semibold text-gray-800 dark:text-white cursor-pointer"}
-                 onClick={() => {
-                   router.push('/chat')
-                 }}>
-                <div className={"flex gap-2"}>
+                      onClick={() => {
+                        router.push('/chat')
+                      }}>
+                <div className={"flex gap-2 justify-center items-center"}>
                   <div>←</div>
-                  <div>abandon.chat</div>
+                  <AbandonIcon width={100}/>
                 </div>
               </button>
               <div className={"md:px-4"}>
@@ -147,10 +148,12 @@ const Redeem = ({user}: any) => {
               </div>
               <div className={"flex flex-col py-4 gap-4"}>
                 <div className={""}>兑换会员卡后将立即生效</div>
-                <input className={`p-3 rounded-md border text-sm shadow-sm text-black ${((cdKeyData && cdKeyData?.used) || cdKeyStatus === 'error' )? 'border-red-500' : ''}`} placeholder={"CDKEY"}
-                       onChange={(e) => {
-                         setCdKey(e.target.value.toUpperCase())
-                       }} value={cdKey}/>
+                <input
+                  className={`p-3 rounded-md border text-sm shadow-sm text-black ${((cdKeyData && cdKeyData?.used) || cdKeyStatus === 'error') ? 'border-red-500' : ''}`}
+                  placeholder={"CDKEY"}
+                  onChange={(e) => {
+                    setCdKey(e.target.value.toUpperCase())
+                  }} value={cdKey}/>
                 {
                   cdKeyStatus === 'loading' && (
                     <LoadingIcon/>
@@ -158,28 +161,32 @@ const Redeem = ({user}: any) => {
                 }
                 {
                   cdKeyStatus === 'error' && cdKey.length === 36 && (
-                    <div className={"flex flex-col gap-2 text-sm p-3 border rounded-md bg-gray-50 dark:bg-gray-600 shadow-sm"}>
+                    <div
+                      className={"flex flex-col gap-2 text-sm p-3 border rounded-md bg-gray-50 dark:bg-gray-600 shadow-sm"}>
                       CDKEY 输入有误，请检查后重试
                     </div>
                   )
                 }
                 {
                   cdKeyStatus === 'success' && (
-                    <div className={"flex flex-col gap-2 text-sm p-3 border rounded-md bg-gray-50 dark:bg-gray-600 shadow-sm"}>
+                    <div
+                      className={"flex flex-col gap-2 text-sm p-3 border rounded-md bg-gray-50 dark:bg-gray-600 shadow-sm"}>
                       兑换成功，会员卡已生效
                     </div>
                   )
                 }
                 {
                   cdKeyStatus === 'redeemError' && (
-                    <div className={"flex flex-col gap-2 text-sm p-3 border rounded-md bg-gray-50 dark:bg-gray-600 shadow-sm"}>
+                    <div
+                      className={"flex flex-col gap-2 text-sm p-3 border rounded-md bg-gray-50 dark:bg-gray-600 shadow-sm"}>
                       兑换失败，请稍后重试
                     </div>
                   )
                 }
                 {
                   cdKeyData && cdKeyData?.used && (
-                    <div className={"flex flex-col gap-2 text-sm p-3 border rounded-md bg-gray-50 dark:bg-gray-600 shadow-sm"}>
+                    <div
+                      className={"flex flex-col gap-2 text-sm p-3 border rounded-md bg-gray-50 dark:bg-gray-600 shadow-sm"}>
                       <div className={"flex gap-2"}>
                         <div className={'w-14'}>使用人</div>
                         <div>{cdKeyData.user.name}</div>
@@ -216,7 +223,7 @@ const Redeem = ({user}: any) => {
                   </div>
                 </form>
                 <div className={`text-xs text-red-500 ${checked ? 'hidden' : ''}`}>
-                  请同意 Abandon chat 的条款以完成兑换
+                  请同意 abandon.chat 的条款以完成兑换
                 </div>
               </div>
               {

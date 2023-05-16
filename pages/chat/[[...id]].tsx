@@ -32,6 +32,7 @@ import DataIcon from "@/components/SVG/DataIcon";
 import OptionIcon from "@/components/SVG/OptionIcon";
 import copy from "copy-to-clipboard";
 import StopIcon from "@/components/SVG/StopIcon";
+import AbandonIcon from "@/components/SVG/AbandonIcon";
 // import ReIcon from "@/components/SVG/ReIcon";
 
 const Chat = ({user}: any) => {
@@ -726,9 +727,7 @@ const Chat = ({user}: any) => {
                         className="grow justify-center bg-white dark:bg-gray-900 dark:text-white rounded-md flex flex-col items-start overflow-hidden border shadow-md dark:border-gray-700">
                         <div
                           className="flex w-full flex-row items-center justify-between border-b px-4 py-3 dark:border-gray-700">
-                          <div className="text-base font-semibold sm:text-base">
-                            探索我们的付费计划<br/>国内使用 ChatGPT 的最佳选择
-                          </div>
+                          <AbandonIcon/>
                           <button className="text-gray-700 opacity-50 transition hover:opacity-75 dark:text-white"
                                   onClick={() => setIsOpenPayment(false)}>
                             <CloseIcon/>

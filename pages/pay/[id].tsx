@@ -9,6 +9,7 @@ import {QRCodeSVG} from "qrcode.react";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {RadioGroup} from "@headlessui/react";
 import CheckIcon from "@/components/SVG/CheckIcon";
+import AbandonIcon from "@/components/SVG/AbandonIcon";
 
 export const PLANS = [
   {
@@ -102,9 +103,9 @@ const Pay = ({user}: any) => {
                       onClick={() => {
                         router.push('/chat')
                       }}>
-                <div className={"flex gap-2"}>
+                <div className={"flex gap-2 justify-center items-center"}>
                   <div>←</div>
-                  <div>abandon.chat</div>
+                  <AbandonIcon width={100}/>
                 </div>
               </button>
               <div className={"md:px-4"}>
@@ -274,7 +275,7 @@ const Pay = ({user}: any) => {
                   </div>
                 </form>
                 <div className={`text-xs text-red-500 ${checked ? 'hidden' : ''}`}>
-                  请同意 Abandon chat 的条款以完成支付
+                  请同意 abandon.chat 的条款以完成支付
                 </div>
               </div>
               <button className={"w-full btn-primary p-3 rounded-md"} disabled={!checked} onClick={mutateOrder}>
