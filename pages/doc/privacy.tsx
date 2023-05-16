@@ -2,8 +2,8 @@ import ReactMarkdown from "react-markdown";
 
 const Privacy = () => {
   return (
-    <div className={'px-2 py-2'}>
-      <ReactMarkdown>
+    <div className={'px-2 py-2 dark:text-white'}>
+      <ReactMarkdown className={'markdown'}>
         {
           `# 隐私政策
 
@@ -40,10 +40,9 @@ const Privacy = () => {
 如果用户30天内未登录系统，为了隐私安全，我们会向用户发送邮件提醒，并**删除**用户的隐私数据。该邮件将会提醒用户使用账户登录我们的系统或点击删除，以保护他们的隐私。在此期间，用户的账户信息将被保留。
 
 
+## 如果您对我们的隐私政策有任何问题或疑虑，请联系我们的客户服务部门，我们将竭诚为您提供帮助。
 
-如果您对我们的隐私政策有任何问题或疑虑，请联系我们的客户服务部门，我们将竭诚为您提供帮助。
-
->本隐私政策自2023年4月11日起生效，abandon.chat 保留对本隐私政策的修改权利。`
+## 本隐私政策自2023年4月11日起生效，abandon.chat 保留对本隐私政策的修改权利。`
         }
       </ReactMarkdown>
     </div>
