@@ -5,10 +5,11 @@ import {Provider, useSelector} from 'react-redux'
 import store from "@/store";
 import {PersistGate} from "redux-persist/integration/react";
 import {persistStore} from "redux-persist";
-import "@/styles/index.css";
 import {UserProvider} from '@auth0/nextjs-auth0/client';
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {useEffect} from "react";
+import "@/styles/index.css";
+import "@/styles/intensifies.scss";
 
 const persistor = persistStore(store);
 
