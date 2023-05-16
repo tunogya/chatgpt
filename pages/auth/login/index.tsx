@@ -9,9 +9,6 @@ const Login = () => {
       <div className="w-96 flex flex-col justify-center items-center">
         <div className="mb-5 text-gray-700 dark:text-gray-100 flex items-center gap-2">
           <AbandonIcon/>
-          <div>
-            Chat
-          </div>
         </div>
         <div className="mb-4 text-center text-xs">由 OpenAI 提供技术支持</div>
         <div className="flex flex-row gap-3">
