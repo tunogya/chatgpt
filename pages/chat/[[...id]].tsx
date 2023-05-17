@@ -60,7 +60,7 @@ const Chat = ({user}: any) => {
   } = useSWR('/api/conversation', (url: string) => fetch(url).then((res) => res.json()))
 
   const handleSubmit = async () => {
-    if (input === '') return;
+    if (input === '' || isWaitComplete) return;
     const scroll_to_bottom_button = document.getElementById('scroll-to-bottom-button');
     if (scroll_to_bottom_button) {
       scroll_to_bottom_button.click();
