@@ -111,7 +111,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                   <textarea className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
                             style={{height: '24px', overflowY: 'hidden'}}
                   >
-                    {props.message.content.parts[0].trim()}
+                    {props.message.content.parts[0]}
                   </textarea>
                   <div className="text-center mt-2 flex justify-center">
                     <button className="btn relative btn-primary mr-2" onClick={() => {
@@ -131,7 +131,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                   <div className="flex flex-grow flex-col gap-3">
                     <div
                       className={`min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap ${flagged ? 'text-orange-500' : ''}`}>
-                      {props?.message?.content?.parts?.[0]?.trim() || '...'}
+                      {props?.message?.content?.parts?.[0] || '...'}
                     </div>
                     {flagged && (
                       <div
@@ -185,10 +185,10 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                   }
                 }}
                 className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                {props?.message?.content?.parts?.[0]?.trim()?.replace(/[\n\r]+/g, '\n') || '...'}
+                {props?.message?.content?.parts?.[0].replace(/\n\n/g, '\n') || '...'}
               </ReactMarkdown>
               {
-                !props?.message?.content?.parts?.[0]?.trim().replace(/[\n\r]+/g, '\n') && (
+                !props?.message?.content?.parts?.[0] && (
                   <div
                     className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
                     对不起，这不是你的错。服务器响应失败，请稍后重试。
@@ -204,8 +204,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
               <button
                 className="flex ml-auto gap-2 rounded-md p-1 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400"
                 onClick={() => {
-                  if (props?.message?.content?.parts?.[0]?.trim()) {
-                    copy(props?.message?.content?.parts?.[0]?.trim())
+                  if (props?.message?.content?.parts?.[0]) {
+                    copy(props?.message?.content?.parts?.[0])
                   } else {
                     copy('...')
                   }
