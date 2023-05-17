@@ -22,7 +22,7 @@ const Index = () => {
   return (
     <div className="w-full h-full flex justify-center items-center flex-col bg-gray-50 dark:bg-gray-800 dark:text-white">
       <div className="w-96 flex flex-col justify-center items-center">
-        <div className="mb-5">
+        <div className="mb-5 text-gray-700 dark:text-gray-100">
           <AbandonIcon width={'140'}/>
         </div>
         <div className="mb-2 text-center text-sm">请稍候，我们正在检查您的浏览器...</div>

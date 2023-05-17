@@ -726,7 +726,7 @@ const Chat = ({user}: any) => {
                       <div
                         className="grow justify-center bg-white dark:bg-gray-900 dark:text-white rounded-md flex flex-col items-start overflow-hidden border shadow-md dark:border-gray-700">
                         <div
-                          className="flex w-full flex-row items-center justify-between border-b px-4 py-3 dark:border-gray-700">
+                          className="flex w-full flex-row items-center justify-between border-b px-4 py-3 text-gray-700 dark:text-gray-100 dark:border-gray-700">
                           <AbandonIcon width={'100'}/>
                           <button className="text-gray-700 opacity-50 transition hover:opacity-75 dark:text-white"
                                   onClick={() => setIsOpenPayment(false)}>

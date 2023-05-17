@@ -50,3 +50,10 @@
   animation-name: intensifies;
   animation-duration: 5s;
 }
+
+.hover\:intensifies:hover {
+  animation-timing-function: ease-out;
+  transform-origin: bottom center;
+  animation-name: intensifies;
+  animation-duration: 5s;
+}
