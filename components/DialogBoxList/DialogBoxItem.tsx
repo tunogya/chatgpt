@@ -1,6 +1,5 @@
 import {FC, useCallback, useEffect, useMemo, useState} from "react";
 // import Edit2Icon from "@/components/SVG/Edit2Icon";
-import AbandonIcon from "@/components/SVG/AbandonIcon";
 import LikeIcon from "@/components/SVG/LikeIcon";
 import UnLikeIcon from "@/components/SVG/UnLikeIcon";
 import {useDispatch, useSelector} from "react-redux";
@@ -131,7 +130,17 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                   <div className="flex flex-grow flex-col gap-3">
                     <div
                       className={`min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap ${flagged ? 'text-orange-500' : ''}`}>
-                      {props?.message?.content?.parts?.[0] || '...'}
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm, remarkMath]}
+                        rehypePlugins={[rehypeKatex]}
+                        components={{
+                          code({...props}) {
+                            return <CodeFormat {...props} />
+                          }
+                        }}
+                        className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
+                        {props?.message?.content?.parts?.[0] || '...'}
+                      </ReactMarkdown>
                     </div>
                     {flagged && (
                       <div
