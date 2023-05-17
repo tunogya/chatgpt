@@ -657,7 +657,7 @@ const Chat = ({user}: any) => {
                                 <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
                                   我们将为您云同步聊天记录，以便您在任何设备上使用。
                                   <a
-                                    href="/doc/privacy.tsx" target="_blank"
+                                    href="/doc/privacy" target="_blank"
                                     className="underline" rel="noreferrer">隐私政策</a>
                                 </div>
                               </div>
