@@ -30,78 +30,6 @@
     src: url(https://cdn.openai.com/common/fonts/signifier/signifier-bold-italic.woff2) format("woff2")
 }
 
-@font-face {
-    font-display: swap;
-    font-family: Söhne;
-    font-style: normal;
-    font-weight: 400;
-    src: url(https://cdn.openai.com/common/fonts/soehne/soehne-buch.woff2) format("woff2")
-}
-
-@font-face {
-    font-display: swap;
-    font-family: Söhne;
-    font-style: italic;
-    font-weight: 400;
-    src: url(https://cdn.openai.com/common/fonts/soehne/soehne-buch-kursiv.woff2) format("woff2")
-}
-
-@font-face {
-    font-display: swap;
-    font-family: Söhne;
-    font-style: normal;
-    font-weight: 500;
-    src: url(https://cdn.openai.com/common/fonts/soehne/soehne-kraftig.woff2) format("woff2")
-}
-
-@font-face {
-    font-display: swap;
-    font-family: Söhne;
-    font-style: italic;
-    font-weight: 500;
-    src: url(https://cdn.openai.com/common/fonts/soehne/soehne-kraftig-kursiv.woff2) format("woff2")
-}
-
-@font-face {
-    font-display: swap;
-    font-family: Söhne;
-    font-style: normal;
-    font-weight: 600;
-    src: url(https://cdn.openai.com/common/fonts/soehne/soehne-halbfett.woff2) format("woff2")
-}
-
-@font-face {
-    font-display: swap;
-    font-family: Söhne;
-    font-style: italic;
-    font-weight: 600;
-    src: url(https://cdn.openai.com/common/fonts/soehne/soehne-halbfett-kursiv.woff2) format("woff2")
-}
-
-@font-face {
-    font-display: swap;
-    font-family: Söhne Mono;
-    font-style: normal;
-    font-weight: 400;
-    src: url(https://cdn.openai.com/common/fonts/soehne/soehne-mono-buch.woff2) format("woff2")
-}
-
-@font-face {
-    font-display: swap;
-    font-family: Söhne Mono;
-    font-style: normal;
-    font-weight: 700;
-    src: url(https://cdn.openai.com/common/fonts/soehne/soehne-mono-halbfett.woff2) format("woff2")
-}
-
-@font-face {
-    font-display: swap;
-    font-family: Söhne Mono;
-    font-style: italic;
-    font-weight: 400;
-    src: url(https://cdn.openai.com/common/fonts/soehne/soehne-mono-buch-kursiv.woff2) format("woff2")
-}
-
 /*! tailwindcss v3.3.2 | MIT License | https://tailwindcss.com*/
 *, :after, :before {
     border: 0 solid #d9d9e3;
@@ -116,7 +44,7 @@ html {
     -webkit-text-size-adjust: 100%;
     -webkit-font-feature-settings: normal;
     font-feature-settings: normal;
-    font-family: Söhne, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     font-variation-settings: normal;
     line-height: 1.5;
     tab-size: 4
@@ -154,7 +82,7 @@ b, strong {
 }
 
 code, kbd, pre, samp {
-    font-family: Söhne Mono, Monaco, Andale Mono, Ubuntu Mono, monospace;
+    font-family: Monaco, Andale Mono, Ubuntu Mono, monospace;
     font-size: 1em
 }
 
@@ -3722,11 +3650,11 @@ h2, h3 {
 }
 
 .font-mono {
-    font-family: Söhne Mono, Monaco, Andale Mono, Ubuntu Mono, monospace
+    font-family: Monaco, Andale Mono, Ubuntu Mono, monospace
 }
 
 .font-sans {
-    font-family: Söhne, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji
 }
 
 .text-2xl {
@@ -5924,7 +5852,7 @@ button.scroll-convo {
 }
 
 code, pre {
-    font-family: Söhne Mono, Monaco, Andale Mono, Ubuntu Mono, monospace !important
+    font-family: Monaco, Andale Mono, Ubuntu Mono, monospace !important
 }
 
 code[class=language-plaintext] {
