@@ -79,7 +79,7 @@ const Redeem = ({user}: any) => {
 
   const price = useMemo(() => {
     if (cdKeyData?.quantity) {
-      return PLANS.find((p) => p.quantity === cdKeyData.quantity)?.total || '-'
+      return PLANS.find((p) => p.quantity === cdKeyData.quantity)?.total || cdKeyData?.quantity
     }
     return '-'
   }, [cdKeyData?.quantity])
