@@ -32,3 +32,6 @@ services:
 
   redis:
     image: redis:latest
+    sysctls:
+      - vm.overcommit_memory=1
+      - net.core.somaxconn=65535
