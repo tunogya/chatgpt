@@ -3,7 +3,7 @@ import {FC, useCallback, useEffect, useMemo, useState} from "react";
 import LikeIcon from "@/components/SVG/LikeIcon";
 import UnLikeIcon from "@/components/SVG/UnLikeIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {updateLastMessageId} from "@/store/session";
+import {clearSession, updateLastMessageId} from "@/store/session";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -14,6 +14,7 @@ import Image from "next/image";
 import CopyIcon from "@/components/SVG/CopyIcon";
 import copy from "copy-to-clipboard";
 import AbIcon from "@/components/SVG/AbIcon";
+import {useRouter} from "next/router";
 
 export type Message = {
   id: string
@@ -41,25 +42,27 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const [editMode, setEditMode] = useState(false);
   const [blocked, setBlocked] = useState(false);
   const [flagged, setFlagged] = useState(false);
+  const [content, setContent] = useState(props.message?.content?.parts?.[0] || '');
+  const router = useRouter();
+  const conversation_id = router.query.id?.[0] || undefined;
+  const dispatch = useDispatch();
 
   const showStreaming = useMemo(() => {
     return lastMessageId === props.id && isWaitComplete
   }, [lastMessageId, props.id, isWaitComplete])
 
   const moderator = useCallback(async () => {
-    if (!props.message || !props.message?.content?.parts?.[0]) {
+    if (!props.message || !props.message?.content?.parts?.[0] || isWaitComplete) {
       return
     }
-    if (props?.message?.role !== 'user') {
-      return;
-    }
+    const input = props.message.content.parts[0]
     const res = await fetch('/api/moderations', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        input: props.message.content.parts[0]
+        input: input.slice(0, 500)
       })
     });
     const data = await res.json();
@@ -69,11 +72,41 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
     if (data?.flagged) {
       setFlagged(true)
     }
-  }, [props.message])
+  }, [props.message, isWaitComplete])
 
   useEffect(() => {
     moderator()
   }, [moderator])
+
+  const handleBlocked = useCallback(() => {
+    if (!blocked) {
+      return
+    }
+    setContent('此内容已被屏蔽，将自动删除本次会话!')
+    fetch(`/api/conversation/${conversation_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }).then(() => {
+      dispatch(clearSession());
+      router.push({
+        pathname: `/chat`,
+      })
+    }).catch((e) => {
+      console.log(e)
+    }).then(() => {
+      // @ts-ignore
+      window.gtag('event', 'auto_delete', {
+        'event_category': 'delete',
+        'event_label': 'moderator',
+      })
+    })
+  }, [])
+
+  useEffect(() => {
+    handleBlocked()
+  }, [blocked, handleBlocked])
 
   if (props.message === null || props.message.role === 'system') {
     return <></>
@@ -110,7 +143,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                   <textarea className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
                             style={{height: '24px', overflowY: 'hidden'}}
                   >
-                    {props.message.content.parts[0]}
+                    {content}
                   </textarea>
                   <div className="text-center mt-2 flex justify-center">
                     <button className="btn relative btn-primary mr-2" onClick={() => {
@@ -139,16 +172,16 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                           }
                         }}
                         className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                        {props?.message?.content?.parts?.[0] || '...'}
+                        {content || '...'}
                       </ReactMarkdown>
+                      {(blocked || flagged) && (
+                        <div
+                          className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
+                          此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a
+                          className={'underline'}>提交您的反馈</a>。若多次违规，您的账号会被封禁。
+                        </div>
+                      )}
                     </div>
-                    {flagged && (
-                      <div
-                        className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
-                        此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a
-                        className={'underline'}>提交您的反馈</a>。若多次违规，您的账号会被封禁。
-                      </div>
-                    )}
                   </div>
                   {/*<div*/}
                   {/*  className="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible">*/}
@@ -194,16 +227,21 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                   }
                 }}
                 className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                {props?.message?.content?.parts?.[0] || '...'}
+                {content || '...'}
               </ReactMarkdown>
-              {
-                !props?.message?.content?.parts?.[0] && (
-                  <div
-                    className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
-                    对不起，这不是你的错。服务器响应失败，请稍后重试。
-                  </div>
-                )
-              }
+              {!content && (
+                <div
+                  className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
+                  对不起，这不是你的错。服务器响应失败，请稍后重试。
+                </div>
+              )}
+              {(blocked || flagged) && (
+                <div
+                  className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
+                  此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a
+                  className={'underline'}>提交您的反馈</a>。若多次违规，您的账号会被封禁。
+                </div>
+              )}
             </div>
           </div>
           <div className="flex justify-between lg:block">
@@ -213,8 +251,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
               <button
                 className="flex ml-auto gap-2 rounded-md p-1 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400"
                 onClick={() => {
-                  if (props?.message?.content?.parts?.[0]) {
-                    copy(props?.message?.content?.parts?.[0])
+                  if (content) {
+                    copy(content)
                   } else {
                     copy('...')
                   }
