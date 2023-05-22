@@ -62,7 +62,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         input: props.message.content.parts[0]
       })
     });
-    const data = await res?.json();
+    const data = await res.json();
     if (data?.blocked) {
       setBlocked(true)
     }
