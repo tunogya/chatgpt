@@ -42,7 +42,6 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const [editMode, setEditMode] = useState(false);
   const [blocked, setBlocked] = useState(false);
   const [flagged, setFlagged] = useState(false);
-  const [content, setContent] = useState(props.message?.content?.parts?.[0] || '');
   const router = useRouter();
   const conversation_id = router.query.id?.[0] || undefined;
   const dispatch = useDispatch();
@@ -56,21 +55,27 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
       return
     }
     const input = props.message.content.parts[0]
-    const res = await fetch('/api/moderations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        input: input.slice(0, 500)
-      })
-    });
-    const data = await res.json();
-    if (data?.blocked) {
-      setBlocked(true)
-    }
-    if (data?.flagged) {
-      setFlagged(true)
+    try {
+      const res = await fetch('/api/moderations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          input: input.slice(0, 500)
+        })
+      });
+      if (res.status === 200) {
+        const data = await res.json();
+        if (data?.blocked) {
+          setBlocked(true)
+        }
+        if (data?.flagged) {
+          setFlagged(true)
+        }
+      }
+    } catch (e) {
+      console.log(e)
     }
   }, [props.message, isWaitComplete])
 
@@ -82,7 +87,9 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
     if (!blocked) {
       return
     }
-    setContent('此内容已被屏蔽，将自动删除本次会话!')
+    router.push({
+      pathname: `/chat`,
+    })
     fetch(`/api/conversation/${conversation_id}`, {
       method: 'DELETE',
       headers: {
@@ -102,11 +109,11 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         'event_label': 'moderator',
       })
     })
-  }, [])
+  }, [blocked, conversation_id])
 
   useEffect(() => {
     handleBlocked()
-  }, [blocked, handleBlocked])
+  }, [handleBlocked])
 
   if (props.message === null || props.message.role === 'system') {
     return <></>
@@ -143,7 +150,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                   <textarea className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
                             style={{height: '24px', overflowY: 'hidden'}}
                   >
-                    {content}
+                    {props.message?.content?.parts?.[0]}
                   </textarea>
                   <div className="text-center mt-2 flex justify-center">
                     <button className="btn relative btn-primary mr-2" onClick={() => {
@@ -172,7 +179,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                           }
                         }}
                         className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                        {content || '...'}
+                        {props.message?.content?.parts?.[0] || '...'}
                       </ReactMarkdown>
                       {(blocked || flagged) && (
                         <div
@@ -227,9 +234,9 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                   }
                 }}
                 className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                {content || '...'}
+                {props.message?.content?.parts?.[0] || '...'}
               </ReactMarkdown>
-              {!content && (
+              {!props.message?.content?.parts?.[0] && (
                 <div
                   className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
                   对不起，这不是你的错。服务器响应失败，请稍后重试。
@@ -251,8 +258,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
               <button
                 className="flex ml-auto gap-2 rounded-md p-1 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400"
                 onClick={() => {
-                  if (content) {
-                    copy(content)
+                  if (props.message?.content?.parts?.[0]) {
+                    copy(props.message?.content?.parts?.[0])
                   } else {
                     copy('...')
                   }
