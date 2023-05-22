@@ -1,6 +1,6 @@
-import redis from 'redis';
+import {createClient} from 'redis';
 
-const redisClient = redis.createClient({
+const redisClient = createClient({
   url: 'redis://redis:6379',
 })
 
