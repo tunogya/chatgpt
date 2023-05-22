@@ -89,7 +89,7 @@ const DialogBoxListContent = () => {
               ) : (
                 <div className="flex flex-col items-center justify-center text-sm dark:bg-gray-800 h-full">
                   <h1
-                    className="result-streaming text-4xl font-semibold text-center text-gray-800 dark:text-gray-100">
+                    className="text-4xl font-semibold text-center text-gray-800 dark:text-gray-100">
                     <Typewriter text={'ChatGPT'}/>
                   </h1>
                   <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
