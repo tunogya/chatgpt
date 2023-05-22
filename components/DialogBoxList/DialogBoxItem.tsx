@@ -3,7 +3,7 @@ import {FC, useCallback, useEffect, useMemo, useState} from "react";
 import LikeIcon from "@/components/SVG/LikeIcon";
 import UnLikeIcon from "@/components/SVG/UnLikeIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {clearSession, updateLastMessageId} from "@/store/session";
+import {clearSession, updateLastMessageId, setBlockComplete} from "@/store/session";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -51,7 +51,10 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   }, [lastMessageId, props.id, isWaitComplete])
 
   const moderator = useCallback(async () => {
-    if (!props.message || !props.message?.content?.parts?.[0] || isWaitComplete) {
+    if (!props.message || !props.message?.content?.parts?.[0]) {
+      return
+    }
+    if (isWaitComplete && props.message.role === 'assistant') {
       return
     }
     const input = props.message.content.parts[0]
@@ -90,24 +93,20 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
     router.push({
       pathname: `/chat`,
     })
+    dispatch(setBlockComplete(true))
     fetch(`/api/conversation/${conversation_id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       }
     }).then(() => {
-      dispatch(clearSession());
-      router.push({
-        pathname: `/chat`,
-      })
-    }).catch((e) => {
-      console.log(e)
-    }).then(() => {
       // @ts-ignore
       window.gtag('event', 'auto_delete', {
         'event_category': 'delete',
         'event_label': 'moderator',
       })
+    }).catch((e) => {
+      console.log(e)
     })
   }, [blocked, conversation_id])
 
@@ -147,11 +146,17 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
             {
               editMode ? (
                 <div className="flex flex-grow flex-col gap-3">
-                  <textarea className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
-                            style={{height: '24px', overflowY: 'hidden'}}
-                  >
+                  {
+                    blocked ? (
+                      <div/>
+                    ) : (
+                      <textarea
+                        className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
+                        style={{height: '24px', overflowY: 'hidden'}}>
                     {props.message?.content?.parts?.[0]}
                   </textarea>
+                    )
+                  }
                   <div className="text-center mt-2 flex justify-center">
                     <button className="btn relative btn-primary mr-2" onClick={() => {
                       // TODO: update message
@@ -170,18 +175,25 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                   <div className="flex flex-grow flex-col gap-3">
                     <div
                       className={`min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap ${flagged ? 'text-orange-500' : ''}`}>
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm, remarkMath]}
-                        rehypePlugins={[rehypeKatex]}
-                        components={{
-                          code({...props}) {
-                            return <CodeFormat {...props} />
-                          }
-                        }}
-                        className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                        {props.message?.content?.parts?.[0] || '...'}
-                      </ReactMarkdown>
-                      {(blocked || flagged) && (
+                      {
+                        blocked ? (
+                          <div/>
+                        ) : (
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm, remarkMath]}
+                            rehypePlugins={[rehypeKatex]}
+                            components={{
+                              code({...props}) {
+                                return <CodeFormat {...props} />
+                              }
+                            }}
+                            className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
+                            {props.message?.content?.parts?.[0] || '...'}
+                          </ReactMarkdown>
+                        )
+                      }
+
+                      {flagged && (
                         <div
                           className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
                           此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a
@@ -225,24 +237,30 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
           <div className="flex flex-grow flex-col gap-3">
             <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm, remarkMath]}
-                rehypePlugins={[rehypeKatex]}
-                components={{
-                  code({...props}) {
-                    return <CodeFormat {...props} />
-                  }
-                }}
-                className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                {props.message?.content?.parts?.[0] || '...'}
-              </ReactMarkdown>
+              {
+                blocked ? (
+                  <div/>
+                ) : (
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm, remarkMath]}
+                    rehypePlugins={[rehypeKatex]}
+                    components={{
+                      code({...props}) {
+                        return <CodeFormat {...props} />
+                      }
+                    }}
+                    className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
+                    {props.message?.content?.parts?.[0] || '...'}
+                  </ReactMarkdown>
+                )
+              }
               {!props.message?.content?.parts?.[0] && (
                 <div
                   className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
                   对不起，这不是你的错。服务器响应失败，请稍后重试。
                 </div>
               )}
-              {(blocked || flagged) && (
+              {flagged && (
                 <div
                   className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
                   此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a

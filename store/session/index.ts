@@ -41,6 +41,7 @@ export const index = createSlice({
     isWaitComplete: false,
     // isWaitHistory is used to indicate whether the history wait is complete
     isWaitHistory: false,
+    isBlockComplete: false,
   },
   reducers: {
     // setSession is used to set the current session
@@ -62,7 +63,7 @@ export const index = createSlice({
       }
     }) => {
       const {message, parent} = action.payload
-      if (!state.session.mapping[message.id]) {
+      if (!state.session.mapping?.[message.id]) {
         state.session.mapping[message.id] = {
           id: message.id,
           message,
@@ -112,6 +113,7 @@ export const index = createSlice({
       state.lastMessageId = "00000000-0000-0000-0000-000000000000"
       state.isWaitComplete = false
       state.isWaitHistory = false
+      state.isBlockComplete = false
     },
     updateLastMessageId: (state, action) => {
       state.lastMessageId = action.payload
@@ -121,6 +123,9 @@ export const index = createSlice({
     },
     setIsWaitHistory: (state, action) => {
       state.isWaitHistory = action.payload
+    },
+    setBlockComplete: (state, action) => {
+      state.isBlockComplete = action.payload
     }
   }
 })
@@ -133,6 +138,7 @@ export const {
   updateLastMessageId,
   setIsWaitComplete,
   setIsWaitHistory,
+  setBlockComplete,
 } = index.actions
 
 export default index.reducer

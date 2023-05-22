@@ -40,6 +40,7 @@ const Chat = ({user}: any) => {
   const router = useRouter()
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete);
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
+  const isBlockComplete = useSelector((state: any) => state.session.isBlockComplete);
   const session = useSelector((state: any) => state.session.session);
   const theme = useSelector((state: any) => state.ui.theme);
   const inputRef = useRef(null);
@@ -185,6 +186,13 @@ const Chat = ({user}: any) => {
   }
 
   const [second, setSecond] = useState(0);
+
+  useEffect(() => {
+    if (isWaitComplete && isBlockComplete && controllerRef) {
+      // @ts-ignore
+      controllerRef?.current?.abort();
+    }
+  }, [isBlockComplete, isWaitComplete, controllerRef])
 
   useEffect(() => {
     const timer = setInterval(() => {
