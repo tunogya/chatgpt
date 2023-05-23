@@ -87,10 +87,13 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   }, [moderator])
 
   const handleBlocked = useCallback(() => {
-    if (!blocked || !conversation_id) {
+    if (!blocked) {
       return
     }
     dispatch(setBlockComplete(true))
+    if (!conversation_id) {
+      return
+    }
     fetch(`/api/conversation/${conversation_id}`, {
       method: 'DELETE',
       headers: {
