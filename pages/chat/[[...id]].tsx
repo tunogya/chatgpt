@@ -420,7 +420,7 @@ const Chat = ({user}: any) => {
               <MenuIcon/>
             </button>
             <h1
-              className="flex-1 text-center text-base font-normal">{isWaitHistory ? '...' : session?.title?.slice(0, 10)}</h1>
+              className="flex-1 text-center text-base font-normal"></h1>
             <button type="button" className="px-3"
                     onClick={async () => {
                       dispatch(clearSession());
@@ -520,15 +520,15 @@ const Chat = ({user}: any) => {
               <div
                 className="flex justify-center px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-gray-500 md:px-4 md:pt-3 md:pb-6 space-y-1">
                 <div className={'flex space-x-1.5'}>
-                  <a href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32068202000378"}
-                     target={'_blank'} rel={'noreferrer'}>
-                    <div className={"flex space-x-1.5"}>
-                      <Image src={"/images/beian.png"} width={16} height={16} alt={"备案图标"}/>
-                      {/*<p>*/}
-                      {/*  苏公网安备32068202000378号*/}
-                      {/*</p>*/}
-                    </div>
-                  </a>
+                  {/*<a href={"http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32068202000378"}*/}
+                  {/*   target={'_blank'} rel={'noreferrer'}>*/}
+                  {/*  /!*<div className={"flex space-x-1.5"}>*!/*/}
+                  {/*    /!*<Image src={"/images/beian.png"} width={16} height={16} alt={"备案图标"}/>*!/*/}
+                  {/*    /!*<p>*!/*/}
+                  {/*    /!*  苏公网安备32068202000378号*!/*/}
+                  {/*    /!*</p>*!/*/}
+                  {/*  /!*</div>*!/*/}
+                  {/*</a>*/}
                   <a href={"https://beian.miit.gov.cn"} target={'_blank'} rel={'noreferrer'}>
                     <div className={"flex space-x-1.5"}>
                       <p>
