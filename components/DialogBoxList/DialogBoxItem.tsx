@@ -106,12 +106,6 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
 
   useEffect(() => {
     handleBlocked()
-    const internal = setInterval(() => {
-      handleBlocked()
-    }, 3_000)
-    return () => {
-      clearInterval(internal)
-    }
   }, [handleBlocked])
 
   if (props.message === null || props.message.role === 'system') {
