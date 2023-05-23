@@ -142,6 +142,7 @@ export default withApiAuthRequired(async function handler(
     });
     await redisClient.set(redisKey, redisValue);
     await redisClient.expire(redisKey, 60 * 60 * 24 * 7); // 7 days
+    await redisClient.quit();
   } catch (e) {
     console.log(e);
   }
