@@ -3,7 +3,7 @@ import {FC, useCallback, useEffect, useMemo, useState} from "react";
 import LikeIcon from "@/components/SVG/LikeIcon";
 import UnLikeIcon from "@/components/SVG/UnLikeIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {clearSession, updateLastMessageId, setBlockComplete} from "@/store/session";
+import {updateLastMessageId, setBlockComplete} from "@/store/session";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -90,9 +90,6 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
     if (!blocked) {
       return
     }
-    router.push({
-      pathname: `/chat`,
-    })
     dispatch(setBlockComplete(true))
     fetch(`/api/conversation/${conversation_id}`, {
       method: 'DELETE',
