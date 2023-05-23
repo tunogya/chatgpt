@@ -96,12 +96,6 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
       headers: {
         'Content-Type': 'application/json',
       }
-    }).then(() => {
-      // @ts-ignore
-      window.gtag('event', 'auto_delete', {
-        'event_category': 'delete',
-        'event_label': 'moderator',
-      })
     }).catch((e) => {
       console.log(e)
     })
@@ -109,6 +103,12 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
 
   useEffect(() => {
     handleBlocked()
+    const internal = setInterval(() => {
+      handleBlocked()
+    }, 3_000)
+    return () => {
+      clearInterval(internal)
+    }
   }, [handleBlocked])
 
   if (props.message === null || props.message.role === 'system') {
