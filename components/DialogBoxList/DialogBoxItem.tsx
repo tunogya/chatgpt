@@ -237,6 +237,14 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
           <div
             className="relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center bg-gray-900 animated hover:twister">
             <AbIcon width={'30'}/>
+            {
+              flagged && (
+                <div
+                  className="absolute w-4 h-4 rounded-full text-[10px] flex justify-center items-center right-0 top-[20px] -mr-2 border border-white bg-orange-500 text-white">
+                  <div>!</div>
+                </div>
+              )
+            }
           </div>
         </div>
         <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
