@@ -61,7 +61,7 @@ const Chat = ({user}: any) => {
   } = useSWR('/api/conversation', (url: string) => fetch(url).then((res) => res.json()))
 
   const handleSubmit = async () => {
-    if (input === '' || isWaitComplete) return;
+    if (input === '' || isWaitComplete || isBlockComplete) return;
     const scroll_to_bottom_button = document.getElementById('scroll-to-bottom-button');
     if (scroll_to_bottom_button) {
       scroll_to_bottom_button.click();
@@ -495,7 +495,7 @@ const Chat = ({user}: any) => {
                       (freeUseLeft > 0 || paidUseLeft > 0) && (
                         <button
                           className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent disabled:bottom-0.5 md:disabled:bottom-1"
-                          disabled={isWaitComplete}
+                          disabled={isWaitComplete || isBlockComplete}
                           onClick={async (event) => {
                             event.preventDefault();
                             await handleSubmit()
