@@ -26,7 +26,6 @@ export default withApiAuthRequired(async function handler(
   const hash = crypto.createHash('sha256').update(input).digest('hex');
 
   try {
-    await redisClient.connect();
     const redisKey = `flag:${hash}`;
     const redisValue = await redisClient.get(redisKey);
     if (redisValue) {
@@ -143,7 +142,6 @@ export default withApiAuthRequired(async function handler(
     });
     await redisClient.set(redisKey, redisValue);
     await redisClient.expire(redisKey, 60 * 60 * 24 * 7); // 7 days
-    await redisClient.disconnect();
   } catch (e) {
     console.log(e);
   }
