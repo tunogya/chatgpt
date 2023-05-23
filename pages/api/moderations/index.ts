@@ -29,14 +29,13 @@ export default withApiAuthRequired(async function handler(
     const redisKey = `flag:${hash}`;
     await redisClient.connect();
     const redisValue = await redisClient.get(redisKey);
+    await redisClient.quit();
     if (redisValue) {
       flagged = JSON.parse(redisValue).flagged;
       blocked = JSON.parse(redisValue).blocked;
-      console.log("get from redis");
       res.status(200).json({flagged, blocked});
       return;
     }
-    await redisClient.quit();
   } catch (e) {
     console.log(e);
   }
