@@ -87,7 +87,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   }, [moderator])
 
   const handleBlocked = useCallback(() => {
-    if (!blocked) {
+    if (!blocked || !conversation_id) {
       return
     }
     dispatch(setBlockComplete(true))
