@@ -27,9 +27,7 @@ export default withApiAuthRequired(async function handler(
 
   try {
     const redisKey = `flag:${hash}`;
-    await redisClient.connect();
-    const redisValue = await redisClient.get(redisKey);
-    await redisClient.quit();
+    const redisValue = await redisClient.redisClient.get(redisKey);
     if (redisValue) {
       flagged = JSON.parse(redisValue).flagged;
       blocked = JSON.parse(redisValue).blocked;
@@ -141,10 +139,8 @@ export default withApiAuthRequired(async function handler(
       flagged,
       blocked
     });
-    await redisClient.connect();
-    await redisClient.set(redisKey, redisValue);
-    await redisClient.expire(redisKey, 60 * 60 * 24 * 7); // 7 days
-    await redisClient.quit();
+    await redisClient.redisClient.set(redisKey, redisValue);
+    await redisClient.redisClient.expire(redisKey, 60 * 60 * 24 * 7); // 7 days
   } catch (e) {
     console.log(e);
   }

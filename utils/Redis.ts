@@ -1,15 +1,19 @@
 import {createClient} from 'redis';
+class RedisClient {
+  redisClient;
+  constructor() {
+    this.redisClient = createClient({
+      url: 'redis://redis:6379',
+    })
+    this.redisClient.on("error", (err) => {
+      console.error(err);
+    });
+    this.redisClient.on("connect", () => {
+      console.log("Redis connected successfully");
+    });
+    this.redisClient.connect();
+  }
+}
 
-const redisClient = createClient({
-  url: 'redis://redis:6379',
-})
-
-redisClient.on('connect', () => {
-  console.log('Redis client connected');
-});
-
-redisClient.on('error', (err) => {
-  console.log('Something went wrong ' + err);
-});
-
+const redisClient = new RedisClient();
 export default redisClient;
