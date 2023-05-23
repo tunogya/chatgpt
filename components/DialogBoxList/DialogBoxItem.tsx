@@ -196,8 +196,13 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                       {flagged && (
                         <div
                           className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
-                          此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a
-                          className={'underline'}>提交您的反馈</a>。若多次违规，您的账号会被封禁。
+                          此内容可能违反我们的<a
+                          rel={'noreferrer'} className={'underline'} href={'/doc/term'}
+                          target={'_blank'}>内容政策</a>。如果您认为这是错误的，请<a
+                          rel={'noreferrer'}
+                          className={'underline'}
+                          href={'https://support.qq.com/products/566478'}
+                          target={'_blank'}>提交您的反馈</a>。若多次违规，您的账号会被封禁。
                         </div>
                       )}
                     </div>
@@ -263,8 +268,13 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
               {flagged && (
                 <div
                   className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
-                  此内容可能违反我们的<a className={'underline'}>内容政策</a>。如果您认为这是错误的，请<a
-                  className={'underline'}>提交您的反馈</a>。若多次违规，您的账号会被封禁。
+                  此内容可能违反我们的<a
+                  rel={'noreferrer'} className={'underline'} href={'/doc/term'}
+                  target={'_blank'}>内容政策</a>。如果您认为这是错误的，请<a
+                  rel={'noreferrer'}
+                  className={'underline'}
+                  href={'https://support.qq.com/products/566478'}
+                  target={'_blank'}>提交您的反馈</a>。若多次违规，您的账号会被封禁。
                 </div>
               )}
             </div>
