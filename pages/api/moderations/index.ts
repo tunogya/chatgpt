@@ -1,9 +1,16 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import aliyunClient from "@/utils/Aliyun";
-import redisClient from "@/utils/Redis";
 import * as crypto from "crypto";
+import {withApiAuthRequired} from "@auth0/nextjs-auth0";
+import RPCClient from "@alicloud/pop-core";
 
-export default async function handler(
+let client = new RPCClient({
+  accessKeyId: process.env.ALIYUN_ACCESS_ID || '',
+  accessKeySecret: process.env.ALIYUN_ACCESS_SECRET || '',
+  endpoint: "https://green-cip.cn-shanghai.aliyuncs.com",
+  apiVersion: '2022-03-02'
+});
+
+export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -16,29 +23,42 @@ export default async function handler(
   }
   let flagged = false, blocked = false;
   const hash = crypto.createHash('sha256').update(input).digest('hex');
+  // try {
+  //   const redisKey = `flag:${hash}`;
+  //   const redisValue = await redisClient.get(redisKey);
+  //   if (redisValue) {
+  //     flagged = JSON.parse(redisValue).flagged;
+  //     blocked = JSON.parse(redisValue).blocked;
+  //     console.log("get from redis");
+  //     res.status(200).json({flagged, blocked});
+  //     return;
+  //   }
+  // } catch (e) {
+  //   console.log(e);
+  // }
   try {
-    const redisKey = `flag:${hash}`;
-    const redisValue = await redisClient.get(redisKey);
-    if (redisValue) {
-      flagged = JSON.parse(redisValue).flagged;
-      blocked = JSON.parse(redisValue).blocked;
-      console.log("get from redis");
-      res.status(200).json({flagged, blocked});
-      return;
-    }
-  } catch (e) {
-    console.log(e);
-  }
-  try {
-    const response = await aliyunClient.request('TextModeration', {
+    const params = {
       "Service": "ai_art_detection",
       "ServiceParameters": JSON.stringify({
         "content": input,
       })
-    }, {
+    }
+    const requestOption = {
       method: 'POST',
       formatParams: false,
-    })
+    }
+    let response = await client.request('TextModeration', params, requestOption)
+    // @ts-ignore
+    if (response.Code === 500) {
+      console.log("switch to beijing")
+      client = new RPCClient({
+        accessKeyId: process.env.ALIYUN_ACCESS_ID || '',
+        accessKeySecret: process.env.ALIYUN_ACCESS_SECRET || '',
+        endpoint: "https://green-cip.cn-beijing.aliyuncs.com",
+        apiVersion: '2022-03-02'
+      });
+      response = await client.request('TextModeration', params, requestOption)
+    }
     // @ts-ignore
     const labels = response?.Data?.labels || undefined;
     switch (labels) {
@@ -112,20 +132,20 @@ export default async function handler(
   }
 
   // save result to redis
-  try {
-    const redisKey = `flag:${hash}`;
-    const redisValue = JSON.stringify({
-      flagged,
-      blocked
-    });
-    await redisClient.set(redisKey, redisValue);
-    await redisClient.expire(redisKey, 60 * 60 * 24 * 7); // 7 days
-  } catch (e) {
-    console.log(e);
-  }
+  // try {
+  //   const redisKey = `flag:${hash}`;
+  //   const redisValue = JSON.stringify({
+  //     flagged,
+  //     blocked
+  //   });
+  //   await redisClient.set(redisKey, redisValue);
+  //   await redisClient.expire(redisKey, 60 * 60 * 24 * 7); // 7 days
+  // } catch (e) {
+  //   console.log(e);
+  // }
   res.status(200).json({
     service: 'ai_art_detection',
     flagged,
     blocked
   });
-}
+});
