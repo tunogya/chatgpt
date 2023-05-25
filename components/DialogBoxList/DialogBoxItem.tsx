@@ -168,7 +168,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                 <>
                   <div className="flex flex-grow flex-col gap-3">
                     <div
-                      className={`min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap ${flagged ? 'text-orange-500' : ''}`}>
+                      className={`min-h-[20px] flex flex-col items-start gap-4 ${flagged ? 'text-orange-500' : ''}`}>
                       {
                         blocked ? (
                           <div/>
@@ -243,7 +243,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
         </div>
         <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
           <div className="flex flex-grow flex-col gap-3">
-            <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
+            <div className="min-h-[20px] flex flex-col items-start gap-4">
               {
                 blocked ? (
                   <div/>
