@@ -15,5 +15,5 @@ class Redis {
   }
 }
 
-const redisClient = new Redis("redis://redis:6379");
+const redisClient = new Redis( process.env.REDIS_URL || "redis://redis:6379");
 export default redisClient;

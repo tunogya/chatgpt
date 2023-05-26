@@ -15,6 +15,7 @@ const nextConfig = {
     AUTH0_ADMIN_CLIENT_SECRET: process.env.AUTH0_ADMIN_CLIENT_SECRET,
     ALIYUN_ACCESS_ID: process.env.ALIYUN_ACCESS_ID,
     ALIYUN_ACCESS_SECRET: process.env.ALIYUN_ACCESS_SECRET,
+    REDIS_URL: process.env.REDIS_URL,
   },
   images: {
     remotePatterns: [
