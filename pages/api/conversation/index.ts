@@ -225,9 +225,7 @@ export default withApiAuthRequired(async function handler(
           .filter((line: string) => line !== '')
           .map((line: string) => line.trim().replace('data: ', ''));
         for (const line of lines) {
-          if (line === '[DONE]') {
-            console.log('[DONE]')
-          } else {
+          if (line !== '[DONE]') {
             try {
               const data = JSON.parse(line);
               if (data.choices?.[0].delta?.role) {
@@ -324,7 +322,7 @@ export default withApiAuthRequired(async function handler(
         return;
       });
       req.socket.on('close', () => {
-        console.log('[DONE]')
+        console.log('[DONE]', new Date().toISOString())
         res.write('data: [DONE]\n\n');
         abortController.abort();
         if (full_callback_message.content.parts[0] === '') {
