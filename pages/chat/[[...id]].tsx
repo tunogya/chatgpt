@@ -44,7 +44,6 @@ const Chat = ({user}: any) => {
   const session = useSelector((state: any) => state.session.session);
   const theme = useSelector((state: any) => state.ui.theme);
   const inputRef = useRef(null);
-  const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory)
   const [input, setInput] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [isOpenSetting, setIsOpenSetting] = useState(false);
@@ -203,8 +202,6 @@ const Chat = ({user}: any) => {
 
   const {
     data: dataOfMetadata,
-    isLoading: isLoadingOfMetadata,
-    mutate: mutateMetadata
   } = useSWR('/api/app/metadata', (url: string) => fetch(url).then((res) => res.json()))
 
   const paidUseLeft = useMemo(() => {

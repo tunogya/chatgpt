@@ -280,6 +280,12 @@ export default withApiAuthRequired(async function handler(
         }
       });
       stream.on('end', async () => {
+        if (full_callback_message.content.parts[0] === '') {
+          res.write('data: [DONE]\n\n');
+          res.end();
+          return;
+        }
+
         // add ai callback message to conversation and add to user children
         conversation = {
           ...conversation,
@@ -313,11 +319,18 @@ export default withApiAuthRequired(async function handler(
         res.end();
       });
       stream.on('error', (error: any) => {
+        console.log(error);
         res.end(`data: ${JSON.stringify({error})}\n\n`);
+        return;
       });
       req.socket.on('close', () => {
         console.log('[DONE]')
         abortController.abort();
+        if (full_callback_message.content.parts[0] === '') {
+          res.write('data: [DONE]\n\n');
+          res.end();
+          return;
+        }
         conversation = {
           ...conversation,
           mapping: {
@@ -353,6 +366,7 @@ export default withApiAuthRequired(async function handler(
       console.log(e)
       abortController.abort();
       res.status(500).json({error: "Error"})
+      return
     }
   } else if (req.method === 'DELETE') {
     const ids = req.body?.ids || [];
