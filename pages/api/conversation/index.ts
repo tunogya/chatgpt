@@ -282,10 +282,9 @@ export default withApiAuthRequired(async function handler(
       stream.on('end', async () => {
         if (full_callback_message.content.parts[0] === '') {
           res.write('data: [DONE]\n\n');
-          res.end();
+          res.status(200).end();
           return;
         }
-
         // add ai callback message to conversation and add to user children
         conversation = {
           ...conversation,
@@ -316,19 +315,21 @@ export default withApiAuthRequired(async function handler(
           }
         }));
         res.write('data: [DONE]\n\n');
-        res.end();
+        res.status(200).end();
       });
       stream.on('error', (error: any) => {
         console.log(error);
-        res.end(`data: ${JSON.stringify({error})}\n\n`);
+        res.write('data: [DONE]\n\n');
+        res.status(500).end();
         return;
       });
       req.socket.on('close', () => {
         console.log('[DONE]')
+        res.write('data: [DONE]\n\n');
         abortController.abort();
         if (full_callback_message.content.parts[0] === '') {
           res.write('data: [DONE]\n\n');
-          res.end();
+          res.status(501).end();
           return;
         }
         conversation = {
@@ -359,8 +360,7 @@ export default withApiAuthRequired(async function handler(
             ...conversation,
           }
         }));
-        res.write('data: [DONE]\n\n');
-        res.end();
+        res.status(200).end();
       })
     } catch (e) {
       console.log(e)
