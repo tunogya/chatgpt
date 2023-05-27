@@ -181,6 +181,7 @@ export default withApiAuthRequired(async function handler(
     ))
     const abortController = new AbortController();
     try {
+      // https://platform.openai.com/docs/api-reference/chat/create
       const result = await fetch('https://api.openai.com/v1/chat/completions', {
         headers: {
           'Content-Type': 'application/json',
@@ -190,12 +191,8 @@ export default withApiAuthRequired(async function handler(
         body: JSON.stringify({
           model,
           messages: full_old_messages,
-          temperature: 1,
-          top_p: 1,
-          frequency_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
-          presence_penalty: 0, // Number between -2.0 and 2.0. The value of 0.0 is the default.
+          top_p: 0.4, // Number between 0 and 1 that adjusts the "creativity" of the generated responses.
           stream: true, // false is default
-          n: 1,
           user: user_id,
         }),
         signal: abortController.signal,
