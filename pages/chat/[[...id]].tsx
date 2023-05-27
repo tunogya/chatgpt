@@ -298,7 +298,7 @@ const Chat = ({user}: any) => {
               }}
             >
               <div
-                className="flex w-full flex-row justify-between">
+                className="flex w-full flex-row justify-between select-none">
                 <div className="gold-new-button flex items-center gap-3">
                   <UserIcon/>
                   付费会员卡
