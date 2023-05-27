@@ -17,10 +17,12 @@ export default withApiAuthRequired(async function handler(
 ) {
   if (req.method !== 'POST') {
     res.status(405).json({error: 'Method Not Allowed'});
+    return;
   }
   const {input} = req.body;
   if (!input) {
     res.status(400).json({error: 'Input is required'});
+    return;
   }
   let flagged = false, blocked = false;
   const hash = crypto.createHash('sha256').update(input).digest('hex');
