@@ -85,7 +85,7 @@ const Redeem = ({user}: any) => {
   }, [cdKeyData?.quantity])
 
   return (
-    <div className={"overflow-hidden w-full h-full relative flex z-0"}>
+    <div className={"overflow-scroll w-full h-full relative flex z-0"}>
       <div className={"flex w-full h-full fixed z-0 flex-shrink-0 overflow-x-hidden"}>
         <div className={"w-full"}/>
         <div className={"w-full shadow-xl hidden md:inline-block"}/>
