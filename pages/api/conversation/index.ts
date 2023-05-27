@@ -65,6 +65,7 @@ export default withApiAuthRequired(async function handler(
       mapping: {},
     }
     if (!conversation.id) {
+      // This is a new conversation, create a new conversation id use uuidv4.
       conversation = {
         ...conversation,
         id: `CONVERSATION#${uid.getUniqueID().toString()}`,
@@ -72,6 +73,7 @@ export default withApiAuthRequired(async function handler(
         created: Math.floor(Date.now() / 1000),
       }
     } else {
+      // Get the old conversation. We can cache the data in the future.
       const old_conversation = await ddbDocClient.send(new GetCommand({
         TableName: 'wizardingpay',
         Key: {
@@ -159,20 +161,29 @@ export default withApiAuthRequired(async function handler(
     // only keep last 4 messages, and keep the last 2000 tokens
     full_old_messages.slice(-4);
     let tokens_count = 0;
+    // https://platform.openai.com/docs/quickstart/pricing
+    // GPT-3.5 Turbo has a limit of 4096 tokens per request (both prompt and completion).
+    // For safety, we set the limit to 2000 tokens of prompt(previously generated messages)
+    // And then, we can have 4096 - 2000 = 2096 tokens for completion.
     const limit = 2000 - encode(messages[0].content.parts[0]).length;
     for (let i = full_old_messages.length - 1; i >= 0; i--) {
+      // To find more previous messages, we need to encode the message to get the token count.
+      // Make sure total tokens count is less than limit.
       tokens_count += encode(full_old_messages[i].content).length;
       if (tokens_count > limit) {
         full_old_messages.splice(0, i);
         break;
       }
     }
-    if (full_old_messages.length === 0 || full_old_messages[0].role !== 'system') {
-      full_old_messages.splice(0, 0, {
-        role: 'system',
-        content: `You are a friendly AI assistant.`,
-      })
-    }
+
+    // // add system message to full_messages
+    // if (full_old_messages.length === 0 || full_old_messages[0].role !== 'system') {
+    //   full_old_messages.splice(0, 0, {
+    //     role: 'system',
+    //     content: `You are a friendly AI assistant.`,
+    //   })
+    // }
+
     // put current messages to full_messages
     full_old_messages.push(...messages.map((message: any) => ({
         role: message.role,

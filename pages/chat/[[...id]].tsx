@@ -677,7 +677,8 @@ const Chat = ({user}: any) => {
                                   </button>
                                 </div>
                                 <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
-                                  该功能即将上线
+                                  为了保护您的隐私，聊天记录默认在创建后的365天后自动删除。<br/>
+                                  我们将尽快提供导出功能供您安全的本地存储。
                                 </div>
                               </div>
                             </div>
