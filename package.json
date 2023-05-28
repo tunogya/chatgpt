@@ -7,11 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "invalidate": "aws cloudfront create-invalidation --distribution-id E1OJS4HKGAM28B --paths '/*'",
-    "docker-login-aws": "aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 913870644571.dkr.ecr.ap-northeast-1.amazonaws.com",
-    "docker-build": "docker build -t chatgpt .",
-    "docker-tag-aws": "docker tag chatgpt:latest 913870644571.dkr.ecr.ap-northeast-1.amazonaws.com/chatgpt:latest",
-    "docker-push-aws": "docker push 913870644571.dkr.ecr.ap-northeast-1.amazonaws.com/chatgpt:latest"
+    "invalidate": "aws cloudfront create-invalidation --distribution-id E1OJS4HKGAM28B --paths '/*'"
   },
   "dependencies": {
     "@alicloud/pop-core": "^1.7.13",
