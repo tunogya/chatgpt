@@ -26,15 +26,8 @@ To learn more about this project, take a look at the following resources:
 
 ## Deployments
 
-You can deploy this project by PM2. Vercel is not supported because of the Server Sent Event.
+You can deploy this project by Docker or AWS Elastic Beanstalk.
 
 ```bash
-npm install -g pm2
-npm install
-npm run build
-pm2 start ecosystem.config.js
+docker-compose up -d --build
 ```
-
-## Environment
-
-Node.js 16.18.1
