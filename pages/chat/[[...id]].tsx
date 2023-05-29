@@ -520,12 +520,12 @@ const Chat = ({user}: any) => {
                   <a href={"https://beian.miit.gov.cn"} target={'_blank'} rel={'noreferrer'}>
                     <div className={"flex space-x-1.5"}>
                       <p>
-                        © {new Date().getFullYear() }, Abandon, Inc.
+                        © {new Date().getFullYear() }, Abandon Inc.
                       </p>
                     </div>
                   </a>
                   <div className={"flex space-x-1.5"}>
-                    由 OpenAI 提供技术支持.
+                    由 OpenAI 提供技术支持。
                   </div>
                 </div>
               </div>
