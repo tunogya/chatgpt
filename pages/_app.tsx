@@ -48,10 +48,10 @@ export default function App({Component, pageProps}: AppProps) {
       <AutoTheme />
       <PersistGate persistor={persistor} loading={<div className={'pt-4'}><LoadingIcon/></div>}>
         <Head>
-          <title>ChatGPT | Abandon.Chat</title>
+          <title>ChatGPT</title>
           <meta
             name='description'
-            content='国内可用的ChatGPT，立即免费使用。由OpenAI提供技术支持。'
+            content='所有国家都可使用的ChatGPT，立即免费使用。由OpenAI提供技术支持。'
           />
           <meta name='viewport'
                 content='width=device-width, initial-scale=1, shrink-to-fit=no,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no'/>
@@ -63,9 +63,9 @@ export default function App({Component, pageProps}: AppProps) {
           <meta name={'format-detection'} content={'email=no'}/>
           <meta name='theme-color' content='#202123'/>
           <meta property='og:image' content='/apple-touch-icon.png'/>
-          <meta property='og:title' content='ChatGPT | Abandon.Chat'/>
+          <meta property='og:title' content='ChatGPT'/>
           <meta property='og:description'
-                content='国内可用的ChatGPT，立即免费使用。由OpenAI提供技术支持。'/>
+                content='所有国家都可使用的ChatGPT，立即免费使用。由OpenAI提供技术支持。'/>
           <meta property='og:url' content='https://www.abandon.chat'/>
           <link rel="manifest" href={"manifest.json"}/>
           <link rel='icon' href='/favicon.ico'/>

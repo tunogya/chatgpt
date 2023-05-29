@@ -1,5 +1,5 @@
 import {withPageAuthRequired} from '@auth0/nextjs-auth0';
-import {setTheme} from "@/store/ui";
+import {setArea, setTheme} from "@/store/ui";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -43,6 +43,7 @@ const Chat = ({user}: any) => {
   const isBlockComplete = useSelector((state: any) => state.session.isBlockComplete);
   const session = useSelector((state: any) => state.session.session);
   const theme = useSelector((state: any) => state.ui.theme);
+  const area = useSelector((state: any) => state.ui.area);
   const inputRef = useRef(null);
   const [input, setInput] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -517,11 +518,26 @@ const Chat = ({user}: any) => {
               <div
                 className="flex justify-center px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-gray-500 md:px-4 md:pt-3 md:pb-6 space-y-1">
                 <div className={'flex space-x-1.5'}>
-                  <div className={"flex space-x-1.5"}>
-                    <p>
-                      © {new Date().getFullYear() }, Abandon Inc.
-                    </p>
-                  </div>
+                  {
+                    area === 'china' ? (
+                      <>
+                        <a href={"https://beian.miit.gov.cn"} target={'_blank'} rel={'noreferrer'}>
+                          <div className={"flex space-x-1.5"}>
+                            <p>
+                              沪ICP备2023000778号-2
+                            </p>
+                          </div>
+                        </a>
+                        <div>|</div>
+                      </>
+                    ) : (
+                      <div className={"flex space-x-1.5"}>
+                        <p>
+                          © {new Date().getFullYear() }, Abandon Inc.
+                        </p>
+                      </div>
+                    )
+                  }
                   <div className={"flex space-x-1.5"}>
                     由 OpenAI 提供技术支持。
                   </div>
@@ -617,6 +633,38 @@ const Chat = ({user}: any) => {
                                   <option value="dark">暗黑模式</option>
                                   <option value="light">浅色模式</option>
                                 </select></div>
+                            </div>
+                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                              <div className="flex items-center justify-between">
+                                <div>区域和限制</div>
+                                <select
+                                  className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20"
+                                  value={area}
+                                  onChange={(e) => {
+                                    dispatch(setArea(e.target.value))
+                                    //   @ts-ignore
+                                    window.gtag('event', 'custom_button_click', {
+                                      'event_category': '按钮',
+                                      'event_label': '区域和限制',
+                                      'value': e.target.value
+                                    })
+                                  }}
+                                >
+                                  <option value="global">全球地区</option>
+                                  <option value="china">中国地区</option>
+                                </select>
+                              </div>
+                              {
+                                area === 'china' ? (
+                                  <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
+                                    如果您在中国大陆地区使用本应用，您需要遵守中国大陆地区的法律法规。
+                                  </div>
+                                ) : (
+                                  <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
+                                    请遵循您所在地区的法律法规。
+                                  </div>
+                                )
+                              }
                             </div>
                             <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
                               <div className="flex items-center justify-between">

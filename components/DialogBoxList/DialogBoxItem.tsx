@@ -39,6 +39,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const {user} = useUser();
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete)
+  const area = useSelector((state: any) => state.ui.area);
   const [editMode, setEditMode] = useState(false);
   const [blocked, setBlocked] = useState(false);
   const [flagged, setFlagged] = useState(false);
@@ -65,7 +66,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          input: input.slice(0, 500)
+          input: input.slice(0, 500),
+          area,
         })
       });
       if (res.status === 200) {
