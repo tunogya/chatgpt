@@ -51,7 +51,7 @@ export default function App({Component, pageProps}: AppProps) {
           <title>ChatGPT</title>
           <meta
             name='description'
-            content='所有国家都可使用的ChatGPT，立即免费使用。由OpenAI提供技术支持。'
+            content='全球通用的ChatGPT工具，超低月费，性能稳定不封号，生产效率直翻倍。限时免费试用3天，助你早日实现AI自由。'
           />
           <meta name='viewport'
                 content='width=device-width, initial-scale=1, shrink-to-fit=no,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no'/>
@@ -65,7 +65,7 @@ export default function App({Component, pageProps}: AppProps) {
           <meta property='og:image' content='/apple-touch-icon.png'/>
           <meta property='og:title' content='ChatGPT'/>
           <meta property='og:description'
-                content='所有国家都可使用的ChatGPT，立即免费使用。由OpenAI提供技术支持。'/>
+                content='全球通用的ChatGPT工具，超低月费，性能稳定不封号，生产效率直翻倍。限时免费试用3天，助你早日实现AI自由。'/>
           <meta property='og:url' content='https://www.abandon.chat'/>
           <link rel="manifest" href={"manifest.json"}/>
           <link rel='icon' href='/favicon.ico'/>
