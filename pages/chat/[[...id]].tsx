@@ -813,10 +813,6 @@ const Chat = ({user}: any) => {
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>有效期内可用，但高峰期可能会受影响</div>
-                              </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
-                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>尽力在最短的时间内回复</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
@@ -858,10 +854,6 @@ const Chat = ({user}: any) => {
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
                                 <div>云同步的会话记录，提供企业级的可用和冗余</div>
-                              </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
-                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>随时畅玩，高峰期仍然高可用</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
