@@ -16,6 +16,7 @@ const nextConfig = {
     ALIYUN_ACCESS_ID: process.env.ALIYUN_ACCESS_ID,
     ALIYUN_ACCESS_SECRET: process.env.ALIYUN_ACCESS_SECRET,
     REDIS_URL: process.env.REDIS_URL,
+    NOTION_TOKEN: process.env.NOTION_TOKEN,
   },
   images: {
     remotePatterns: [
