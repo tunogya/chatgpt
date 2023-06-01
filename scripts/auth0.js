@@ -1,69 +1,65 @@
-const {DynamoDBClient} = require('@aws-sdk/client-dynamodb');
-const {DynamoDBDocumentClient, BatchWriteCommand} = require('@aws-sdk/lib-dynamodb');
-const fetch = require('node-fetch');
-const dotenv = require('dotenv');
+const fetch = require("node-fetch");
 
-dotenv.config();
-
-const ddbClient = new DynamoDBClient({
-  region: 'ap-northeast-1'
-});
-
-const ddbDocClient = DynamoDBDocumentClient.from(ddbClient, {
-  marshallOptions: {
-    convertEmptyValues: true,
-    removeUndefinedValues: true,
-  },
-});
-
-const getBearerToken = async () => {
-  const res = await fetch('https://abandon.jp.auth0.com/oauth/token', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      client_id: process.env.AUTH0_ADMIN_CLIENT_ID,
-      client_secret: process.env.AUTH0_ADMIN_CLIENT_SECRET,
-      audience: 'https://abandon.jp.auth0.com/api/v2/',
-      grant_type: 'client_credentials',
-    }),
-  })
-  const data = await res.json()
-  return data.access_token
-}
-
-const getUsers = async (key) => {
-  const res = await fetch(`https://abandon.jp.auth0.com/api/v2/users?page=4`, {
-    headers: {
-      'Authorization': 'Bearer ' + key,
+class Auth0Manager {
+  constructor() {
+    this.auth0_access_token = null;
+  }
+  
+  async getAuth0BearerToken() {
+    const res = await fetch('https://abandon.jp.auth0.com/oauth/token', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        client_id: process.env.AUTH0_ADMIN_CLIENT_ID,
+        client_secret: process.env.AUTH0_ADMIN_CLIENT_SECRET,
+        audience: 'https://abandon.jp.auth0.com/api/v2/',
+        grant_type: 'client_credentials',
+      }),
+    })
+    const data = await res.json()
+    this.auth0_access_token = data.access_token
+  }
+  
+  
+  /*
+    Users from Auth0 have the following properties:
+      @param {string} created_at
+      @param {string} email
+      @param {boolean} email_verified
+      @param {string} name
+      @param {string} nickname
+      @param {string} picture
+      @param {string} updated_at
+      @param {string} user_id
+      @param {string} username
+      @param {string} last_login
+      @param {string} last_ip
+      @param {number} logins_count
+   */
+  async getUsersFromAuth0() {
+    if (!this.auth0_access_token) {
+      await this.getAuth0BearerToken();
     }
-  })
-  return await res.json()
+    let users = [];
+    let page = 0;
+    while (true) {
+      const res = await fetch(`https://abandon.jp.auth0.com/api/v2/users?page=${page}&per_page=100`, {
+        headers: {
+          'Authorization': 'Bearer ' + this.auth0_access_token,
+        }
+      })
+      const data = await res.json()
+      if (data.length === 0) {
+        break;
+      }
+      page++;
+      users = users.concat(data);
+    }
+    console.log(users.length, 'users fetched from Auth0')
+    return users;
+  }
 }
 
-const main = async () => {
-  const key = await getBearerToken()
-  const users = await getUsers(key)
-  console.log(users.length)
-  //   {
-  //     created_at: '2023-05-25T09:16:22.398Z',
-  //     email: '870058418@qq.com',
-  //     email_verified: false,
-  //     identities: [ [Object] ],
-  //     name: '870058418@qq.com',
-  //     nickname: '870058418',
-  //     picture: 'https://s.gravatar.com/avatar/ce46a6538207dacded567a00fceeeecc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2F87.png',
-  //     updated_at: '2023-05-25T09:16:22.398Z',
-  //     user_id: 'auth0|646f27664496e4f3de1bb2ee',
-  //     username: 'angelawsj',
-  //     last_login: '2023-05-25T09:16:22.396Z',
-  //     last_ip: '2409:8920:4c11:90f1:8db5:13bc:cfb:cf13',
-  //     logins_count: 1
-  //   }
-  
-  
-  
-}
-
-main()
+export default Auth0Manager;
