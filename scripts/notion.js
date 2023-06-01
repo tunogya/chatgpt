@@ -320,9 +320,9 @@ class NotionManager {
               {
                 type: 'text',
                 text: {
-                  content: cdKey?.user_id || '',
+                  content: cdKey?.sub || '',
                 },
-                plain_text: cdKey?.user_id || '',
+                plain_text: cdKey?.sub || '',
               }
             ]
           },
@@ -357,9 +357,9 @@ class NotionManager {
               {
                 type: 'text',
                 text: {
-                  content: cdKey?.user_id || '',
+                  content: cdKey?.sub || '',
                 },
-                plain_text: cdKey?.user_id || '',
+                plain_text: cdKey?.sub || '',
               }
             ]
           },
