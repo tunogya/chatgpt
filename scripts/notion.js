@@ -137,14 +137,6 @@ class NotionManager {
       await this.notion.pages.update({
         page_id: page_id,
         properties: {
-          // TODO: update Date format
-          'Created At': {
-            id: '%5Dogk',
-            type: 'date',
-            date: {
-              start: user.created_at.split('.')[0] + 'Z',
-            }
-          },
           'Email Verified': {
             id: 'Q%3F%3Ed',
             type: 'checkbox',
@@ -181,6 +173,49 @@ class NotionManager {
     } catch (e) {
       console.log("Error! Entry not updated:", user.user_id)
     }
+  }
+  
+  async updateCRMUserMetadata(page_id, freeExpiration, paidExpiration){
+    try {
+      await this.notion.pages.update({
+        page_id: page_id,
+        properties: {
+          'Free Expiration': {
+            id: 'EmTC',
+            type: 'date',
+            date: {
+              start: freeExpiration.split('.')[0] + 'Z',
+            },
+          },
+          'Paid Expiration': {
+            id: 'Pdqy',
+            type: 'date',
+            date: {
+              start: paidExpiration.split('.')[0] + 'Z',
+            },
+          }
+        }
+      })
+    } catch (e) {
+      console.log("update error")
+    }
+  }
+  
+  async getAllCRMUsers() {
+    let users = [];
+    let next_cursor = undefined;
+    while (true) {
+      const res = await this.notion.databases.query({
+        database_id: '77414699b6864b6986c53c18457731d3',
+        start_cursor: next_cursor,
+      });
+      users = users.concat(res.results);
+      if (!res.has_more) {
+        break;
+      }
+      next_cursor = res.next_cursor;
+    }
+    return users;
   }
 }
 
