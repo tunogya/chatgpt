@@ -20,10 +20,8 @@ class Abot {
     });
     this.notion = new Client({
       auth: process.env.NOTION_TOKEN,
-      logLevel: LogLevel.DEBUG,
     })
     this.getBearerToken();
-    this.database_id = '77414699b6864b6986c53c18457731d3'
   }
   
   async getBearerToken() {
@@ -43,17 +41,27 @@ class Abot {
     this.auth0_access_token = data.access_token
   }
   
-  async getUsers() {
+  async getUsersFromAuth0() {
     if (!this.auth0_access_token) {
       await this.getBearerToken();
     }
-    // TODO
-    const res = await fetch(`https://abandon.jp.auth0.com/api/v2/users?page=0&per_page=100`, {
-      headers: {
-        'Authorization': 'Bearer ' + this.auth0_access_token,
+    let users = [];
+    let page = 0;
+    while (true) {
+      const res = await fetch(`https://abandon.jp.auth0.com/api/v2/users?page=${page}&per_page=100`, {
+        headers: {
+          'Authorization': 'Bearer ' + this.auth0_access_token,
+        }
+      })
+      const data = await res.json()
+      if (data.length === 0) {
+        break;
       }
-    })
-    return await res.json()
+      page++;
+      users = users.concat(data);
+    }
+    console.log(users.length, 'users fetched from Auth0')
+    return users;
     // {
     //     created_at: '2023-05-16T08:39:09.980Z',
     //     email: 'hr@cision.cc',
@@ -71,12 +79,19 @@ class Abot {
     //   },
   }
   
-  async postToCRM(user) {
+  // new user to
+  async postUserToCRM(user) {
     try {
       await this.notion.pages.create({
         parent: {
           type: "database_id",
-          database_id: this.database_id,
+          database_id: '77414699b6864b6986c53c18457731d3',
+        },
+        icon: {
+          type: 'external',
+          external: {
+            url: user.picture,
+          }
         },
         properties: {
           'Created At': {
@@ -124,11 +139,6 @@ class Abot {
             id: 'Q%3F%3Ed',
             type: 'checkbox',
             checkbox: user.email_verified,
-          },
-          Picture: {
-            id: 'J%3AIm',
-            type: 'url',
-            url: user.picture,
           },
           'Last Login': {
             id: '%5Dx%3F~',
@@ -178,8 +188,8 @@ class Abot {
 }
 
 const abot = new Abot();
-abot.getUsers().then(async (users) => {
+abot.getUsersFromAuth0().then(async (users) => {
   for (const user of users) {
-    await abot.postToCRM(user);
+    await abot.postUserToCRM(user);
   }
 });
