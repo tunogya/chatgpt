@@ -24,8 +24,7 @@ class NotionManager {
             id: '%5Dogk',
             type: 'date',
             date: {
-              // created_at is in ISO 8601 format, we only need the date and hour, minute, and timezone. we do not need the seconds.
-              start: user.created_at.split('T')[0],
+              start: user.created_at.split('.')[0] + 'Z',
               end: null,
               time_zone: null,
             }
@@ -71,7 +70,7 @@ class NotionManager {
             id: '%5Dx%3F~',
             type: 'date',
             date: {
-              start: user.last_login.split('T')[0],
+              start: user.last_login.split('.')[0] + 'Z',
               end: null,
               time_zone: null,
             }
