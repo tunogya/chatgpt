@@ -1,5 +1,5 @@
 const {DynamoDBClient} = require("@aws-sdk/client-dynamodb");
-const {DynamoDBDocumentClient, GetCommand, UpdateCommand} = require("@aws-sdk/lib-dynamodb");
+const {DynamoDBDocumentClient, GetCommand, UpdateCommand, QueryCommand} = require("@aws-sdk/lib-dynamodb");
 
 class DynamodbManager {
   constructor() {
@@ -43,6 +43,29 @@ class DynamodbManager {
     } catch (e) {
       console.log('update page_id in ddb error', user_id)
     }
+  }
+  
+  async getAllCDKeyFromDDB() {
+    let cdkeys = [];
+    let LastEvaluatedKey = undefined;
+    while (true) {
+      const res = await this.ddbDocClient.send(new QueryCommand({
+        TableName: 'wizardingpay',
+        KeyConditionExpression: 'PK = :pk',
+        ExpressionAttributeValues: {
+          ':pk': 'CHATGPT#CDKEY',
+        },
+        Limit: 200,
+        ExclusiveStartKey: LastEvaluatedKey,
+      }));
+      cdkeys = cdkeys.concat(res.Items);
+      if (!res.LastEvaluatedKey) {
+        break;
+      } else {
+        LastEvaluatedKey = res.LastEvaluatedKey;
+      }
+    }
+    return cdkeys;
   }
 }
 

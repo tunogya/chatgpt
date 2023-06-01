@@ -17,13 +17,13 @@ class Abot {
   async syncAuth0UserDataToNotion() {
     const users = await this.auth0.getUsersFromAuth0();
     for (const user of users) {
-      const notionUser = await this.notion.getUserInfoFromCRM(user);
+      const notionUser = await this.notion.getUserInfoFromNotion(user);
       if (notionUser) {
         console.log('update user info in notion', user.email);
-        await this.notion.updateCRMUserInfoByAuth0Data(notionUser.id, user);
+        await this.notion.updateNotionUserInfoFromAuth0(notionUser.id, user);
       } else {
         console.log('insert user to notion', user.email);
-        await this.notion.postCRMUserInfoByAuth0Data(user);
+        await this.notion.postCRMUserInfoFromAuth0Data(user);
       }
     }
   }
@@ -57,9 +57,24 @@ class Abot {
       }
     }
   }
+  
+  async syncCDKeysToNotion() {
+    const cdkeys = await this.ddb.getAllCDKeyFromDDB();
+    console.log(cdkeys.length, 'cdkeys fetched from dynamodb');
+    for (const cdkey of cdkeys) {
+      const page = await this.notion.getCDKeyFromNotion(cdkey);
+      if (!page) {
+        console.log('insert cdkey to notion', cdkey.SK);
+        await this.notion.postCDKeysByDDB(cdkey);
+      } else {
+        console.log('update cdkey in notion', cdkey.SK);
+        await this.notion.updateCDKeysByDDB(page.id, cdkey);
+      }
+    }
+  }
 }
 
 (async () => {
   const abot = new Abot();
-  await abot.syncMetadataToNotion();
+  await abot.syncCDKeysToNotion();
 })();
