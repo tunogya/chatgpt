@@ -15,4 +15,4 @@ class DynamodbManager {
   }
 }
 
-export default DynamodbManager;
+module.exports = DynamodbManager;

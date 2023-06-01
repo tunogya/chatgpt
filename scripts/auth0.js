@@ -62,4 +62,4 @@ class Auth0Manager {
   }
 }
 
-export default Auth0Manager;
+module.exports = Auth0Manager;
