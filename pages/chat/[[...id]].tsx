@@ -456,7 +456,7 @@ const Chat = ({user}: any) => {
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
                           disabled={!paidUseLeft}
                           rows={1} ref={inputRef}
-                          placeholder={paidUseLeft > 0 ? '' : '如果你的试用结束，请获取会员卡以继续'}
+                          placeholder={paidUseLeft > 0 ? 'Message' : '如您试用结束，请获取会员卡以继续'}
                           onKeyDown={async (e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                               if (e.nativeEvent.isComposing) return;
