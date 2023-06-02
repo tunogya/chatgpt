@@ -30,7 +30,6 @@ import RightIcon from "@/components/SVG/RightIcon";
 import SettingIcon from "@/components/SVG/SettingIcon";
 import DataIcon from "@/components/SVG/DataIcon";
 import OptionIcon from "@/components/SVG/OptionIcon";
-import copy from "copy-to-clipboard";
 import StopIcon from "@/components/SVG/StopIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
 // import ReIcon from "@/components/SVG/ReIcon";
@@ -215,17 +214,6 @@ const Chat = ({user}: any) => {
     }
     return time
   }, [dataOfMetadata?.paidUseTTL])
-
-  const freeUseLeft = useMemo(() => {
-    if (!dataOfMetadata?.freeUseTTL) {
-      return 0
-    }
-    const time = ((dataOfMetadata.freeUseTTL - Date.now() / 1000) / 86400)
-    if (time < 0) {
-      return 0
-    }
-    return time
-  }, [dataOfMetadata?.freeUseTTL])
 
   const clearConversationList = async () => {
     if (!deleteConfirm) {
@@ -466,9 +454,9 @@ const Chat = ({user}: any) => {
                   <div
                     className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
-                          disabled={!(freeUseLeft || paidUseLeft)}
+                          disabled={!paidUseLeft}
                           rows={1} ref={inputRef}
-                          placeholder={(freeUseLeft > 0 || paidUseLeft > 0) ? '' : '如果你的试用结束，请获取会员卡以继续'}
+                          placeholder={paidUseLeft > 0 ? '' : '如果你的试用结束，请获取会员卡以继续'}
                           onKeyDown={async (e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                               if (e.nativeEvent.isComposing) return;
@@ -490,7 +478,7 @@ const Chat = ({user}: any) => {
                           }} value={input}
                           className="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent md:pl-0"></textarea>
                     {
-                      (freeUseLeft > 0 || paidUseLeft > 0) && (
+                      paidUseLeft > 0 && (
                         <button
                           className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent disabled:bottom-0.5 md:disabled:bottom-1"
                           disabled={isWaitComplete || isBlockComplete}
@@ -765,54 +753,35 @@ const Chat = ({user}: any) => {
                             className="relative order-2 col-div-1 border-r-0 border-t dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div className={"text-gray-800 dark:text-gray-200"}>免费体验卡</div>
-                                <div
-                                  className="font-semibold text-gray-500">{Math.ceil(freeUseLeft)} 天
-                                </div>
+                                <div className={"text-gray-800 dark:text-gray-200"}>ChatGPT</div>
                               </div>
                               <button
                                 className="btn relative btn-primary dark:text-gray-white border-none bg-gray-300 py-3 hover:opacity-80 dark:hover:text-white font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:opacity-100"
                                 onClick={() => {
-                                  setCopied(true)
-                                  const refUrl = `https://www.abandon.chat/referrer/${user?.sub}`;
-                                  copy(refUrl);
-                                  //   @ts-ignore
-                                  window.gtag('event', 'custom_button_click', {
-                                    'event_category': '按钮',
-                                    'event_label': '复制邀请链接',
-                                  })
-                                  setTimeout(() => {
-                                    setCopied(false)
-                                  }, 3_000)
+                                  window.open('https://chat.openai.com', '_blank')
                                 }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div className="inline-block">
-                                    {copied ? '复制链接成功' : '邀请好友解锁'}
+                                    chat.openai.com
                                   </div>
                                 </div>
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>云同步的会话记录，多个设备轻松访问</div>
+                                <div>仅限特定的地区使用，强行使用会被永久封号</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>尽力在最短的时间内回复</div>
+                                <div>采集你的会话信息，用于模型训练</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>可免费体验部分功能</div>
+                                <div>网络繁忙时，回复速度较慢</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>提供在线的社区支持</div>
-                              </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-1">
-                                <a rel={'noreferrer'} target="_blank" href=""
-                                   className="flex flex-row items-center space-x-1">
-                                  <div>每成功邀请 1 位好友解锁，双方都将立即获得 1 天体验卡</div>
-                                </a>
+                                <div>有限的社区支持</div>
                               </div>
                             </div>
                           </div>
@@ -838,15 +807,15 @@ const Chat = ({user}: any) => {
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>云同步的会话记录，提供企业级的可用和冗余</div>
+                                <div>没有任何的地域限制</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>享受更快的回复速度</div>
+                                <div>高度的隐私保护，不采集您的信息用于模型训练</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>可享全部功能，并第一时间体验新功能</div>
+                                <div>稳定可靠的接口，随时快速响应</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
