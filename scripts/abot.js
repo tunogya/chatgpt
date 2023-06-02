@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 const NotionManager = require("./notion");
 const Auth0Manager = require("./auth0");
-const DynamoDBManager = require("./dynamodb");
+const DynamoDBManager = require("./dynamoDB");
 dotenv.config();
 
 class Abot {
