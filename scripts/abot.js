@@ -76,5 +76,7 @@ class Abot {
 
 (async () => {
   const abot = new Abot();
+  await abot.syncAuth0UserDataToNotion();
+  await abot.syncMetadataToNotion();
   await abot.syncCDKeysToNotion();
 })();
