@@ -769,26 +769,30 @@ const Chat = ({user}: any) => {
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>仅限特定的地区使用，强行使用会被永久封号</div>
+                                <div>免费研究预览版，仅特定的国家和地区使用</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>采集你的会话信息，用于模型训练</div>
+                                <div>在其他国家和地区使用，可能会被封号</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>网络繁忙时，回复速度较慢</div>
+                                <div>开启聊天记录时，会采集聊天内容用于训练和改进</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
+                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
+                                <div>禁用聊天记录后，保留最多 30 天的对话记录</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>有限的社区支持</div>
+                                <div>有昂贵的 PLUS 订阅</div>
                               </div>
                             </div>
                           </div>
                           <div className="relative order-1 col-div-1 sm:order-2">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div>付费会员卡</div>
+                                <div>Abandon Chat</div>
                                 <div
                                   className="font-semibold text-gray-500">每月19元起
                                 </div>
@@ -801,21 +805,25 @@ const Chat = ({user}: any) => {
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-white">购买或续费
+                                    className="inline-block text-white">订阅会员
                                   </div>
                                 </div>
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>没有任何的地域限制</div>
+                                <div>没有任何地域限制，企业级的账户安全和可靠</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>高度的隐私保护，不采集您的信息用于模型训练</div>
+                                <div>ChatGPT Business 级别的 API 数据使用政策</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>稳定可靠的接口，随时快速响应</div>
+                                <div>最多保留 365 天的对话记录，可永久删除保证隐私安全</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
+                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
+                                <div>媲美原版，且不断更新提高用户体验</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
