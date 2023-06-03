@@ -1,10 +1,10 @@
 const SendIcon = () => {
   return (
-    <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round"
-         strokeLinejoin="round" className="h-4 w-4 mr-1" height="1em" width="1em"
-         xmlns="http://www.w3.org/2000/svg">
-      <line x1="22" y1="2" x2="11" y2="13"></line>
-      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" className="h-4 w-4 m-1 md:m-0"
+         strokeWidth="2">
+      <path
+        d="M.5 1.163A1 1 0 0 1 1.97.28l12.868 6.837a1 1 0 0 1 0 1.766L1.969 15.72A1 1 0 0 1 .5 14.836V10.33a1 1 0 0 1 .816-.983L8.5 8 1.316 6.653A1 1 0 0 1 .5 5.67V1.163Z"
+        fill="currentColor"></path>
     </svg>
   )
 }

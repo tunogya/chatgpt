@@ -480,7 +480,7 @@ const Chat = ({user}: any) => {
                     {
                       paidUseLeft > 0 && (
                         <button
-                          className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent disabled:bottom-0.5 md:disabled:bottom-1"
+                          className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent disabled:bottom-0.5 md:disabled:bottom-1"
                           disabled={isWaitComplete || isBlockComplete}
                           onClick={async (event) => {
                             event.preventDefault();
