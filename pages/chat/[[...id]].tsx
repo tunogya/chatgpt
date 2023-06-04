@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
   clearSession,
   Message, setIsOpenShare,
-  setIsWaitComplete,
+  setIsWaitComplete, setSession,
   updateLastMessageId,
   updateMessageInSession, updateSession
 } from "@/store/session";
@@ -17,9 +17,9 @@ import MoreIcon from "@/components/SVG/MoreIcon";
 import DeleteIcon from "@/components/SVG/DeleteIcon";
 import LogoutIcon from "@/components/SVG/LogoutIcon";
 import {useRouter} from "next/router";
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import useSWR from "swr";
-import DialogBoxList from "@/components/DialogBoxList";
+import DialogBoxListContent from "@/components/DialogBoxList";
 import SendIcon from "@/components/SVG/SendIcon";
 import {v4 as uuidv4} from "uuid";
 import MenuIcon from "@/components/SVG/MenuIcon";
@@ -35,6 +35,7 @@ import AbIcon from "@/components/SVG/AbIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import LinkIcon from "@/components/SVG/LinkIcon";
 import EditIcon from "@/components/SVG/EditIcon";
+import ScrollToBottom from "react-scroll-to-bottom";
 // import ReIcon from "@/components/SVG/ReIcon";
 
 const Chat = ({user}: any) => {
@@ -55,6 +56,30 @@ const Chat = ({user}: any) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isOpenPayment, setIsOpenPayment] = useState(false);
   const controllerRef = useRef(null);
+  const conversation_id = router.query.id?.[0] || undefined;
+  const {
+    data,
+    isLoading
+  } = useSWR(conversation_id ? `/api/conversation/${conversation_id}` : null, (url: string) => fetch(url).then((res) => res.json()))
+
+  const updateStoreSession = useCallback(async () => {
+    if (data) {
+      dispatch(setSession({
+        // @ts-ignore
+        id: data.SK,
+        // @ts-ignore
+        title: data.title,
+        // @ts-ignore
+        mapping: data.mapping,
+        // @ts-ignore
+        create_time: new Date(data.created * 1000).toLocaleString(),
+      }))
+    }
+  }, [data, dispatch])
+
+  useEffect(() => {
+    updateStoreSession()
+  }, [updateStoreSession])
 
   const {
     data: conversationData,
@@ -421,7 +446,11 @@ const Chat = ({user}: any) => {
             </button>
           </div>
           <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
-            <DialogBoxList/>
+            <div className="flex-1 overflow-hidden">
+              <ScrollToBottom className="h-full w-full dark:bg-gray-800">
+                <DialogBoxListContent data={session} isLoading={isLoading}/>
+              </ScrollToBottom>
+            </div>
             <div
               className="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient">
               <form
@@ -951,7 +980,8 @@ const Chat = ({user}: any) => {
                           <div
                             className="flex p-4 bg-white text-white dark:bg-gray-800/90 border-t border-gray-100 dark:border-gray-700 rounded-b-lg w-full h-full">
                             <div className="flex-1 pr-1">
-                              <div className="flex w-full items-center justify-left gap-2 min-h-[1.5rem]">Requesting Conversation Summary.
+                              <div className="flex w-full items-center justify-left gap-2 min-h-[1.5rem]">Requesting
+                                Conversation Summary.
                                 <button className="text-gray-500">
                                   <EditIcon/>
                                 </button>

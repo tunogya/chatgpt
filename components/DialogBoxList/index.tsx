@@ -1,12 +1,7 @@
-import {FC, useCallback, useEffect, useMemo, useRef} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {setSession} from "@/store/session";
+import {FC, useEffect, useMemo, useRef} from "react";
 import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
-import {useRouter} from "next/router";
 import DownIcon from "@/components/SVG/DownIcon";
-import ScrollToBottom, {useScrollToBottom, useSticky} from "react-scroll-to-bottom";
-import dynamic from 'next/dynamic';
-import useSWR from "swr";
+import {useScrollToBottom, useSticky} from "react-scroll-to-bottom";
 import Typewriter from "@/components/Typewriter";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 
@@ -86,44 +81,4 @@ const DialogBoxListContent: FC<DialogBoxListContentProps> = ({data, isLoading}: 
   )
 }
 
-const WrapDialogBoxListContent = () => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const conversation_id = router.query.id?.[0] || undefined;
-  const session = useSelector((state: any) => state.session.session);
-  const {
-    data,
-    isLoading
-  } = useSWR(conversation_id ? `/api/conversation/${conversation_id}` : null, (url: string) => fetch(url).then((res) => res.json()))
-
-  const updateSession = useCallback(async () => {
-    if (data) {
-      dispatch(setSession({
-        // @ts-ignore
-        id: data.SK,
-        // @ts-ignore
-        title: data.title,
-        // @ts-ignore
-        mapping: data.mapping,
-        // @ts-ignore
-        create_time: new Date(data.created * 1000).toLocaleString(),
-      }))
-    }
-  }, [data, dispatch])
-
-  useEffect(() => {
-    updateSession()
-  }, [updateSession])
-
-  return (
-    <div className="flex-1 overflow-hidden">
-      <ScrollToBottom className="h-full w-full dark:bg-gray-800">
-        <DialogBoxListContent data={session} isLoading={isLoading}/>
-      </ScrollToBottom>
-    </div>
-  )
-}
-
-export default dynamic(() => Promise.resolve(WrapDialogBoxListContent), {
-  ssr: false
-})
+export default DialogBoxListContent
