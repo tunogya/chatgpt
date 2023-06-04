@@ -35,6 +35,7 @@ import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import LinkIcon from "@/components/SVG/LinkIcon";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ShareDialogBoxList from "@/components/ShareDialogBoxList";
+import EditIcon from "@/components/SVG/EditIcon";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -55,6 +56,8 @@ const Chat = ({user}: any) => {
   const [isOpenPayment, setIsOpenPayment] = useState(false);
   const controllerRef = useRef(null);
   const conversation_id = router.query.id?.[0] || undefined;
+  const [shareTitle, setShareTitle] = useState('');
+  const [editShareTitle, setEditShareTitle] = useState(false);
 
   const {
     data,
@@ -929,21 +932,36 @@ const Chat = ({user}: any) => {
                             className="flex p-4 bg-white text-white dark:bg-gray-800/90 border-t border-gray-100 dark:border-gray-700 rounded-b-lg w-full h-full">
                             <div className="flex-1 pr-1">
                               <div className="flex w-full items-center justify-left gap-2 min-h-[1.5rem]">
-                                {session?.title}
+                                {
+                                  editShareTitle ? (
+                                    <input type="text" className="border-none bg-transparent p-0 m-0 w-full mr-0" defaultValue={shareTitle}
+                                           value={shareTitle} onChange={(e) => setShareTitle(e.target.value)}
+                                           // end of input
+                                            onBlur={() => {setEditShareTitle(false)}} autoFocus={true}
+                                    />
+                                  ) : (
+                                    <>
+                                      {shareTitle}
+                                      <button className="text-gray-500" onClick={() => setEditShareTitle(true)}>
+                                        <EditIcon/>
+                                      </button>
+                                    </>
+                                  )
+                                }
                               </div>
                               <div className="mt-1 text-gray-500">
                                 {new Date().toDateString()}
                               </div>
                             </div>
-                            {/*<div className="flex-none h-full mt-auto mb-auto">*/}
-                            {/*  <button className="btn relative btn-neutral mb-auto mt-auto" type="button"*/}
-                            {/*          aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r16:"*/}
-                            {/*          data-state="closed">*/}
-                            {/*    <div className="flex w-full gap-2 items-center justify-center">*/}
-                            {/*      <MoreIcon/>*/}
-                            {/*    </div>*/}
-                            {/*  </button>*/}
-                            {/*</div>*/}
+                            <div className="flex-none h-full mt-auto mb-auto">
+                              <button className="btn relative btn-neutral mb-auto mt-auto" type="button"
+                                      aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r16:"
+                                      data-state="closed">
+                                <div className="flex w-full gap-2 items-center justify-center">
+                                  <MoreIcon/>
+                                </div>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </main>
@@ -951,11 +969,11 @@ const Chat = ({user}: any) => {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      {/*<a href="https://help.openai.com/en/articles/7925741-chatgpt-shared-links-faq"*/}
-                      {/*   className="flex items-center gap-2 text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"*/}
-                      {/*   target="_blank" rel="noreferrer">更多信息*/}
-                      {/*  <LinkOutIcon/>*/}
-                      {/*</a>*/}
+                      <a href="https://help.openai.com/en/articles/7925741-chatgpt-shared-links-faq"
+                         className="flex items-center gap-2 text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
+                         target="_blank" rel="noreferrer">更多信息
+                        <LinkOutIcon/>
+                      </a>
                     </div>
                     <div className="text-right">
                       <button className="btn relative btn-primary">
