@@ -1,6 +1,6 @@
 import {FC, useCallback, useEffect, useMemo, useRef} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setIsWaitHistory, setSession} from "@/store/session";
+import {setSession} from "@/store/session";
 import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
 import {useRouter} from "next/router";
 import DownIcon from "@/components/SVG/DownIcon";
@@ -11,11 +11,11 @@ import Typewriter from "@/components/Typewriter";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 
 type DialogBoxListContentProps = {
-  session: any
+  data: any
   isLoading: boolean
 }
 
-const DialogBoxListContent: FC<DialogBoxListContentProps> = ({session, isLoading}: any) => {
+const DialogBoxListContent: FC<DialogBoxListContentProps> = ({data, isLoading}: any) => {
   const bottomRef = useRef(null);
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
@@ -24,26 +24,26 @@ const DialogBoxListContent: FC<DialogBoxListContentProps> = ({session, isLoading
   useEffect(() => {
     // @ts-ignore
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
-  }, [session.messages]);
+  }, [data.messages]);
 
   const rootMessageId = useMemo(() => {
-    if (!session) {
+    if (!data) {
       return null
     }
-    if (session.mapping?.['00000000-0000-0000-0000-000000000000']) {
+    if (data.mapping?.['00000000-0000-0000-0000-000000000000']) {
       return '00000000-0000-0000-0000-000000000000'
     }
     // for those who has no root(00000000-0000-0000-0000-000000000000) message
-    const ids = Object?.keys(session?.mapping || {}) || []
+    const ids = Object?.keys(data?.mapping || {}) || []
     if (ids.length === 0) {
       return null
     }
     let check_point = ids[0]
-    while (session.mapping[check_point].parent !== null) {
-      check_point = session.mapping[check_point].parent
+    while (data.mapping[check_point].parent !== null) {
+      check_point = data.mapping[check_point].parent
     }
     return check_point
-  }, [session])
+  }, [data])
 
   return (
     <div className={"w-full h-full"}>
@@ -57,10 +57,10 @@ const DialogBoxListContent: FC<DialogBoxListContentProps> = ({session, isLoading
               <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
             </div>
           ) : (
-            (session?.id || rootMessageId)
+            (data?.id || rootMessageId)
               ? (
                 rootMessageId && (
-                  <DialogBoxItem id={rootMessageId} session={session}/>
+                  <DialogBoxItem id={rootMessageId} session={data}/>
                 )
               ) : (
                 <div className="flex flex-col items-center justify-center text-sm dark:bg-gray-800 h-full">
@@ -109,8 +109,7 @@ const WrapDialogBoxListContent = () => {
         create_time: new Date(data.created * 1000).toLocaleString(),
       }))
     }
-    dispatch(setIsWaitHistory(isLoading))
-  }, [data, dispatch, isLoading])
+  }, [data, dispatch])
 
   useEffect(() => {
     updateSession()
@@ -119,7 +118,7 @@ const WrapDialogBoxListContent = () => {
   return (
     <div className="flex-1 overflow-hidden">
       <ScrollToBottom className="h-full w-full dark:bg-gray-800">
-        <DialogBoxListContent session={session} isLoading={isLoading}/>
+        <DialogBoxListContent data={session} isLoading={isLoading}/>
       </ScrollToBottom>
     </div>
   )

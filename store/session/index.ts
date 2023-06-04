@@ -39,8 +39,6 @@ export const index = createSlice({
     lastMessageId: "00000000-0000-0000-0000-000000000000",
     // isWaitComplete is used to indicate whether the answer wait is complete
     isWaitComplete: false,
-    // isWaitHistory is used to indicate whether the history wait is complete
-    isWaitHistory: false,
     isBlockComplete: false,
     isOpenShare: false,
   },
@@ -113,7 +111,6 @@ export const index = createSlice({
       }
       state.lastMessageId = "00000000-0000-0000-0000-000000000000"
       state.isWaitComplete = false
-      state.isWaitHistory = false
       state.isBlockComplete = false
     },
     updateLastMessageId: (state, action) => {
@@ -121,9 +118,6 @@ export const index = createSlice({
     },
     setIsWaitComplete: (state, action) => {
       state.isWaitComplete = action.payload
-    },
-    setIsWaitHistory: (state, action) => {
-      state.isWaitHistory = action.payload
     },
     setBlockComplete: (state, action) => {
       state.isBlockComplete = action.payload
@@ -141,7 +135,6 @@ export const {
   clearSession,
   updateLastMessageId,
   setIsWaitComplete,
-  setIsWaitHistory,
   setBlockComplete,
   setIsOpenShare,
 } = index.actions
