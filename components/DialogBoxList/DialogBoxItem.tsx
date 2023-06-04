@@ -231,7 +231,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, lastMessage
         className="text-base gap-4 md:gap-6 m-auto md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0">
         <div className="w-[30px] flex flex-col relative items-end">
           <div
-            className="relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center bg-gray-900 animated hover:twister">
+            className="relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center bg-gray-900">
             <AbIcon width={'30'}/>
             {
               flagged && (
