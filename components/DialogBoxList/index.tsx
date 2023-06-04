@@ -10,7 +10,7 @@ type DialogBoxListContentProps = {
   isLoading: boolean
 }
 
-const DialogBoxListContent: FC<DialogBoxListContentProps> = ({data, isLoading}: any) => {
+const DialogBoxList: FC<DialogBoxListContentProps> = ({data, isLoading}: any) => {
   const bottomRef = useRef(null);
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
@@ -55,7 +55,7 @@ const DialogBoxListContent: FC<DialogBoxListContentProps> = ({data, isLoading}: 
             (data?.id || rootMessageId)
               ? (
                 rootMessageId && (
-                  <DialogBoxItem id={rootMessageId} session={data}/>
+                  <DialogBoxItem id={rootMessageId} data={data}/>
                 )
               ) : (
                 <div className="flex flex-col items-center justify-center text-sm dark:bg-gray-800 h-full">
@@ -81,4 +81,4 @@ const DialogBoxListContent: FC<DialogBoxListContentProps> = ({data, isLoading}: 
   )
 }
 
-export default DialogBoxListContent
+export default DialogBoxList

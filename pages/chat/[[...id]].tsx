@@ -19,7 +19,7 @@ import LogoutIcon from "@/components/SVG/LogoutIcon";
 import {useRouter} from "next/router";
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import useSWR from "swr";
-import DialogBoxListContent from "@/components/DialogBoxList";
+import DialogBoxList from "@/components/DialogBoxList";
 import SendIcon from "@/components/SVG/SendIcon";
 import {v4 as uuidv4} from "uuid";
 import MenuIcon from "@/components/SVG/MenuIcon";
@@ -31,12 +31,10 @@ import DataIcon from "@/components/SVG/DataIcon";
 import OptionIcon from "@/components/SVG/OptionIcon";
 import StopIcon from "@/components/SVG/StopIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
-import AbIcon from "@/components/SVG/AbIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import LinkIcon from "@/components/SVG/LinkIcon";
-import EditIcon from "@/components/SVG/EditIcon";
 import ScrollToBottom from "react-scroll-to-bottom";
-// import ReIcon from "@/components/SVG/ReIcon";
+import ShareDialogBoxList from "@/components/ShareDialogBoxList";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -57,6 +55,7 @@ const Chat = ({user}: any) => {
   const [isOpenPayment, setIsOpenPayment] = useState(false);
   const controllerRef = useRef(null);
   const conversation_id = router.query.id?.[0] || undefined;
+
   const {
     data,
     isLoading
@@ -448,7 +447,7 @@ const Chat = ({user}: any) => {
           <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
             <div className="flex-1 overflow-hidden">
               <ScrollToBottom className="h-full w-full dark:bg-gray-800">
-                <DialogBoxListContent data={session} isLoading={isLoading}/>
+                <DialogBoxList data={session} isLoading={isLoading}/>
               </ScrollToBottom>
             </div>
             <div
@@ -906,8 +905,11 @@ const Chat = ({user}: any) => {
                   </div>
                 </div>
                 <div className="p-4 sm:p-6 sm:pt-4">
-                  <div className="w-full"><p className="mb-6 text-gray-500">Messages you send after creating your link
-                    won&apos;t be shared. Anyone with the URL will be able to view the shared chat.</p></div>
+                  <div className="w-full">
+                    <p className="mb-6 text-gray-500">
+                      您在创建链接后发送的消息将不会被共享。知道该 URL 的任何人都可以查看共享聊天。
+                    </p>
+                  </div>
                   <div
                     className="w-full mb-4 shadow-[0_2px_12px_0px_rgba(0,0,0,0.08)] dark:bg-gray-800/90 rounded-lg border border-gray-100 dark:border-gray-700 overflow-hidden bg-gray-50">
                     <div className="flex h-full max-w-full flex-1 flex-col">
@@ -920,94 +922,41 @@ const Chat = ({user}: any) => {
                             <div className="overflow-auto bg-white dark:bg-gray-800"
                                  style={{position: "absolute", inset: "0px"}}
                             >
-                              <div className="flex flex-col text-sm dark:bg-gray-800">
-                                <div className="group w-full text-gray-800 dark:text-gray-100 dark:bg-gray-800">
-                                  <div
-                                    className="flex p-4 gap-4 text-base md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl md:py-6 lg:px-0 ml-5">
-                                    <div className="flex-shrink-0 flex flex-col relative items-end">
-                                      <div className="w-[30px]">
-                                        <div
-                                          className="relative p-1 rounded-sm h-[30px] w-[30px] text-white flex items-center justify-center"
-                                          style={{backgroundColor: "rgb(171, 104, 255)"}}
-                                        >
-                                          <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24"
-                                               stroke-linecap="round" stroke-linejoin="round" className="h-6 w-6"
-                                               height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                            <circle cx="12" cy="7" r="4"></circle>
-                                          </svg>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div
-                                      className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
-                                      <div className="flex flex-grow flex-col gap-3">
-                                        <div
-                                          className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap break-words">Hello
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div
-                                  className="group w-full text-gray-800 dark:text-gray-100 bg-gray-50 dark:bg-[#444654]">
-                                  <div
-                                    className="flex p-4 gap-4 text-base md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl md:py-6 lg:px-0 ml-5">
-                                    <div className="flex-shrink-0 flex flex-col relative items-end">
-                                      <div className="w-[30px]">
-                                        <div
-                                          className="relative p-1 rounded-sm h-[30px] w-[30px] text-white flex items-center justify-center bg-gray-900"
-                                        >
-                                          <AbIcon width={'30'}/>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div
-                                      className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
-                                      <div className="flex flex-grow flex-col gap-3">
-                                        <div
-                                          className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap break-words">
-                                          <div className="markdown prose w-full break-words dark:prose-invert light">
-                                            <p>Hello! How can I assist you today?</p></div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                              <ShareDialogBoxList data={session} isLoading={isLoading}/>
                             </div>
                           </div>
                           <div
                             className="flex p-4 bg-white text-white dark:bg-gray-800/90 border-t border-gray-100 dark:border-gray-700 rounded-b-lg w-full h-full">
                             <div className="flex-1 pr-1">
-                              <div className="flex w-full items-center justify-left gap-2 min-h-[1.5rem]">Requesting
-                                Conversation Summary.
-                                <button className="text-gray-500">
-                                  <EditIcon/>
-                                </button>
+                              <div className="flex w-full items-center justify-left gap-2 min-h-[1.5rem]">
+                                {session?.title}
                               </div>
-                              <div className="mt-1 text-gray-500">June 4, 2023</div>
+                              <div className="mt-1 text-gray-500">
+                                {new Date().toDateString()}
+                              </div>
                             </div>
-                            <div className="flex-none h-full mt-auto mb-auto">
-                              <button className="btn relative btn-neutral mb-auto mt-auto" type="button"
-                                      aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r16:"
-                                      data-state="closed">
-                                <div className="flex w-full gap-2 items-center justify-center">
-                                  <MoreIcon/>
-                                </div>
-                              </button>
-                            </div>
+                            {/*<div className="flex-none h-full mt-auto mb-auto">*/}
+                            {/*  <button className="btn relative btn-neutral mb-auto mt-auto" type="button"*/}
+                            {/*          aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r16:"*/}
+                            {/*          data-state="closed">*/}
+                            {/*    <div className="flex w-full gap-2 items-center justify-center">*/}
+                            {/*      <MoreIcon/>*/}
+                            {/*    </div>*/}
+                            {/*  </button>*/}
+                            {/*</div>*/}
                           </div>
                         </div>
                       </main>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div><a href="https://help.openai.com/en/articles/7925741-chatgpt-shared-links-faq"
-                            className="flex items-center gap-2 text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
-                            target="_blank" rel="noreferrer">More Info
-                      <LinkOutIcon/>
-                    </a></div>
+                    <div>
+                      {/*<a href="https://help.openai.com/en/articles/7925741-chatgpt-shared-links-faq"*/}
+                      {/*   className="flex items-center gap-2 text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"*/}
+                      {/*   target="_blank" rel="noreferrer">更多信息*/}
+                      {/*  <LinkOutIcon/>*/}
+                      {/*</a>*/}
+                    </div>
                     <div className="text-right">
                       <button className="btn relative btn-primary">
                         <div className="flex w-full gap-2 items-center justify-center">

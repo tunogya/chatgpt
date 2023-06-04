@@ -315,12 +315,12 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, lastMessage
   )
 }
 
-type RenderDialogBoxItemProps = {
+type DialogBoxItemProps = {
   id: string
-  session: any
+  data: any
 }
 
-const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id, session}) => {
+const DialogBoxItem: FC<DialogBoxItemProps> = ({id, data}) => {
   const [children_index, setChildren_index] = useState(0)
   const dispatch = useDispatch()
   const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
@@ -329,10 +329,10 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id, session}) => {
 
   const children = useMemo(() => {
     // filter used to remove the current id from the children list, so that the current id is not rendered twice
-    return session?.mapping?.[id]?.children?.filter((c_id: string) => c_id !== id)?.map((id: string) => (
-      <DialogBoxItem key={id} id={id} session={session}/>
+    return data?.mapping?.[id]?.children?.filter((c_id: string) => c_id !== id)?.map((id: string) => (
+      <DialogBoxItem key={id} id={id} data={data}/>
     )) || []
-  }, [session, id])
+  }, [data, id])
 
   useEffect(() => {
     if (children.length === 0) {
@@ -343,7 +343,7 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id, session}) => {
   return (
     <>
       <BaseDialogBoxItem
-        message={session?.mapping?.[id].message}
+        message={data?.mapping?.[id].message}
         id={id}
         lastMessageId={lastMessageId}
         isWaitComplete={isWaitComplete}
