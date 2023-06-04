@@ -4,9 +4,10 @@ import RightIcon from "@/components/SVG/RightIcon";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch} from "react-redux";
 import {useRouter} from "next/router";
-import {clearSession} from "@/store/session";
+import {clearSession, setIsOpenShare} from "@/store/session";
 import DeleteIcon from "@/components/SVG/DeleteIcon";
 import EditIcon from "@/components/SVG/EditIcon";
+import ShareIcon from "@/components/SVG/ShareIcon";
 
 export type DialogMenuItemProps = {
   id: string,
@@ -140,6 +141,9 @@ const DialogMenuItem: FC<DialogMenuItemProps> = ({...props}) => {
                 <div className="absolute flex right-1 z-10 text-gray-300 visible">
                   <button className="p-1 hover:text-white" onClick={() => setUpdateConfirm(true)}>
                     <EditIcon/>
+                  </button>
+                  <button className="p-1 hover:text-white" onClick={() => dispatch(setIsOpenShare(true))}>
+                    <ShareIcon/>
                   </button>
                   <button className="p-1 hover:text-white" onClick={() => setDeleteConfirm(true)}>
                     <DeleteIcon/>

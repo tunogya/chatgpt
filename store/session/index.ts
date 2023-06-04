@@ -42,6 +42,7 @@ export const index = createSlice({
     // isWaitHistory is used to indicate whether the history wait is complete
     isWaitHistory: false,
     isBlockComplete: false,
+    isOpenShare: false,
   },
   reducers: {
     // setSession is used to set the current session
@@ -126,7 +127,10 @@ export const index = createSlice({
     },
     setBlockComplete: (state, action) => {
       state.isBlockComplete = action.payload
-    }
+    },
+    setIsOpenShare: (state, action) => {
+      state.isOpenShare = action.payload
+    },
   }
 })
 
@@ -139,6 +143,7 @@ export const {
   setIsWaitComplete,
   setIsWaitHistory,
   setBlockComplete,
+  setIsOpenShare,
 } = index.actions
 
 export default index.reducer
