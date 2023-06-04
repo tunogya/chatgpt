@@ -56,7 +56,7 @@ const Chat = ({user}: any) => {
   const [isOpenPayment, setIsOpenPayment] = useState(false);
   const controllerRef = useRef(null);
   const conversation_id = router.query.id?.[0] || undefined;
-  const [shareTitle, setShareTitle] = useState('');
+  const [shareTitle, setShareTitle] = useState('New Chat');
   const [editShareTitle, setEditShareTitle] = useState(false);
 
   const {
