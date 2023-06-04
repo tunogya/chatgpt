@@ -95,11 +95,11 @@ const DialogMenuItem: FC<DialogMenuItemProps> = ({...props}) => {
       {
         deleteConfirm ? <DeleteIcon/> : <ConversationIcon/>
       }
-      <div className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">
+      <div className={`flex-1 ${updateConfirm ? "" : "overflow-hidden text-ellipsis"} max-h-5 break-all relative`}>
         {
           updateConfirm ? (
             <input type="text" className="text-sm border-none bg-transparent p-0 m-0 w-full mr-0"
-                   value={title} onChange={(e) => setTitle(e.target.value)}/>
+                   value={title} onChange={(e) => setTitle(e.target.value)} autoFocus={true}/>
           ) : (
             <>
               {title}
