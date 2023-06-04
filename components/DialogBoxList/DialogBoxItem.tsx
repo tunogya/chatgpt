@@ -110,11 +110,11 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
     handleBlocked()
   }, [handleBlocked])
 
-  if (props.message === null || props.message.role === 'system') {
+  if (props.message === null || props.message?.role === 'system') {
     return <></>
   }
 
-  if (props.message.role === 'user') {
+  if (props.message?.role === 'user') {
     return (
       <div
         className="w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800">
@@ -317,17 +317,17 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
 
 type RenderDialogBoxItemProps = {
   id: string
+  session: any
 }
 
-const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
-  const session = useSelector((state: any) => state.session.session);
+const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id, session}) => {
   const [children_index, setChildren_index] = useState(0)
   const dispatch = useDispatch()
 
   const children = useMemo(() => {
     // filter used to remove the current id from the children list, so that the current id is not rendered twice
     return session?.mapping?.[id]?.children?.filter((c_id: string) => c_id !== id)?.map((id: string) => (
-      <DialogBoxItem key={id} id={id}/>
+      <DialogBoxItem key={id} id={id} session={session}/>
     )) || []
   }, [session, id])
 
@@ -339,7 +339,7 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id}) => {
 
   return (
     <>
-      <BaseDialogBoxItem message={session.mapping?.[id].message} id={id}/>
+      <BaseDialogBoxItem message={session?.mapping?.[id].message} id={id}/>
       {
         children.length > 0 ? (
           children[children_index]

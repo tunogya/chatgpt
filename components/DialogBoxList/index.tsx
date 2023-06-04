@@ -5,44 +5,14 @@ import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
 import {useRouter} from "next/router";
 import DownIcon from "@/components/SVG/DownIcon";
 import ScrollToBottom, {useScrollToBottom, useSticky} from "react-scroll-to-bottom";
-import LoadingIcon from "@/components/SVG/LoadingIcon";
 import dynamic from 'next/dynamic';
 import useSWR from "swr";
 import Typewriter from "@/components/Typewriter";
 
-const DialogBoxListContent = () => {
+const DialogBoxListContent = ({session}: any) => {
   const bottomRef = useRef(null);
-  const session = useSelector((state: any) => state.session.session);
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const isWaitHistory = useSelector((state: any) => state.session.isWaitHistory);
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
-  const conversation_id = router.query.id?.[0] || undefined;
-  const {
-    data,
-    isLoading
-  } = useSWR(conversation_id ? `/api/conversation/${conversation_id}` : null, (url: string) => fetch(url).then((res) => res.json()))
-
-  const updateSession = useCallback(async () => {
-    if (data) {
-      dispatch(setSession({
-        // @ts-ignore
-        id: data.SK,
-        // @ts-ignore
-        title: data.title,
-        // @ts-ignore
-        mapping: data.mapping,
-        // @ts-ignore
-        create_time: new Date(data.created * 1000).toLocaleString(),
-      }))
-    }
-    dispatch(setIsWaitHistory(isLoading))
-  }, [data, dispatch, isLoading])
-
-  useEffect(() => {
-    updateSession()
-  }, [updateSession])
 
   // scroll to bottom when new message
   useEffect(() => {
@@ -73,29 +43,20 @@ const DialogBoxListContent = () => {
     <div className={"w-full h-full"}>
       <div className="flex flex-col h-full items-center text-sm dark:bg-gray-800">
         {
-          isWaitHistory ? (
-            <div className="flex flex-col items-center text-sm text-gray-800 dark:text-gray-100 dark:bg-gray-800">
-              <div className={"pt-4"}>
-                <LoadingIcon/>
-              </div>
-              <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
-            </div>
-          ) : (
-            (session?.id || rootMessageId)
-              ? (
-                rootMessageId && (
-                  <DialogBoxItem id={rootMessageId}/>
-                )
-              ) : (
-                <div className="flex flex-col items-center justify-center text-sm dark:bg-gray-800 h-full">
-                  <h1
-                    className="text-4xl font-semibold text-center text-gray-800 dark:text-gray-100">
-                    <Typewriter text={'ChatGPT'}/>
-                  </h1>
-                  <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
-                </div>
+          (session?.id || rootMessageId)
+            ? (
+              rootMessageId && (
+                <DialogBoxItem id={rootMessageId} session={session}/>
               )
-          )
+            ) : (
+              <div className="flex flex-col items-center justify-center text-sm dark:bg-gray-800 h-full">
+                <h1
+                  className="text-4xl font-semibold text-center text-gray-800 dark:text-gray-100">
+                  <Typewriter text={'ChatGPT'}/>
+                </h1>
+                <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+              </div>
+            )
         }
       </div>
       {
@@ -111,10 +72,39 @@ const DialogBoxListContent = () => {
 }
 
 const WrapDialogBoxListContent = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const conversation_id = router.query.id?.[0] || undefined;
+  const session = useSelector((state: any) => state.session.session);
+  const {
+    data,
+    isLoading
+  } = useSWR(conversation_id ? `/api/conversation/${conversation_id}` : null, (url: string) => fetch(url).then((res) => res.json()))
+
+  const updateSession = useCallback(async () => {
+    if (data) {
+      dispatch(setSession({
+        // @ts-ignore
+        id: data.SK,
+        // @ts-ignore
+        title: data.title,
+        // @ts-ignore
+        mapping: data.mapping,
+        // @ts-ignore
+        create_time: new Date(data.created * 1000).toLocaleString(),
+      }))
+    }
+    dispatch(setIsWaitHistory(isLoading))
+  }, [data, dispatch, isLoading])
+
+  useEffect(() => {
+    updateSession()
+  }, [updateSession])
+
   return (
     <div className="flex-1 overflow-hidden">
       <ScrollToBottom className="h-full w-full dark:bg-gray-800">
-        <DialogBoxListContent/>
+        <DialogBoxListContent session={session}/>
       </ScrollToBottom>
     </div>
   )
