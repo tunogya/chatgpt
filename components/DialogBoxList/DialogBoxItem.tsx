@@ -33,13 +33,13 @@ export type Message = {
 export type BaseDialogBoxItemProps = {
   id: string,
   message: Message | null,
+  lastMessageId: string | null,
+  isWaitComplete: boolean,
+  area: string,
 }
 
-const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
+const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, lastMessageId, isWaitComplete, area}) => {
   const {user} = useUser();
-  const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
-  const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete)
-  const area = useSelector((state: any) => state.ui.area);
   const [editMode, setEditMode] = useState(false);
   const [blocked, setBlocked] = useState(false);
   const [flagged, setFlagged] = useState(false);
@@ -48,17 +48,17 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
   const dispatch = useDispatch();
 
   const showStreaming = useMemo(() => {
-    return lastMessageId === props.id && isWaitComplete
-  }, [lastMessageId, props.id, isWaitComplete])
+    return lastMessageId === id && isWaitComplete
+  }, [lastMessageId, id, isWaitComplete])
 
   const moderator = useCallback(async () => {
-    if (!props.message || !props.message?.content?.parts?.[0]) {
+    if (!message || !message?.content?.parts?.[0]) {
       return
     }
-    if (isWaitComplete && props.message.role === 'assistant') {
+    if (isWaitComplete && message.role === 'assistant') {
       return
     }
-    const input = props.message.content.parts[0]
+    const input = message.content.parts[0]
     try {
       const res = await fetch('/api/moderations', {
         method: 'POST',
@@ -82,7 +82,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
     } catch (e) {
       console.log(e)
     }
-  }, [props.message, isWaitComplete])
+  }, [message, isWaitComplete])
 
   useEffect(() => {
     moderator()
@@ -110,11 +110,11 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
     handleBlocked()
   }, [handleBlocked])
 
-  if (props.message === null || props.message?.role === 'system') {
+  if (message === null || message?.role === 'system') {
     return <></>
   }
 
-  if (props.message?.role === 'user') {
+  if (message?.role === 'user') {
     return (
       <div
         className="w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800">
@@ -149,7 +149,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                       <textarea
                         className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
                         style={{height: '24px', overflowY: 'hidden'}}>
-                    {props.message?.content?.parts?.[0]}
+                    {message?.content?.parts?.[0]}
                   </textarea>
                     )
                   }
@@ -184,7 +184,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                               }
                             }}
                             className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                            {props.message?.content?.parts?.[0] || '...'}
+                            {message?.content?.parts?.[0] || '...'}
                           </ReactMarkdown>
                         )
                       }
@@ -259,11 +259,11 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
                       }
                     }}
                     className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                    {props.message?.content?.parts?.[0] || '...'}
+                    {message?.content?.parts?.[0] || '...'}
                   </ReactMarkdown>
                 )
               }
-              {!props.message?.content?.parts?.[0] && (
+              {!message?.content?.parts?.[0] && (
                 <div
                   className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
                   对不起，这不是你的错。服务器响应失败，请稍后重试。
@@ -290,8 +290,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({...props}) => {
               <button
                 className="flex ml-auto gap-2 rounded-md p-1 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400"
                 onClick={() => {
-                  if (props.message?.content?.parts?.[0]) {
-                    copy(props.message?.content?.parts?.[0])
+                  if (message?.content?.parts?.[0]) {
+                    copy(message?.content?.parts?.[0])
                   } else {
                     copy('...')
                   }
@@ -323,6 +323,9 @@ type RenderDialogBoxItemProps = {
 const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id, session}) => {
   const [children_index, setChildren_index] = useState(0)
   const dispatch = useDispatch()
+  const lastMessageId = useSelector((state: any) => state.session.lastMessageId)
+  const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete)
+  const area = useSelector((state: any) => state.ui.area);
 
   const children = useMemo(() => {
     // filter used to remove the current id from the children list, so that the current id is not rendered twice
@@ -339,7 +342,13 @@ const DialogBoxItem: FC<RenderDialogBoxItemProps> = ({id, session}) => {
 
   return (
     <>
-      <BaseDialogBoxItem message={session?.mapping?.[id].message} id={id}/>
+      <BaseDialogBoxItem
+        message={session?.mapping?.[id].message}
+        id={id}
+        lastMessageId={lastMessageId}
+        isWaitComplete={isWaitComplete}
+        area={area}
+      />
       {
         children.length > 0 ? (
           children[children_index]
