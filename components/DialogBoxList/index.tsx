@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useRef} from "react";
+import {FC, useCallback, useEffect, useMemo, useRef} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setIsWaitHistory, setSession} from "@/store/session";
 import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
@@ -8,8 +8,14 @@ import ScrollToBottom, {useScrollToBottom, useSticky} from "react-scroll-to-bott
 import dynamic from 'next/dynamic';
 import useSWR from "swr";
 import Typewriter from "@/components/Typewriter";
+import LoadingIcon from "@/components/SVG/LoadingIcon";
 
-const DialogBoxListContent = ({session}: any) => {
+type DialogBoxListContentProps = {
+  session: any
+  isLoading: boolean
+}
+
+const DialogBoxListContent: FC<DialogBoxListContentProps> = ({session, isLoading}: any) => {
   const bottomRef = useRef(null);
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
@@ -43,20 +49,29 @@ const DialogBoxListContent = ({session}: any) => {
     <div className={"w-full h-full"}>
       <div className="flex flex-col h-full items-center text-sm dark:bg-gray-800">
         {
-          (session?.id || rootMessageId)
-            ? (
-              rootMessageId && (
-                <DialogBoxItem id={rootMessageId} session={session}/>
-              )
-            ) : (
-              <div className="flex flex-col items-center justify-center text-sm dark:bg-gray-800 h-full">
-                <h1
-                  className="text-4xl font-semibold text-center text-gray-800 dark:text-gray-100">
-                  <Typewriter text={'ChatGPT'}/>
-                </h1>
-                <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+          isLoading ? (
+            <div className="flex flex-col items-center text-sm text-gray-800 dark:text-gray-100 dark:bg-gray-800">
+              <div className={"pt-4"}>
+                <LoadingIcon/>
               </div>
-            )
+              <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+            </div>
+          ) : (
+            (session?.id || rootMessageId)
+              ? (
+                rootMessageId && (
+                  <DialogBoxItem id={rootMessageId} session={session}/>
+                )
+              ) : (
+                <div className="flex flex-col items-center justify-center text-sm dark:bg-gray-800 h-full">
+                  <h1
+                    className="text-4xl font-semibold text-center text-gray-800 dark:text-gray-100">
+                    <Typewriter text={'ChatGPT'}/>
+                  </h1>
+                  <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+                </div>
+              )
+          )
         }
       </div>
       {
@@ -104,7 +119,7 @@ const WrapDialogBoxListContent = () => {
   return (
     <div className="flex-1 overflow-hidden">
       <ScrollToBottom className="h-full w-full dark:bg-gray-800">
-        <DialogBoxListContent session={session}/>
+        <DialogBoxListContent session={session} isLoading={isLoading}/>
       </ScrollToBottom>
     </div>
   )
