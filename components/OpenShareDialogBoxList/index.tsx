@@ -1,6 +1,6 @@
 import {FC, useMemo} from "react";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
-import ShareDialogBoxItem from "@/components/ShareDialogBoxList/ShareDialogBoxItem";
+import OpenShareDialogBoxItem from "@/components/OpenShareDialogBoxList/OpenShareDialogBoxItem";
 
 type OpenShareDialogBoxListProps = {
   data: any
@@ -40,7 +40,7 @@ const OpenShareDialogBoxList: FC<OpenShareDialogBoxListProps> = ({data, isLoadin
         ) : (
           (data?.id || rootMessageId) && (
             rootMessageId && (
-              <ShareDialogBoxItem id={rootMessageId} data={data}/>
+              <OpenShareDialogBoxItem id={rootMessageId} data={data}/>
             )
           )
         )
