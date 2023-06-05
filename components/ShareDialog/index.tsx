@@ -22,7 +22,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
   const [shareData, setShareData] = useState({
     share_id: '',
     title: '',
-    is_anonymous: false,
+    is_anonymous: true,
     is_public: true,
     is_visible: true,
     mapping: {},
@@ -30,19 +30,19 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
     created: 0,
   });
   const [copied, setCopied] = useState(false);
-  const updateShareLink = async (shareId: string, title: string, isAnonymous: boolean) => {
-    if (!shareId) {
+  const updateShareLink = async () => {
+    if (!shareData.share_id) {
       return
     }
     try {
-      await fetch(`/api/share/${shareId}`, {
+      await fetch(`/api/share/${shareData.share_id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          title: title,
-          is_anonymous: isAnonymous,
+          title: shareData.title,
+          is_anonymous: shareData.is_anonymous,
         })
       })
     } catch (e) {
@@ -67,6 +67,16 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
     if (!isOpenShare) {
       return
     }
+    setShareData({
+      share_id: '',
+      title: '',
+      is_anonymous: false,
+      is_public: true,
+      is_visible: true,
+      mapping: {},
+      share_url: '',
+      created: 0,
+    })
     try {
       const res = await fetch(`/api/share`, {
         method: 'POST',
@@ -80,7 +90,6 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
         })
       })
       const resJson = await res.json();
-      console.log(resJson)
       if (resJson) {
         setShareData({
           ...shareData,
@@ -91,6 +100,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
           is_visible: resJson.is_visible,
           mapping: resJson.mapping,
           share_url: resJson.share_url,
+          created: resJson.created,
         })
       }
       // 需要获取到 share_id
@@ -166,6 +176,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
                                          }}
                                          onBlur={() => {
                                            setIsEditTitle(false)
+                                           updateShareLink()
                                          }} autoFocus={true}
                                   />
                                 ) : (

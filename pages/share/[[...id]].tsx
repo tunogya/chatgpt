@@ -53,21 +53,26 @@ const Share = () => {
             </div>
             <div
               className="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient pt-2">
-              <div className="relative flex h-full w-full flex-1 items-center justify-center gap-2">
-                <a target="_self"
-                   className="btn relative cursor-pointer btn-primary"
-                  // href={data.continue_conversation_url}
-                >
-                  <div className="flex w-full gap-2 items-center justify-center">继续该对话</div>
-                </a></div>
+              {/*<div className="relative flex h-full w-full flex-1 items-center justify-center gap-2">*/}
+              {/*  <a target="_self"*/}
+              {/*     className="btn relative cursor-pointer btn-primary"*/}
+              {/*    // href={data.continue_conversation_url}*/}
+              {/*  >*/}
+              {/*    <div className="flex w-full gap-2 items-center justify-center">继续该对话</div>*/}
+              {/*  </a>*/}
+              {/*</div>*/}
               <div
                 className="px-3 pb-3 pt-2 text-center text-xs text-gray-600 dark:text-gray-300 md:px-4 md:pb-6 md:pt-3">
                 <div className="flex justify-center gap-3 text-gray-500">
-                  <button>内容举报</button>
-                  <span>|</span><a href="https://openai.com/policies/terms-of-use" target="_blank"
-                                   rel="noreferrer">使用条款</a><span>|</span><a
-                  href="https://openai.com/policies/privacy-policy" target="_blank"
-                  rel="noreferrer">隐私政策</a></div>
+                  {/*<button>内容举报</button>*/}
+                  {/*<span>|</span>*/}
+                  <a href="/doc/term" target="_blank"
+                     rel="noreferrer">使用条款</a>
+                  <span>|</span>
+                  <a
+                    href="/doc/privacy" target="_blank"
+                    rel="noreferrer">隐私政策</a>
+                </div>
               </div>
             </div>
           </main>

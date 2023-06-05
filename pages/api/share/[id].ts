@@ -1,9 +1,9 @@
-import {withApiAuthRequired} from "@auth0/nextjs-auth0";
+// import {withApiAuthRequired} from "@auth0/nextjs-auth0";
 import {NextApiRequest, NextApiResponse} from "next";
-import {DeleteCommand, GetCommand} from "@aws-sdk/lib-dynamodb";
+import {DeleteCommand, GetCommand, UpdateCommand} from "@aws-sdk/lib-dynamodb";
 import {ddbDocClient} from "@/utils/DynamoDB";
 
-export default withApiAuthRequired(async function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -29,6 +29,7 @@ export default withApiAuthRequired(async function handler(
   }
   // DELETE
   else if (req.method === 'DELETE') {
+    // TODO, check if user is owner
     try {
       await ddbDocClient.send(new DeleteCommand({
         TableName: 'wizardingpay',
@@ -46,7 +47,24 @@ export default withApiAuthRequired(async function handler(
   // PATCH
   else if (req.method === 'PATCH') {
     try {
-      // TODO, PATCH share
+      // TODO, check if user is owner
+      // only owner can update
+      // TODO, partial update
+      const {title, is_anonymous} = req.body;
+      await ddbDocClient.send(new UpdateCommand({
+        TableName: 'wizardingpay',
+        Key: {
+          PK: id,
+          SK: id,
+        },
+        UpdateExpression: 'SET title = :title, is_anonymous = :is_anonymous',
+        ExpressionAttributeValues: {
+          ':title': title,
+          ':is_anonymous': is_anonymous,
+        },
+        ConditionExpression: 'attribute_exists(PK)',
+      }))
+      res.status(200).json({message: 'Update share'})
     } catch (e) {
       res.status(500).json({error: e})
       return;
@@ -55,4 +73,4 @@ export default withApiAuthRequired(async function handler(
   else {
     res.status(500).json({error: "Only support GET, DELETE, PATCH method"})
   }
-});
+};
