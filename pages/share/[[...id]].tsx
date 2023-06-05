@@ -1,8 +1,6 @@
-import AbIcon from "@/components/SVG/AbIcon";
 import {useRouter} from "next/router";
 import useSWR from "swr";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
-import ShareDialogBoxList from "@/components/ShareDialogBoxList";
 import OpenShareDialogBoxList from "@/components/OpenShareDialogBoxList";
 
 const Share = () => {
