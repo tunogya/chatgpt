@@ -7,15 +7,78 @@ import MoreIcon from "@/components/SVG/MoreIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import LinkIcon from "@/components/SVG/LinkIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {useState} from "react";
-import useSWR from "swr";
+import {FC, useCallback, useEffect, useState} from "react";
 
-const ShareDialog = () => {
+type ShareDialogProps = {
+  conversation_id: string | null,
+  current_node_id: string,
+}
+const ShareDialog: FC<ShareDialogProps> = ({current_node_id, conversation_id}) => {
   const isOpenShare = useSelector((state: any) => state.session.isOpenShare);
   const dispatch = useDispatch();
-  const [shareTitle, setShareTitle] = useState('New Chat');
-  const [editShareTitle, setEditShareTitle] = useState(false);
-  const {data, isLoading} = useSWR('')
+  const [shareId, setShareId] = useState(null);
+  const [title, setTitle] = useState('New Chat');
+  const [editTitle, setEditTitle] = useState(false);
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
+
+  const createShareLink = useCallback(async () => {
+    if (current_node_id === '00000000-0000-0000-0000-000000000000') {
+      return
+    }
+    setIsLoading(true)
+    try {
+      const res = await fetch(`/api/share`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          conversation_id,
+          current_node_id,
+          is_anonymous: isAnonymous,
+        })
+      })
+      console.log(res)
+      const {data} = await res.json();
+      if (data) {
+        setData(data)
+      }
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
+    setIsLoading(false)
+  }, [conversation_id, current_node_id])
+
+  const UpdateShareLink = useCallback(async () => {
+    if (!shareId) {
+      return
+    }
+    try {
+      const res = await fetch(`/api/share/${shareId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: title,
+          is_anonymous: isAnonymous,
+        })
+      })
+      const {data} = await res.json();
+      if (data) {
+        setData(data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }, [isAnonymous, shareId, title])
+
+  useEffect(() => {
+    createShareLink()
+  }, [createShareLink])
 
   return (
     <Dialog open={isOpenShare} onClose={() => dispatch(setIsOpenShare(false))}>
@@ -69,16 +132,15 @@ const ShareDialog = () => {
                           <div className="flex-1 pr-1">
                             <div className="flex w-full items-center justify-left gap-2 min-h-[1.5rem]">
                               {
-                                editShareTitle ? (
-                                  <input type="text" className="border-none bg-transparent p-0 m-0 w-full mr-0" defaultValue={shareTitle}
-                                         value={shareTitle} onChange={(e) => setShareTitle(e.target.value)}
-                                    // end of input
-                                         onBlur={() => {setEditShareTitle(false)}} autoFocus={true}
+                                editTitle ? (
+                                  <input type="text" className="border-none bg-transparent p-0 m-0 w-full mr-0" defaultValue={title}
+                                         value={title} onChange={(e) => setTitle(e.target.value)}
+                                         onBlur={() => {setEditTitle(false)}} autoFocus={true}
                                   />
                                 ) : (
                                   <>
-                                    {shareTitle}
-                                    <button className="text-gray-500" onClick={() => setEditShareTitle(true)}>
+                                    {title}
+                                    <button className="text-gray-500" onClick={() => setEditTitle(true)}>
                                       <EditIcon/>
                                     </button>
                                   </>

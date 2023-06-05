@@ -1,32 +1,103 @@
-import {withApiAuthRequired} from "@auth0/nextjs-auth0";
+import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
 import {NextApiRequest, NextApiResponse} from "next";
+import {ddbDocClient} from "@/utils/DynamoDB";
+import {GetCommand, PutCommand, UpdateCommand} from "@aws-sdk/lib-dynamodb";
+import {v4 as uuidv4} from "uuid";
 
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // request
-  // {
-  //     "current_node_id": "20617eb9-8853-42d8-8b0c-1627a70a670d",
-  //     "conversation_id": "ad2bc389-5e96-4846-a1bd-f963692ec730",
-  //     "is_anonymous": true
-  // }
-  const {current_node_id, conversation_id, is_anonymous} = req.body;
+  if (req.method === 'POST') {
+    // @ts-ignore
+    const {user} = await getSession(req, res);
+    const user_id = user.sub;
+    const {current_node_id, conversation_id, is_anonymous} = req.body;
+    const conversationRes = await ddbDocClient.send(new GetCommand({
+      TableName: 'wizardingpay',
+      Key: {
+        PK: user_id,
+        SK: conversation_id,
+      }
+    }))
 
-  // return
-  // {"share_id":"34c27a3c-64c8-442e-bff3-b675de57b885",
-  // "share_url":"https://chat.openai.com/share/34c27a3c-64c8-442e-bff3-b675de57b885",
-  // "title":"Requesting Conversation Summary.",
-  // "is_public":true,
-  // "is_visible":true,
-  // "is_anonymous":true,
-  // "highlighted_message_id":null,
-  // "current_node_id":"20617eb9-8853-42d8-8b0c-1627a70a670d",
-  // "already_exists":true,
-  // "moderation_state":{"has_been_moderated":false,
-  //    "has_been_blocked":false,
-  //    "has_been_accepted":false,
-  //    "has_been_auto_blocked":false,
-  //    "has_been_auto_moderated":false
-  // }}
+    if (!conversationRes.Item) {
+      res.status(404).json({error: 'No conversation found'})
+      return;
+    }
+
+    if (conversationRes.Item.share_id) {
+      const shareRes = await ddbDocClient.send(new GetCommand({
+        TableName: 'wizardingpay',
+        Key: {
+          PK: conversationRes.Item.share_id,
+          SK: conversationRes.Item.share_id,
+        }
+      }))
+      res.status(200).json({
+        ...shareRes.Item,
+        already_exists: true,
+      })
+      return;
+    }
+
+    const share_id = uuidv4()
+    await ddbDocClient.send(new UpdateCommand({
+      TableName: 'wizardingpay',
+      Key: {
+        PK: user_id,
+        SK: conversation_id,
+      },
+      UpdateExpression: 'SET share_id = :share_id',
+      ExpressionAttributeValues: {
+        ':share_id': share_id,
+      }
+    }))
+
+    await ddbDocClient.send(new PutCommand({
+      TableName: 'wizardingpay',
+      Item: {
+        PK: share_id,
+        SK: share_id,
+        share_url: `https://www.abandon.chat/share/${share_id}`,
+        title: conversationRes.Item.title,
+        is_public: true,
+        is_visible: true,
+        is_anonymous,
+        current_node_id,
+        highlighted_message_id: null,
+        mapping: conversationRes.Item.mapping,
+        moderation_state: {
+          "has_been_moderated": false,
+          "has_been_blocked": false,
+          "has_been_accepted": false,
+          "has_been_auto_blocked": false,
+          "has_been_auto_moderated": false,
+        },
+        TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
+      }
+    }))
+    res.status(200).json({
+      share_id,
+      share_url: `https://www.abandon.chat/share/${share_id}`,
+      title: conversationRes.Item.title,
+      is_public: true,
+      is_visible: true,
+      is_anonymous,
+      current_node_id,
+      highlighted_message_id: null,
+      already_exists: false,
+      mapping: conversationRes.Item.mapping,
+      moderation_state: {
+        "has_been_moderated": false,
+        "has_been_blocked": false,
+        "has_been_accepted": false,
+        "has_been_auto_blocked": false,
+        "has_been_auto_moderated": false,
+      },
+    })
+    return
+  } else {
+    res.status(500).json({"error": "bad request"})
+  }
 });
