@@ -9,8 +9,6 @@ import {UserProvider} from '@auth0/nextjs-auth0/client';
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {useEffect} from "react";
 import "@/styles/index.css";
-import "@/styles/intensifies.scss";
-import "@/styles/twister.scss";
 
 const persistor = persistStore(store);
 
