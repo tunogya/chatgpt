@@ -23,6 +23,17 @@ const Share = () => {
     )
   }
 
+  if (data?.error) {
+    return (
+      <div className="flex flex-col items-center text-sm text-gray-800 dark:text-gray-100 dark:bg-gray-800">
+        <div className={"pt-4"}>
+          {data?.error}
+        </div>
+        <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="overflow-hidden w-full h-full relative flex z-0">
       <div className="relative flex h-full max-w-full flex-1 overflow-hidden">

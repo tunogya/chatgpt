@@ -38,6 +38,8 @@ export default async function handler(
           SK: id,
         }
       }))
+      // TODO, delete all related conversation tag
+
       res.status(200).json({message: 'Delete share'})
     } catch (e) {
       res.status(500).json({error: e})

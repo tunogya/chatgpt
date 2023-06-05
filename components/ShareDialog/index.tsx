@@ -142,7 +142,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
               <div className="p-4 sm:p-6 sm:pt-4">
                 <div className="w-full">
                   <p className="mb-6 text-gray-500">
-                    您在创建链接后发送的消息将不会被共享。知道该 URL 的任何人都可以查看共享聊天。
+                    ⚠️ 测试功能，可能会有 Bug，我们将尽快修复。请不要分享个人隐私等敏感信息！
                   </p>
                 </div>
                 <div
@@ -181,7 +181,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
                                   />
                                 ) : (
                                   <>
-                                    {shareData.title}
+                                    {shareData.title || 'loading...'}
                                     <button className="text-gray-500" onClick={() => setIsEditTitle(true)}>
                                       <EditIcon/>
                                     </button>
@@ -190,7 +190,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
                               }
                             </div>
                             <div className="mt-1 text-gray-500">
-                              {shareData.created ? new Date(shareData?.created * 1000).toDateString() : ''}
+                              {shareData.created ? new Date(shareData?.created * 1000).toDateString() : '-'}
                             </div>
                           </div>
                           <div className="flex-none h-full mt-auto mb-auto">
