@@ -42,7 +42,8 @@ const Share = () => {
                         className="max-w-md text-3xl font-semibold leading-tight text-gray-700 dark:text-gray-100 sm:text-4xl">
                         {data?.title}
                       </h1>
-                      <div className="pt-3 text-base text-gray-400 sm:pt-4">{data?.created ? new Date(data?.created * 1000).toDateString() : ''}</div>
+                      <div
+                        className="pt-3 text-base text-gray-400 sm:pt-4">{data?.created ? new Date(data?.created * 1000).toDateString() : ''}</div>
                     </div>
                   </div>
                   <OpenShareDialogBoxList data={data} isLoading={isLoading}/>

@@ -1,4 +1,4 @@
-import {Dialog} from "@headlessui/react";
+import {Dialog, Menu} from "@headlessui/react";
 import {setIsOpenShare} from "@/store/session";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import ShareDialogBoxList from "@/components/ShareDialogBoxList";
@@ -60,6 +60,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
         'Content-Type': 'application/json',
       }
     })
+    dispatch(setIsOpenShare(false))
   }
 
   const createShareLink = useCallback(async () => {
@@ -182,13 +183,26 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
                             </div>
                           </div>
                           <div className="flex-none h-full mt-auto mb-auto">
-                            <button className="btn relative btn-neutral mb-auto mt-auto" type="button"
-                                    aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r16:"
-                                    data-state="closed">
-                              <div className="flex w-full gap-2 items-center justify-center">
-                                <MoreIcon/>
-                              </div>
-                            </button>
+                            <Menu as="div" className="relative inline-block text-left">
+                              <Menu.Button className="btn relative btn-neutral mb-auto mt-auto">
+                                <div className="flex w-full gap-2 items-center justify-center">
+                                  <MoreIcon/>
+                                </div>
+                              </Menu.Button>
+                              <Menu.Items
+                                className="absolute flex flex-col justify-center bottom-full overflow-hidden right-0 z-20 mb-2 w-[103px] rounded-md bg-[#050509] outline-none opacity-100 translate-y-0">
+                                <Menu.Item>
+                                  <a
+                                    className={"flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"}
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      deleteShareLink()
+                                    }}>
+                                    删除链接
+                                  </a>
+                                </Menu.Item>
+                              </Menu.Items>
+                            </Menu>
                           </div>
                         </div>
                       </div>
