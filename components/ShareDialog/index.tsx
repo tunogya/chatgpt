@@ -9,6 +9,7 @@ import LinkIcon from "@/components/SVG/LinkIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {FC, useCallback, useEffect, useState} from "react";
 import copy from "copy-to-clipboard";
+import RightIcon from "@/components/SVG/RightIcon";
 
 type ShareDialogProps = {
   data: any,
@@ -28,6 +29,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
     share_url: '',
     created: 0,
   });
+  const [copied, setCopied] = useState(false);
   const updateShareLink = async (shareId: string, title: string, isAnonymous: boolean) => {
     if (!shareId) {
       return
@@ -202,10 +204,16 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
                     </a>
                   </div>
                   <div className="text-right">
-                    <button className="btn relative btn-primary" onClick={() => copy(shareData.share_url)}>
+                    <button className="btn relative btn-primary" onClick={() => {
+                      setCopied(true)
+                      copy(shareData.share_url)
+                      setTimeout(() => {
+                        setCopied(false)
+                      }, 1000)
+                    }}>
                       <div className="flex w-full gap-2 items-center justify-center">
-                        <LinkIcon/>
-                        复制链接
+                        {copied ? <RightIcon/> : <LinkIcon/>}
+                        {copied ? '复制成功' : '复制链接'}
                       </div>
                     </button>
                   </div>

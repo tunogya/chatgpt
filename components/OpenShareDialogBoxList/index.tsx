@@ -2,12 +2,12 @@ import {FC, useMemo} from "react";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import ShareDialogBoxItem from "@/components/ShareDialogBoxList/ShareDialogBoxItem";
 
-type ShareDialogBoxListProps = {
+type OpenShareDialogBoxListProps = {
   data: any
   isLoading: boolean
 }
 
-const ShareDialogBoxList: FC<ShareDialogBoxListProps> = ({data, isLoading}) => {
+const OpenShareDialogBoxList: FC<OpenShareDialogBoxListProps> = ({data, isLoading}) => {
   const rootMessageId = useMemo(() => {
     if (!data) {
       return null
@@ -49,4 +49,4 @@ const ShareDialogBoxList: FC<ShareDialogBoxListProps> = ({data, isLoading}) => {
   )
 }
 
-export default ShareDialogBoxList
+export default OpenShareDialogBoxList
