@@ -74,7 +74,9 @@ export default withApiAuthRequired(async function handler(
           "has_been_auto_blocked": false,
           "has_been_auto_moderated": false,
         },
-        TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
+        created: Math.floor(Date.now() / 1000),
+        // TODO: set TTL 7 days
+        TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
       }
     }))
     res.status(200).json({
@@ -88,6 +90,7 @@ export default withApiAuthRequired(async function handler(
       highlighted_message_id: null,
       already_exists: false,
       mapping: conversationRes.Item.mapping,
+      created: Math.floor(Date.now() / 1000),
       moderation_state: {
         "has_been_moderated": false,
         "has_been_blocked": false,

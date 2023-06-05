@@ -142,7 +142,9 @@ const DialogMenuItem: FC<DialogMenuItemProps> = ({...props}) => {
                   <button className="p-1 hover:text-white" onClick={() => setUpdateConfirm(true)}>
                     <EditIcon/>
                   </button>
-                  <button className="p-1 hover:text-white" onClick={() => dispatch(setIsOpenShare(true))}>
+                  <button className="p-1 hover:text-white" onClick={() => {
+                    dispatch(setIsOpenShare(true))
+                  }}>
                     <ShareIcon/>
                   </button>
                   <button className="p-1 hover:text-white" onClick={() => setDeleteConfirm(true)}>

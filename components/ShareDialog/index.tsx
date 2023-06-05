@@ -8,56 +8,32 @@ import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import LinkIcon from "@/components/SVG/LinkIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {FC, useCallback, useEffect, useState} from "react";
+import copy from "copy-to-clipboard";
 
 type ShareDialogProps = {
-  conversation_id: string | null,
-  current_node_id: string,
+  data: any,
 }
-const ShareDialog: FC<ShareDialogProps> = ({current_node_id, conversation_id}) => {
+const ShareDialog: FC<ShareDialogProps> = ({data}) => {
   const isOpenShare = useSelector((state: any) => state.session.isOpenShare);
   const dispatch = useDispatch();
-  const [shareId, setShareId] = useState(null);
-  const [title, setTitle] = useState('New Chat');
-  const [editTitle, setEditTitle] = useState(false);
-  const [data, setData] = useState(null);
+  const [isEditTitle, setIsEditTitle] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAnonymous, setIsAnonymous] = useState(false);
-
-  const createShareLink = useCallback(async () => {
-    if (current_node_id === '00000000-0000-0000-0000-000000000000') {
-      return
-    }
-    setIsLoading(true)
-    try {
-      const res = await fetch(`/api/share`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          conversation_id,
-          current_node_id,
-          is_anonymous: isAnonymous,
-        })
-      })
-      console.log(res)
-      const {data} = await res.json();
-      if (data) {
-        setData(data)
-      }
-      console.log(data)
-    } catch (e) {
-      console.log(e)
-    }
-    setIsLoading(false)
-  }, [conversation_id, current_node_id])
-
-  const UpdateShareLink = useCallback(async () => {
+  const [shareData, setShareData] = useState({
+    share_id: '',
+    title: '',
+    is_anonymous: false,
+    is_public: true,
+    is_visible: true,
+    mapping: {},
+    share_url: '',
+    created: 0,
+  });
+  const updateShareLink = async (shareId: string, title: string, isAnonymous: boolean) => {
     if (!shareId) {
       return
     }
     try {
-      const res = await fetch(`/api/share/${shareId}`, {
+      await fetch(`/api/share/${shareId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -67,17 +43,61 @@ const ShareDialog: FC<ShareDialogProps> = ({current_node_id, conversation_id}) =
           is_anonymous: isAnonymous,
         })
       })
-      const {data} = await res.json();
-      if (data) {
-        setData(data)
-      }
     } catch (e) {
       console.log(e)
     }
-  }, [isAnonymous, shareId, title])
+  }
+
+  const deleteShareLink = async () => {
+    if (!shareData.share_id) {
+      return
+    }
+    await fetch(`/api/share/${shareData.share_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+  }
+
+  const createShareLink = useCallback(async () => {
+    if (!isOpenShare) {
+      return
+    }
+    try {
+      const res = await fetch(`/api/share`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          conversation_id: data?.id,
+          current_node_id: '',
+          is_anonymous: true,
+        })
+      })
+      const resJson = await res.json();
+      console.log(resJson)
+      if (resJson) {
+        setShareData({
+          ...shareData,
+          share_id: resJson.PK,
+          title: resJson.title,
+          is_anonymous: resJson.is_anonymous,
+          is_public: resJson.is_public,
+          is_visible: resJson.is_visible,
+          mapping: resJson.mapping,
+          share_url: resJson.share_url,
+        })
+      }
+      // 需要获取到 share_id
+    } catch (e) {
+      console.log(e)
+    }
+  }, [data?.id, isOpenShare])
 
   useEffect(() => {
-    createShareLink()
+    createShareLink();
   }, [createShareLink])
 
   return (
@@ -132,15 +152,23 @@ const ShareDialog: FC<ShareDialogProps> = ({current_node_id, conversation_id}) =
                           <div className="flex-1 pr-1">
                             <div className="flex w-full items-center justify-left gap-2 min-h-[1.5rem]">
                               {
-                                editTitle ? (
-                                  <input type="text" className="border-none bg-transparent p-0 m-0 w-full mr-0" defaultValue={title}
-                                         value={title} onChange={(e) => setTitle(e.target.value)}
-                                         onBlur={() => {setEditTitle(false)}} autoFocus={true}
+                                isEditTitle ? (
+                                  <input type="text" className="border-none bg-transparent p-0 m-0 w-full mr-0"
+                                         value={shareData.title}
+                                         onChange={(e) => {
+                                           setShareData({
+                                             ...shareData,
+                                             title: e.target.value
+                                           })
+                                         }}
+                                         onBlur={() => {
+                                           setIsEditTitle(false)
+                                         }} autoFocus={true}
                                   />
                                 ) : (
                                   <>
-                                    {title}
-                                    <button className="text-gray-500" onClick={() => setEditTitle(true)}>
+                                    {shareData.title}
+                                    <button className="text-gray-500" onClick={() => setIsEditTitle(true)}>
                                       <EditIcon/>
                                     </button>
                                   </>
@@ -148,7 +176,7 @@ const ShareDialog: FC<ShareDialogProps> = ({current_node_id, conversation_id}) =
                               }
                             </div>
                             <div className="mt-1 text-gray-500">
-                              {new Date().toDateString()}
+                              {shareData.created ? new Date(shareData?.created * 1000).toDateString() : ''}
                             </div>
                           </div>
                           <div className="flex-none h-full mt-auto mb-auto">
@@ -174,7 +202,7 @@ const ShareDialog: FC<ShareDialogProps> = ({current_node_id, conversation_id}) =
                     </a>
                   </div>
                   <div className="text-right">
-                    <button className="btn relative btn-primary">
+                    <button className="btn relative btn-primary" onClick={() => copy(shareData.share_url)}>
                       <div className="flex w-full gap-2 items-center justify-center">
                         <LinkIcon/>
                         复制链接

@@ -877,11 +877,7 @@ const Chat = ({user}: any) => {
           </div>
         </div>
       </Dialog>
-      {
-        currentNodeId !== '00000000-0000-0000-0000-000000000000' && (
-          <ShareDialog conversation_id={session.id} current_node_id={currentNodeId}/>
-        )
-      }
+      <ShareDialog data={session}/>
     </>
   )
 }
