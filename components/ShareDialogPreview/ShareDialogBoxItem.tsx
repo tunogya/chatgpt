@@ -28,7 +28,7 @@ const ShareDialogBaseItem: FC<ShareDialogBaseItemProps> = ({id, is_anonymous, me
           <div className="flex-shrink-0 flex flex-col relative items-end">
             <div className="w-[30px]">
               <div
-                style={{backgroundColor: '#ab68ff'}}
+                style={{backgroundColor: is_anonymous ? '#808080' : '#f58296'}}
                 className="relative p-1 rounded-sm h-[30px] w-[30px] text-white flex items-center justify-center">
                 <AnonymouslyIcon/>
               </div>
