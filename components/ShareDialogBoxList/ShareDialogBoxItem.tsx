@@ -36,7 +36,7 @@ const ShareBaseDialogBoxItem: FC<ShareBaseDialogBoxItemProps> = ({id, message}) 
             className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
             <div className="flex flex-grow flex-col gap-3">
               <div
-                className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap break-words">
+                className="min-h-[20px] flex flex-col items-start gap-4 break-words">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm, remarkMath]}
                   rehypePlugins={[rehypeKatex]}
@@ -74,7 +74,7 @@ const ShareBaseDialogBoxItem: FC<ShareBaseDialogBoxItemProps> = ({id, message}) 
           className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
           <div className="flex flex-grow flex-col gap-3">
             <div
-              className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap break-words">
+              className="min-h-[20px] flex flex-col items-start gap-4 break-words">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[rehypeKatex]}
