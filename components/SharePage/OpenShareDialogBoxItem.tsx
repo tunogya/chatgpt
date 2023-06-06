@@ -7,12 +7,16 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import CodeFormat from "@/components/DialogBoxList/CodeFormat";
 import AnonymouslyIcon from "@/components/SVG/AnonymouslyIcon";
+import {useUser} from "@auth0/nextjs-auth0/client";
+import Image from "next/image";
 
 type ShareBaseDialogBoxItemProps = {
   id: string,
+  is_anonymous: boolean,
   message: Message | null,
 }
-const OpenShareBaseDialogBoxItem: FC<ShareBaseDialogBoxItemProps> = ({id, message}) => {
+const OpenShareBaseDialogBoxItem: FC<ShareBaseDialogBoxItemProps> = ({id, message, is_anonymous}) => {
+  const {user, error, isLoading} = useUser();
   if (message === null || message?.role === 'system') {
     return <></>
   }
@@ -24,13 +28,36 @@ const OpenShareBaseDialogBoxItem: FC<ShareBaseDialogBoxItemProps> = ({id, messag
         <div
           className="flex p-4 gap-4 text-base md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl md:py-6 m-auto">
           <div className="flex-shrink-0 flex flex-col relative items-end">
-            <div className="w-[30px]">
-              <div
-                style={{backgroundColor: '#ab68ff'}}
-                className="relative p-1 rounded-sm h-[30px] w-[30px] text-white flex items-center justify-center">
-                <AnonymouslyIcon/>
-              </div>
-            </div>
+            {
+              is_anonymous ? (
+                <div className="w-[30px]">
+                  <div
+                    style={{backgroundColor: '#ab68ff'}}
+                    className="relative p-1 rounded-sm h-[30px] w-[30px] text-white flex items-center justify-center">
+                    <AnonymouslyIcon/>
+                  </div>
+                </div>
+              ) : (
+                <div className={'w-[30px]'}>
+                  <div className={'relative flex'}>
+                    <div className={'rounded-sm overflow-hidden'}>
+                      <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={30} height={30} quality={80}
+                             priority
+                             blurDataURL={`https://dummyimage.com/30x30/ffffff/000000.png&text=${user?.name?.[0] || 'A'}`}
+                      />
+                    </div>
+                    {/*{*/}
+                    {/*  flagged && (*/}
+                    {/*    <div*/}
+                    {/*      className="absolute w-4 h-4 rounded-full text-[10px] flex justify-center items-center right-0 top-[20px] -mr-2 border border-white bg-orange-500 text-white">*/}
+                    {/*      <div>!</div>*/}
+                    {/*    </div>*/}
+                    {/*  )*/}
+                    {/*}*/}
+                  </div>
+                </div>
+              )
+            }
           </div>
           <div
             className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
@@ -93,7 +120,6 @@ const OpenShareBaseDialogBoxItem: FC<ShareBaseDialogBoxItemProps> = ({id, messag
   )
 }
 
-
 type ShareDialogBoxItemProps = {
   id: string
   data: any
@@ -109,10 +135,7 @@ const OpenShareDialogBoxItem: FC<ShareDialogBoxItemProps> = ({id, data}) => {
 
   return (
     <>
-      <OpenShareBaseDialogBoxItem
-        message={data?.mapping?.[id].message}
-        id={id}
-      />
+      <OpenShareBaseDialogBoxItem id={id} is_anonymous={data.is_anonymous} message={data?.mapping?.[id].message}/>
       {
         children.length > 0 && (
           children[children_index]

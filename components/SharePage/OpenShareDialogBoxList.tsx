@@ -1,5 +1,5 @@
 import {FC, useMemo} from "react";
-import OpenShareDialogBoxItem from "@/components/OpenShareDialogBoxList/OpenShareDialogBoxItem";
+import OpenShareDialogBoxItem from "@/components/SharePage/OpenShareDialogBoxItem";
 
 type OpenShareDialogBoxListProps = {
   data: any

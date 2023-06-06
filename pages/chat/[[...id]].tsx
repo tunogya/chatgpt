@@ -33,7 +33,7 @@ import StopIcon from "@/components/SVG/StopIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import ScrollToBottom from "react-scroll-to-bottom";
-import ShareDialog from "@/components/ShareDialog";
+import ShareDialog from "components/ShareDialogPreview";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -534,16 +534,9 @@ const Chat = ({user}: any) => {
               </form>
               <div
                 className="flex justify-center px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-gray-500 md:px-4 md:pt-3 md:pb-6 space-y-1">
-                <div className={'flex space-x-1.5'}>
-                  <div className={"flex space-x-1.5"}>
-                    <p>
-                      © {new Date().getFullYear()}, Abandon Inc.
-                    </p>
-                  </div>
-                  <div className={"flex space-x-1.5"}>
-                    由 OpenAI 提供技术支持。
-                  </div>
-                </div>
+                <p>
+                  © {new Date().getFullYear()}, Abandon Inc., Powered by OpenAI.
+                </p>
               </div>
             </div>
           </main>

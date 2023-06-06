@@ -1,16 +1,13 @@
-import AbIcon from "@/components/SVG/AbIcon";
 import {FC, useMemo} from "react";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
-import DialogBoxItem from "@/components/DialogBoxList/DialogBoxItem";
-import Typewriter from "@/components/Typewriter";
-import ShareDialogBoxItem from "@/components/ShareDialogBoxList/ShareDialogBoxItem";
+import SharePreviewBaseDialogBoxItem from "@/components/ShareDialogPreview/ShareDialogBoxItem";
 
 type ShareDialogBoxListProps = {
   data: any
   isLoading?: boolean
 }
 
-const ShareDialogBoxList: FC<ShareDialogBoxListProps> = ({data, isLoading}) => {
+const ShareDialogPreviewList: FC<ShareDialogBoxListProps> = ({data, isLoading}) => {
   const rootMessageId = useMemo(() => {
     if (!data) {
       return null
@@ -43,7 +40,7 @@ const ShareDialogBoxList: FC<ShareDialogBoxListProps> = ({data, isLoading}) => {
         ) : (
           (data?.id || rootMessageId) && (
             rootMessageId && (
-              <ShareDialogBoxItem id={rootMessageId} data={data}/>
+              <SharePreviewBaseDialogBoxItem id={rootMessageId} data={data}/>
             )
           )
         )
@@ -52,4 +49,4 @@ const ShareDialogBoxList: FC<ShareDialogBoxListProps> = ({data, isLoading}) => {
   )
 }
 
-export default ShareDialogBoxList
+export default ShareDialogPreviewList
