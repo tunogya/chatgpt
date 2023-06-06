@@ -7,8 +7,6 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import CodeFormat from "@/components/DialogBoxList/CodeFormat";
 import AnonymouslyIcon from "@/components/SVG/AnonymouslyIcon";
-import {useUser} from "@auth0/nextjs-auth0/client";
-import Image from "next/image";
 
 type ShareBaseDialogBoxItemProps = {
   id: string,
@@ -16,8 +14,6 @@ type ShareBaseDialogBoxItemProps = {
   message: Message | null,
 }
 const OpenShareBaseDialogBoxItem: FC<ShareBaseDialogBoxItemProps> = ({id, message, is_anonymous}) => {
-  const {user} = useUser();
-
   if (message === null || message?.role === 'system') {
     return <></>
   }
