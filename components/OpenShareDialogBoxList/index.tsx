@@ -1,13 +1,11 @@
 import {FC, useMemo} from "react";
-import LoadingIcon from "@/components/SVG/LoadingIcon";
 import OpenShareDialogBoxItem from "@/components/OpenShareDialogBoxList/OpenShareDialogBoxItem";
 
 type OpenShareDialogBoxListProps = {
   data: any
-  isLoading: boolean
 }
 
-const OpenShareDialogBoxList: FC<OpenShareDialogBoxListProps> = ({data, isLoading}) => {
+const OpenShareDialogBoxList: FC<OpenShareDialogBoxListProps> = ({data}) => {
   const rootMessageId = useMemo(() => {
     if (!data) {
       return null
@@ -30,18 +28,9 @@ const OpenShareDialogBoxList: FC<OpenShareDialogBoxListProps> = ({data, isLoadin
   return (
     <div className="flex flex-col text-sm dark:bg-gray-800">
       {
-        isLoading ? (
-          <div className="flex flex-col items-center text-sm text-gray-800 dark:text-gray-100 dark:bg-gray-800">
-            <div className={"pt-4"}>
-              <LoadingIcon/>
-            </div>
-            <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
-          </div>
-        ) : (
-          (data?.id || rootMessageId) && (
-            rootMessageId && (
-              <OpenShareDialogBoxItem id={rootMessageId} data={data}/>
-            )
+        (data?.id || rootMessageId) && (
+          rootMessageId && (
+            <OpenShareDialogBoxItem id={rootMessageId} data={data}/>
           )
         )
       }

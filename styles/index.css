@@ -2495,6 +2495,10 @@ h2, h3 {
     width: 88px
 }
 
+.w-\[672px\] {
+    width: 672px
+}
+
 .w-\[calc\(100\%-50px\)\] {
     width: calc(100% - 50px)
 }

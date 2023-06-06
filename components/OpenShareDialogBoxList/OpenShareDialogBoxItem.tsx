@@ -22,7 +22,7 @@ const OpenShareBaseDialogBoxItem: FC<ShareBaseDialogBoxItemProps> = ({id, messag
       <div
         className="group w-full text-gray-800 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50 dark:bg-gray-800">
         <div
-          className="flex p-4 gap-4 text-base md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl md:py-6 lg:px-0 m-auto">
+          className="flex p-4 gap-4 text-base md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl md:py-6 m-auto">
           <div className="flex-shrink-0 flex flex-col relative items-end">
             <div className="w-[30px]">
               <div
@@ -60,7 +60,7 @@ const OpenShareBaseDialogBoxItem: FC<ShareBaseDialogBoxItemProps> = ({id, messag
     <div
       className="group w-full text-gray-800 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50 bg-gray-50 dark:bg-[#444654]">
       <div
-        className="flex p-4 gap-4 text-base md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl md:py-6 lg:px-0 m-auto">
+        className="flex p-4 gap-4 text-base md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl md:py-6 m-auto">
         <div className="flex-shrink-0 flex flex-col relative items-end">
           <div className="w-[30px]">
             <div

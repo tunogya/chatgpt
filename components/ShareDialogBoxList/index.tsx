@@ -7,7 +7,7 @@ import ShareDialogBoxItem from "@/components/ShareDialogBoxList/ShareDialogBoxIt
 
 type ShareDialogBoxListProps = {
   data: any
-  isLoading: boolean
+  isLoading?: boolean
 }
 
 const ShareDialogBoxList: FC<ShareDialogBoxListProps> = ({data, isLoading}) => {
