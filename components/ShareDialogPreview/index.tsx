@@ -5,23 +5,35 @@ import EditIcon from "@/components/SVG/EditIcon";
 import MoreIcon from "@/components/SVG/MoreIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {FC, useRef, useState} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import domtoimage from "../../utils/dom-to-image";
 import SharePage from "@/components/SharePage";
 import ShareDialogPreviewList from "@/components/ShareDialogPreview/ShareDialogPreviewList";
+import {useUser} from "@auth0/nextjs-auth0/client";
 
 type ShareDialogProps = {
   data: any,
 }
 const ShareDialog: FC<ShareDialogProps> = ({data}) => {
+  const {user} = useUser();
   const isOpenShare = useSelector((state: any) => state.session.isOpenShare);
   const dispatch = useDispatch();
   const [isEditTitle, setIsEditTitle] = useState(false);
+  const myShareRef = useRef(null);
   const [shareData, setShareData] = useState({
-    ...data,
+    id: '',
+    title: '',
+    mapping: {},
     is_anonymous: true,
   });
-  const myShareRef = useRef(null);
+
+  useEffect(() => {
+    if (data.id && data.id !== shareData.id) {
+      setShareData({
+        ...data,
+      })
+    }
+  }, [shareData, data])
 
   return (
     <Dialog open={isOpenShare} onClose={() => dispatch(setIsOpenShare(false))}>
@@ -100,7 +112,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
                               }
                             </div>
                             <div className="mt-1 text-gray-500">
-                              {new Date().toDateString()}
+                              {`${shareData.is_anonymous ? '' : `${user?.email}, `}${new Date().toDateString()}`}
                             </div>
                           </div>
                           <div className="flex-none h-full mt-auto mb-auto">

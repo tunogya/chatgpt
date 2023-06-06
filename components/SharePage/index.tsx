@@ -27,7 +27,7 @@ const SharePage: FC<SharePageProps> = ({data}) => {
                       {data?.title}
                     </h1>
                     <div
-                      className="pt-3 text-base text-gray-400 sm:pt-4">{`${data.is_anonymous ? '' : `${user?.email} `}${new Date().toDateString()}`}</div>
+                      className="pt-3 text-base text-gray-400 sm:pt-4">{`${data.is_anonymous ? '' : `${user?.email}, `}${new Date().toDateString()}`}</div>
                   </div>
                 </div>
                 <OpenShareDialogBoxList data={data}/>
