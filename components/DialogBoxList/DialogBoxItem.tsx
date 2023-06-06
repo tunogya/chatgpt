@@ -123,10 +123,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
           <div className={'w-[30px]'}>
             <div className={'relative flex'}>
               <div className={'rounded-sm overflow-hidden'}>
-                <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={30} height={30} quality={80}
-                       priority
-                       blurDataURL={`https://dummyimage.com/30x30/ffffff/000000.png&text=${user?.name?.[0] || 'A'}`}
-                />
+                <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={30} height={30} quality={80} priority/>
               </div>
               {
                 flagged && (
