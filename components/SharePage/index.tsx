@@ -1,6 +1,7 @@
 import {FC} from "react";
 import {useUser} from "@auth0/nextjs-auth0/client";
 import OpenShareDialogBoxList from "@/components/SharePage/OpenShareDialogBoxList";
+import moment from "moment";
 
 type SharePageProps = {
   data: any
@@ -27,7 +28,7 @@ const SharePage: FC<SharePageProps> = ({data}) => {
                       {data?.title}
                     </h1>
                     <div
-                      className="pt-3 text-base text-gray-400 sm:pt-4">{`${data.is_anonymous ? '' : `${user?.email}, `}${new Date().toDateString()}`}</div>
+                      className="pt-3 text-base text-gray-400 sm:pt-4">{`${data.is_anonymous ? '' : `${user?.email}, `}${moment().format('ll')}`}</div>
                   </div>
                 </div>
                 <OpenShareDialogBoxList data={data}/>

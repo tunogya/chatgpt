@@ -10,6 +10,7 @@ import domtoimage from "../../utils/dom-to-image";
 import SharePage from "@/components/SharePage";
 import ShareDialogPreviewList from "@/components/ShareDialogPreview/ShareDialogPreviewList";
 import {useUser} from "@auth0/nextjs-auth0/client";
+import moment from "moment/moment";
 
 type ShareDialogProps = {
   data: any,
@@ -112,7 +113,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
                               }
                             </div>
                             <div className="mt-1 text-gray-500">
-                              {`${shareData.is_anonymous ? '' : `${user?.email}, `}${new Date().toDateString()}`}
+                              {`${shareData.is_anonymous ? '' : `${user?.email}, `}${moment().format('ll')}`}
                             </div>
                           </div>
                           <div className="flex-none h-full mt-auto mb-auto">
