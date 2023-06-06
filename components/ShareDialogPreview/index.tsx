@@ -5,7 +5,7 @@ import EditIcon from "@/components/SVG/EditIcon";
 import MoreIcon from "@/components/SVG/MoreIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {FC, useEffect, useRef, useState} from "react";
+import {FC, useCallback, useEffect, useRef, useState} from "react";
 import domtoimage from "../../utils/dom-to-image";
 import SharePage from "@/components/SharePage";
 import ShareDialogPreviewList from "@/components/ShareDialogPreview/ShareDialogPreviewList";
@@ -22,19 +22,21 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
   const [isEditTitle, setIsEditTitle] = useState(false);
   const myShareRef = useRef(null);
   const [shareData, setShareData] = useState({
-    id: '',
-    title: '',
-    mapping: {},
+    ...data,
     is_anonymous: true,
   });
 
-  useEffect(() => {
-    if (data.id && data.id !== shareData.id) {
+  const updateShareData = useCallback(() => {
+    if (isOpenShare) {
       setShareData({
         ...data,
       })
     }
-  }, [shareData, data])
+  }, [isOpenShare, data])
+
+  useEffect(() => {
+    updateShareData()
+  }, [updateShareData])
 
   return (
     <Dialog open={isOpenShare} onClose={() => dispatch(setIsOpenShare(false))}>
@@ -84,7 +86,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
                           </div>
                         </div>
                         <div
-                          className="flex p-4 bg-white text-white dark:bg-gray-800/90 border-t border-gray-100 dark:border-gray-700 rounded-b-lg w-full h-full">
+                          className="flex p-4 bg-white dark:text-white dark:bg-gray-800/90 border-t border-gray-100 dark:border-gray-700 rounded-b-lg w-full h-full">
                           <div className="flex-1 pr-1">
                             <div className="flex w-full items-center justify-left gap-2 min-h-[1.5rem]">
                               {

@@ -15,7 +15,7 @@ const SharePage: FC<SharePageProps> = ({data}) => {
         <main
           className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
           <div className="flex-1 overflow-hidden">
-            <div className="h-full overflow-auto dark:bg-gray-800">
+            <div className="h-full overflow-auto bg-white dark:bg-gray-800">
               <div className="flex flex-col text-sm dark:bg-gray-800">
                 <div
                   className="flex items-center justify-center gap-1 border-b border-black/10 bg-gray-50 p-3 text-gray-500 dark:border-gray-900/50 dark:bg-gray-700 dark:text-gray-300 sticky top-0 z-50">
