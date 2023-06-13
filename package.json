@@ -12,7 +12,7 @@
   "dependencies": {
     "@alicloud/pop-core": "^1.7.13",
     "@auth0/nextjs-auth0": "^2.3.1",
-    "@aws-sdk/client-dynamodb": "^3.316.0",
+    "@aws-sdk/client-dynamodb": "^3.351.0",
     "@aws-sdk/lib-dynamodb": "^3.267.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
