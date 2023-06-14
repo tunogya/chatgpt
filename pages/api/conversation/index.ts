@@ -48,11 +48,9 @@ export default withApiAuthRequired(async function handler(
       res.status(400).json({error: 'Currently, only next action is supported.'})
       return
     }
-    // Currently, only gpt-3.5-turbo and gpt-3.5-turbo-0301 are supported.
     // https://platform.openai.com/docs/api-reference/chat
-    if (model !== 'gpt-3.5-turbo' && model !== 'gpt-3.5-turbo-0301') {
-      res.status(400).json({error: 'Currently, only gpt-3.5-turbo and gpt-3.5-turbo-0301 are supported.'})
-      return
+    if (model !== 'gpt-3.5-turbo-16k') {
+      model == 'gpt-3.5-turbo-16k'
     }
     let conversation: {
       id: null | string, title: null | string, created: null | number, mapping: {
@@ -158,14 +156,10 @@ export default withApiAuthRequired(async function handler(
         })
       })
     }
-    // only keep last 4 messages, and keep the last 2000 tokens
-    full_old_messages.slice(-4);
+    // keep all messages in full_messages
+    // full_old_messages.slice(-4);
     let tokens_count = 0;
-    // https://platform.openai.com/docs/quickstart/pricing
-    // GPT-3.5 Turbo has a limit of 4096 tokens per request (both prompt and completion).
-    // For safety, we set the limit to 2000 tokens of prompt(previously generated messages)
-    // And then, we can have 4096 - 2000 = 2096 tokens for completion.
-    const limit = 2000 - encode(messages[0].content.parts[0]).length;
+    const limit = 8192 - encode(messages[0].content.parts[0]).length;
     for (let i = full_old_messages.length - 1; i >= 0; i--) {
       // To find more previous messages, we need to encode the message to get the token count.
       // Make sure total tokens count is less than limit.

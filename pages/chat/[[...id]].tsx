@@ -129,7 +129,7 @@ const Chat = ({user}: any) => {
           off_protected: false,
           conversation_id: session.id,
           action: 'next',
-          model: 'gpt-3.5-turbo',
+          model: 'gpt-3.5-turbo-16k',
           messages: [message],
           parent_message_id: currentNodeId,
         }),
@@ -835,15 +835,11 @@ const Chat = ({user}: any) => {
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>ChatGPT Business 级别的 API 数据使用政策</div>
+                                <div>当前模型：gpt-3.5-turbo-16k，最多16K的上下文</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>最多保留 365 天的对话记录，可永久删除保证隐私安全</div>
-                              </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
-                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>媲美原版，且不断更新提高用户体验</div>
+                                <div>对话记录最多保留365天，可永久删除保证隐私安全</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
