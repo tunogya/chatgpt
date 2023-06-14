@@ -35,7 +35,7 @@ export default withApiAuthRequired(async function handler(
     res.status(200).json({
       items: conversations.Items?.map((item: any) => ({
         id: item.SK,
-        title: item.title,
+        title: item.title?.slice(0, 20),
         create_time: item?.created ? new Date(item.created * 1000)?.toLocaleString() : null,
       })),
       total: conversations.Count,
@@ -67,7 +67,7 @@ export default withApiAuthRequired(async function handler(
       conversation = {
         ...conversation,
         id: `CONVERSATION#${uid.getUniqueID().toString()}`,
-        title: messages[0].content.parts[0],
+        title: messages[0].content.parts[0]?.slice(0, 20),
         created: Math.floor(Date.now() / 1000),
       }
     } else {
@@ -82,7 +82,7 @@ export default withApiAuthRequired(async function handler(
       conversation = {
         ...conversation,
         id: old_conversation.Item?.SK,
-        title: old_conversation.Item?.title,
+        title: old_conversation.Item?.title?.slice(0, 20),
         created: old_conversation.Item?.created,
         mapping: old_conversation.Item?.mapping,
       }

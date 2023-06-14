@@ -92,11 +92,11 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
                               {
                                 isEditTitle ? (
                                   <input type="text" className="border-none bg-transparent p-0 m-0 w-full mr-0"
-                                         value={shareData.title}
+                                         value={shareData.title.slice(0, 20)}
                                          onChange={(e) => {
                                            setShareData({
                                              ...shareData,
-                                             title: e.target.value
+                                             title: e.target.value.slice(0, 20)
                                            })
                                          }}
                                          onBlur={() => {
