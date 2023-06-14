@@ -795,14 +795,6 @@ const Chat = ({user}: any) => {
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>在其他国家和地区使用，可能会被封号</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
-                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>开启聊天记录时，会采集聊天内容用于训练和改进</div>
-                              </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
-                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>禁用聊天记录后，保留最多 30 天的对话记录</div>
-                              </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>有昂贵的 PLUS 订阅</div>
@@ -831,19 +823,15 @@ const Chat = ({user}: any) => {
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>没有任何地域限制，企业级的账户安全和可靠</div>
+                                <div>没有地域限制，企业级的账户安全和可靠</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>当前模型：gpt-3.5-turbo-16k，最多16K的上下文</div>
+                                <div>允许最多 16K 的上下文</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>对话记录最多保留365天，可永久删除保证隐私安全</div>
-                              </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
-                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>拥有我们一流工程师团队的直接支持</div>
+                                <div>对话记录最多保留 365 天</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-1">
                                 <button onClick={() => {
