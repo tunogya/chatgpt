@@ -256,7 +256,7 @@ export default withApiAuthRequired(async function handler(
               }
               res.write(`data: ${JSON.stringify({
                 id: conversation.id,
-                title: messages[0].content.parts[0],
+                title: messages[0].content.parts[0].slice(0, 20),
                 messages: [
                   {
                     id: message_id,
