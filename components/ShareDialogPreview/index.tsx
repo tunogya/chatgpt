@@ -106,7 +106,7 @@ const ShareDialog: FC<ShareDialogProps> = ({data}) => {
                                   />
                                 ) : (
                                   <>
-                                    {shareData.title || ''}
+                                    {shareData.title.slice(0, 20) || ''}
                                     <button className="text-gray-500" onClick={() => setIsEditTitle(true)}>
                                       <EditIcon/>
                                     </button>
