@@ -25,7 +25,7 @@ const SharePage: FC<SharePageProps> = ({data}) => {
                   <div className="mb-1 border-b border-gray-100 pt-3 sm:mb-2 sm:pb-10 sm:pt-8">
                     <h1
                       className="max-w-md text-3xl font-semibold leading-tight text-gray-700 dark:text-gray-100 sm:text-4xl">
-                      {data?.title}
+                      {data?.title.slice(0, 20)}
                     </h1>
                     <div
                       className="pt-3 text-base text-gray-400 sm:pt-4">{`${data.is_anonymous ? '' : `${user?.email}, `}${moment().format('ll')}`}</div>
