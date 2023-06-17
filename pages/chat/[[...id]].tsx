@@ -336,7 +336,9 @@ const Chat = ({user}: any) => {
                         </div>
                       </div>
                       <div
-                        className="grow overflow-hidden text-ellipsis whitespace-nowrap text-left text-white">{user?.name}</div>
+                        className="grow overflow-hidden text-ellipsis whitespace-nowrap text-left text-white">
+                        {user.name?.split('@')[0].slice(0, 20)}
+                      </div>
                       <MoreIcon/>
                     </a>
                   </Menu.Button>
