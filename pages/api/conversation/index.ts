@@ -43,15 +43,12 @@ export default withApiAuthRequired(async function handler(
       offset,
     });
   } else if (req.method === 'POST') {
-    const {action, messages, model, parent_message_id} = req.body;
+    let {action, messages, model, parent_message_id} = req.body;
     if (action !== 'next') {
       res.status(400).json({error: 'Currently, only next action is supported.'})
       return
     }
     // https://platform.openai.com/docs/api-reference/chat
-    if (model !== 'gpt-3.5-turbo-16k') {
-      model == 'gpt-3.5-turbo-16k'
-    }
     let conversation: {
       id: null | string, title: null | string, created: null | number, mapping: {
         [key: string]: any
@@ -157,7 +154,7 @@ export default withApiAuthRequired(async function handler(
       })
     }
     // keep all messages in full_messages
-    // full_old_messages.slice(-4);
+    full_old_messages.slice(-6);
     let tokens_count = 0;
     const limit = 8192 - encode(messages[0].content.parts[0]).length;
     for (let i = full_old_messages.length - 1; i >= 0; i--) {
@@ -184,6 +181,17 @@ export default withApiAuthRequired(async function handler(
         content: message.content.parts[0],
       })
     ))
+
+    // 计算当前的tokens汇总
+    const current_tokens_count = full_old_messages.reduce((acc, cur) => acc + encode(cur.content).length, 0);
+
+    if (current_tokens_count <= 2000) {
+      model = 'gpt-3.5-turbo'
+    } else {
+      model = 'gpt-3.5-turbo-16k'
+    }
+    console.log(model)
+
     const abortController = new AbortController();
     try {
       // https://platform.openai.com/docs/api-reference/chat/create
