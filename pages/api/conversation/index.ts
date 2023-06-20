@@ -182,15 +182,14 @@ export default withApiAuthRequired(async function handler(
       })
     ))
 
-    // 计算当前的tokens汇总
     const current_tokens_count = full_old_messages.reduce((acc, cur) => acc + encode(cur.content).length, 0);
 
-    if (current_tokens_count <= 2000) {
+    // 当总的tokens <= 4096 * 0.8 = 3277 时，使用 gpt-3.5-turbo 来生成回复
+    if (current_tokens_count <= 3277) {
       model = 'gpt-3.5-turbo'
     } else {
       model = 'gpt-3.5-turbo-16k'
     }
-    console.log(model)
 
     const abortController = new AbortController();
     try {
