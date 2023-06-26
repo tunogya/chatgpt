@@ -46,7 +46,6 @@
     "rehype-katex": "^6.0.2",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
-    "request": "^2.88.2",
     "sass": "^1.62.1",
     "sharp": "^0.32.0",
     "swr": "^2.1.0",
