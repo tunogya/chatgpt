@@ -129,7 +129,7 @@ const Chat = ({user}: any) => {
           off_protected: false,
           conversation_id: session.id,
           action: 'next',
-          model: 'gpt-3.5-turbo-16k',
+          model: 'gpt-3.5-turbo',
           messages: [message],
           parent_message_id: currentNodeId,
         }),
