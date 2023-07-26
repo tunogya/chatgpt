@@ -331,8 +331,7 @@ const Chat = ({user}: any) => {
                       className="flex w-full items-center gap-2.5 rounded-md px-3 py-3 text-sm transition-colors duration-200 hover:bg-gray-800 group-ui-open:bg-gray-800">
                       <div className="-ml-0.5 w-5 flex-shrink-0">
                         <div className="relative flex rounded-sm overflow-hidden">
-                          <Image src={user?.picture || ""} alt={user.email} width={24} height={24}
-                                 quality={80} priority/>
+                          <Image src={user?.picture || ""} alt={user.email} width={28} height={28} quality={80} priority/>
                         </div>
                       </div>
                       <div
