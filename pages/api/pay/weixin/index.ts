@@ -29,7 +29,7 @@ export default withApiAuthRequired(async function handler(
       out_trade_no: out_trade_no,
       notify_url: 'https://www.abandon.chat/api/pay/weixin/callback',
       amount: {
-        gpt3_5_total: total,
+        total: total,
       },
       attach,
     };
