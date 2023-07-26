@@ -560,14 +560,14 @@ const Chat = ({user}: any) => {
                 <div className="p-4 sm:p-6 sm:pt-4">
                   <div dir="ltr" data-orientation="vertical" className="flex flex-col gap-6 md:flex-row">
                     <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-                      <Tab.List className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-col">
+                      <Tab.List className="-ml-[8px] flex min-w-[180px] flex-shrink-0 md:flex-col">
                         <Tab as={"button"}
-                             className={`${selectedIndex === 0 ? 'bg-gray-800 text-white dark:text-white' : ''} group flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm dark:text-gray-500`}>
+                             className={`${selectedIndex === 0 ? 'bg-gray-800 text-white dark:text-white' : ''} group flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm dark:text-gray-500 w-full`}>
                           <SettingIcon/>
                           <div>General</div>
                         </Tab>
                         <Tab as={"button"}
-                             className={`${selectedIndex === 1 ? 'bg-gray-800 text-white dark:text-white' : ''} group flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm dark:text-gray-500`}>
+                             className={`${selectedIndex === 1 ? 'bg-gray-800 text-white dark:text-white' : ''} group flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm dark:text-gray-500 w-full`}>
                           <DataIcon/>
                           <div>Data controls</div>
                         </Tab>
