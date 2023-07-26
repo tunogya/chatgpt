@@ -25,7 +25,7 @@ const Index = () => {
         <div className="mb-5 text-gray-700 dark:text-gray-100">
           <AbandonIcon width={'140'}/>
         </div>
-        <div className="mb-2 text-center text-sm">请稍候，我们正在检查您的浏览器...</div>
+        <div className="mb-2 text-center text-sm">Please wait while we check your browser...</div>
       </div>
     </div>
   )
