@@ -315,7 +315,7 @@ const Chat = ({user}: any) => {
                 className="flex w-full flex-row justify-between select-none">
                 <div className="gold-new-button flex items-center gap-3">
                   <UserIcon/>
-                  付费会员卡
+                  GPT-3.5 会员
                 </div>
                 <div
                   className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-800">
@@ -342,7 +342,7 @@ const Chat = ({user}: any) => {
                     </a>
                   </Menu.Button>
                   <Menu.Items
-                    className={'absolute bottom-full left-0 z-20 mb-2 w-full overflow-hidden rounded-md bg-[#050509] py-1.5 outline-none opacity-100 translate-y-0'}>
+                    className={'absolute bottom-full left-0 z-20 mb-2 w-full overflow-hidden rounded-md bg-gray-950 py-1.5 outline-none opacity-100 translate-y-0'}>
                     <div>
                       <Menu.Item>
                         <a href="https://support.qq.com/products/566478" target="_blank" rel={'noreferrer'}
@@ -480,7 +480,7 @@ const Chat = ({user}: any) => {
                     )}
                   </div>
                   <div
-                    className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
+                    className="flex flex-col w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
                           disabled={!paidUseLeft}
                           rows={1} ref={inputRef}
@@ -508,8 +508,8 @@ const Chat = ({user}: any) => {
                     {
                       paidUseLeft > 0 && (
                         <button
-                          className="absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent disabled:bottom-0.5 md:disabled:bottom-1"
-                          disabled={isWaitComplete || isBlockComplete}
+                          className="absolute p-1 rounded-md md:bottom-3 md:p-2 md:right-3 dark:hover:bg-gray-900 dark:disabled:hover:bg-transparent right-2 disabled:text-gray-400 enabled:bg-brand-green text-white bottom-1.5 transition-colors disabled:opacity-40"
+                          disabled={input === '' || isWaitComplete || isBlockComplete}
                           onClick={async (event) => {
                             event.preventDefault();
                             await handleSubmit()
