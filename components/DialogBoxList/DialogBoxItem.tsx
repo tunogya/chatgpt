@@ -154,12 +154,12 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
                     <button className="btn relative btn-primary mr-2" onClick={() => {
                       // TODO: update message
                     }}>
-                      <div className="flex w-full items-center justify-center gap-2">保存并提交</div>
+                      <div className="flex w-full items-center justify-center gap-2">Save</div>
                     </button>
                     <button className="btn relative btn-neutral" onClick={() => {
                       setEditMode(false);
                     }}>
-                      <div className="flex w-full items-center justify-center gap-2">取消</div>
+                      <div className="flex w-full items-center justify-center gap-2">Cancel</div>
                     </button>
                   </div>
                 </div>
@@ -189,13 +189,13 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
                       {flagged && (
                         <div
                           className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
-                          此内容可能违反我们的<a
+                          This content may violate our<a
                           rel={'noreferrer'} className={'underline'} href={'/doc/term'}
-                          target={'_blank'}>内容政策</a>。如果您认为这是错误的，请<a
+                          target={'_blank'}>content policy</a>. If you think this is wrong, please<a
                           rel={'noreferrer'}
                           className={'underline'}
                           href={'https://support.qq.com/products/566478'}
-                          target={'_blank'}>提交您的反馈</a>。若多次违规，您的账号会被封禁。
+                          target={'_blank'}>submit your feedback</a>Repeated violations will result in your account being banned.
                         </div>
                       )}
                     </div>
@@ -263,19 +263,19 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
               {!message?.content?.parts?.[0] && (
                 <div
                   className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
-                  对不起，这不是你的错。服务器响应失败，请稍后重试。
+                  Sorry, it&apos;s not your fault. The server failed to respond, please try again later.
                 </div>
               )}
               {flagged && (
                 <div
                   className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
-                  此内容可能违反我们的<a
+                  This content may violate our<a
                   rel={'noreferrer'} className={'underline'} href={'/doc/term'}
-                  target={'_blank'}>内容政策</a>。如果您认为这是错误的，请<a
+                  target={'_blank'}>content policy</a>. If you think this is wrong, please<a
                   rel={'noreferrer'}
                   className={'underline'}
                   href={'https://support.qq.com/products/566478'}
-                  target={'_blank'}>提交您的反馈</a>。若多次违规，您的账号会被封禁。
+                  target={'_blank'}>submit your feedback</a>Repeated violations will result in your account being banned.
                 </div>
               )}
             </div>

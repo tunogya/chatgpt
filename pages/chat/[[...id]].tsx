@@ -1,5 +1,5 @@
 import {withPageAuthRequired} from '@auth0/nextjs-auth0';
-import {setArea, setTheme} from "@/store/ui";
+import {setTheme} from "@/store/ui";
 import CloseIcon from "@/components/SVG/CloseIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -14,7 +14,6 @@ import UserIcon from "@/components/SVG/UserIcon";
 import {Dialog, Menu, Tab} from "@headlessui/react";
 import Image from "next/image";
 import MoreIcon from "@/components/SVG/MoreIcon";
-import DeleteIcon from "@/components/SVG/DeleteIcon";
 import LogoutIcon from "@/components/SVG/LogoutIcon";
 import {useRouter} from "next/router";
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
@@ -25,7 +24,6 @@ import {v4 as uuidv4} from "uuid";
 import MenuIcon from "@/components/SVG/MenuIcon";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import DialogMenuItem, {DialogMenuItemProps} from "@/components/DialogMenuItem";
-import RightIcon from "@/components/SVG/RightIcon";
 import SettingIcon from "@/components/SVG/SettingIcon";
 import DataIcon from "@/components/SVG/DataIcon";
 import OptionIcon from "@/components/SVG/OptionIcon";
@@ -33,7 +31,6 @@ import StopIcon from "@/components/SVG/StopIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import ScrollToBottom from "react-scroll-to-bottom";
-import ShareDialog from "components/ShareDialogPreview";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -43,7 +40,6 @@ const Chat = ({user}: any) => {
   const isBlockComplete = useSelector((state: any) => state.session.isBlockComplete);
   const session = useSelector((state: any) => state.session.session);
   const theme = useSelector((state: any) => state.ui.theme);
-  const area = useSelector((state: any) => state.ui.area);
   const inputRef = useRef(null);
   const [input, setInput] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -278,7 +274,7 @@ const Chat = ({user}: any) => {
                })
                // @ts-ignore
                window.gtag('event', 'custom_button_click', {
-                 'event_category': '按钮',
+                 'event_category': 'button',
                  'event_label': 'New chat',
                })
              }}
@@ -306,8 +302,8 @@ const Chat = ({user}: any) => {
                 setIsOpenPayment(true)
                 // @ts-ignore
                 window.gtag('event', 'custom_button_click', {
-                  'event_category': '按钮',
-                  'event_label': '会员菜单',
+                  'event_category': 'button',
+                  'event_label': 'menu',
                 })
               }}
             >
@@ -315,11 +311,11 @@ const Chat = ({user}: any) => {
                 className="flex w-full flex-row justify-between select-none">
                 <div className="gold-new-button flex items-center gap-3">
                   <UserIcon/>
-                  GPT-3.5 会员
+                  GPT-3.5
                 </div>
                 <div
                   className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-800">
-                  {paidUseLeft > 0 ? `${Math.ceil(paidUseLeft)}天` : `每月19元起`}
+                  {paidUseLeft > 0 ? `${Math.ceil(paidUseLeft)} days` : `¥19 per month`}
                 </div>
               </div>
             </a>
@@ -348,39 +344,16 @@ const Chat = ({user}: any) => {
                         <a href="https://support.qq.com/products/566478" target="_blank" rel={'noreferrer'}
                            className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
                           <LinkOutIcon/>
-                          帮助和反馈
+                          Help & FAQ
                         </a>
                       </Menu.Item>
-                      <div className="my-1.5 h-px bg-white/20" role="none"></div>
-                      {
-                        conversationData && conversationData.items.length > 0 && (
-                          <Menu.Item>
-                            <a
-                              className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
-                              onClick={async (e) => {
-                                e.preventDefault()
-                                await clearConversationList()
-                                // @ts-ignore
-                                window.gtag('event', 'custom_button_click', {
-                                  'event_category': '按钮',
-                                  'event_label': '清空会话',
-                                  'value': deleteConfirm ? '确认清空' : '清空会话'
-                                })
-                              }}
-                            >
-                              {deleteConfirm ? <RightIcon/> : <DeleteIcon/>}
-                              {deleteConfirm ? '确认清空' : '清空会话'}
-                            </a>
-                          </Menu.Item>
-                        )
-                      }
                       <Menu.Item>
                         <a
                           className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
                           onClick={() => setIsOpenSetting(true)}
                         >
                           <SettingIcon/>
-                          系统设置
+                          Settings
                         </a>
                       </Menu.Item>
                       <div className="my-1.5 h-px bg-white/20" role="none"></div>
@@ -391,14 +364,14 @@ const Chat = ({user}: any) => {
                             dispatch(clearSession());
                             // @ts-ignore
                             window.gtag('event', 'custom_button_click', {
-                              'event_category': '按钮',
-                              'event_label': '退出登陆',
+                              'event_category': 'button',
+                              'event_label': 'Log out',
                             })
                           }}
                           href={'/api/auth/logout'}
                         >
                           <LogoutIcon/>
-                          退出登陆
+                          Log out
                         </a>
                       </Menu.Item>
                     </div>
@@ -474,7 +447,7 @@ const Chat = ({user}: any) => {
                       }}>
                         <div className="flex w-full items-center justify-center gap-2">
                           <StopIcon/>
-                          停止对话
+                          Stop generating
                         </div>
                       </button>
                     )}
@@ -484,7 +457,7 @@ const Chat = ({user}: any) => {
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
                           disabled={!paidUseLeft}
                           rows={1} ref={inputRef}
-                          placeholder={paidUseLeft > 0 ? 'Message' : '如您试用结束，请获取会员卡以继续'}
+                          placeholder={paidUseLeft > 0 ? 'Send a message' : 'Please purchase a membership to continue.'}
                           onKeyDown={async (e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                               if (e.nativeEvent.isComposing) return;
@@ -516,7 +489,7 @@ const Chat = ({user}: any) => {
                           }}>
                           {
                             isWaitComplete ? (
-                              <div className="flex text-2xl">
+                              <div className="flex text-2xl h-4 w-4">
                                 <div className={''}>·</div>
                                 <div className={`${second % 3 === 1 && 'invisible'}`}>·</div>
                                 <div className={`${second % 3 >= 1 && 'invisible'}`}>·</div>
@@ -565,13 +538,13 @@ const Chat = ({user}: any) => {
           <div className="fixed inset-0 z-50 overflow-y-auto">
             <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
               <Dialog.Panel
-                className="relative w-full transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all dark:bg-gray-900 sm:my-8 sm:max-w-2xl">
+                className="relative w-full transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all dark:bg-gray-900 sm:my-8 md:max-w-[680px]">
                 <div
                   className="flex items-center justify-between border-b-[1px] border-black/10 dark:border-white/10 px-4 pb-4 pt-5 sm:p-6">
                   <div className="flex items-center">
                     <div className="text-center sm:text-left">
                       <h3
-                        className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">系统设置
+                        className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">Settings
                       </h3>
                     </div>
                   </div>
@@ -587,21 +560,16 @@ const Chat = ({user}: any) => {
                 <div className="p-4 sm:p-6 sm:pt-4">
                   <div dir="ltr" data-orientation="vertical" className="flex flex-col gap-6 md:flex-row">
                     <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-                      <Tab.List className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-row md:flex-col">
+                      <Tab.List className="-ml-[8px] flex min-w-[180px] flex-shrink-0 flex-col">
                         <Tab as={"button"}
-                             className={`${selectedIndex === 0 ? 'bg-gray-800 text-white' : ''} dark:text-white flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center  gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                             className={`${selectedIndex === 0 ? 'bg-gray-800 text-white dark:text-white' : ''} group flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm dark:text-gray-500`}>
                           <SettingIcon/>
-                          <div>常规</div>
+                          <div>General</div>
                         </Tab>
                         <Tab as={"button"}
-                             className={`${selectedIndex === 1 ? 'bg-gray-800 text-white' : ''} dark:text-white flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center gap-2 rounded-md px-2 py-1.5 text-sm`}>
+                             className={`${selectedIndex === 1 ? 'bg-gray-800 text-white dark:text-white' : ''} group flex items-center justify-start gap-2 rounded-md px-2 py-1.5 text-sm dark:text-gray-500`}>
                           <DataIcon/>
-                          <div>数据</div>
-                        </Tab>
-                        <Tab as={"button"}
-                             className={`${selectedIndex === 2 ? 'bg-gray-800 text-white' : ''} dark:text-white flex flex-1 md:flex-grow-0 justify-center md:justify-start items-center gap-2 rounded-md px-2 py-1.5 text-sm`}>
-                          <UserIcon/>
-                          <div>账户</div>
+                          <div>Data controls</div>
                         </Tab>
                       </Tab.List>
                       <Tab.Panels className="w-full md:min-h-[300px]">
@@ -609,7 +577,7 @@ const Chat = ({user}: any) => {
                           <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
                             <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
                               <div className="flex items-center justify-between">
-                                <div>主题</div>
+                                <div>Theme</div>
                                 <select
                                   className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20"
                                   value={theme}
@@ -617,65 +585,33 @@ const Chat = ({user}: any) => {
                                     dispatch(setTheme(e.target.value))
                                     //   @ts-ignore
                                     window.gtag('event', 'custom_button_click', {
-                                      'event_category': '按钮',
+                                      'event_category': 'button',
                                       'event_label': '主题',
                                       'value': e.target.value
                                     })
                                   }}
                                 >
-                                  <option value="system">跟随系统</option>
-                                  <option value="dark">暗黑模式</option>
-                                  <option value="light">浅色模式</option>
+                                  <option value="system">System</option>
+                                  <option value="dark">Dark</option>
+                                  <option value="light">Light</option>
                                 </select></div>
                             </div>
                             <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
                               <div className="flex items-center justify-between">
-                                <div>区域和限制</div>
-                                <select
-                                  className="rounded border border-black/10 bg-transparent text-sm dark:border-white/20"
-                                  value={area}
-                                  onChange={(e) => {
-                                    dispatch(setArea(e.target.value))
-                                    //   @ts-ignore
-                                    window.gtag('event', 'custom_button_click', {
-                                      'event_category': '按钮',
-                                      'event_label': '区域和限制',
-                                      'value': e.target.value
-                                    })
-                                  }}
-                                >
-                                  <option value="global">全球地区</option>
-                                  <option value="china">中国地区</option>
-                                </select>
-                              </div>
-                              {
-                                area === 'china' ? (
-                                  <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
-                                    如果您在中国大陆地区使用本应用，您需要遵守中国大陆地区的法律法规。
-                                  </div>
-                                ) : (
-                                  <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
-                                    请遵循您所在地区的法律法规。
-                                  </div>
-                                )
-                              }
-                            </div>
-                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
-                              <div className="flex items-center justify-between">
-                                <div>清空所有记录</div>
+                                <div>Clear all chats</div>
                                 <button className="btn relative btn-danger"
                                         disabled={conversationData?.items.length === 0}
                                         onClick={async () => {
                                           await clearConversationList()
                                           // @ts-ignore
                                           window.gtag('event', 'custom_button_click', {
-                                            'event_category': '按钮',
-                                            'event_label': '清空会话',
-                                            'value': deleteConfirm ? '确认清空' : '清空会话'
+                                            'event_category': 'button',
+                                            'event_label': 'Clear',
+                                            'value': deleteConfirm ? 'Confirm deletion' : 'Clear'
                                           })
                                         }}>
                                   <div className="flex w-full gap-2 items-center justify-center">
-                                    {deleteConfirm ? '确认清空' : '清空会话'}
+                                    {deleteConfirm ? 'Confirm deletion' : 'Clear'}
                                   </div>
                                 </button>
                               </div>
@@ -687,45 +623,13 @@ const Chat = ({user}: any) => {
                             <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
                               <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
                                 <div className="flex items-center justify-between">
-                                  <div>聊天记录</div>
+                                  <div>Chat history</div>
                                 </div>
                                 <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
-                                  我们将为您云同步聊天记录，以便您在任何设备上使用。
+                                  We will cloud sync chat history for you so that you can use it on any device.
                                   <a
                                     href="/doc/privacy" target="_blank"
-                                    className="underline" rel="noreferrer">隐私政策</a>
-                                </div>
-                              </div>
-                              <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
-                                <div className="flex items-center justify-between">
-                                  <div>导出数据</div>
-                                  <button className="btn relative btn-neutral"
-                                    // disabled={conversationData?.items.length === 0}
-                                          disabled={true}
-                                  >
-                                    <div className="flex w-full gap-2 items-center justify-center">导出</div>
-                                  </button>
-                                </div>
-                                <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
-                                  为了保护您的隐私，聊天记录默认在创建后的365天后自动删除。<br/>
-                                  我们将尽快提供导出功能供您安全的本地存储。
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </Tab.Panel>
-                        <Tab.Panel>
-                          <div className="w-full md:min-h-[300px]">
-                            <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
-                              <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
-                                <div className="flex items-center justify-between">
-                                  <div>删除账户</div>
-                                  <button className="btn relative btn-danger" disabled={true}>
-                                    <div className="flex w-full gap-2 items-center justify-center">删除</div>
-                                  </button>
-                                </div>
-                                <div className="mt-2 text-xs text-gray-500 dark:text-gray-600">
-                                  该功能即将上线
+                                    className="underline" rel="noreferrer">Privacy</a>
                                 </div>
                               </div>
                             </div>
@@ -853,7 +757,6 @@ const Chat = ({user}: any) => {
           </div>
         </div>
       </Dialog>
-      <ShareDialog data={session}/>
     </>
   )
 }

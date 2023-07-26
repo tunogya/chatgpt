@@ -25,7 +25,7 @@ export const index = createSlice({
     // session is used to store the current conversation
     session: {
       id: null, // conversation id
-      title: '新会话', // conversation title
+      title: 'New chat', // conversation title
       create_time: "", // conversation create time
       mapping: {} as { // mapping used to store messages in a tree structure
         [key: string]: { // message id
@@ -40,7 +40,6 @@ export const index = createSlice({
     // isWaitComplete is used to indicate whether the answer wait is complete
     isWaitComplete: false,
     isBlockComplete: false,
-    isOpenShare: false,
   },
   reducers: {
     // setSession is used to set the current session
@@ -105,7 +104,7 @@ export const index = createSlice({
     clearSession: (state) => {
       state.session = {
         id: null,
-        title: '新会话',
+        title: 'New chat',
         create_time: "",
         mapping: {},
       }
@@ -122,9 +121,6 @@ export const index = createSlice({
     setBlockComplete: (state, action) => {
       state.isBlockComplete = action.payload
     },
-    setIsOpenShare: (state, action) => {
-      state.isOpenShare = action.payload
-    },
   }
 })
 
@@ -136,7 +132,6 @@ export const {
   updateCurrentNodeId,
   setIsWaitComplete,
   setBlockComplete,
-  setIsOpenShare,
 } = index.actions
 
 export default index.reducer

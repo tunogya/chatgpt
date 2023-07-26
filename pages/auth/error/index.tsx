@@ -16,7 +16,7 @@ const Error = () => {
         <button className="btn relative btn-neutral" onClick={() => {
           router.back()
         }}>
-          <div className="flex w-full items-center justify-center gap-2">返回</div>
+          <div className="flex w-full items-center justify-center gap-2">Back</div>
         </button>
       </div>
     </div>
