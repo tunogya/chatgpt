@@ -15,17 +15,20 @@ export const PLANS = [
   {
     name: '30 days',
     quantity: 30,
-    total: 30,
+    gpt3_5_total: 30,
+    gpt4_total: 120,
   },
   {
     name: '90 days',
     quantity: 90,
-    total: 60,
+    gpt3_5_total: 60,
+    gpt4_total: 240,
   },
   {
     name: '365 days',
     quantity: 365,
-    total: 228,
+    gpt3_5_total: 228,
+    gpt4_total: 912,
   },
 ]
 
@@ -113,7 +116,7 @@ const Pay = ({user}: any) => {
                   <div className={"text-gray-600"}>ChatGPT GPT-3.5 Subscription</div>
                   <div className={"flex items-center gap-4"}>
                     <div
-                      className={"text-4xl font-semibold text-black dark:text-white"}>RMB {(selected.total / selected.quantity * 30).toLocaleString("en-US", {
+                      className={"text-4xl font-semibold text-black dark:text-white"}>RMB {(selected.gpt3_5_total / selected.quantity * 30).toLocaleString("en-US", {
                       maximumFractionDigits: 2
                     })}</div>
                     <div className={"text-gray-600 text-sm"}>per<br/>month</div>
@@ -128,7 +131,7 @@ const Pay = ({user}: any) => {
                     Subtotal
                   </div>
                   <div>
-                    {selected.total} RMB
+                    {selected.gpt3_5_total} RMB
                   </div>
                 </div>
                 <div className={"text-sm py-4 text-gray-500 border-t-[1px] flex justify-between"}>
@@ -143,7 +146,7 @@ const Pay = ({user}: any) => {
                     Total payable today
                   </div>
                   <div className={"font-semibold"}>
-                    {selected.total} RMB
+                    {selected.gpt3_5_total} RMB
                   </div>
                 </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
@@ -175,7 +178,7 @@ const Pay = ({user}: any) => {
                                       as="span"
                                       className={`inline text-gray-500 text-xs`}
                                     >
-                                      RMB {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
+                                      RMB {(plan.gpt3_5_total / plan.quantity * 30).toLocaleString("en-US", {
                                         maximumFractionDigits: 2
                                       })} per month
                                     </RadioGroup.Description>

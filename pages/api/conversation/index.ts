@@ -38,7 +38,7 @@ export default withApiAuthRequired(async function handler(
         title: item.title?.slice(0, 20),
         create_time: item?.created ? new Date(item.created * 1000)?.toLocaleString() : null,
       })),
-      total: conversations.Count,
+      gpt3_5_total: conversations.Count,
       limit,
       offset,
     });
