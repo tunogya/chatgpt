@@ -678,43 +678,12 @@ const Chat = ({user}: any) => {
                             className="relative order-2 col-div-1 border-r-0 border-t dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div className={"text-gray-800 dark:text-gray-200"}>ChatGPT</div>
-                              </div>
-                              <button
-                                className="btn relative btn-primary dark:text-gray-white border-none bg-gray-300 py-3 hover:opacity-80 dark:hover:text-white font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:opacity-100"
-                                onClick={() => {
-                                  window.open('https://chat.openai.com', '_blank')
-                                }}
-                              >
-                                <div className="flex w-full gap-2 items-center justify-center">
-                                  <div className="inline-block">
-                                    chat.openai.com
-                                  </div>
-                                </div>
-                              </button>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
-                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>免费研究预览版，仅特定的国家和地区使用</div>
-                              </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
-                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>在其他国家和地区使用，可能会被封号</div>
-                              </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
-                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>有昂贵的 PLUS 订阅</div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="relative order-1 col-div-1 sm:order-2">
-                            <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
-                              <div className="text-xl font-semibold justify-between items-center flex">
-                                <div>Abandon Chat</div>
+                                <div className={"text-gray-800 dark:text-gray-200"}>GPT-3.5</div>
                                 <div
-                                  className="font-semibold text-gray-500">每月19元起
+                                  className="font-semibold text-gray-500">¥19
                                 </div>
                               </div>
-                              <button className="btn relative btn-primary border-none py-3 font-semibold"
+                              <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-yellow"
                                       onClick={async () => {
                                         const out_trade_no = uuidv4()
                                         await router.push(`/pay/${out_trade_no}`)
@@ -722,28 +691,55 @@ const Chat = ({user}: any) => {
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-white">订阅会员
+                                    className="inline-block text-gray-900">Subscribe GPT-3.5
+                                  </div>
+                                </div>
+                              </button>
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
+                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
+                                <div>Access to our GPT-3.5 model</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
+                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
+                                <div>Standard response speed</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
+                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
+                                <div>Regular model updates</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="relative order-1 col-div-1 sm:order-2">
+                            <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
+                              <div className="text-xl font-semibold justify-between items-center flex">
+                                <div>GPT-4</div>
+                                <div
+                                  className="font-semibold text-gray-500">¥100
+                                </div>
+                              </div>
+                              <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
+                                      onClick={async () => {
+                                        const out_trade_no = uuidv4()
+                                        await router.push(`/pay/${out_trade_no}`)
+                                      }}
+                              >
+                                <div className="flex w-full gap-2 items-center justify-center">
+                                  <div
+                                    className="inline-block text-white">Subscribe GPT-4
                                   </div>
                                 </div>
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>没有地域限制，企业级的账户安全和可靠</div>
+                                <div>Access to GPT-4, our most capable model</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>允许最多 16K 的上下文</div>
+                                <div>Faster response speed</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>对话记录最多保留 365 天</div>
-                              </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-1">
-                                <button onClick={() => {
-                                  router.push('/redeem')
-                                }} className="flex flex-row items-center space-x-1 underline">
-                                  <div>CDKEY 兑换中心</div>
-                                </button>
+                                <div>Exclusive access to beta features like Browsing, Plugins, <br/>and Code Interpreter</div>
                               </div>
                             </div>
                           </div>
