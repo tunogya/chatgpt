@@ -1,4 +1,4 @@
-import type {AppProps} from 'next/app'
+import type {AppProps} from 'next/app';
 import Script from 'next/script';
 import Head from 'next/head';
 import {Provider, useSelector} from 'react-redux'
@@ -8,8 +8,8 @@ import {persistStore} from "redux-persist";
 import {UserProvider} from '@auth0/nextjs-auth0/client';
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {useEffect} from "react";
-import "tailwindcss/tailwind.css"
-// import "@/styles/index.css";
+import "tailwindcss/tailwind.css";
+import "@/styles/index.css";
 
 const persistor = persistStore(store);
 
