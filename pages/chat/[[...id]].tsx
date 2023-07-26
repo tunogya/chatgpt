@@ -279,12 +279,12 @@ const Chat = ({user}: any) => {
                // @ts-ignore
                window.gtag('event', 'custom_button_click', {
                  'event_category': '按钮',
-                 'event_label': '新会话',
+                 'event_label': 'New chat',
                })
              }}
           >
             <AddIcon/>
-            新会话
+            New chat
           </a>
           <div className="flex-col flex-1 overflow-y-auto border-white/20">
             <div className="flex flex-col gap-2 text-gray-100 text-sm">
