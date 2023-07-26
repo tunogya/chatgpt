@@ -3436,6 +3436,11 @@ textarea:focus {
     background-color: rgba(25, 195, 125, var(--tw-text-opacity)) !important
 }
 
+.\!bg-brand-yellow {
+    --tw-bg-opacity: 1 !important;
+    background-color: rgba(250, 230, 158, var(--tw-bg-opacity)) !important
+}
+
 .\!bg-gray-700 {
     --tw-bg-opacity: 1 !important;
     background-color: rgba(64, 65, 79, var(--tw-bg-opacity)) !important
@@ -4324,6 +4329,10 @@ textarea:focus {
 
 .text-white\/80 {
     color: hsla(0, 0%, 100%, .8)
+}
+
+.text-yellow-200 {
+    color: rgba(250, 230, 158, var(--tw-bg-opacity))
 }
 
 .text-yellow-500 {
@@ -5356,6 +5365,11 @@ button[data-state=closed] .toggle-item-button-closed, button[data-state=open] .t
 .enabled\:bg-brand-green:enabled {
     --tw-bg-opacity: 1;
     background-color: rgba(25,195,125,var(--tw-text-opacity))
+}
+
+.enabled\:bg-brand-yellow:enabled {
+    --tw-bg-opacity: 1;
+    background-color: rgba(250, 230, 158, var(--tw-bg-opacity))
 }
 
 .enabled\:hover\:text-gray-700:hover:enabled {
