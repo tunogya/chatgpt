@@ -13,23 +13,41 @@ import AbandonIcon from "@/components/SVG/AbandonIcon";
 
 export const PLANS = [
   {
-    name: 'Monthly Member Card',
+    name: 'GPT-3.5 Monthly Member Card',
     quantity: 30,
     total: 30,
-    gpt4_total: 120,
+    type: 'GPT-3.5',
   },
   {
-    name: 'Quarterly Member Card',
+    name: 'GPT-3.5 Quarterly Member Card',
     quantity: 90,
     total: 60,
-    gpt4_total: 240,
+    type: 'GPT-3.5',
   },
   {
-    name: 'Yearly Member Card',
+    name: 'GPT-3.5 Yearly Member Card',
     quantity: 365,
     total: 228,
-    gpt4_total: 912,
+    type: 'GPT-3.5',
   },
+  // {
+  //   name: 'GPT-3.5 Monthly Member Card',
+  //   quantity: 30,
+  //   total: 120,
+  //   type: 'GPT-4',
+  // },
+  // {
+  //   name: 'GPT-3.5 Quarterly Member Card',
+  //   quantity: 90,
+  //   total: 240,
+  //   type: 'GPT-4',
+  // },
+  // {
+  //   name: 'GPT-3.5 Yearly Member Card',
+  //   quantity: 365,
+  //   total: 912,
+  //   type: 'GPT-4',
+  // },
 ]
 
 const Pay = ({user}: any) => {
@@ -123,7 +141,7 @@ const Pay = ({user}: any) => {
                   </div>
                 </div>
                 <div className={"pb-4"}>
-                  <div className={"pt-5 text-sm"}>GPT-3.5 {selected.name} ({selected.quantity} days)</div>
+                  <div className={"pt-5 text-sm"}>{selected.name} ({selected.quantity} days)</div>
                 </div>
                 <div className={"text-sm py-4 flex justify-between text-black dark:text-white"}>
                   <div>
