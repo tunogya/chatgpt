@@ -718,6 +718,7 @@ const Chat = ({user}: any) => {
                                 </div>
                               </div>
                               <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
+                                      disabled
                                       onClick={async () => {
                                         const out_trade_no = uuidv4()
                                         await router.push(`/pay/${out_trade_no}`)
