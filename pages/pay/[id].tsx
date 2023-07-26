@@ -13,17 +13,17 @@ import AbandonIcon from "@/components/SVG/AbandonIcon";
 
 export const PLANS = [
   {
-    name: '月卡',
+    name: '30 days',
     quantity: 30,
     total: 30,
   },
   {
-    name: '季卡',
+    name: '90 days',
     quantity: 90,
     total: 60,
   },
   {
-    name: '年卡',
+    name: '365 days',
     quantity: 365,
     total: 228,
   },
@@ -110,55 +110,55 @@ const Pay = ({user}: any) => {
               </button>
               <div className={"md:px-4"}>
                 <div className={"py-8"}>
-                  <div className={"text-gray-600"}>购买 ChatGPT</div>
+                  <div className={"text-gray-600"}>ChatGPT GPT-3.5 Subscription</div>
                   <div className={"flex items-center gap-4"}>
                     <div
                       className={"text-4xl font-semibold text-black dark:text-white"}>RMB {(selected.total / selected.quantity * 30).toLocaleString("en-US", {
                       maximumFractionDigits: 2
                     })}</div>
-                    <div className={"text-gray-600 text-sm"}>每<br/>个月</div>
+                    <div className={"text-gray-600 text-sm"}>per<br/>month</div>
                   </div>
                 </div>
                 <div className={"pb-4"}>
-                  <div className={"pt-5 text-sm"}>ChatGPT {selected.quantity} 天会员卡</div>
-                  <div className={"text-xs text-gray-500"}>按月收费</div>
+                  <div className={"pt-5 text-sm"}>{selected.quantity} days subscription of GPT-3.5</div>
+                  <div className={"text-xs text-gray-500"}>Billed monthly</div>
                 </div>
                 <div className={"text-sm py-4 flex justify-between text-black dark:text-white"}>
                   <div>
-                    小计
+                    Subtotal
                   </div>
                   <div>
-                    {selected.total} 元
+                    {selected.total} RMB
                   </div>
                 </div>
                 <div className={"text-sm py-4 text-gray-500 border-t-[1px] flex justify-between"}>
                   <div className={""}>
-                    税
+                    Tax
                   </div>
-                  <div className={""}>0 元
+                  <div className={""}>0 RMB
                   </div>
                 </div>
                 <div className={"text-sm py-4 border-t-[1px] flex justify-between text-black dark:text-white"}>
                   <div className={"font-semibold"}>
-                    今日应付合计
+                    Total payable today
                   </div>
                   <div className={"font-semibold"}>
-                    {selected.total} 元
+                    {selected.total} RMB
                   </div>
                 </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
-                  <div className={"text-gray-600 dark:text-gray-200"}>所有方案</div>
+                  <div className={"text-gray-600 dark:text-gray-200"}>All programs</div>
                   <div className={"flex gap-4 text-sm w-full"}>
                     <div className="w-full">
                       <RadioGroup value={selected} onChange={setSelected} defaultValue={selected}>
-                        <RadioGroup.Label className="sr-only">所有方案</RadioGroup.Label>
-                        <div className="space-y-2">
+                        <RadioGroup.Label className="sr-only">all programs</RadioGroup.Label>
+                        <div className="">
                           {PLANS.map((plan) => (
                             <RadioGroup.Option
                               key={plan.name}
                               value={plan}
-                              className={`${plan.name === selected.name ? 'bg-yellow-200' : 'bg-gray-50 dark:bg-gray-600'}
-                    relative flex cursor-pointer rounded-lg p-3 bg-gray-50 rounded-md border shadow-sm`}
+                              className={`${plan.name === selected.name ? 'bg-yellow-200' : 'bg-gray-50 dark:bg-gray-700'}
+                    relative flex cursor-pointer p-3 bg-gray-50 rounded-md border shadow-sm mb-2`}
                             >
                               <div className="flex w-full items-center justify-between">
                                 <div className="flex items-center">
@@ -175,9 +175,9 @@ const Pay = ({user}: any) => {
                                       as="span"
                                       className={`inline text-gray-500 text-xs`}
                                     >
-                                      {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
+                                      RMB {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
                                         maximumFractionDigits: 2
-                                      })}元/月
+                                      })} per month
                                     </RadioGroup.Description>
                                   </div>
                                 </div>
@@ -196,16 +196,16 @@ const Pay = ({user}: any) => {
             </div>
           </div>
           <div className={"px-6 lg:px-14 w-full flex flex-col items-start"}>
-            <div className={"dark:text-white w-full md:w-[380px] md:py-6 py-3 text-gray-600 dark:text-gray-200 w-full"}>
+            <div className={"dark:text-white w-full md:w-[380px] md:py-6 py-3 text-gray-600"}>
               <div className={"flex flex-col py-4 gap-4"}>
-                <div className={""}>联系信息</div>
-                <div className={"flex gap-2 text-sm bg-gray-50 dark:bg-gray-600 p-3 rounded-md border shadow-sm"}>
-                  <div className={"flex gap-2"}>账户</div>
+                <div className={""}>Contact information</div>
+                <div className={"flex gap-2 text-sm bg-gray-50 dark:bg-gray-700 p-3 rounded-md border shadow-sm"}>
+                  <div className={"flex gap-2"}>Account</div>
                   <div>{user.name}</div>
                 </div>
               </div>
               <div className={"flex flex-col py-4 gap-4"}>
-                <div className={""}>支付方式</div>
+                <div className={""}>Payment</div>
                 <div className={"flex gap-2 items-center"}>
                   <WeixinPayLogo/>
                   <WeixinPayText/>
@@ -220,7 +220,7 @@ const Pay = ({user}: any) => {
                 qrStatus === 'error' && (
                   <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
                     <div className={"flex justify-center items-center text-red-600 font-bold text-center"}
-                         style={{height: '200px'}}>获取二维码失败，请刷新重试
+                         style={{height: '200px'}}>Failed to get the QR code, please refresh and try again.
                     </div>
                   </div>
                 )
@@ -229,7 +229,7 @@ const Pay = ({user}: any) => {
                 dataOfOrder?.data?.trade_state === 'SUCCESS' && (
                   <div className={"flex flex-col items-center justify-center gap-2"} style={{paddingTop: "20px"}}>
                     <div className={"flex justify-center items-center text-green-600 font-bold text-center"}
-                         style={{height: '200px'}}>支付成功<br/>返回首页以继续使用
+                         style={{height: '200px'}}>Payment successful!<br/>Return to the home page to continue using.
                     </div>
                   </div>
                 )
@@ -243,7 +243,7 @@ const Pay = ({user}: any) => {
                       </div>
                     </div>
                     <div className={`text-xs text-center md:hidden`}>
-                      可截屏后在微信中打开以完成支付
+                      You can take a screenshot and open it in WeChat to complete the payment.
                     </div>
                   </>
                 ) : (
@@ -267,19 +267,19 @@ const Pay = ({user}: any) => {
                         checkBoxRef.current.click()
                       }
                     }}>
-                      我已阅读并同意 abandon.chat <a href={"/doc/term"} rel={'noreferrer'} target={'_blank'}
-                                                     className={"underline"}>服务条款</a> 和 <a
+                      I have read and agree the <a href={"/doc/term"} rel={'noreferrer'} target={'_blank'}
+                                                     className={"underline"}>terms of service</a> and <a
                       href={"/doc/privacy"} rel={'noreferrer'} target={'_blank'}
-                      className={"underline"}>隐私政策</a>。
+                      className={"underline"}>privacy policy</a> of Abandon Inc.
                     </div>
                   </div>
                 </form>
                 <div className={`text-xs text-red-500 ${checked ? 'hidden' : ''}`}>
-                  请同意 abandon.chat 的条款以完成支付
+                  Please agree to the terms of abandon.chat to complete the payment.
                 </div>
               </div>
               <button className={"w-full btn-primary p-3 rounded-md"} disabled={!checked} onClick={mutateOrder}>
-                若您已支付完成，请点这里确认
+                If you have paid, please click here to confirm.
               </button>
             </div>
           </div>

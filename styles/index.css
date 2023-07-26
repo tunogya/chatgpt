@@ -6500,6 +6500,10 @@ button[data-state=closed] .toggle-item-button-closed, button[data-state=open] .t
         width: 250px
     }
 
+    .md\:w-\[380px\] {
+        width: 380px
+    }
+
     .md\:w-\[672px\] {
         width: 672px
     }
