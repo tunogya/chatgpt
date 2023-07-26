@@ -13,21 +13,21 @@ import AbandonIcon from "@/components/SVG/AbandonIcon";
 
 export const PLANS = [
   {
-    name: '30 days',
+    name: 'Monthly Member Card',
     quantity: 30,
-    gpt3_5_total: 30,
+    total: 30,
     gpt4_total: 120,
   },
   {
-    name: '90 days',
+    name: 'Quarterly Member Card',
     quantity: 90,
-    gpt3_5_total: 60,
+    total: 60,
     gpt4_total: 240,
   },
   {
-    name: '365 days',
+    name: 'Yearly Member Card',
     quantity: 365,
-    gpt3_5_total: 228,
+    total: 228,
     gpt4_total: 912,
   },
 ]
@@ -60,7 +60,7 @@ const Pay = ({user}: any) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        description: `ChatGPT会员卡-${selected.name}: ${user?.name}`,
+        description: `GPT-3.5 ${selected.name}: ${user?.name}`,
         out_trade_no,
         quantity: selected.quantity,
         topic: 'chatgpt',
@@ -113,25 +113,24 @@ const Pay = ({user}: any) => {
               </button>
               <div className={"md:px-4"}>
                 <div className={"py-8"}>
-                  <div className={"text-gray-600"}>ChatGPT GPT-3.5 Subscription</div>
+                  <div className={"text-gray-600"}>GPT-3.5 Subscription</div>
                   <div className={"flex items-center gap-4"}>
                     <div
-                      className={"text-4xl font-semibold text-black dark:text-white"}>RMB {(selected.gpt3_5_total / selected.quantity * 30).toLocaleString("en-US", {
+                      className={"text-4xl font-semibold text-black dark:text-white"}>RMB {(selected.total / selected.quantity * 30).toLocaleString("en-US", {
                       maximumFractionDigits: 2
                     })}</div>
-                    <div className={"text-gray-600 text-sm"}>per<br/>month</div>
+                    <div className={"text-gray-600 text-sm"}>Per<br/>Month</div>
                   </div>
                 </div>
                 <div className={"pb-4"}>
-                  <div className={"pt-5 text-sm"}>{selected.quantity} days subscription of GPT-3.5</div>
-                  <div className={"text-xs text-gray-500"}>Billed monthly</div>
+                  <div className={"pt-5 text-sm"}>GPT-3.5 {selected.name} ({selected.quantity} days)</div>
                 </div>
                 <div className={"text-sm py-4 flex justify-between text-black dark:text-white"}>
                   <div>
                     Subtotal
                   </div>
                   <div>
-                    {selected.gpt3_5_total} RMB
+                    {selected.total} RMB
                   </div>
                 </div>
                 <div className={"text-sm py-4 text-gray-500 border-t-[1px] flex justify-between"}>
@@ -146,7 +145,7 @@ const Pay = ({user}: any) => {
                     Total payable today
                   </div>
                   <div className={"font-semibold"}>
-                    {selected.gpt3_5_total} RMB
+                    {selected.total} RMB
                   </div>
                 </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
@@ -178,9 +177,9 @@ const Pay = ({user}: any) => {
                                       as="span"
                                       className={`inline text-gray-500 text-xs`}
                                     >
-                                      RMB {(plan.gpt3_5_total / plan.quantity * 30).toLocaleString("en-US", {
+                                      {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
                                         maximumFractionDigits: 2
-                                      })} per month
+                                      })} yuan per month
                                     </RadioGroup.Description>
                                   </div>
                                 </div>

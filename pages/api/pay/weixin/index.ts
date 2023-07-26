@@ -13,7 +13,7 @@ export default withApiAuthRequired(async function handler(
   const {description, out_trade_no, quantity, topic, attach} = req.body;
   let total = 0;
   if (topic === 'chatgpt' && quantity > 0) {
-    total = (PLANS.find((p) => p.quantity === quantity)?.gpt3_5_total || 0) * 100;
+    total = (PLANS.find((p) => p.quantity === quantity)?.total || 0) * 100;
     if (total <= 0) {
       total = quantity * 100;
     }
