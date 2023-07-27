@@ -39,7 +39,6 @@ const Chat = ({user}: any) => {
   const currentNodeId = useSelector((state: any) => state.session.currentNodeId)
   const isBlockComplete = useSelector((state: any) => state.session.isBlockComplete);
   const session = useSelector((state: any) => state.session.session);
-  const model = useSelector((state: any) => state.session.model);
   const theme = useSelector((state: any) => state.ui.theme);
   const inputRef = useRef(null);
   const [input, setInput] = useState('');
@@ -59,14 +58,11 @@ const Chat = ({user}: any) => {
   const updateStoreSession = useCallback(async () => {
     if (data) {
       dispatch(setSession({
-        // @ts-ignore
         id: data.SK,
-        // @ts-ignore
         title: data.title,
-        // @ts-ignore
         mapping: data.mapping,
-        // @ts-ignore
         create_time: new Date(data.created * 1000).toLocaleString(),
+        model: data.model ?? 'gpt-3.5-turbo',
       }))
     }
   }, [data, dispatch])
@@ -126,7 +122,7 @@ const Chat = ({user}: any) => {
           off_protected: false,
           conversation_id: session.id,
           action: 'next',
-          model: model,
+          model: session.model,
           messages: [message],
           parent_message_id: currentNodeId,
         }),

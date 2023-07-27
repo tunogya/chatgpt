@@ -46,7 +46,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
   const router = useRouter();
   const conversation_id = router.query.id?.[0] || undefined;
   const dispatch = useDispatch();
-  const model = useSelector((state: any) => state.session.model);
+  const model = useSelector((state: any) => state.session.session.model);
 
   const showStreaming = useMemo(() => {
     return currentNodeId === id && isWaitComplete

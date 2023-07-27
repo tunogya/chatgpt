@@ -18,7 +18,7 @@ const DialogBoxList: FC<DialogBoxListContentProps> = ({data, isLoading, gpt3_5, 
   const bottomRef = useRef(null);
   const scrollToBottom = useScrollToBottom();
   const [sticky] = useSticky();
-  const model = useSelector((state: any) => state.session.model);
+  const model = useSelector((state: any) => state.session.session.model);
   const dispatch = useDispatch();
 
   // scroll to bottom when new message

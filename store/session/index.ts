@@ -35,12 +35,12 @@ export const index = createSlice({
           parent: string | null // parent message id
         }
       },
+      model: 'gpt-3.5-turbo',
     },
     currentNodeId: "00000000-0000-0000-0000-000000000000",
     // isWaitComplete is used to indicate whether the answer wait is complete
     isWaitComplete: false,
     isBlockComplete: false,
-    model: 'gpt-3.5-turbo',
   },
   reducers: {
     // setSession is used to set the current session
@@ -108,11 +108,11 @@ export const index = createSlice({
         title: 'New chat',
         create_time: "",
         mapping: {},
+        model: 'gpt-3.5-turbo',
       }
       state.currentNodeId = "00000000-0000-0000-0000-000000000000"
       state.isWaitComplete = false
       state.isBlockComplete = false
-      state.model = 'gpt-3.5-turbo'
     },
     updateCurrentNodeId: (state, action) => {
       state.currentNodeId = action.payload
@@ -124,7 +124,13 @@ export const index = createSlice({
       state.isBlockComplete = action.payload
     },
     setModel: (state, action) => {
-      state.model = action.payload
+      state.session = {
+        id: null,
+        title: 'New chat',
+        create_time: "",
+        mapping: {},
+        model: action.payload,
+      }
     }
   }
 })
