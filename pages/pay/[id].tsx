@@ -141,13 +141,13 @@ const Pay = ({user}: any) => {
                   <div className={"text-gray-600"}>{topic} Subscription</div>
                   <div className={"flex items-center gap-4"}>
                     <div
-                      className={"text-4xl font-semibold text-black dark:text-white"}>CNY {selected.total.toLocaleString("en-US", {
+                      className={"text-4xl font-semibold text-black dark:text-white"}>CNY {selected?.total?.toLocaleString("en-US", {
                       maximumFractionDigits: 2
                     })}</div>
                   </div>
                 </div>
                 <div className={"pb-4"}>
-                  <div className={"pt-5 text-sm"}>{selected.name} ({selected.quantity} days)</div>
+                  <div className={"pt-5 text-sm"}>{selected?.name} ({selected?.quantity} days)</div>
                 </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
                   <div className={"text-gray-600 dark:text-gray-200"}>{topic} subscriptions</div>

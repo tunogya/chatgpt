@@ -225,6 +225,7 @@ const Chat = ({user}: any) => {
     data: dataOfMetadata,
   } = useSWR('/api/app/metadata', (url: string) => fetch(url).then((res) => res.json()))
 
+  // GPT3-5 Use Left
   const paidUseLeft = useMemo(() => {
     if (!dataOfMetadata?.paidUseTTL) {
       return 0
@@ -235,6 +236,18 @@ const Chat = ({user}: any) => {
     }
     return time
   }, [dataOfMetadata?.paidUseTTL])
+
+  // GPT4 Use Left
+  const gpt4Left = useMemo(() => {
+    if (!dataOfMetadata?.gpt4TTL) {
+      return 0
+    }
+    const time = ((dataOfMetadata.gpt4TTL - Date.now() / 1000) / 86400)
+    if (time < 0) {
+      return 0
+    }
+    return time
+  }, [dataOfMetadata?.gpt4TTL])
 
   const clearConversationList = async () => {
     if (!deleteConfirm) {
@@ -311,11 +324,34 @@ const Chat = ({user}: any) => {
                 className="flex w-full flex-row justify-between select-none">
                 <div className="gold-new-button flex items-center gap-3">
                   <UserIcon/>
-                  GPT-3.5
+                  Subscription
                 </div>
-                <div
-                  className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-800">
-                  {paidUseLeft > 0 ? `${Math.ceil(paidUseLeft)} days` : `¥19 per month`}
+                <div className={'flex gap-1'}>
+                  {
+                    paidUseLeft <= 0 && gpt4Left <= 0 && (
+                      <div
+                        className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-800">
+                        Buy
+                      </div>
+                    )
+                  }
+                  {
+                    paidUseLeft > 0 && (
+                      <div
+                        className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-800">
+                        {`${Math.ceil(paidUseLeft)} D`}
+                      </div>
+                    )
+                  }
+                  {
+                    gpt4Left > 0 && (
+                      <div
+                        className="rounded-md !bg-brand-purple px-1.5 py-0.5 text-xs font-medium uppercase text-white">
+                        {`${Math.ceil(gpt4Left)} D`}
+                      </div>
+                    )
+                  }
+
                 </div>
               </div>
             </a>
@@ -399,7 +435,7 @@ const Chat = ({user}: any) => {
             className="sticky top-0 z-10 flex items-center border-b border-white/20 bg-gray-800 pl-1 pt-1 text-gray-200 sm:pl-3 md:hidden">
             <button type="button" onClick={() => setIsOpenSidebar(true)}
                     className="-ml-0.5 -mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white">
-              <div className="sr-only">打开侧边栏</div>
+              <div className="sr-only">Open</div>
               <MenuIcon/>
             </button>
             <h1
@@ -522,7 +558,7 @@ const Chat = ({user}: any) => {
               <div className="absolute top-0 right-0 -mr-12 pt-2 opacity-100">
                 <button type="button" onClick={() => setIsOpenSidebar(false)} tabIndex={0}
                         className="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                  <div className="sr-only">关闭侧边栏</div>
+                  <div className="sr-only">Close</div>
                   <CloseIcon className={"h-6 w-6 text-white"} strokeWidth={"1.5"}/>
                 </button>
               </div>
@@ -675,18 +711,18 @@ const Chat = ({user}: any) => {
                         </div>
                         <div className="grid sm:grid-cols-2">
                           <div
-                            className="relative order-2 col-div-1 border-r-0 border-t dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0">
+                            className="relative order-2 col-div-1 border-r-0 border-t dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0 max-w-[400px]">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
                                 <div className={"text-gray-800 dark:text-gray-200"}>GPT-3.5</div>
                                 <div
-                                  className="font-semibold text-gray-500">¥19
+                                  className="font-semibold text-gray-500">Up to 33% Off
                                 </div>
                               </div>
                               <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-yellow"
                                       onClick={async () => {
                                         const out_trade_no = uuidv4()
-                                        await router.push(`/pay/${out_trade_no}`)
+                                        await router.push(`/pay/${out_trade_no}?topic=GPT-3.5`)
                                       }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
@@ -703,25 +739,28 @@ const Chat = ({user}: any) => {
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>Standard response speed</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div>Regular model updates</div>
                               </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
+                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
+                                <div>Annual payment up to 33% off</div>
+                              </div>
                             </div>
                           </div>
-                          <div className="relative order-1 col-div-1 sm:order-2">
+                          <div className="relative order-1 col-div-1 sm:order-2 max-w-[400px]">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
                                 <div>GPT-4</div>
                                 <div
-                                  className="font-semibold text-gray-500">¥100
+                                  className="font-semibold text-gray-500">Up to 13% Off
                                 </div>
                               </div>
                               <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
-                                      disabled
                                       onClick={async () => {
                                         const out_trade_no = uuidv4()
-                                        await router.push(`/pay/${out_trade_no}`)
+                                        await router.push(`/pay/${out_trade_no}?topic=GPT-4`)
                                       }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
@@ -740,7 +779,11 @@ const Chat = ({user}: any) => {
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>Exclusive access to beta features like Browsing, Plugins, <br/>and Code Interpreter</div>
+                                <div>Exclusive access to beta features like Browsing, Plugins, and Code Interpreter</div>
+                              </div>
+                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
+                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
+                                <div>Annual payment up to 13% off</div>
                               </div>
                             </div>
                           </div>
