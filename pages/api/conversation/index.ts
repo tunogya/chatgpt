@@ -52,12 +52,13 @@ export default withApiAuthRequired(async function handler(
     let conversation: {
       id: null | string, title: null | string, created: null | number, mapping: {
         [key: string]: any
-      },
+      }, model: string,
     } = {
       id: req.body?.conversation_id ?? null,
       title: null,
       created: null,
       mapping: {},
+      model: model,
     }
     if (!conversation.id) {
       // This is a new conversation, create a new conversation id use uuidv4.
