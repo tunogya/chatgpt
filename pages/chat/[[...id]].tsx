@@ -39,6 +39,7 @@ const Chat = ({user}: any) => {
   const currentNodeId = useSelector((state: any) => state.session.currentNodeId)
   const isBlockComplete = useSelector((state: any) => state.session.isBlockComplete);
   const session = useSelector((state: any) => state.session.session);
+  const model = useSelector((state: any) => state.session.model);
   const theme = useSelector((state: any) => state.ui.theme);
   const inputRef = useRef(null);
   const [input, setInput] = useState('');
@@ -125,7 +126,7 @@ const Chat = ({user}: any) => {
           off_protected: false,
           conversation_id: session.id,
           action: 'next',
-          model: 'gpt-3.5-turbo',
+          model: model ?? "gpt-3.5-turbo",
           messages: [message],
           parent_message_id: currentNodeId,
         }),
@@ -338,7 +339,7 @@ const Chat = ({user}: any) => {
                   {
                     paidUseLeft > 0 && (
                       <div
-                        className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-800">
+                        className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase !bg-brand-green">
                         {`${Math.ceil(paidUseLeft)} D`}
                       </div>
                     )
@@ -453,7 +454,7 @@ const Chat = ({user}: any) => {
           <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
             <div className="flex-1 overflow-hidden">
               <ScrollToBottom className="h-full w-full dark:bg-gray-800">
-                <DialogBoxList data={session} isLoading={isLoading}/>
+                <DialogBoxList data={session} isLoading={isLoading} gpt3_5={paidUseLeft > 0} gpt4={gpt4Left > 0}/>
               </ScrollToBottom>
             </div>
             <div
@@ -719,7 +720,7 @@ const Chat = ({user}: any) => {
                                   className="font-semibold text-gray-500">Up to 33% Off
                                 </div>
                               </div>
-                              <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-yellow"
+                              <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-green"
                                       onClick={async () => {
                                         const out_trade_no = uuidv4()
                                         await router.push(`/pay/${out_trade_no}?topic=GPT-3.5`)
@@ -727,7 +728,7 @@ const Chat = ({user}: any) => {
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-gray-900">Subscribe GPT-3.5
+                                    className="inline-block text-white">Subscribe GPT-3.5
                                   </div>
                                 </div>
                               </button>

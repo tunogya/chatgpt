@@ -40,6 +40,7 @@ export const index = createSlice({
     // isWaitComplete is used to indicate whether the answer wait is complete
     isWaitComplete: false,
     isBlockComplete: false,
+    model: 'gpt-3.5-turbo',
   },
   reducers: {
     // setSession is used to set the current session
@@ -111,6 +112,7 @@ export const index = createSlice({
       state.currentNodeId = "00000000-0000-0000-0000-000000000000"
       state.isWaitComplete = false
       state.isBlockComplete = false
+      state.model = 'gpt-3.5-turbo'
     },
     updateCurrentNodeId: (state, action) => {
       state.currentNodeId = action.payload
@@ -121,6 +123,9 @@ export const index = createSlice({
     setBlockComplete: (state, action) => {
       state.isBlockComplete = action.payload
     },
+    setModel: (state, action) => {
+      state.model = action.payload
+    }
   }
 })
 
@@ -132,6 +137,7 @@ export const {
   updateCurrentNodeId,
   setIsWaitComplete,
   setBlockComplete,
+  setModel,
 } = index.actions
 
 export default index.reducer
