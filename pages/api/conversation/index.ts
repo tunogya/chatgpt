@@ -161,6 +161,9 @@ export default withApiAuthRequired(async function handler(
     } else if (model === 'gpt-3.5-turbo-16k') {
       full_old_messages.slice(-6);
       limit = 8192 - encode(messages[0].content.parts[0]).length;
+    } else if (model === 'gpt-4') {
+      full_old_messages.slice(-4);
+      limit = 4096 - encode(messages[0].content.parts[0]).length;
     }
     for (let i = full_old_messages.length - 1; i >= 0; i--) {
       // To find more previous messages, we need to encode the message to get the token count.

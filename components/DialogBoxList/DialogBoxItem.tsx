@@ -13,7 +13,7 @@ import CodeFormat from "@/components/DialogBoxList/CodeFormat";
 import Image from "next/image";
 import CopyIcon from "@/components/SVG/CopyIcon";
 import copy from "copy-to-clipboard";
-import AbIcon from "@/components/SVG/AbIcon";
+import OpenAIIcon from "@/components/SVG/OpenAIIcon";
 import {useRouter} from "next/router";
 
 export type Message = {
@@ -46,6 +46,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
   const router = useRouter();
   const conversation_id = router.query.id?.[0] || undefined;
   const dispatch = useDispatch();
+  const model = useSelector((state: any) => state.session.model);
 
   const showStreaming = useMemo(() => {
     return currentNodeId === id && isWaitComplete
@@ -123,7 +124,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
           <div className={'w-[30px]'}>
             <div className={'relative flex'}>
               <div className={'rounded-sm overflow-hidden'}>
-                <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={30} height={30} quality={80} priority/>
+                <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={30} height={30} quality={80}
+                       priority/>
               </div>
               {
                 flagged && (
@@ -195,7 +197,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
                           rel={'noreferrer'}
                           className={'underline'}
                           href={'https://support.qq.com/products/566478'}
-                          target={'_blank'}>submit your feedback</a>Repeated violations will result in your account being banned.
+                          target={'_blank'}>submit your feedback</a>Repeated violations will result in your account
+                          being banned.
                         </div>
                       )}
                     </div>
@@ -228,8 +231,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
         className="text-base gap-4 md:gap-6 m-auto md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0">
         <div className="w-[30px] flex flex-col relative items-end">
           <div
-            className="relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center bg-gray-900">
-            <AbIcon width={'30'}/>
+            className={`relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center ${model === 'gpt-4' ? '!bg-brand-purple' : '!bg-brand-green'}`}>
+            <OpenAIIcon width={'30'}/>
             {
               flagged && (
                 <div
@@ -275,7 +278,8 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
                   rel={'noreferrer'}
                   className={'underline'}
                   href={'https://support.qq.com/products/566478'}
-                  target={'_blank'}>submit your feedback</a>Repeated violations will result in your account being banned.
+                  target={'_blank'}>submit your feedback</a>Repeated violations will result in your account being
+                  banned.
                 </div>
               )}
             </div>

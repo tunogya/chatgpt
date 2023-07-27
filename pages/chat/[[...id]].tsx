@@ -126,7 +126,7 @@ const Chat = ({user}: any) => {
           off_protected: false,
           conversation_id: session.id,
           action: 'next',
-          model: model ?? "gpt-3.5-turbo",
+          model: model,
           messages: [message],
           parent_message_id: currentNodeId,
         }),

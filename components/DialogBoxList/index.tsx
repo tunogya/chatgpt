@@ -61,7 +61,27 @@ const DialogBoxList: FC<DialogBoxListContentProps> = ({data, isLoading, gpt3_5, 
             (data?.id || rootMessageId)
               ? (
                 rootMessageId && (
-                  <DialogBoxItem id={rootMessageId} data={data}/>
+                  <>
+                    <header className="w-full">
+                      <div
+                        className="relative z-20 flex min-h-[60px] flex-wrap items-center justify-between gap-3 border-b border-black/10 bg-white p-2 text-gray-500 dark:border-gray-900/50 dark:bg-gray-800 dark:text-gray-300">
+                        <div
+                          className="flex flex-1 flex-grow items-center gap-1 p-1 text-gray-600 dark:text-gray-200 justify-center sm:p-0">
+                          {
+                            model === 'gpt-3.5-turbo' && (
+                              <span>Default (GPT-3.5)</span>
+                            )
+                          }
+                          {
+                            model === 'gpt-4' && (
+                              <span>Model (GPT-4)</span>
+                            )
+                          }
+                        </div>
+                      </div>
+                    </header>
+                    <DialogBoxItem id={rootMessageId} data={data}/>
+                  </>
                 )
               ) : (
                 <>

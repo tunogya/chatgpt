@@ -2427,6 +2427,10 @@ textarea:focus {
     min-height: 71px
 }
 
+.min-h-\[60px\] {
+    min-height: 71px
+}
+
 .min-h-full {
     min-height: 100%
 }
