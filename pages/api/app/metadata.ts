@@ -26,7 +26,8 @@ export default withApiAuthRequired(async function handler(
         const newItem = {
           PK: user_id,
           SK: 'METADATA#chatgpt',
-          paidUseTTL: Math.floor(Date.now() / 1000) + 60 * 60 * 2,
+          paidUseTTL: Math.floor(Date.now() / 1000) + 60 * 60 * 2, // This is gpt-3.5
+          gpt4TTL: 0,
         }
         await ddbDocClient.send(new PutCommand({
           TableName: 'wizardingpay',

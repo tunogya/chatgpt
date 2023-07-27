@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import pay from "@/utils/WxPay";
 import {withApiAuthRequired} from "@auth0/nextjs-auth0";
-import {PLANS} from "@/pages/pay/[id]";
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse

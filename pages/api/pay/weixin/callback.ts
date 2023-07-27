@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import pay from "@/utils/WxPay";
 import {ddbDocClient} from "@/utils/DynamoDB";
-import {GetCommand, PutCommand, TransactWriteCommand, UpdateCommand} from "@aws-sdk/lib-dynamodb";
+import {GetCommand, TransactWriteCommand} from "@aws-sdk/lib-dynamodb";
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,15 +28,22 @@ export default async function handler(
   const resource = await pay.decipher_gcm(req.body.resource.ciphertext, req.body.resource.associated_data, req.body.resource.nonce);
   // @ts-ignore
   const {topic, quantity, user} = JSON.parse(resource.attach);
+  let gpt3_5_quantity = 0, gpt4_quantity = 0;
+  if (topic === 'GPT3-5') {
+    gpt3_5_quantity = quantity;
+  } else if (topic === 'GPT4') {
+    gpt4_quantity = quantity;
+  }
   try {
     const metadata = await ddbDocClient.send(new GetCommand({
       TableName: 'wizardingpay',
       Key: {
         PK: user,
-        SK: `METADATA#${topic}`,
+        SK: `METADATA#chatgpt`,
       }
     }))
     const oldPaidUseTTL = metadata.Item?.paidUseTTL || 0;
+    const oldGPT4TTL = metadata.Item?.gpt4TTL || 0;
     const transactionRequest = {
       TransactItems: [
         {
@@ -57,11 +64,12 @@ export default async function handler(
             TableName: 'wizardingpay',
             Key: {
               PK: user,
-              SK: `METADATA#${topic}`,
+              SK: `METADATA#chatgpt`,
             },
-            UpdateExpression: `SET paidUseTTL = :newPaidUseTTL`,
+            UpdateExpression: `SET paidUseTTL = :newPaidUseTTL, gpt4TTL = :newGpt4TTL`,
             ExpressionAttributeValues: {
-              ':newPaidUseTTL': Math.max(oldPaidUseTTL, Math.floor(Date.now() / 1000)) + quantity * 24 * 60 * 60,
+              ':newPaidUseTTL': Math.max(oldPaidUseTTL, Math.floor(Date.now() / 1000)) + gpt3_5_quantity * 24 * 60 * 60,
+              ':newGpt4TTL': Math.max(oldGPT4TTL, Math.floor(Date.now() / 1000)) + gpt4_quantity * 24 * 60 * 60,
             }
           }
         }

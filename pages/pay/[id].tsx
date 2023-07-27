@@ -85,13 +85,13 @@ const Pay = ({user}: any) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      // description, out_trade_no, attach, total
       body: JSON.stringify({
         description: `${selected.name}: ${user?.name}`,
         out_trade_no,
         total: selected.total,
         attach: JSON.stringify({
-          name: selected.name,
+          topic: selected.topic,
+          quantity: selected.quantity,
           user: user?.sub,
         })
       })
