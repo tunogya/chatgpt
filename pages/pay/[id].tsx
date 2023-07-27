@@ -204,9 +204,9 @@ const Pay = ({user}: any) => {
                                         as="span"
                                         className={`inline text-gray-500 text-xs`}
                                       >
-                                        {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
+                                        {(plan.total / plan.quantity).toLocaleString("en-US", {
                                           maximumFractionDigits: 2
-                                        })} yuan per month
+                                        })} yuan per day
                                       </RadioGroup.Description>
                                     </div>
                                   </div>
