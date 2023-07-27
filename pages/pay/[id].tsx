@@ -1,6 +1,6 @@
 import {withPageAuthRequired} from "@auth0/nextjs-auth0";
 import {useRouter} from "next/router";
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import useSWR from "swr";
 import {v4 as uuidv4} from 'uuid';
 import WeixinPayLogo from "@/components/SVG/WeixinPayLogo";
@@ -30,24 +30,24 @@ export const PLANS = [
     total: 228,
     type: 'GPT-3.5',
   },
-  // {
-  //   name: 'GPT-3.5 Monthly Member Card',
-  //   quantity: 30,
-  //   total: 120,
-  //   type: 'GPT-4',
-  // },
-  // {
-  //   name: 'GPT-3.5 Quarterly Member Card',
-  //   quantity: 90,
-  //   total: 240,
-  //   type: 'GPT-4',
-  // },
-  // {
-  //   name: 'GPT-3.5 Yearly Member Card',
-  //   quantity: 365,
-  //   total: 912,
-  //   type: 'GPT-4',
-  // },
+  {
+    name: 'GPT-4 Monthly Member Card',
+    quantity: 30,
+    total: 120,
+    type: 'GPT-4',
+  },
+  {
+    name: 'GPT-4 Quarterly Member Card',
+    quantity: 90,
+    total: 340,
+    type: 'GPT-4',
+  },
+  {
+    name: 'GPT-4 Yearly Member Card',
+    quantity: 365,
+    total: 1200,
+    type: 'GPT-4',
+  },
 ]
 
 const Pay = ({user}: any) => {
@@ -57,12 +57,20 @@ const Pay = ({user}: any) => {
   const [qrStatus, setQrStatus] = useState<string>('idle')
   const trade_no = router.query.id
   const checkBoxRef = useRef(null)
-  const [selected, setSelected] = useState(PLANS[2])
+  const type = router.query?.type ?? 'GPT-3.5'
+  const SelectPlans = useMemo(() => {
+    return PLANS.filter((item) => item.type === type)
+  }, [type])
+  const [selected, setSelected] = useState(SelectPlans[0])
 
   const {
     data: dataOfOrder,
     mutate: mutateOrder
   } = useSWR(trade_no ? `/api/pay/weixin/query?out_trade_no=${trade_no}` : null, (url: string) => fetch(url).then((res) => res.json()))
+
+  useEffect(() => {
+    setSelected(SelectPlans[0])
+  }, [type, SelectPlans])
 
   const getCodeUrl = useCallback(() => {
     setQrStatus('loading')
@@ -167,49 +175,64 @@ const Pay = ({user}: any) => {
                   </div>
                 </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
-                  <div className={"text-gray-600 dark:text-gray-200"}>All programs</div>
+                  <div className={"text-gray-600 dark:text-gray-200"}>All {type} subscriptions</div>
                   <div className={"flex gap-4 text-sm w-full"}>
                     <div className="w-full">
                       <RadioGroup value={selected} onChange={setSelected} defaultValue={selected}>
                         <RadioGroup.Label className="sr-only">all programs</RadioGroup.Label>
                         <div className="">
-                          {PLANS.map((plan) => (
-                            <RadioGroup.Option
-                              key={plan.name}
-                              value={plan}
-                              className={`${plan.name === selected.name ? 'bg-yellow-200' : 'bg-gray-50 dark:bg-gray-700'}
+                          {SelectPlans
+                            .map((plan) => (
+                              <RadioGroup.Option
+                                key={plan.name}
+                                value={plan}
+                                className={`${plan.name === selected.name ? 'bg-yellow-200' : 'bg-gray-50 dark:bg-gray-700'}
                     relative flex cursor-pointer p-3 bg-gray-50 rounded-md border shadow-sm mb-2`}
-                            >
-                              <div className="flex w-full items-center justify-between">
-                                <div className="flex items-center">
-                                  <div className="text-sm">
-                                    <RadioGroup.Label
-                                      as="p"
-                                      className={`text-sm text-gray-800 ${
-                                        plan.name === selected.name ? '' : 'dark:text-gray-200'
-                                      }`}
-                                    >
-                                      {plan.name}
-                                    </RadioGroup.Label>
-                                    <RadioGroup.Description
-                                      as="span"
-                                      className={`inline text-gray-500 text-xs`}
-                                    >
-                                      {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
-                                        maximumFractionDigits: 2
-                                      })} yuan per month
-                                    </RadioGroup.Description>
+                              >
+                                <div className="flex w-full items-center justify-between">
+                                  <div className="flex items-center">
+                                    <div className="text-sm">
+                                      <RadioGroup.Label
+                                        as="p"
+                                        className={`text-sm text-gray-800 ${
+                                          plan.name === selected.name ? '' : 'dark:text-gray-200'
+                                        }`}
+                                      >
+                                        {plan.name}
+                                      </RadioGroup.Label>
+                                      <RadioGroup.Description
+                                        as="span"
+                                        className={`inline text-gray-500 text-xs`}
+                                      >
+                                        {(plan.total / plan.quantity * 30).toLocaleString("en-US", {
+                                          maximumFractionDigits: 2
+                                        })} yuan per month
+                                      </RadioGroup.Description>
+                                    </div>
                                   </div>
+                                  {plan.name === selected.name && (
+                                    <CheckIcon className={"h-6 w-6"}/>
+                                  )}
                                 </div>
-                                {plan.name === selected.name && (
-                                  <CheckIcon className={"h-6 w-6"}/>
-                                )}
-                              </div>
-                            </RadioGroup.Option>
-                          ))}
+                              </RadioGroup.Option>
+                            ))}
                         </div>
                       </RadioGroup>
                     </div>
+                  </div>
+                  <div>
+                     <span className={`${type === 'GPT-3.5' ? 'text-brand-purple' : 'text-brand-green'} p-3 rounded mt-12 underline cursor-pointer`}
+                           onClick={() => {
+                             if (type === 'GPT-3.5') {
+                               router.push(`/pay/${router.query.id}?type=GPT-4`)
+                             } else {
+                               router.push(`/pay/${router.query.id}?type=GPT-3.5`)
+                             }
+                           }}>
+                    {
+                      type === 'GPT-3.5' ? 'Upgrade to GPT-4 Subscription' : 'Look for GPT-3.5 Subscription'
+                    }
+                  </span>
                   </div>
                 </div>
               </div>
@@ -288,7 +311,7 @@ const Pay = ({user}: any) => {
                       }
                     }}>
                       I have read and agree the <a href={"/doc/term"} rel={'noreferrer'} target={'_blank'}
-                                                     className={"underline"}>terms of service</a> and <a
+                                                   className={"underline"}>terms of service</a> and <a
                       href={"/doc/privacy"} rel={'noreferrer'} target={'_blank'}
                       className={"underline"}>privacy policy</a> of Abandon Inc.
                     </div>
