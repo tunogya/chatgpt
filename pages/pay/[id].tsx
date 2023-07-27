@@ -16,37 +16,37 @@ export const PLANS = [
     name: 'GPT-3.5 Monthly Member Card',
     quantity: 30,
     total: 30,
-    type: 'GPT-3.5',
+    topic: 'GPT-3.5',
   },
   {
     name: 'GPT-3.5 Quarterly Member Card',
     quantity: 90,
     total: 60,
-    type: 'GPT-3.5',
+    topic: 'GPT-3.5',
   },
   {
     name: 'GPT-3.5 Yearly Member Card',
     quantity: 365,
     total: 228,
-    type: 'GPT-3.5',
+    topic: 'GPT-3.5',
   },
   {
     name: 'GPT-4 Monthly Member Card',
     quantity: 30,
     total: 120,
-    type: 'GPT-4',
+    topic: 'GPT-4',
   },
   {
     name: 'GPT-4 Quarterly Member Card',
     quantity: 90,
     total: 340,
-    type: 'GPT-4',
+    topic: 'GPT-4',
   },
   {
     name: 'GPT-4 Yearly Member Card',
     quantity: 365,
     total: 1200,
-    type: 'GPT-4',
+    topic: 'GPT-4',
   },
 ]
 
@@ -57,10 +57,10 @@ const Pay = ({user}: any) => {
   const [qrStatus, setQrStatus] = useState<string>('idle')
   const trade_no = router.query.id
   const checkBoxRef = useRef(null)
-  const type = router.query?.type ?? 'GPT-3.5'
+  const topic = router.query?.topic ?? 'GPT-3.5'
   const SelectPlans = useMemo(() => {
-    return PLANS.filter((item) => item.type === type)
-  }, [type])
+    return PLANS.filter((item) => item.topic === topic)
+  }, [topic])
   const [selected, setSelected] = useState(SelectPlans[0])
 
   const {
@@ -70,7 +70,7 @@ const Pay = ({user}: any) => {
 
   useEffect(() => {
     setSelected(SelectPlans[0])
-  }, [type, SelectPlans])
+  }, [topic, SelectPlans])
 
   const getCodeUrl = useCallback(() => {
     setQrStatus('loading')
@@ -85,14 +85,13 @@ const Pay = ({user}: any) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      // description, out_trade_no, attach, total
       body: JSON.stringify({
-        description: `GPT-3.5 ${selected.name}: ${user?.name}`,
+        description: `${selected.name}: ${user?.name}`,
         out_trade_no,
-        quantity: selected.quantity,
-        topic: 'chatgpt',
+        total: selected.total,
         attach: JSON.stringify({
-          topic: 'chatgpt',
-          quantity: selected.quantity,
+          name: selected.name,
           user: user?.sub,
         })
       })
@@ -139,43 +138,19 @@ const Pay = ({user}: any) => {
               </button>
               <div className={"md:px-4"}>
                 <div className={"py-8"}>
-                  <div className={"text-gray-600"}>GPT-3.5 Subscription</div>
+                  <div className={"text-gray-600"}>{topic} Subscription</div>
                   <div className={"flex items-center gap-4"}>
                     <div
-                      className={"text-4xl font-semibold text-black dark:text-white"}>RMB {(selected.total / selected.quantity * 30).toLocaleString("en-US", {
+                      className={"text-4xl font-semibold text-black dark:text-white"}>CNY {selected.total.toLocaleString("en-US", {
                       maximumFractionDigits: 2
                     })}</div>
-                    <div className={"text-gray-600 text-sm"}>Per<br/>Month</div>
                   </div>
                 </div>
                 <div className={"pb-4"}>
                   <div className={"pt-5 text-sm"}>{selected.name} ({selected.quantity} days)</div>
                 </div>
-                <div className={"text-sm py-4 flex justify-between text-black dark:text-white"}>
-                  <div>
-                    Subtotal
-                  </div>
-                  <div>
-                    {selected.total} RMB
-                  </div>
-                </div>
-                <div className={"text-sm py-4 text-gray-500 border-t-[1px] flex justify-between"}>
-                  <div className={""}>
-                    Tax
-                  </div>
-                  <div className={""}>0 RMB
-                  </div>
-                </div>
-                <div className={"text-sm py-4 border-t-[1px] flex justify-between text-black dark:text-white"}>
-                  <div className={"font-semibold"}>
-                    Total payable today
-                  </div>
-                  <div className={"font-semibold"}>
-                    {selected.total} RMB
-                  </div>
-                </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
-                  <div className={"text-gray-600 dark:text-gray-200"}>{type} subscriptions</div>
+                  <div className={"text-gray-600 dark:text-gray-200"}>{topic} subscriptions</div>
                   <div className={"flex gap-4 text-sm w-full"}>
                     <div className="w-full">
                       <RadioGroup value={selected} onChange={setSelected} defaultValue={selected}>
@@ -221,16 +196,16 @@ const Pay = ({user}: any) => {
                     </div>
                   </div>
                   <div>
-                     <span className={`${type === 'GPT-3.5' ? 'text-brand-purple' : 'text-gray-200'} p-3 rounded mt-12 underline cursor-pointer`}
+                     <span className={`${topic === 'GPT-3.5' ? 'text-brand-purple' : 'text-gray-200'} p-3 rounded mt-12 underline cursor-pointer`}
                            onClick={() => {
-                             if (type === 'GPT-3.5') {
-                               router.push(`/pay/${router.query.id}?type=GPT-4`)
+                             if (topic === 'GPT-3.5') {
+                               router.push(`/pay/${router.query.id}?topic=GPT-4`)
                              } else {
-                               router.push(`/pay/${router.query.id}?type=GPT-3.5`)
+                               router.push(`/pay/${router.query.id}?topic=GPT-3.5`)
                              }
                            }}>
                     {
-                      type === 'GPT-3.5' ? 'Upgrade to GPT-4 Subscription' : 'Look for GPT-3.5 Subscription'
+                      topic === 'GPT-3.5' ? 'Upgrade to GPT-4 Subscription' : 'Look for GPT-3.5 Subscription'
                     }
                   </span>
                   </div>
