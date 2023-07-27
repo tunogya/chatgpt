@@ -175,7 +175,7 @@ const Pay = ({user}: any) => {
                   </div>
                 </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
-                  <div className={"text-gray-600 dark:text-gray-200"}>All {type} subscriptions</div>
+                  <div className={"text-gray-600 dark:text-gray-200"}>{type} subscriptions</div>
                   <div className={"flex gap-4 text-sm w-full"}>
                     <div className="w-full">
                       <RadioGroup value={selected} onChange={setSelected} defaultValue={selected}>
@@ -221,7 +221,7 @@ const Pay = ({user}: any) => {
                     </div>
                   </div>
                   <div>
-                     <span className={`${type === 'GPT-3.5' ? 'text-brand-purple' : 'text-brand-green'} p-3 rounded mt-12 underline cursor-pointer`}
+                     <span className={`${type === 'GPT-3.5' ? 'text-brand-purple' : 'text-gray-200'} p-3 rounded mt-12 underline cursor-pointer`}
                            onClick={() => {
                              if (type === 'GPT-3.5') {
                                router.push(`/pay/${router.query.id}?type=GPT-4`)
@@ -241,7 +241,7 @@ const Pay = ({user}: any) => {
           <div className={"px-6 lg:px-14 w-full flex flex-col items-start"}>
             <div className={"dark:text-white w-full md:w-[380px] md:py-6 py-3 text-gray-600"}>
               <div className={"flex flex-col py-4 gap-4"}>
-                <div className={""}>Contact information</div>
+                <div className={""}>Contact</div>
                 <div className={"flex gap-2 text-sm bg-gray-50 dark:bg-gray-700 p-3 rounded-md border shadow-sm"}>
                   <div className={"flex gap-2"}>Account</div>
                   <div>{user.name}</div>
