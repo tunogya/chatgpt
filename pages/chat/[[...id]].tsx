@@ -225,7 +225,6 @@ const Chat = ({user}: any) => {
     .then((res) => res.json())
   )
 
-  console.log(userInfo)
   // standard exp
   const standard_exp = useMemo(() => {
     if (!userInfo?.app_metadata?.vip?.chatgpt_standard) {

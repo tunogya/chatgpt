@@ -10,7 +10,7 @@ export const OPENAI_MODELS = {
   },
   GPT4: {
     topic: 'GPT-4',
-    model: 'gpt-4'
+    model: 'gpt-4',
   }
 }
 
