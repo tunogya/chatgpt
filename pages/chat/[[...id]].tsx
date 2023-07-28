@@ -31,6 +31,7 @@ import StopIcon from "@/components/SVG/StopIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import ScrollToBottom from "react-scroll-to-bottom";
+import {OpenAIModel} from "@/pages/const/misc";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -62,7 +63,7 @@ const Chat = ({user}: any) => {
         title: data.title,
         mapping: data.mapping,
         create_time: new Date(data.created * 1000).toLocaleString(),
-        model: data.model ?? 'gpt-3.5-turbo',
+        model: data.model ?? OpenAIModel.GPT3_5.model,
       }))
     }
   }, [data, dispatch])

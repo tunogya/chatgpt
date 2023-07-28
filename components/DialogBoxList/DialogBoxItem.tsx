@@ -15,6 +15,7 @@ import CopyIcon from "@/components/SVG/CopyIcon";
 import copy from "copy-to-clipboard";
 import OpenAIIcon from "@/components/SVG/OpenAIIcon";
 import {useRouter} from "next/router";
+import {OpenAIModel} from "@/pages/const/misc";
 
 export type Message = {
   id: string
@@ -231,7 +232,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
         className="text-base gap-4 md:gap-6 m-auto md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0">
         <div className="w-[30px] flex flex-col relative items-end">
           <div
-            className={`relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center ${model === 'gpt-4' ? '!bg-brand-purple' : '!bg-brand-green'}`}>
+            className={`relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center ${model === OpenAIModel.GPT4.model ? '!bg-brand-purple' : '!bg-brand-green'}`}>
             <OpenAIIcon width={'30'}/>
             {
               flagged && (

@@ -10,45 +10,7 @@ import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {RadioGroup} from "@headlessui/react";
 import CheckIcon from "@/components/SVG/CheckIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
-
-export const PLANS = [
-  {
-    name: 'GPT-3.5 Monthly Member Card',
-    quantity: 30,
-    total: 30,
-    topic: 'GPT-3.5',
-  },
-  {
-    name: 'GPT-3.5 Quarterly Member Card',
-    quantity: 90,
-    total: 60,
-    topic: 'GPT-3.5',
-  },
-  {
-    name: 'GPT-3.5 Yearly Member Card',
-    quantity: 365,
-    total: 228,
-    topic: 'GPT-3.5',
-  },
-  {
-    name: 'GPT-4 Monthly Member Card',
-    quantity: 30,
-    total: 120,
-    topic: 'GPT-4',
-  },
-  {
-    name: 'GPT-4 Quarterly Member Card',
-    quantity: 90,
-    total: 340,
-    topic: 'GPT-4',
-  },
-  {
-    name: 'GPT-4 Yearly Member Card',
-    quantity: 365,
-    total: 1200,
-    topic: 'GPT-4',
-  },
-]
+import {PLANS} from "@/pages/const/misc";
 
 const Pay = ({user}: any) => {
   const router = useRouter()

@@ -2,6 +2,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 import pay from "@/utils/WxPay";
 import {ddbDocClient} from "@/utils/DynamoDB";
 import {GetCommand, TransactWriteCommand} from "@aws-sdk/lib-dynamodb";
+import {OpenAIModel} from "@/pages/const/misc";
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,9 +30,11 @@ export default async function handler(
   // @ts-ignore
   const {topic, quantity, user} = JSON.parse(resource.attach);
   let gpt3_5_quantity = 0, gpt4_quantity = 0;
-  if (topic === 'GPT3-5') {
+  if (topic === OpenAIModel.GPT3_5.topic) {
     gpt3_5_quantity = quantity;
-  } else if (topic === 'GPT4') {
+  } else if (topic === OpenAIModel.GPT4.topic) {
+    // 如果是GPT-4,则均增加TTL
+    gpt3_5_quantity = quantity;
     gpt4_quantity = quantity;
   }
   try {

@@ -6,6 +6,7 @@ import uid from "@/utils/uid";
 import {v4 as uuidv4} from 'uuid';
 import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
 import {encode} from "gpt-3-encoder";
+import {OpenAIModel} from "@/pages/const/misc";
 
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
@@ -156,13 +157,10 @@ export default withApiAuthRequired(async function handler(
     }
     // keep all messages in full_messages
     let tokens_count = 0, limit = 0;
-    if (model === 'gpt-3.5-turbo') {
+    if (model === OpenAIModel.GPT3_5.model) {
       full_old_messages.slice(-4);
       limit = 2048 - encode(messages[0].content.parts[0]).length;
-    } else if (model === 'gpt-3.5-turbo-16k') {
-      full_old_messages.slice(-6);
-      limit = 8192 - encode(messages[0].content.parts[0]).length;
-    } else if (model === 'gpt-4') {
+    } else if (model === OpenAIModel.GPT4.model) {
       full_old_messages.slice(-4);
       limit = 4096 - encode(messages[0].content.parts[0]).length;
     }
