@@ -43,7 +43,8 @@ const ddbManager = new DynamodbManager();
 const main = async () => {
   const allUsers = await auth0Management.getUsers({
     per_page: 100,
-    page: 1
+    page: 2,
+    sort: 'created_at:1',
   })
   console.log(allUsers.length, '人')
   for (const user of allUsers) {
