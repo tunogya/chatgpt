@@ -47,15 +47,19 @@ const Pay = ({user}: any) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      // description, out_trade_no, user, product
       body: JSON.stringify({
         description: `${selected.name}: ${user?.name}`,
         out_trade_no,
-        total: selected.total,
-        attach: JSON.stringify({
+        user: user,
+        product: {
+          // product topic
           topic: selected.topic,
+          // product quantity
           quantity: selected.quantity,
-          user: user?.sub,
-        })
+          // total need to pay
+          total: selected.total,
+        },
       })
     }).then((res) => res.json())
       .then((data) => {

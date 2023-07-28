@@ -1,8 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import wxPayClient from "@/utils/wxPayClient";
-import ddbDocClient from "@/utils/ddbDocClient";
-import {GetCommand} from "@aws-sdk/lib-dynamodb";
-import {OpenAIModel} from "@/pages/const/misc";
+import auth0Management from "@/utils/auth0Management";
+import me from "@/pages/api/me";
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,28 +26,14 @@ export default async function handler(
     return;
   }
   const resource = await wxPayClient.decipher_gcm(req.body.resource.ciphertext, req.body.resource.associated_data, req.body.resource.nonce);
+  // metadata is the latest user's metadata, need to be updated to user's info
+  // the id is the user_id
   // @ts-ignore
-  const {topic, quantity, user} = JSON.parse(resource.attach);
-  let gpt3_5_quantity = 0, gpt4_quantity = 0;
-  if (topic === OpenAIModel.GPT3_5.topic) {
-    gpt3_5_quantity = quantity;
-  } else if (topic === OpenAIModel.GPT4.topic) {
-    // 如果是GPT-4,则均增加TTL
-    gpt3_5_quantity = quantity;
-    gpt4_quantity = quantity;
-  }
+  const {metadata, id} = JSON.parse(resource.attach);
   try {
-    const metadata = await ddbDocClient.send(new GetCommand({
-      TableName: 'wizardingpay',
-      Key: {
-        PK: user,
-        SK: `METADATA#chatgpt`,
-      }
-    }))
-    const oldPaidUseTTL = metadata.Item?.paidUseTTL || 0;
-    const oldGPT4TTL = metadata.Item?.gpt4TTL || 0;
-    // ':newPaidUseTTL': Math.max(oldPaidUseTTL, Math.floor(Date.now() / 1000)) + gpt3_5_quantity * 24 * 60 * 60,
-    // ':newGpt4TTL': Math.max(oldGPT4TTL, Math.floor(Date.now() / 1000)) + gpt4_quantity * 24 * 60 * 60,
+    await auth0Management.updateAppMetadata({id}, {
+      ...metadata
+    })
     res.status(200).json({success: true})
   } catch (e) {
     console.log(e)

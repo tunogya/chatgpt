@@ -220,32 +220,34 @@ const Chat = ({user}: any) => {
   }, [second]);
 
   const {
-    data: dataOfMetadata,
-  } = useSWR('/api/app/metadata', (url: string) => fetch(url).then((res) => res.json()))
+    data: userInfo,
+  } = useSWR('/api/me', (url: string) => fetch(url)
+    .then((res) => res.json())
+  )
 
-  // GPT3-5 Use Left
-  const paidUseLeft = useMemo(() => {
-    if (!dataOfMetadata?.paidUseTTL) {
+  // standard exp
+  const standard_exp = useMemo(() => {
+    if (!userInfo?.app_metadata?.vip?.chatgpt_standard) {
       return 0
     }
-    const time = ((dataOfMetadata.paidUseTTL - Date.now() / 1000) / 86400)
+    const time = ((new Date(userInfo.app_metadata.vip.chatgpt_standard).getTime() - Date.now()) / 86400 / 1000)
     if (time < 0) {
       return 0
     }
     return time
-  }, [dataOfMetadata?.paidUseTTL])
+  }, [userInfo?.app_metadata?.vip?.chatgpt_standard])
 
   // GPT4 Use Left
-  const gpt4Left = useMemo(() => {
-    if (!dataOfMetadata?.gpt4TTL) {
+  const plus_exp = useMemo(() => {
+    if (!userInfo?.app_metadata?.vip?.chatgpt_plus) {
       return 0
     }
-    const time = ((dataOfMetadata.gpt4TTL - Date.now() / 1000) / 86400)
+    const time = ((new Date(userInfo?.app_metadata?.vip?.chatgpt_plus).getTime() - Date.now()) / 86400 / 1000)
     if (time < 0) {
       return 0
     }
     return time
-  }, [dataOfMetadata?.gpt4TTL])
+  }, [userInfo?.app_metadata?.vip?.chatgpt_plus])
 
   const clearConversationList = async () => {
     if (!deleteConfirm) {
@@ -326,7 +328,7 @@ const Chat = ({user}: any) => {
                 </div>
                 <div className={'flex gap-1'}>
                   {
-                    paidUseLeft <= 0 && gpt4Left <= 0 && (
+                    standard_exp <= 0 && plus_exp <= 0 && (
                       <div
                         className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-800">
                         Buy
@@ -334,18 +336,18 @@ const Chat = ({user}: any) => {
                     )
                   }
                   {
-                    paidUseLeft > 0 && (
+                    standard_exp > 0 && (
                       <div
                         className="rounded-md bg-yellow-200 px-1.5 py-0.5 text-xs font-medium uppercase !bg-brand-green">
-                        {`${Math.ceil(paidUseLeft)} D`}
+                        {`${Math.ceil(standard_exp)} D`}
                       </div>
                     )
                   }
                   {
-                    gpt4Left > 0 && (
+                    plus_exp > 0 && (
                       <div
                         className="rounded-md !bg-brand-purple px-1.5 py-0.5 text-xs font-medium uppercase text-white">
-                        {`${Math.ceil(gpt4Left)} D`}
+                        {`${Math.ceil(plus_exp)} D`}
                       </div>
                     )
                   }
@@ -451,7 +453,7 @@ const Chat = ({user}: any) => {
           <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
             <div className="flex-1 overflow-hidden">
               <ScrollToBottom className="h-full w-full dark:bg-gray-800">
-                <DialogBoxList data={session} isLoading={isLoading} gpt3_5={paidUseLeft > 0} gpt4={gpt4Left > 0}/>
+                <DialogBoxList data={session} isLoading={isLoading} gpt3_5={standard_exp > 0} gpt4={plus_exp > 0}/>
               </ScrollToBottom>
             </div>
             <div
@@ -489,9 +491,9 @@ const Chat = ({user}: any) => {
                   <div
                     className="flex flex-col w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'hidden'}}
-                          disabled={!paidUseLeft}
+                          disabled={!standard_exp}
                           rows={1} ref={inputRef}
-                          placeholder={paidUseLeft > 0 ? 'Send a message' : 'Please purchase a membership to continue.'}
+                          placeholder={standard_exp > 0 ? 'Send a message' : 'Please purchase a membership to continue.'}
                           onKeyDown={async (e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                               if (e.nativeEvent.isComposing) return;
@@ -513,7 +515,7 @@ const Chat = ({user}: any) => {
                           }} value={input}
                           className="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent md:pl-0"></textarea>
                     {
-                      paidUseLeft > 0 && (
+                      standard_exp > 0 && (
                         <button
                           className="absolute p-1 rounded-md md:bottom-3 md:p-2 md:right-3 dark:hover:bg-gray-900 dark:disabled:hover:bg-transparent right-2 disabled:text-gray-400 enabled:bg-brand-green text-white bottom-1.5 transition-colors disabled:opacity-40"
                           disabled={input === '' || isWaitComplete || isBlockComplete}

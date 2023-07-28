@@ -9,19 +9,40 @@ export default withApiAuthRequired(async function handler(
     res.status(405).json({error: 'Method Not Allowed'});
     return;
   }
-  const {description, out_trade_no, attach, total} = req.body;
+  // description, out_trade_no, user, product
+  // product: {
+  //   topic: string
+  //   quantity: number,
+  //   total: number,
+  // },
+  const {description, out_trade_no, user, product} = req.body;
+  let chatgpt_standard = '', chatgpt_plus = '';
+  // TODO
+  if (product.topic === '') {
+    chatgpt_standard = ''
+  } else if (product.topic === '') {
+    chatgpt_plus = ''
+  }
   try {
     const params = {
-      appid: 'wxc7d6f9e23b346d39',
-      mchid: '1642508849',
-      description,
+      appid: process.env.WEIXIN_APP_ID,
+      mchid: process.env.WEIXIN_MCH_ID,
+      description: description,
       out_trade_no: out_trade_no,
       notify_url: 'https://www.abandon.chat/api/pay/weixin/callback',
       amount: {
-        total: total * 100,
+        total: product.total * 100,
         currency: 'CNY',
       },
-      attach,
+      attach: JSON.stringify({
+        id: user.sub,
+        metadata: {
+          vip: {
+            chatgpt_standard: chatgpt_standard,
+            chatgpt_plus: chatgpt_plus,
+          }
+        },
+      }),
     };
     const data = await wxPayClient.transactions_native(params)
     res.status(200).json({status: 'ok', data});
