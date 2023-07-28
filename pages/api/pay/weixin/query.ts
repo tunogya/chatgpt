@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import pay from "@/utils/WxPay";
+import wxPayClient from "@/utils/wxPayClient";
 import {withApiAuthRequired} from "@auth0/nextjs-auth0";
 
 export default withApiAuthRequired(async function handler(
@@ -12,7 +12,7 @@ export default withApiAuthRequired(async function handler(
     return;
   }
   try {
-    const data = await pay.query({
+    const data = await wxPayClient.query({
       out_trade_no: out_trade_no as string
     })
     res.status(200).json({status: 'ok', data});

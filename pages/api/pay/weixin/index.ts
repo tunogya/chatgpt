@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import pay from "@/utils/WxPay";
+import wxPayClient from "@/utils/wxPayClient";
 import {withApiAuthRequired} from "@auth0/nextjs-auth0";
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
@@ -23,7 +23,7 @@ export default withApiAuthRequired(async function handler(
       },
       attach,
     };
-    const data = await pay.transactions_native(params)
+    const data = await wxPayClient.transactions_native(params)
     res.status(200).json({status: 'ok', data});
   } catch (error) {
     console.log(error);

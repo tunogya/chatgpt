@@ -1,8 +1,8 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {ddbDocClient} from "@/utils/DynamoDB";
+import ddbDocClient from "@/utils/ddbDocClient";
 import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {Readable} from "stream";
-import uid from "@/utils/uid";
+import uidClient from "@/utils/uidClient";
 import {v4 as uuidv4} from 'uuid';
 import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
 import {encode} from "gpt-3-encoder";
@@ -65,7 +65,7 @@ export default withApiAuthRequired(async function handler(
       // This is a new conversation, create a new conversation id use uuidv4.
       conversation = {
         ...conversation,
-        id: `CONVERSATION#${uid.getUniqueID().toString()}`,
+        id: `CONVERSATION#${uidClient.getUniqueID().toString()}`,
         title: messages[0].content.parts[0]?.slice(0, 20),
         created: Math.floor(Date.now() / 1000),
       }

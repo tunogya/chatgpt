@@ -13,9 +13,11 @@ const ddbClient = new DynamoDBClient({
   })
 });
 
-export const ddbDocClient = DynamoDBDocumentClient.from(ddbClient, {
+const ddbDocClient = DynamoDBDocumentClient.from(ddbClient, {
   marshallOptions: {
     convertEmptyValues: true,
     removeUndefinedValues: true,
   },
 });
+
+export default ddbDocClient

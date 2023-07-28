@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {ddbDocClient} from "@/utils/DynamoDB";
+import ddbDocClient from "@/utils/ddbDocClient";
 import {DeleteCommand, GetCommand, QueryCommand, UpdateCommand} from "@aws-sdk/lib-dynamodb";
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
