@@ -10,7 +10,7 @@ import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {RadioGroup} from "@headlessui/react";
 import CheckIcon from "@/components/SVG/CheckIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
-import {PLANS} from "@/pages/const/misc";
+import {CHATGPT_MEMBERSHIP, PRODUCTS} from "@/pages/const/misc";
 
 const Pay = ({user}: any) => {
   const router = useRouter()
@@ -21,7 +21,7 @@ const Pay = ({user}: any) => {
   const checkBoxRef = useRef(null)
   const topic = router.query?.topic ?? 'GPT-3.5'
   const SelectPlans = useMemo(() => {
-    return PLANS.filter((item) => item.topic === topic)
+    return PRODUCTS.filter((item) => item.topic === topic)
   }, [topic])
   const [selected, setSelected] = useState(SelectPlans[0])
 
@@ -113,10 +113,10 @@ const Pay = ({user}: any) => {
                   </div>
                 </div>
                 <div className={"pb-4"}>
-                  <div className={"pt-5 text-sm"}>{selected?.name} ({selected?.quantity} days)</div>
+                  <div className={"pt-5 text-sm"}>{selected?.name} ({selected?.quantity} month)</div>
                 </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
-                  <div className={"text-gray-600 dark:text-gray-200"}>{topic} subscriptions</div>
+                  <div className={"text-gray-600 dark:text-gray-200"}>Subscriptions</div>
                   <div className={"flex gap-4 text-sm w-full"}>
                     <div className="w-full">
                       <RadioGroup value={selected} onChange={setSelected} defaultValue={selected}>
@@ -145,9 +145,9 @@ const Pay = ({user}: any) => {
                                         as="span"
                                         className={`inline text-gray-500 text-xs`}
                                       >
-                                        {(plan.total / plan.quantity).toLocaleString("en-US", {
+                                        ¥{(plan.total / plan.quantity).toLocaleString("en-US", {
                                           maximumFractionDigits: 2
-                                        })} yuan per day
+                                        })} / mo
                                       </RadioGroup.Description>
                                     </div>
                                   </div>
@@ -162,16 +162,16 @@ const Pay = ({user}: any) => {
                     </div>
                   </div>
                   <div>
-                     <span className={`${topic === 'GPT-3.5' ? 'text-brand-purple' : 'text-gray-200'} p-3 rounded mt-12 underline cursor-pointer`}
+                     <span className={`${topic === CHATGPT_MEMBERSHIP.STANDARD ? 'text-brand-purple' : 'text-gray-200'} p-3 rounded mt-12 underline cursor-pointer`}
                            onClick={() => {
-                             if (topic === 'GPT-3.5') {
-                               router.push(`/pay/${router.query.id}?topic=GPT-4`)
+                             if (topic === CHATGPT_MEMBERSHIP.STANDARD) {
+                               router.push(`/pay/${router.query.id}?topic=${CHATGPT_MEMBERSHIP.PLUS}`)
                              } else {
-                               router.push(`/pay/${router.query.id}?topic=GPT-3.5`)
+                               router.push(`/pay/${router.query.id}?topic=${CHATGPT_MEMBERSHIP.STANDARD}`)
                              }
                            }}>
                     {
-                      topic === 'GPT-3.5' ? 'Upgrade to GPT-4 Subscription' : 'Look for GPT-3.5 Subscription'
+                      topic === CHATGPT_MEMBERSHIP.STANDARD ? 'Upgrade to ChatGPT Plus' : 'Look for ChatGPT Standard'
                     }
                   </span>
                   </div>

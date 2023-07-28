@@ -31,7 +31,7 @@ import StopIcon from "@/components/SVG/StopIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import ScrollToBottom from "react-scroll-to-bottom";
-import {OpenAIModel} from "@/pages/const/misc";
+import {CHATGPT_MEMBERSHIP, OPENAI_MODELS} from "@/pages/const/misc";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ const Chat = ({user}: any) => {
         title: data.title,
         mapping: data.mapping,
         create_time: new Date(data.created * 1000).toLocaleString(),
-        model: data.model ?? OpenAIModel.GPT3_5.model,
+        model: data.model ?? OPENAI_MODELS.GPT3_5.model,
       }))
     }
   }, [data, dispatch])
@@ -225,6 +225,7 @@ const Chat = ({user}: any) => {
     .then((res) => res.json())
   )
 
+  console.log(userInfo)
   // standard exp
   const standard_exp = useMemo(() => {
     if (!userInfo?.app_metadata?.vip?.chatgpt_standard) {
@@ -714,7 +715,7 @@ const Chat = ({user}: any) => {
                             className="relative order-2 col-div-1 border-r-0 border-t dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0 max-w-[400px]">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div className={"text-gray-800 dark:text-gray-200"}>GPT-3.5</div>
+                                <div className={"text-gray-800 dark:text-gray-200"}>ChatGPT Standard</div>
                                 <div
                                   className="font-semibold text-gray-500">19 CNY/mo
                                 </div>
@@ -722,12 +723,12 @@ const Chat = ({user}: any) => {
                               <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-green"
                                       onClick={async () => {
                                         const out_trade_no = uuidv4()
-                                        await router.push(`/pay/${out_trade_no}?topic=GPT-3.5`)
+                                        await router.push(`/pay/${out_trade_no}?topic=${CHATGPT_MEMBERSHIP.STANDARD}`)
                                       }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-white">Subscribe GPT-3.5
+                                    className="inline-block text-white">Subscribe with 33% off
                                   </div>
                                 </div>
                               </button>
@@ -752,7 +753,7 @@ const Chat = ({user}: any) => {
                           <div className="relative order-1 col-div-1 sm:order-2 max-w-[400px]">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div>GPT-4</div>
+                                <div>ChatGPT Plus</div>
                                 <div
                                   className="font-semibold text-gray-500">100 CNY/mo
                                 </div>
@@ -760,12 +761,12 @@ const Chat = ({user}: any) => {
                               <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
                                       onClick={async () => {
                                         const out_trade_no = uuidv4()
-                                        await router.push(`/pay/${out_trade_no}?topic=GPT-4`)
+                                        await router.push(`/pay/${out_trade_no}?topic=${CHATGPT_MEMBERSHIP.PLUS}`)
                                       }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-white">Subscribe GPT-4
+                                    className="inline-block text-white">Subscribe with 13% off
                                   </div>
                                 </div>
                               </button>

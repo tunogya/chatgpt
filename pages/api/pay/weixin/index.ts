@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import wxPayClient from "@/utils/wxPayClient";
 import {withApiAuthRequired} from "@auth0/nextjs-auth0";
+import auth0Management from "@/utils/auth0Management";
+import {CHATGPT_MEMBERSHIP} from "@/pages/const/misc";
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -16,12 +18,16 @@ export default withApiAuthRequired(async function handler(
   //   total: number,
   // },
   const {description, out_trade_no, user, product} = req.body;
-  let chatgpt_standard = '', chatgpt_plus = '';
-  // TODO
-  if (product.topic === '') {
-    chatgpt_standard = ''
-  } else if (product.topic === '') {
-    chatgpt_plus = ''
+  const userInfo = await auth0Management.getUser({
+    id: user.sub,
+  })
+  const chatgpt_standard_exp = userInfo?.app_metadata?.vip?.chatgpt_standard ? new Date(userInfo?.app_metadata?.vip?.chatgpt_standard) : new Date()
+  const chatgpt_plus_exp = userInfo?.app_metadata?.vip?.chatgpt_plus ? new Date(userInfo?.app_metadata?.vip?.chatgpt_plus) : new Date()
+
+  if (product.topic === CHATGPT_MEMBERSHIP.STANDARD) {
+    chatgpt_standard_exp.setMonth(chatgpt_standard_exp.getMonth() + product.quantity)
+  } else if (product.topic === CHATGPT_MEMBERSHIP.PLUS) {
+    chatgpt_plus_exp.setMonth(chatgpt_plus_exp.getMonth() + product.quantity)
   }
   try {
     const params = {
@@ -38,8 +44,8 @@ export default withApiAuthRequired(async function handler(
         id: user.sub,
         metadata: {
           vip: {
-            chatgpt_standard: chatgpt_standard,
-            chatgpt_plus: chatgpt_plus,
+            chatgpt_standard: chatgpt_standard_exp.toISOString(),
+            chatgpt_plus: chatgpt_plus_exp.toISOString(),
           }
         },
       }),
