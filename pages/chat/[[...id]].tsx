@@ -714,7 +714,7 @@ const Chat = ({user}: any) => {
                               <div className="text-xl font-semibold justify-between items-center flex">
                                 <div className={"text-gray-800 dark:text-gray-200"}>GPT-3.5</div>
                                 <div
-                                  className="font-semibold text-gray-500">Up to 33% Off
+                                  className="font-semibold text-gray-500">19 CNY/mo
                                 </div>
                               </div>
                               <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-green"
@@ -752,7 +752,7 @@ const Chat = ({user}: any) => {
                               <div className="text-xl font-semibold justify-between items-center flex">
                                 <div>GPT-4</div>
                                 <div
-                                  className="font-semibold text-gray-500">Up to 13% Off
+                                  className="font-semibold text-gray-500">100 CNY/mo
                                 </div>
                               </div>
                               <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
