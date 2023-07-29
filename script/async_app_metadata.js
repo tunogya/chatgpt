@@ -43,8 +43,7 @@ const ddbManager = new DynamodbManager();
 const main = async () => {
   const allUsers = await auth0Management.getUsers({
     per_page: 100,
-    page: 1,
-    sort: 'created_at:1',
+    page: 3,
   })
   for (const user of allUsers) {
     if (!user?.app_metadata?.vip?.chatgpt_standard) {
@@ -59,7 +58,7 @@ const main = async () => {
           }
         })
       }
-      console.log('update app_metadata')
+      console.log(user.name, 'update app_metadata')
     } else {
       console.log(user.name, user?.app_metadata?.vip?.chatgpt_standard)
     }
