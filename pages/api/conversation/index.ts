@@ -7,6 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
 import {encode} from "gpt-3-encoder";
 import {OPENAI_MODELS} from "@/pages/const/misc";
+import auth0Management from "@/utils/auth0Management";
 
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
@@ -45,6 +46,23 @@ export default withApiAuthRequired(async function handler(
     });
   } else if (req.method === 'POST') {
     let {action, messages, model, parent_message_id} = req.body;
+    const userMetadata = await auth0Management.getUser({
+      id: user_id,
+    })
+    const chatgpt_standard = userMetadata?.app_metadata?.vip?.chatgpt_standard ?? undefined
+    const chatgpt_plus = userMetadata?.app_metadata?.vip?.chatgpt_plus ?? undefined
+    if (model === OPENAI_MODELS.GPT4.model) {
+      if (!chatgpt_plus || new Date(chatgpt_plus) < new Date()) {
+        res.status(400).json({error: 'Chatgpt plus membership is not valid.'})
+        return
+      }
+    } else {
+      // require chatgpt_standard is not undefined, and > new Date()
+      if (!chatgpt_standard || new Date(chatgpt_standard) < new Date()) {
+        res.status(400).json({error: 'Chatgpt standard membership is not valid.'})
+        return
+      }
+    }
     if (action !== 'next') {
       res.status(400).json({error: 'Currently, only next action is supported.'})
       return
