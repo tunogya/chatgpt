@@ -610,7 +610,7 @@ const Chat = ({user}: any) => {
                       <Tab.Panels className="w-full md:min-h-[300px]">
                         <Tab.Panel>
                           <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
-                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 border-black/10 dark:border-gray-700">
                               <div className="flex items-center justify-between">
                                 <div>Theme</div>
                                 <select
@@ -631,7 +631,7 @@ const Chat = ({user}: any) => {
                                   <option value="light">Light</option>
                                 </select></div>
                             </div>
-                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 border-black/10 dark:border-gray-700">
                               <div className="flex items-center justify-between">
                                 <div>Clear all chats</div>
                                 <button className="btn relative btn-danger"
@@ -656,7 +656,7 @@ const Chat = ({user}: any) => {
                         <Tab.Panel>
                           <div className="w-full md:min-h-[300px]">
                             <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
-                              <div className="border-b-[1px] pb-3 last-of-type:border-b-0 dark:border-gray-700">
+                              <div className="border-b-[1px] pb-3 last-of-type:border-b-0 border-black/10 dark:border-gray-700">
                                 <div className="flex items-center justify-between">
                                   <div>Chat history</div>
                                 </div>
@@ -699,9 +699,9 @@ const Chat = ({user}: any) => {
                   <div className="flex h-full flex-col items-center justify-start">
                     <div className="relative">
                       <div
-                        className="grow justify-center bg-white dark:bg-gray-900 dark:text-white rounded-md flex flex-col items-start overflow-hidden border shadow-md dark:border-gray-700">
+                        className="grow justify-center bg-white dark:bg-gray-900 dark:text-white rounded-md flex flex-col items-start overflow-hidden border shadow-md border-black/10 dark:border-gray-700">
                         <div
-                          className="flex w-full flex-row items-center justify-between border-b px-4 py-3 text-gray-700 dark:text-gray-100 dark:border-gray-700">
+                          className="flex w-full flex-row items-center justify-between border-b px-4 py-3 text-gray-700 dark:text-gray-100 border-black/10 dark:border-gray-700">
                           <AbandonIcon width={'100'}/>
                           <button className="text-gray-700 opacity-50 transition hover:opacity-75 dark:text-white"
                                   onClick={() => setIsOpenPayment(false)}>
@@ -710,7 +710,7 @@ const Chat = ({user}: any) => {
                         </div>
                         <div className="grid sm:grid-cols-2">
                           <div
-                            className="relative order-2 col-div-1 border-r-0 border-t dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0 max-w-[400px]">
+                            className="relative order-2 col-div-1 border-r-0 border-t border-black/10 dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0 max-w-[400px]">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
                                 <div className={"text-gray-800 dark:text-gray-200"}>ChatGPT Standard</div>
@@ -732,19 +732,19 @@ const Chat = ({user}: any) => {
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>Access to our GPT-3.5 model</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Access to our GPT-3.5 model</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>Standard response speed</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Standard response speed</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>Regular model updates</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Regular model updates</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div>Annual payment up to 33% off</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Annual payment up to 33% off</div>
                               </div>
                             </div>
                           </div>
@@ -770,19 +770,19 @@ const Chat = ({user}: any) => {
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>Access to GPT-4, our most capable model</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Access to GPT-4, our most capable model</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>Faster response speed</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Faster response speed</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>Exclusive access to beta features like Browsing, Plugins, and Code Interpreter</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Exclusive access to beta features like Browsing, Plugins, and Code Interpreter</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div>Annual payment up to 13% off</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Annual payment up to 13% off</div>
                               </div>
                             </div>
                           </div>

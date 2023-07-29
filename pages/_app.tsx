@@ -8,8 +8,9 @@ import {persistStore} from "redux-persist";
 import {UserProvider} from '@auth0/nextjs-auth0/client';
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {useEffect} from "react";
-// import "tailwindcss/tailwind.css";
+import "tailwindcss/tailwind.css";
 import "@/styles/index.css";
+
 
 const persistor = persistStore(store);
 

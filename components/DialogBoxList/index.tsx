@@ -49,10 +49,10 @@ const DialogBoxList: FC<DialogBoxListContentProps> = ({data, isLoading, gpt3_5, 
 
   return (
     <div className={"w-full h-full"}>
-      <div className="flex flex-col h-full items-center text-sm dark:bg-gray-800">
+      <div className="flex flex-col h-full items-center text-sm bg-white dark:bg-gray-800">
         {
           isLoading ? (
-            <div className="flex flex-col items-center text-sm text-gray-800 dark:text-gray-100 dark:bg-gray-800">
+            <div className="flex flex-col items-center text-sm text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800">
               <div className={"pt-4"}>
                 <LoadingIcon/>
               </div>
@@ -158,7 +158,7 @@ const DialogBoxList: FC<DialogBoxListContentProps> = ({data, isLoading, gpt3_5, 
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-col items-center justify-center text-sm dark:bg-gray-800 h-full w-full">
+                  <div className="flex flex-col items-center justify-center text-sm bg-white dark:bg-gray-800 h-full w-full">
                     <h1
                       className="text-4xl font-semibold text-center text-gray-800 dark:text-gray-100">
                       <Typewriter text={'ChatGPT'}/>
