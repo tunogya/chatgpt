@@ -43,27 +43,34 @@ const ddbManager = new DynamodbManager();
 const main = async () => {
   const allUsers = await auth0Management.getUsers({
     per_page: 100,
-    page: 2,
+    page: 1,
     sort: 'created_at:1',
   })
   console.log(allUsers.length, '人')
   for (const user of allUsers) {
-    console.log(user.user_id)
-    const metadata = await ddbManager.getUserMetadataFromDDB(user.user_id)
-    if (metadata) {
-      const paidUseTTL = new Date(metadata.paidUseTTL * 1000)
-      await auth0Management.updateAppMetadata({
-        id: user.user_id,
-      }, {
-        vip: {
-          chatgpt_standard: paidUseTTL.toISOString(),
-        }
-      })
+    if (!user?.app_metadata?.vip?.chatgpt_standard) {
+      console.log(user.user_id)
+      const metadata = await ddbManager.getUserMetadataFromDDB(user.user_id)
+      if (metadata) {
+        const paidUseTTL = new Date(metadata.paidUseTTL * 1000)
+        await auth0Management.updateAppMetadata({
+          id: user.user_id,
+        }, {
+          vip: {
+            chatgpt_standard: paidUseTTL.toISOString(),
+          }
+        })
+      }
+    } else {
+      console.log('already vip')
+    }
+    if (user.user_metadata.vip.chatgpt_standard) {
       await auth0Management.updateUserMetadata({
         id: user.user_id,
       }, {
         vip: null,
       })
+      console.log('clear user_metadata')
     }
   }
 }
