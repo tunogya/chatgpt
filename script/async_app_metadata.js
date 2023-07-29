@@ -41,10 +41,26 @@ const auth0Management = new ManagementClient({
 const ddbManager = new DynamodbManager();
 
 const main = async () => {
-  const allUsers = await auth0Management.getUsers({
+  let allUsers = []
+  const page0 = await auth0Management.getUsers({
+    per_page: 100,
+    page: 0,
+  })
+  const page1 = await auth0Management.getUsers({
+    per_page: 100,
+    page: 1,
+  })
+  const page2 = await auth0Management.getUsers({
+    per_page: 100,
+    page: 2,
+  })
+  const page3 = await auth0Management.getUsers({
     per_page: 100,
     page: 3,
   })
+  allUsers = allUsers.concat(page0).concat(page1).concat(page2).concat(page3)
+  console.log(allUsers.length)
+  
   for (const user of allUsers) {
     if (!user?.app_metadata?.vip?.chatgpt_standard) {
       const metadata = await ddbManager.getUserMetadataFromDDB(user.user_id)
@@ -56,6 +72,11 @@ const main = async () => {
           vip: {
             chatgpt_standard: paidUseTTL.toISOString(),
           }
+        })
+        await auth0Management.updateUserMetadata({
+          id: user.user_id,
+        }, {
+          vip: null,
         })
       }
       console.log(user.name, 'update app_metadata')
