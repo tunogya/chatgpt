@@ -107,7 +107,7 @@ const Pay = ({user}: any) => {
                   <div className={"text-gray-600"}>{topic} Subscription</div>
                   <div className={"flex items-center gap-4"}>
                     <div
-                      className={"text-4xl font-semibold text-black dark:text-white"}>CNY {selected?.total?.toLocaleString("en-US", {
+                      className={"text-4xl font-semibold text-black dark:text-white"}>CNY ¥{selected?.total?.toLocaleString("en-US", {
                       maximumFractionDigits: 2
                     })}</div>
                   </div>
@@ -145,9 +145,9 @@ const Pay = ({user}: any) => {
                                         as="span"
                                         className={`inline text-gray-500 text-xs`}
                                       >
-                                        ¥{(plan.total / plan.quantity).toLocaleString("en-US", {
+                                       CNY ¥{(plan.total / plan.quantity).toLocaleString("en-US", {
                                           maximumFractionDigits: 2
-                                        })} / mo
+                                        })}/mo
                                       </RadioGroup.Description>
                                     </div>
                                   </div>

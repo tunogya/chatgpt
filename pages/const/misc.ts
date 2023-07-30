@@ -53,3 +53,16 @@ export const PRODUCTS = [
     topic: CHATGPT_MEMBERSHIP.PLUS,
   },
 ]
+
+export const RATE_LIMIT = {
+  'gpt-3.5-turbo': {
+    'reset-hours': 1,
+    'limit-requests': 100,
+    'limit-tokens': 100 * 2000,
+  },
+  'gpt-4': {
+    'reset-hours': 3,
+    'limit-requests': 50,
+    'limit-tokens': 50 * 2000,
+  },
+}
