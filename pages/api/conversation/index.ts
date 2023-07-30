@@ -6,7 +6,7 @@ import uidClient from "@/utils/uidClient";
 import {v4 as uuidv4} from 'uuid';
 import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
 import {encode} from "gpt-3-encoder";
-import {OPENAI_MODELS} from "@/pages/const/misc";
+import {OPENAI_MODELS} from "@/const/misc";
 import auth0Management from "@/utils/auth0Management";
 
 export default withApiAuthRequired(async function handler(

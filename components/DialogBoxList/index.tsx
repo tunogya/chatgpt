@@ -6,7 +6,7 @@ import Typewriter from "@/components/Typewriter";
 import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {useDispatch, useSelector} from "react-redux";
 import {setModel} from "@/store/session";
-import {OPENAI_MODELS} from "@/pages/const/misc";
+import {OPENAI_MODELS} from "@/const/misc";
 
 type DialogBoxListContentProps = {
   data: any

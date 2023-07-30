@@ -10,7 +10,7 @@ import LoadingIcon from "@/components/SVG/LoadingIcon";
 import {RadioGroup} from "@headlessui/react";
 import CheckIcon from "@/components/SVG/CheckIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
-import {CHATGPT_MEMBERSHIP, PRODUCTS} from "@/pages/const/misc";
+import {CHATGPT_MEMBERSHIP, PRODUCTS} from "@/const/misc";
 
 const Pay = ({user}: any) => {
   const router = useRouter()

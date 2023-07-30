@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import wxPayClient from "@/utils/wxPayClient";
 import {withApiAuthRequired} from "@auth0/nextjs-auth0";
 import auth0Management from "@/utils/auth0Management";
-import {CHATGPT_MEMBERSHIP} from "@/pages/const/misc";
+import {CHATGPT_MEMBERSHIP} from "@/const/misc";
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse

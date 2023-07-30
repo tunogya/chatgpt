@@ -31,7 +31,7 @@ import StopIcon from "@/components/SVG/StopIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import ScrollToBottom from "react-scroll-to-bottom";
-import {CHATGPT_MEMBERSHIP, OPENAI_MODELS} from "@/pages/const/misc";
+import {CHATGPT_MEMBERSHIP, OPENAI_MODELS} from "@/const/misc";
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();

@@ -15,7 +15,7 @@ import CopyIcon from "@/components/SVG/CopyIcon";
 import copy from "copy-to-clipboard";
 import OpenAIIcon from "@/components/SVG/OpenAIIcon";
 import {useRouter} from "next/router";
-import {OPENAI_MODELS} from "@/pages/const/misc";
+import {OPENAI_MODELS} from "@/const/misc";
 
 export type Message = {
   id: string
