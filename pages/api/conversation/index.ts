@@ -243,6 +243,7 @@ export default withApiAuthRequired(async function handler(
         role: '',
       };
       const stream = result.body as any as Readable;
+      let saved = false;
       stream.on('data', (chunk: any) => {
         const lines = chunk
           .toString()
@@ -339,6 +340,7 @@ export default withApiAuthRequired(async function handler(
             ...conversation,
           }
         }));
+        saved = true;
         res.write('data: [DONE]\n\n');
         res.status(200).end();
       });
@@ -349,6 +351,9 @@ export default withApiAuthRequired(async function handler(
         return;
       });
       req.socket.on('close', () => {
+        if (saved) {
+          return;
+        }
         res.write('data: [DONE]\n\n');
         abortController.abort();
         if (full_callback_message.content.parts[0] === '') {
