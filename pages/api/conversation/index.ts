@@ -308,6 +308,8 @@ export default withApiAuthRequired(async function handler(
           res.status(200).end();
           return;
         }
+        tokens_count += encode(full_callback_message.content.parts[0]).length;
+        console.log(user.sub, new Date().toISOString(), model, 'tokens:', tokens_count)
         // add ai callback message to conversation and add to user children
         conversation = {
           ...conversation,
@@ -347,7 +349,8 @@ export default withApiAuthRequired(async function handler(
         return;
       });
       req.socket.on('close', () => {
-        console.log('[DONE]', new Date().toISOString())
+        tokens_count += encode(full_callback_message.content.parts[0]).length;
+        console.log(user.sub, new Date().toISOString(), model, 'tokens:', tokens_count)
         res.write('data: [DONE]\n\n');
         abortController.abort();
         if (full_callback_message.content.parts[0] === '') {
