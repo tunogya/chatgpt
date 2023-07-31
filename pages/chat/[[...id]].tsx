@@ -78,6 +78,10 @@ const Chat = ({user}: any) => {
     mutate: mutateConversation
   } = useSWR('/api/conversation', (url: string) => fetch(url).then((res) => res.json()))
 
+  const {
+    data: rateLimitData,
+  } = useSWR('/api/rate-limit', (url: string) => fetch(url).then((res) => res.json()))
+
   const handleSubmit = async () => {
     if (input === '' || isWaitComplete || isBlockComplete) return;
     const scroll_to_bottom_button = document.getElementById('scroll-to-bottom-button');
@@ -453,7 +457,12 @@ const Chat = ({user}: any) => {
           <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
             <div className="flex-1 overflow-hidden">
               <ScrollToBottom className="h-full w-full dark:bg-gray-800">
-                <DialogBoxList data={session} isLoading={isLoading} gpt3_5={standard_exp > 0} gpt4={plus_exp > 0}/>
+                <DialogBoxList
+                  data={session} isLoading={isLoading}
+                  gpt3_5={standard_exp > 0 && rateLimitData?.['gpt-3.5-turbo']?.['remaining-requests'] > 0 &&
+                    rateLimitData?.['gpt-3.5-turbo']?.['remaining-tokens'] > 0 }
+                  gpt4={plus_exp > 0 && rateLimitData?.['gpt-4']?.['remaining-requests'] > 0 &&
+                    rateLimitData?.['gpt-4']?.['remaining-tokens'] > 0 }/>
               </ScrollToBottom>
             </div>
             <div
@@ -610,7 +619,8 @@ const Chat = ({user}: any) => {
                       <Tab.Panels className="w-full md:min-h-[300px]">
                         <Tab.Panel>
                           <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
-                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 border-black/10 dark:border-gray-700">
+                            <div
+                              className="border-b-[1px] pb-3 last-of-type:border-b-0 border-black/10 dark:border-gray-700">
                               <div className="flex items-center justify-between">
                                 <div>Theme</div>
                                 <select
@@ -631,7 +641,8 @@ const Chat = ({user}: any) => {
                                   <option value="light">Light</option>
                                 </select></div>
                             </div>
-                            <div className="border-b-[1px] pb-3 last-of-type:border-b-0 border-black/10 dark:border-gray-700">
+                            <div
+                              className="border-b-[1px] pb-3 last-of-type:border-b-0 border-black/10 dark:border-gray-700">
                               <div className="flex items-center justify-between">
                                 <div>Clear all chats</div>
                                 <button className="btn relative btn-danger"
@@ -656,7 +667,8 @@ const Chat = ({user}: any) => {
                         <Tab.Panel>
                           <div className="w-full md:min-h-[300px]">
                             <div className="flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300">
-                              <div className="border-b-[1px] pb-3 last-of-type:border-b-0 border-black/10 dark:border-gray-700">
+                              <div
+                                className="border-b-[1px] pb-3 last-of-type:border-b-0 border-black/10 dark:border-gray-700">
                                 <div className="flex items-center justify-between">
                                   <div>Chat history</div>
                                 </div>
@@ -718,11 +730,12 @@ const Chat = ({user}: any) => {
                                   className="font-semibold text-gray-500">CNY ¥19/mo
                                 </div>
                               </div>
-                              <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-green"
-                                      onClick={async () => {
-                                        const out_trade_no = uuidv4()
-                                        await router.push(`/pay/${out_trade_no}?topic=${CHATGPT_MEMBERSHIP.STANDARD}`)
-                                      }}
+                              <button
+                                className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-green"
+                                onClick={async () => {
+                                  const out_trade_no = uuidv4()
+                                  await router.push(`/pay/${out_trade_no}?topic=${CHATGPT_MEMBERSHIP.STANDARD}`)
+                                }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
@@ -756,11 +769,12 @@ const Chat = ({user}: any) => {
                                   className="font-semibold text-gray-500">CNY ¥120/mo
                                 </div>
                               </div>
-                              <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
-                                      onClick={async () => {
-                                        const out_trade_no = uuidv4()
-                                        await router.push(`/pay/${out_trade_no}?topic=${CHATGPT_MEMBERSHIP.PLUS}`)
-                                      }}
+                              <button
+                                className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
+                                onClick={async () => {
+                                  const out_trade_no = uuidv4()
+                                  await router.push(`/pay/${out_trade_no}?topic=${CHATGPT_MEMBERSHIP.PLUS}`)
+                                }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
@@ -770,7 +784,9 @@ const Chat = ({user}: any) => {
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>Access to GPT-4, our most capable model</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Access to GPT-4, our most capable
+                                  model
+                                </div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
@@ -778,7 +794,9 @@ const Chat = ({user}: any) => {
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>Exclusive access to beta features like Browsing, Plugins, and Code Interpreter</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Exclusive access to beta features
+                                  like Browsing, Plugins, and Code Interpreter
+                                </div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>

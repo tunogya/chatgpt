@@ -45,7 +45,8 @@ export default withApiAuthRequired(async function handler(
     }
   }
   const hour = new Date().getHours()
-  const period_has_pass = Math.floor(hour / RATE_LIMIT['gpt-3.5-turbo']['reset-hours'])
+  const period_has_pass_gpt3_5_turbo = Math.floor(hour / RATE_LIMIT['gpt-3.5-turbo']['reset-hours'])
+  const period_has_pass_gpt4 = Math.floor(hour / RATE_LIMIT['gpt-4']['reset-hours'])
 
   const total_request_gpt3_5_turbo = userLimit['gpt-3.5-turbo']
     .requests
@@ -63,8 +64,8 @@ export default withApiAuthRequired(async function handler(
     .tokens
     .slice(hour - RATE_LIMIT['gpt-4']['reset-hours'] + 1, hour + 1)
     .reduce((a, b) => a + b, 0)
-  const next_start_time_gpt3_5_turbo = new Date(new Date().setHours((period_has_pass + 1) * RATE_LIMIT['gpt-3.5-turbo']['reset-hours'], 0, 0, 0)).getTime()
-  const next_start_time_gpt4 = new Date(new Date().setHours((period_has_pass + 1) * RATE_LIMIT['gpt-4']['reset-hours'], 0, 0, 0)).getTime()
+  const next_start_time_gpt3_5_turbo = new Date(new Date().setHours((period_has_pass_gpt3_5_turbo + 1) * RATE_LIMIT['gpt-3.5-turbo']['reset-hours'], 0, 0, 0)).getTime()
+  const next_start_time_gpt4 = new Date(new Date().setHours((period_has_pass_gpt4 + 1) * RATE_LIMIT['gpt-4']['reset-hours'], 0, 0, 0)).getTime()
 
   res.status(200).json({
     'gpt-3.5-turbo': {
@@ -72,16 +73,16 @@ export default withApiAuthRequired(async function handler(
       'limit-tokens': RATE_LIMIT["gpt-3.5-turbo"]["limit-tokens"],
       'remaining-requests': RATE_LIMIT['gpt-3.5-turbo']['limit-requests'] - total_request_gpt3_5_turbo,
       'remaining-tokens': RATE_LIMIT['gpt-3.5-turbo']['limit-tokens'] - total_tokens_gpt3_5_turbo,
-      'reset-requests': (next_start_time_gpt3_5_turbo - new Date().getTime()) / 1000 / 60,
-      'reset-tokens': (next_start_time_gpt3_5_turbo - new Date().getTime()) / 1000 / 60,
+      'reset-requests': Math.ceil((next_start_time_gpt3_5_turbo - new Date().getTime()) / 1000 / 60),
+      'reset-tokens': Math.ceil((next_start_time_gpt3_5_turbo - new Date().getTime()) / 1000 / 60),
     },
     'gpt-4': {
       'limit-requests': RATE_LIMIT["gpt-4"]["limit-requests"],
       'limit-tokens': RATE_LIMIT["gpt-4"]["limit-tokens"],
       'remaining-requests': RATE_LIMIT['gpt-4']['limit-requests'] - total_request_gpt4,
       'remaining-tokens': RATE_LIMIT['gpt-4']['limit-tokens'] - total_tokens_gpt4,
-      'reset-requests': (next_start_time_gpt4 - new Date().getTime()) / 1000 / 60,
-      'reset-tokens': (next_start_time_gpt4 - new Date().getTime()) / 1000 / 60,
+      'reset-requests': Math.ceil((next_start_time_gpt4 - new Date().getTime()) / 1000 / 60),
+      'reset-tokens': Math.ceil((next_start_time_gpt4 - new Date().getTime()) / 1000 / 60),
     },
   })
 })

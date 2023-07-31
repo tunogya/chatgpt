@@ -37,10 +37,10 @@ export const PRODUCTS = [
     topic: CHATGPT_MEMBERSHIP.STANDARD,
   },
   {
-    name: 'ChatGPT Plus Daily',
-    quantity: 1,
-    total: 7,
-    original: 5,
+    name: 'ChatGPT Plus Weekly',
+    quantity: 7,
+    total: 50,
+    original: 50,
     topic: CHATGPT_MEMBERSHIP.PLUS,
   },
   {

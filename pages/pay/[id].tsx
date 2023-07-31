@@ -107,13 +107,16 @@ const Pay = ({user}: any) => {
                   <div className={"text-gray-600"}>{topic} Subscription</div>
                   <div className={"flex items-center gap-4"}>
                     <div
-                      className={"text-4xl font-semibold text-black dark:text-white"}>CNY ¥{selected?.total?.toLocaleString("en-US", {
-                      maximumFractionDigits: 2
-                    })}</div>
+                      className={"text-4xl font-semibold text-black dark:text-white"}>CNY
+                      ¥{selected?.total?.toLocaleString("en-US", {
+                        maximumFractionDigits: 2
+                      })}</div>
                   </div>
                 </div>
                 <div className={"pb-4"}>
-                  <div className={"pt-5 text-sm"}>{selected?.name} ({selected?.quantity} day{selected?.quantity > 1 ? 's' : ''})</div>
+                  <div
+                    className={"pt-5 text-sm"}>{selected?.name} ({selected?.quantity} day{selected?.quantity > 1 ? 's' : ''})
+                  </div>
                 </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
                   <div className={"text-gray-600 dark:text-gray-200"}>Subscriptions</div>
@@ -145,9 +148,25 @@ const Pay = ({user}: any) => {
                                         as="span"
                                         className={`inline text-gray-500 text-xs`}
                                       >
-                                       CNY ¥{(plan.total / plan.quantity).toLocaleString("en-US", {
-                                          maximumFractionDigits: 2
-                                        })}/day
+                                        <div className={'flex space-x-2 font-bold'}>
+                                          {
+                                            plan.original !== plan.total && (
+                                              <div className={'line-through'}>
+                                                ¥ {plan.original}
+                                              </div>
+                                            )
+                                          }
+                                          <div>
+                                            ¥ {plan.total}
+                                          </div>
+                                          {
+                                            plan.original !== plan.total && (
+                                              <div>
+                                                (Saved ¥ {plan.original - plan.total})
+                                              </div>
+                                            )
+                                          }
+                                        </div>
                                       </RadioGroup.Description>
                                     </div>
                                   </div>
@@ -162,14 +181,15 @@ const Pay = ({user}: any) => {
                     </div>
                   </div>
                   <div>
-                     <span className={`${topic === CHATGPT_MEMBERSHIP.STANDARD ? 'text-brand-purple' : 'text-gray-200'} p-3 rounded mt-12 underline cursor-pointer`}
-                           onClick={() => {
-                             if (topic === CHATGPT_MEMBERSHIP.STANDARD) {
-                               router.push(`/pay/${router.query.id}?topic=${CHATGPT_MEMBERSHIP.PLUS}`)
-                             } else {
-                               router.push(`/pay/${router.query.id}?topic=${CHATGPT_MEMBERSHIP.STANDARD}`)
-                             }
-                           }}>
+                     <span
+                       className={`${topic === CHATGPT_MEMBERSHIP.STANDARD ? 'text-brand-purple' : 'text-gray-200'} p-3 rounded mt-12 underline cursor-pointer`}
+                       onClick={() => {
+                         if (topic === CHATGPT_MEMBERSHIP.STANDARD) {
+                           router.push(`/pay/${router.query.id}?topic=${CHATGPT_MEMBERSHIP.PLUS}`)
+                         } else {
+                           router.push(`/pay/${router.query.id}?topic=${CHATGPT_MEMBERSHIP.STANDARD}`)
+                         }
+                       }}>
                     {
                       topic === CHATGPT_MEMBERSHIP.STANDARD ? 'Upgrade to ChatGPT Plus' : 'Look for ChatGPT Standard'
                     }
