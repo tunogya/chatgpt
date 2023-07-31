@@ -24,14 +24,14 @@ export default withApiAuthRequired(async function handler(
   const chatgpt_plus_exp = userInfo?.app_metadata?.vip?.chatgpt_plus ? new Date(userInfo?.app_metadata?.vip?.chatgpt_plus) : new Date()
   let metadata = {}
   if (product.topic === CHATGPT_MEMBERSHIP.STANDARD) {
-    chatgpt_standard_exp.setMonth(chatgpt_standard_exp.getMonth() + product.quantity)
+    chatgpt_standard_exp.setDate(chatgpt_standard_exp.getDate() + product.quantity)
     metadata = {
       vip: {
         chatgpt_standard: chatgpt_standard_exp.toISOString(),
       }
     }
   } else if (product.topic === CHATGPT_MEMBERSHIP.PLUS) {
-    chatgpt_plus_exp.setMonth(chatgpt_plus_exp.getMonth() + product.quantity)
+    chatgpt_plus_exp.setDate(chatgpt_plus_exp.getDate() + product.quantity)
     metadata = {
       vip: {
         chatgpt_plus: chatgpt_plus_exp.toISOString(),

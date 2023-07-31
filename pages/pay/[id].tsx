@@ -113,7 +113,7 @@ const Pay = ({user}: any) => {
                   </div>
                 </div>
                 <div className={"pb-4"}>
-                  <div className={"pt-5 text-sm"}>{selected?.name} ({selected?.quantity} month)</div>
+                  <div className={"pt-5 text-sm"}>{selected?.name} ({selected?.quantity} day{selected?.quantity > 1 ? 's' : ''})</div>
                 </div>
                 <div className={"flex flex-col gap-4 pt-4 lg:pt-32"}>
                   <div className={"text-gray-600 dark:text-gray-200"}>Subscriptions</div>
@@ -147,7 +147,7 @@ const Pay = ({user}: any) => {
                                       >
                                        CNY ¥{(plan.total / plan.quantity).toLocaleString("en-US", {
                                           maximumFractionDigits: 2
-                                        })}/mo
+                                        })}/day
                                       </RadioGroup.Description>
                                     </div>
                                   </div>
