@@ -349,8 +349,6 @@ export default withApiAuthRequired(async function handler(
         return;
       });
       req.socket.on('close', () => {
-        tokens_count += encode(full_callback_message.content.parts[0]).length;
-        console.log(user.sub, new Date().toISOString(), model, 'tokens:', tokens_count)
         res.write('data: [DONE]\n\n');
         abortController.abort();
         if (full_callback_message.content.parts[0] === '') {
