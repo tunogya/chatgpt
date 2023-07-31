@@ -751,9 +751,9 @@ const Chat = ({user}: any) => {
                           <div className="relative order-1 col-div-1 sm:order-2 max-w-[400px]">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div>ChatGPT Plus</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>ChatGPT Plus</div>
                                 <div
-                                  className="font-semibold text-gray-500">CNY ¥100/mo
+                                  className="font-semibold text-gray-500">CNY ¥120/mo
                                 </div>
                               </div>
                               <button className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
@@ -764,7 +764,7 @@ const Chat = ({user}: any) => {
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-white">Subscribe with 13% off
+                                    className="inline-block text-white">Subscribe with 20% off
                                   </div>
                                 </div>
                               </button>
@@ -782,7 +782,7 @@ const Chat = ({user}: any) => {
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>Annual payment up to 13% off</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Annual payment up to 20% off</div>
                               </div>
                             </div>
                           </div>

@@ -36,20 +36,19 @@ export const PRODUCTS = [
   {
     name: 'ChatGPT Plus Monthly',
     quantity: 1,
-    total: 120,
-    month: 120,
+    total: 150,
     topic: CHATGPT_MEMBERSHIP.PLUS,
   },
   {
     name: 'ChatGPT Plus Quarterly',
     quantity: 3,
-    total: 324,
+    total: 390,
     topic: CHATGPT_MEMBERSHIP.PLUS,
   },
   {
     name: 'ChatGPT Plus Yearly',
     quantity: 12,
-    total: 1200,
+    total: 1440,
     topic: CHATGPT_MEMBERSHIP.PLUS,
   },
 ]
