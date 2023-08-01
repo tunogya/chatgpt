@@ -760,7 +760,7 @@ const Chat = ({user}: any) => {
                               <div className="text-xl font-semibold justify-between items-center flex">
                                 <div className={'text-gray-800 dark:text-gray-200'}>ChatGPT Plus</div>
                                 <div
-                                  className="font-semibold text-gray-500">CNY ¥120/mo
+                                  className="font-semibold text-gray-500">CNY ¥600/mo
                                 </div>
                               </div>
                               <button
@@ -772,15 +772,13 @@ const Chat = ({user}: any) => {
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-white">Subscribe with 20% off
+                                    className="inline-block text-white">Subscribe GPT-4
                                   </div>
                                 </div>
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>Access to GPT-4, our most capable
-                                  model
-                                </div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>GPT-4 without any rate limit</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
@@ -791,10 +789,6 @@ const Chat = ({user}: any) => {
                                 <div className={'text-gray-800 dark:text-gray-200'}>Exclusive access to beta features
                                   like Browsing, Plugins, and Code Interpreter
                                 </div>
-                              </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
-                                <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>Annual payment up to 20% off</div>
                               </div>
                             </div>
                           </div>
