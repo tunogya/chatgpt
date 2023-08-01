@@ -1,7 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import wxPayClient from "@/utils/wxPayClient";
 import auth0Management from "@/utils/auth0Management";
-import me from "@/pages/api/me";
 
 export default async function handler(
   req: NextApiRequest,
