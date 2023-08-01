@@ -27,16 +27,16 @@ export default withApiAuthRequired(async function handler(
     chatgpt_standard_exp.setDate(chatgpt_standard_exp.getDate() + product.quantity)
     metadata = {
       vip: {
-        chatgpt_standard: chatgpt_standard_exp.toISOString(),
-        chatgpt_plus: chatgpt_plus_exp.toISOString(),
+        chatgpt_standard: chatgpt_standard_exp.toISOString().slice(0,10),
+        chatgpt_plus: chatgpt_plus_exp.toISOString().slice(0,10),
       }
     }
   } else if (product.topic === CHATGPT_MEMBERSHIP.PLUS) {
     chatgpt_plus_exp.setDate(chatgpt_plus_exp.getDate() + product.quantity)
     metadata = {
       vip: {
-        chatgpt_standard: chatgpt_standard_exp.toISOString(),
-        chatgpt_plus: chatgpt_plus_exp.toISOString(),
+        chatgpt_standard: chatgpt_standard_exp.toISOString().slice(0,10),
+        chatgpt_plus: chatgpt_plus_exp.toISOString().slice(0,10),
       }
     }
   }
