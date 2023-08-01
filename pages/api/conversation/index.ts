@@ -180,7 +180,7 @@ export default withApiAuthRequired(async function handler(
       limit = 2048 - encode(messages[0].content.parts[0]).length;
     } else if (model === OPENAI_MODELS.GPT4.model) {
       full_old_messages.slice(-4);
-      limit = 4096 - encode(messages[0].content.parts[0]).length;
+      limit = 2048 - encode(messages[0].content.parts[0]).length;
     }
     for (let i = full_old_messages.length - 1; i >= 0; i--) {
       // To find more previous messages, we need to encode the message to get the token count.

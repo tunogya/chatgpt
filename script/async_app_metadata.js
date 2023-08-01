@@ -59,30 +59,14 @@ const main = async () => {
     page: 3,
   })
   allUsers = allUsers.concat(page0).concat(page1).concat(page2).concat(page3)
-  console.log(allUsers.length)
+  const whitelist = [
+      '395280368@qq.com', 'lixueyao00@vip.qq.com', 'jefferyq2000@msn.com', 'cscz5592@233bdd.com',
+      'zxy-feiyu@163.com', 'zhanglei19840106@ailiyun.com', 'youfei@gaodun.com', '449087246@qq.com',
+      '492181855@qq.com', 'chris@cision.cc', 'wangmengyuan@gaodun.com', 'sallymason.nestprotocol@gmail.com',
+  ]
   
   for (const user of allUsers) {
-    if (!user?.app_metadata?.vip?.chatgpt_standard) {
-      const metadata = await ddbManager.getUserMetadataFromDDB(user.user_id)
-      if (metadata) {
-        const paidUseTTL = new Date(metadata.paidUseTTL * 1000)
-        await auth0Management.updateAppMetadata({
-          id: user.user_id,
-        }, {
-          vip: {
-            chatgpt_standard: paidUseTTL.toISOString(),
-          }
-        })
-        await auth0Management.updateUserMetadata({
-          id: user.user_id,
-        }, {
-          vip: null,
-        })
-      }
-      console.log(user.name, 'update app_metadata')
-    } else {
-      console.log(user.name, user?.app_metadata?.vip?.chatgpt_standard)
-    }
+    console.log(user.email)
   }
 }
 
