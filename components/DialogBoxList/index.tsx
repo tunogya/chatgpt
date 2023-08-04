@@ -163,6 +163,9 @@ const DialogBoxList: FC<DialogBoxListContentProps> = ({data, isLoading, gpt3_5, 
                       className="text-4xl font-semibold text-center text-gray-800 dark:text-gray-100">
                       <Typewriter text={'ChatGPT'}/>
                     </h1>
+                    <div className={'mt-2 dark:text-white'}>
+                      chat.abandon.ai
+                    </div>
                     <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
                   </div>
                 </>
