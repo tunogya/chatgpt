@@ -1,11 +1,11 @@
 {
-  "name": "abandon.chat",
-  "short_name": "abandon.chat",
-  "description": "A free conversational AI system that listens, learns, and challenges",
+  "name": "Abandon AI",
+  "short_name": "Abandon AI",
+  "description": "Powered by OpenAI.",
   "icons": [
     {
       "src": "/favicon.png",
-      "sizes": "256x256",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
