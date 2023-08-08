@@ -8,6 +8,7 @@ import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
 import {encode} from "gpt-3-encoder";
 import {OPENAI_MODELS} from "@/const/misc";
 import auth0Management from "@/utils/auth0Management";
+import * as process from "process";
 
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
@@ -213,7 +214,8 @@ export default withApiAuthRequired(async function handler(
       const result = await fetch('https://api.openai.com/v1/chat/completions', {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
+          'Authorization': `Bearer ${process.env.OPENAI_API_SECRET ?? ''}`,
+          'OpenAI-Organization': process.env.OPENAI_ORG_ID ?? '',
         },
         method: 'POST',
         body: JSON.stringify({

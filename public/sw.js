@@ -1,5 +1,5 @@
 'use strict'
-const cacheStorageKey = 'abandon.chat';
+const cacheStorageKey = 'abandon.ai';
 
 const cacheList = [
   '/',

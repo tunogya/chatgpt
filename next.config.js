@@ -13,6 +13,7 @@ const nextConfig = {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     OPENAI_API_SECRET: process.env.OPENAI_API_SECRET,
+    OPENAI_ORG_ID: process.env.OPENAI_ORG_ID,
     REDIS_URL: process.env.REDIS_URL,
     WEIXIN_APIV3_KEY: process.env.WEIXIN_APIV3_KEY,
     WEIXIN_APP_ID: process.env.WEIXIN_APP_ID,
