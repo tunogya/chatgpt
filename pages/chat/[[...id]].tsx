@@ -751,15 +751,14 @@ const Chat = ({user}: any) => {
                             className="relative order-2 col-div-1 border-r-0 border-t border-black/10 dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0 max-w-[400px]">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div className={"text-gray-800 dark:text-gray-200"}>ChatGPT Standard</div>
+                                <div className={"text-gray-800 dark:text-gray-200"}>{CHATGPT_MEMBERSHIP.PLUS.description}</div>
                                 <div
-                                  className="font-semibold text-gray-500">$5/mo
-                                </div>
+                                  className="font-semibold text-gray-500">{CHATGPT_MEMBERSHIP.PLUS.description}</div>
                               </div>
                               <button
                                 className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-green"
                                 onClick={async () => {
-                                  const session = await checkoutSession('price_1Ncr6kFPpv8QfieYkTe1gfa6')
+                                  const session = await checkoutSession(CHATGPT_MEMBERSHIP.STANDARD.price)
                                   await router.push(session.url)
                                 }}
                               >
@@ -786,15 +785,14 @@ const Chat = ({user}: any) => {
                           <div className="relative order-1 col-div-1 sm:order-2 max-w-[400px]">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div className={'text-gray-800 dark:text-gray-200'}>ChatGPT Plus</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>{CHATGPT_MEMBERSHIP.PLUS.name}</div>
                                 <div
-                                  className="font-semibold text-gray-500">$20/mo
-                                </div>
+                                  className="font-semibold text-gray-500">{CHATGPT_MEMBERSHIP.PLUS.description}</div>
                               </div>
                               <button
                                 className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
                                 onClick={async () => {
-                                  const session = await checkoutSession('price_1NdC7JFPpv8QfieYMvBGGcSt')
+                                  const session = await checkoutSession(CHATGPT_MEMBERSHIP.PLUS.price)
                                   await router.push(session.url)
                                 }}
                               >

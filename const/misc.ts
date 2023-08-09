@@ -1,6 +1,18 @@
 export const CHATGPT_MEMBERSHIP = {
-  STANDARD: "chatgpt_standard",
-  PLUS: "chatgpt_plus",
+  STANDARD: {
+    // record membership in Auth0
+    id: 'chatgpt_standard',
+    name: 'ChatGPT Standard',
+    // price id in  Stripe
+    price: 'price_1Ncr6kFPpv8QfieYkTe1gfa6',
+    description: '$5/mo',
+  },
+  PLUS: {
+    id: 'chatgpt_plus',
+    name: 'ChatGPT Plus',
+    price: 'price_1NdC7JFPpv8QfieYMvBGGcSt',
+    description: '$20/mo',
+  },
 }
 
 export const OPENAI_MODELS = {
@@ -12,62 +24,4 @@ export const OPENAI_MODELS = {
     topic: 'GPT-4',
     model: 'gpt-4',
   }
-}
-
-export const PRODUCTS = [
-  {
-    name: 'ChatGPT Standard Monthly',
-    quantity: 31,
-    total: 30,
-    original: 30,
-    topic: CHATGPT_MEMBERSHIP.STANDARD,
-  },
-  {
-    name: 'ChatGPT Standard Quarterly',
-    quantity: 3 * 31,
-    total: 60,
-    original: 3 * 30,
-    topic: CHATGPT_MEMBERSHIP.STANDARD,
-  },
-  {
-    name: 'ChatGPT Standard Yearly',
-    quantity: 12 * 31,
-    total: 228,
-    original: 12 * 30,
-    topic: CHATGPT_MEMBERSHIP.STANDARD,
-  },
-  {
-    name: 'ChatGPT Plus Weekly',
-    quantity: 7,
-    total: 200,
-    original: 200,
-    topic: CHATGPT_MEMBERSHIP.PLUS,
-  },
-  {
-    name: 'ChatGPT Plus Monthly',
-    quantity: 31,
-    total: 600,
-    original: 600,
-    topic: CHATGPT_MEMBERSHIP.PLUS,
-  },
-  {
-    name: 'ChatGPT Plus Quarterly',
-    quantity: 3 * 31,
-    total: 1800,
-    original: 3 * 600,
-    topic: CHATGPT_MEMBERSHIP.PLUS,
-  },
-]
-
-export const RATE_LIMIT = {
-  'gpt-3.5-turbo': {
-    'reset-hours': 1,
-    'limit-requests': 100,
-    'limit-tokens': 100 * 2000,
-  },
-  'gpt-4': {
-    'reset-hours': 3,
-    'limit-requests': 50,
-    'limit-tokens': 50 * 2000,
-  },
 }
