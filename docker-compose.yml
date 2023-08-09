@@ -11,9 +11,6 @@ services:
       replicas: 4
       restart_policy:
         condition: on-failure
-    volumes:
-      - ./apiclient_cert.pem:/app/apiclient_cert.pem
-      - ./apiclient_key.pem:/app/apiclient_key.pem
 
   nginx:
     image: nginx
