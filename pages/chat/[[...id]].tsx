@@ -5,9 +5,11 @@ import {useDispatch, useSelector} from "react-redux";
 import {
   clearSession,
   Message,
-  setIsWaitComplete, setSession,
+  setIsWaitComplete,
+  setSession,
   updateCurrentNodeId,
-  updateMessageInSession, updateSession
+  updateMessageInSession,
+  updateSession
 } from "@/store/session";
 import AddIcon from "@/components/SVG/AddIcon";
 import UserIcon from "@/components/SVG/UserIcon";
@@ -32,6 +34,11 @@ import AbandonIcon from "@/components/SVG/AbandonIcon";
 import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import ScrollToBottom from "react-scroll-to-bottom";
 import {CHATGPT_MEMBERSHIP, OPENAI_MODELS} from "@/const/misc";
+import {loadStripe} from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
@@ -221,9 +228,34 @@ const Chat = ({user}: any) => {
 
   const {
     data: userInfo,
-  } = useSWR('/api/me', (url: string) => fetch(url)
-    .then((res) => res.json())
-  )
+  } = useSWR('/api/me', (url: string) => fetch(url).then((res) => res.json()))
+
+  useEffect(() => {
+    if (router.query?.success) {
+      console.log('Order placed! You will receive an email confirmation.');
+    } else if (router.query?.canceled) {
+      console.log('Order canceled -- continue to shop around and checkout when you’re ready.');
+    }
+  }, [router.query])
+
+  const checkoutSession = async (price_id: string) => {
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        line_items: [
+          {
+            price: price_id,
+            quantity: 1,
+          }
+        ],
+        mode: 'subscription'
+      }),
+    })
+    return await res.json()
+  }
 
   // standard exp
   const standard_exp = useMemo(() => {
@@ -377,10 +409,10 @@ const Chat = ({user}: any) => {
                     className={'absolute bottom-full left-0 z-20 mb-2 w-full overflow-hidden rounded-md bg-gray-950 py-1.5 outline-none opacity-100 translate-y-0'}>
                     <div>
                       <Menu.Item>
-                        <a href="https://support.qq.com/products/566478" target="_blank" rel={'noreferrer'}
+                        <a href="https://billing.stripe.com/p/login/bIYbJzgMB1vh2Mo000" target="_blank" rel={'noreferrer'}
                            className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
                           <LinkOutIcon/>
-                          Help & FAQ
+                          Billing Portal
                         </a>
                       </Menu.Item>
                       <Menu.Item>
@@ -721,19 +753,19 @@ const Chat = ({user}: any) => {
                               <div className="text-xl font-semibold justify-between items-center flex">
                                 <div className={"text-gray-800 dark:text-gray-200"}>ChatGPT Standard</div>
                                 <div
-                                  className="font-semibold text-gray-500">CNY ¥19/mo
+                                  className="font-semibold text-gray-500">$5/mo
                                 </div>
                               </div>
                               <button
                                 className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-green"
                                 onClick={async () => {
-                                  const out_trade_no = uuidv4()
-                                  await router.push(`/pay/${out_trade_no}?topic=${CHATGPT_MEMBERSHIP.STANDARD}`)
+                                  const session = await checkoutSession('price_1Ncr6kFPpv8QfieYkTe1gfa6')
+                                  await router.push(session.url)
                                 }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-white">Subscribe with 33% off
+                                    className="inline-block text-white">Subscribe
                                   </div>
                                 </div>
                               </button>
@@ -749,10 +781,6 @@ const Chat = ({user}: any) => {
                                 <OptionIcon className={"h-5 w-5 text-gray-400"}/>
                                 <div className={'text-gray-800 dark:text-gray-200'}>Regular model updates</div>
                               </div>
-                              <div className="gap-2 flex flex-row justify-start items-center text-xs sm:pb-2">
-                                <OptionIcon className={"h-5 w-5 text-gray-400"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>Annual payment up to 33% off</div>
-                              </div>
                             </div>
                           </div>
                           <div className="relative order-1 col-div-1 sm:order-2 max-w-[400px]">
@@ -760,25 +788,25 @@ const Chat = ({user}: any) => {
                               <div className="text-xl font-semibold justify-between items-center flex">
                                 <div className={'text-gray-800 dark:text-gray-200'}>ChatGPT Plus</div>
                                 <div
-                                  className="font-semibold text-gray-500">CNY ¥600/mo
+                                  className="font-semibold text-gray-500">$20/mo
                                 </div>
                               </div>
                               <button
                                 className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
                                 onClick={async () => {
-                                  const out_trade_no = uuidv4()
-                                  await router.push(`/pay/${out_trade_no}?topic=${CHATGPT_MEMBERSHIP.PLUS}`)
+                                  const session = await checkoutSession('price_1NdC7JFPpv8QfieYMvBGGcSt')
+                                  await router.push(session.url)
                                 }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-white">Subscribe GPT-4
+                                    className="inline-block text-white">Subscribe
                                   </div>
                                 </div>
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>GPT-4 without any rate limit</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>GPT-4 with rate limit</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
