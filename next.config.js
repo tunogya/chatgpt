@@ -18,6 +18,8 @@ const nextConfig = {
     WEIXIN_APIV3_KEY: process.env.WEIXIN_APIV3_KEY,
     WEIXIN_APP_ID: process.env.WEIXIN_APP_ID,
     WEIXIN_MCH_ID: process.env.WEIXIN_MCH_ID,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   },
   images: {
     remotePatterns: [
