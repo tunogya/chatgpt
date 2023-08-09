@@ -161,7 +161,7 @@ const DialogBoxList: FC<DialogBoxListContentProps> = ({data, isLoading, gpt3_5, 
                   <div className="flex flex-col items-center justify-center text-sm bg-white dark:bg-gray-800 h-full w-full">
                     <h1
                       className="text-2xl font-semibold text-center text-gray-800 dark:text-gray-100">
-                      <Typewriter text={'chat.abandon.ai'}/>
+                      <Typewriter text={'ChatGPT'}/>
                     </h1>
                     <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
                   </div>

@@ -355,7 +355,7 @@ const DialogBoxItem: FC<DialogBoxItemProps> = ({id, data}) => {
         children.length > 0 ? (
           children[children_index]
         ) : (
-          <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+          <div className="w-full h-32 md:h-48 flex-shrink-0 bg-white dark:bg-gray-800"></div>
         )
       }
     </>
