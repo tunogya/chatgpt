@@ -15,9 +15,6 @@ const nextConfig = {
     OPENAI_API_SECRET: process.env.OPENAI_API_SECRET,
     OPENAI_ORG_ID: process.env.OPENAI_ORG_ID,
     REDIS_URL: process.env.REDIS_URL,
-    WEIXIN_APIV3_KEY: process.env.WEIXIN_APIV3_KEY,
-    WEIXIN_APP_ID: process.env.WEIXIN_APP_ID,
-    WEIXIN_MCH_ID: process.env.WEIXIN_MCH_ID,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   },
