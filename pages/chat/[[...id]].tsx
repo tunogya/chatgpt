@@ -751,7 +751,7 @@ const Chat = ({user}: any) => {
                             className="relative order-2 col-div-1 border-r-0 border-t border-black/10 dark:border-gray-700 sm:order-1 sm:border-r sm:border-t-0 max-w-[400px]">
                             <div className="p-4 flex flex-col gap-3 bg-white z-20 relative dark:bg-gray-900">
                               <div className="text-xl font-semibold justify-between items-center flex">
-                                <div className={"text-gray-800 dark:text-gray-200"}>{CHATGPT_MEMBERSHIP.PLUS.description}</div>
+                                <div className={"text-gray-800 dark:text-gray-200"}>{CHATGPT_MEMBERSHIP.PLUS.name}</div>
                                 <div
                                   className="font-semibold text-gray-500">{CHATGPT_MEMBERSHIP.PLUS.description}</div>
                               </div>
