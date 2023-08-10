@@ -294,7 +294,7 @@ const Chat = ({user}: any) => {
     return time
   }, [userInfo?.app_metadata?.vip?.chatgpt_standard])
 
-  // GPT4 Use Left
+  // plus Use Left
   const plus_exp = useMemo(() => {
     if (!userInfo?.app_metadata?.vip?.chatgpt_plus) {
       return 0
