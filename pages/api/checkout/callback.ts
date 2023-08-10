@@ -1,4 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
+import auth0Management from "@/utils/auth0Management";
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
@@ -15,19 +16,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     switch (event.type) {
-      case 'checkout.session.async_payment_succeeded':
-        const checkoutSessionAsyncPaymentSucceeded = event.data.object;
-        console.log(checkoutSessionAsyncPaymentSucceeded)
-        // Then define and call a function to handle the event checkout.session.async_payment_succeeded
-        break;
       case 'checkout.session.completed':
         const checkoutSessionCompleted = event.data.object;
-        console.log(checkoutSessionCompleted)
-        // Then define and call a function to handle the event checkout.session.completed
+        const { metadata, payment_status} =  checkoutSessionCompleted;
+        if (payment_status === 'paid') {
+          if (metadata) {
+            try {
+              const auth0Metadata = metadata.medadata;
+              await auth0Management.updateAppMetadata({id: metadata.id}, {
+                ...auth0Metadata,
+              })
+            } catch (e) {
+              console.log(e)
+            }
+          }
+        }
         break;
-      // ... handle other event types
       default:
-        console.log(`Unhandled event type ${event.type}`);
+        break;
     }
 
   } else {
