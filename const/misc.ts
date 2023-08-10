@@ -4,14 +4,14 @@ export const CHATGPT_MEMBERSHIP = {
     id: 'chatgpt_standard',
     name: 'ChatGPT Standard',
     // price id in  Stripe
-    price: 'price_1Ncr6kFPpv8QfieYkTe1gfa6',
-    description: '$5/mo',
+    price: 'price_1NdXaLFPpv8QfieYaDPxXIe6',
+    description: 'CNY ¥30/mo',
   },
   PLUS: {
     id: 'chatgpt_plus',
     name: 'ChatGPT Plus',
-    price: 'price_1NdC7JFPpv8QfieYMvBGGcSt',
-    description: '$20/mo',
+    price: 'price_1NdXcxFPpv8QfieYl7XQhLl8',
+    description: 'CNY ¥120/mo',
   },
 }
 

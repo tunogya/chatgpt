@@ -251,7 +251,11 @@ const Chat = ({user}: any) => {
             quantity: 1,
           }
         ],
-        mode: 'subscription'
+        mode: 'payment',
+        customer_email: user.email || undefined,
+        metadata: {
+          user: user.sub
+        }
       }),
     })
     return await res.json()

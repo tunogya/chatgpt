@@ -4,7 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const {line_items, mode} = req.body;
+    const {line_items, mode, customer_email, metadata} = req.body;
     try {
       // Create Checkout Sessions from body params.
       const session = await stripe.checkout.sessions.create({
@@ -13,6 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         success_url: `${req.headers.origin}/?success=true`,
         cancel_url: `${req.headers.origin}/?canceled=true`,
         automatic_tax: {enabled: true},
+        currency: 'CNY',
+        customer_email: customer_email || undefined,
+        metadata: metadata || undefined,
       });
       res.status(200).json(session)
     } catch (err: any) {
