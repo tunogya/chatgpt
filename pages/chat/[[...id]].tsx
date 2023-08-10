@@ -275,7 +275,7 @@ const Chat = ({user}: any) => {
         customer_email: user.email || undefined,
         metadata: {
           id: user.sub,
-          metadata: metadata
+          metadata: JSON.stringify(metadata)
         }
       }),
     })
@@ -777,7 +777,8 @@ const Chat = ({user}: any) => {
                                 className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-green"
                                 onClick={async () => {
                                   const session = await checkoutSession(CHATGPT_MEMBERSHIP.STANDARD.price)
-                                  await router.push(session.url)
+                                  console.log(session)
+                                  // await router.push(session.url)
                                 }}
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">

@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (payment_status === 'paid') {
           if (metadata) {
             try {
-              const auth0Metadata = metadata.medadata;
+              const auth0Metadata = JSON.parse(metadata.medadata);
               await auth0Management.updateAppMetadata({id: metadata.id}, {
                 ...auth0Metadata,
               })
