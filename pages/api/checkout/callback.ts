@@ -15,11 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     switch (event.type) {
-      case 'checkout.session.async_payment_failed':
-        const checkoutSessionAsyncPaymentFailed = event.data.object;
-        console.log(checkoutSessionAsyncPaymentFailed)
-        // Then define and call a function to handle the event checkout.session.async_payment_failed
-        break;
       case 'checkout.session.async_payment_succeeded':
         const checkoutSessionAsyncPaymentSucceeded = event.data.object;
         console.log(checkoutSessionAsyncPaymentSucceeded)
@@ -29,11 +24,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const checkoutSessionCompleted = event.data.object;
         console.log(checkoutSessionCompleted)
         // Then define and call a function to handle the event checkout.session.completed
-        break;
-      case 'checkout.session.expired':
-        const checkoutSessionExpired = event.data.object;
-        console.log(checkoutSessionExpired)
-        // Then define and call a function to handle the event checkout.session.expired
         break;
       // ... handle other event types
       default:

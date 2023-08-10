@@ -413,13 +413,6 @@ const Chat = ({user}: any) => {
                     className={'absolute bottom-full left-0 z-20 mb-2 w-full overflow-hidden rounded-md bg-gray-950 py-1.5 outline-none opacity-100 translate-y-0'}>
                     <div>
                       <Menu.Item>
-                        <a href="https://billing.stripe.com/p/login/bIYbJzgMB1vh2Mo000" target="_blank" rel={'noreferrer'}
-                           className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700">
-                          <LinkOutIcon/>
-                          Billing Portal
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item>
                         <a
                           className="flex py-3 px-3 items-center gap-3 transition-colors duration-200 text-white cursor-pointer text-sm hover:bg-gray-700"
                           onClick={() => setIsOpenSetting(true)}
