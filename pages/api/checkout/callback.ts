@@ -1,15 +1,13 @@
-import {NextApiRequest, NextApiResponse} from "next";
 import auth0Management from "@/utils/auth0Management";
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: any, res: any) {
   if (req.method === 'POST') {
     // get headers stripe-signature
-    const signature = req.headers['stripe-signature'];
     let event;
     try {
-      event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET);
+      event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
       console.log(event)
     } catch (err: any) {
       console.log(err.message)
@@ -40,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       default:
         break;
     }
-    res.status(200).end("ok");
+    res.status(200).json({ received: true });
   } else {
     res.setHeader('Allow', 'POST');
     res.status(405).end('Method Not Allowed');
