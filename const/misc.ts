@@ -3,13 +3,13 @@ export const CHATGPT_MEMBERSHIP = {
     // record membership in Auth0
     id: 'chatgpt_standard',
     name: 'ChatGPT Standard',
-    price: 'price_1NdXaLFPpv8QfieYaDPxXIe6',
+    price: 'price_1NgrpfFPpv8QfieYQbVybsZ1',
     description: '$5/mo',
   },
   PLUS: {
     id: 'chatgpt_plus',
     name: 'ChatGPT Plus',
-    price: 'price_1NdXcxFPpv8QfieYl7XQhLl8',
+    price: 'price_1NgrqLFPpv8QfieYlpImgUry',
     description: '$20/mo',
   },
 }
