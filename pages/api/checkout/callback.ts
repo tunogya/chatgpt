@@ -12,6 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET);
       console.log(event)
     } catch (err: any) {
+      console.log(err.message)
       res.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
@@ -39,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       default:
         break;
     }
-    res.status(200);
+    res.status(200).end("ok");
   } else {
     res.setHeader('Allow', 'POST');
     res.status(405).end('Method Not Allowed');
