@@ -245,12 +245,12 @@ const Chat = ({user}: any) => {
     if (price_id === CHATGPT_MEMBERSHIP.STANDARD.price) {
       chatgpt_standard_exp.setDate(chatgpt_standard_exp.getDate() + 31)
       metadata = {
-        chatgpt_standard: chatgpt_standard_exp.toISOString().slice(0,10),
+        chatgpt_standard: chatgpt_standard_exp.toISOString(),
       }
     } else if (price_id === CHATGPT_MEMBERSHIP.PLUS.price) {
       chatgpt_plus_exp.setDate(chatgpt_plus_exp.getDate() + 31)
       metadata = {
-        chatgpt_plus: chatgpt_plus_exp.toISOString().slice(0,10),
+        chatgpt_plus: chatgpt_plus_exp.toISOString()
       }
     }
     const res = await fetch('/api/checkout', {
