@@ -36,10 +36,9 @@ export type BaseDialogBoxItemProps = {
   message: Message | null,
   currentNodeId: string | null,
   isWaitComplete: boolean,
-  area: string,
 }
 
-const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNodeId, isWaitComplete, area}) => {
+const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNodeId, isWaitComplete}) => {
   const {user} = useUser();
   const [editMode, setEditMode] = useState(false);
   const [blocked, setBlocked] = useState(false);
@@ -69,7 +68,6 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
         },
         body: JSON.stringify({
           input: input.slice(0, 500),
-          area,
         })
       });
       if (res.status === 200) {
@@ -327,7 +325,6 @@ const DialogBoxItem: FC<DialogBoxItemProps> = ({id, data}) => {
   const dispatch = useDispatch()
   const currentNodeId = useSelector((state: any) => state.session.currentNodeId)
   const isWaitComplete = useSelector((state: any) => state.session.isWaitComplete)
-  const area = useSelector((state: any) => state.ui.area);
 
   const children = useMemo(() => {
     // filter used to remove the current id from the children list, so that the current id is not rendered twice
@@ -349,7 +346,6 @@ const DialogBoxItem: FC<DialogBoxItemProps> = ({id, data}) => {
         id={id}
         currentNodeId={currentNodeId}
         isWaitComplete={isWaitComplete}
-        area={area}
       />
       {
         children.length > 0 ? (
