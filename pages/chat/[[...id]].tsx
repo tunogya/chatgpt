@@ -538,6 +538,7 @@ const Chat = ({user}: any) => {
                   <div
                     className="flex flex-col w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 text-gray-900 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs">
                 <textarea tabIndex={0} data-id="root" style={{maxHeight: 200, height: "24px", overflowY: 'auto'}}
+                          maxLength={2000}
                           disabled={!standard_exp} rows={1} ref={inputRef}
                           placeholder={standard_exp > 0 ? 'Send a message' : 'Please purchase a membership to continue.'}
                           onKeyDown={async (e) => {
