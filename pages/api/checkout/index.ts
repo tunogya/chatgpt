@@ -13,7 +13,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         success_url: `${req.headers.origin}/?success=true`,
         cancel_url: `${req.headers.origin}/?canceled=true`,
         automatic_tax: {enabled: true},
-        currency: 'CNY',
         customer_email: customer_email || undefined,
         metadata: metadata || undefined,
       });

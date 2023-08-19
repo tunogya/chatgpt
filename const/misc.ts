@@ -3,15 +3,14 @@ export const CHATGPT_MEMBERSHIP = {
     // record membership in Auth0
     id: 'chatgpt_standard',
     name: 'ChatGPT Standard',
-    // price id in  Stripe
     price: 'price_1NdXaLFPpv8QfieYaDPxXIe6',
-    description: 'CNY ¥30/mo',
+    description: '$5/mo',
   },
   PLUS: {
     id: 'chatgpt_plus',
     name: 'ChatGPT Plus',
     price: 'price_1NdXcxFPpv8QfieYl7XQhLl8',
-    description: 'CNY ¥120/mo',
+    description: '$20/mo',
   },
 }
 
