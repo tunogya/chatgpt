@@ -50,8 +50,8 @@ export default withApiAuthRequired(async function handler(
     const userMetadata = await auth0Management.getUser({
       id: user_id,
     })
-    const chatgpt_standard = userMetadata?.app_metadata?.vip?.chatgpt_standard ?? undefined
-    const chatgpt_plus = userMetadata?.app_metadata?.vip?.chatgpt_plus ?? undefined
+    const chatgpt_standard = userMetadata?.app_metadata?.chatgpt_standard ?? undefined
+    const chatgpt_plus = userMetadata?.app_metadata?.chatgpt_plus ?? undefined
     if (model === OPENAI_MODELS.GPT4.model) {
       if (!chatgpt_plus || new Date(chatgpt_plus) < new Date()) {
         res.status(400).json({error: 'Chatgpt plus membership is not valid.'})

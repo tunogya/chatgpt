@@ -239,8 +239,8 @@ const Chat = ({user}: any) => {
   }, [router.query])
 
   const checkoutSession = async (price_id: string) => {
-    const chatgpt_standard_exp = userInfo?.app_metadata?.vip?.chatgpt_standard ? new Date(userInfo?.app_metadata?.vip?.chatgpt_standard) : new Date()
-    const chatgpt_plus_exp = userInfo?.app_metadata?.vip?.chatgpt_plus ? new Date(userInfo?.app_metadata?.vip?.chatgpt_plus) : new Date()
+    const chatgpt_standard_exp = userInfo?.app_metadata?.chatgpt_standard ? new Date(userInfo?.app_metadata?.chatgpt_standard) : new Date()
+    const chatgpt_plus_exp = userInfo?.app_metadata?.chatgpt_plus ? new Date(userInfo?.app_metadata?.chatgpt_plus) : new Date()
     let metadata = {}
     if (price_id === CHATGPT_MEMBERSHIP.STANDARD.price) {
       chatgpt_standard_exp.setDate(chatgpt_standard_exp.getDate() + 31)
@@ -278,27 +278,27 @@ const Chat = ({user}: any) => {
 
   // standard exp
   const standard_exp = useMemo(() => {
-    if (!userInfo?.app_metadata?.vip?.chatgpt_standard) {
+    if (!userInfo?.app_metadata?.chatgpt_standard) {
       return 0
     }
-    const time = ((new Date(userInfo.app_metadata.vip.chatgpt_standard).getTime() - Date.now()) / 86400 / 1000)
+    const time = ((new Date(userInfo.app_metadata.chatgpt_standard).getTime() - Date.now()) / 86400 / 1000)
     if (time < 0) {
       return 0
     }
     return time
-  }, [userInfo?.app_metadata?.vip?.chatgpt_standard])
+  }, [userInfo?.app_metadata?.chatgpt_standard])
 
   // plus Use Left
   const plus_exp = useMemo(() => {
-    if (!userInfo?.app_metadata?.vip?.chatgpt_plus) {
+    if (!userInfo?.app_metadata?.chatgpt_plus) {
       return 0
     }
-    const time = ((new Date(userInfo?.app_metadata?.vip?.chatgpt_plus).getTime() - Date.now()) / 86400 / 1000)
+    const time = ((new Date(userInfo?.app_metadata?.chatgpt_plus).getTime() - Date.now()) / 86400 / 1000)
     if (time < 0) {
       return 0
     }
     return time
-  }, [userInfo?.app_metadata?.vip?.chatgpt_plus])
+  }, [userInfo?.app_metadata?.chatgpt_plus])
 
   const clearConversationList = async () => {
     if (!deleteConfirm) {
