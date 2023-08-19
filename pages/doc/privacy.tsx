@@ -4,30 +4,81 @@ const Privacy = () => {
   return (
     <div className={'px-2 py-2 dark:text-white'}>
       <ReactMarkdown className={'markdown prose w-full break-words dark:prose-invert light'}>
-        {
-          `## 隐私政策
-我们非常尊重您的隐私权。因此，我们已制定这份隐私政策，以向您解释我们收集、使用和存储您的个人信息的方式以及我们所保护您隐私的措施。请您仔细阅读以下条款。
+        Privacy Policy
 
-### 收集的信息
-我们的系统将在您使用我们的服务时**收集您的对话信息**，并将其存储在我们的服务器上。同时，我们会记录您登录、使用、修改账户信息以及操作等行为相关的技术信息，诸如设备信息、应用程序日志等。这些信息将有助于我们改进和优化我们的服务体验。
+        Effective date: [Insert date]
 
-### 如何使用信息
-我们将利用您提供的信息，以提供和改进我们的服务。我们**不会出售、分享或出租您的个人讯息予他人**。如您同意，我们可以将您的信息用于新服务和功能的设计及优化，以最大程度地提高您的使用体验。
+        At ChatGPT, we value your privacy and are committed to protecting your personal information. This Privacy Policy
+        outlines how we collect, use, and disclose your information when you use our services.
 
-### 信息保护
-我们将采取必要的技术和组织措施，保护您的个人信息，防止您的信息被意外或非法的使用、更改或破坏。**我们保证您的隐私数据不会泄露**，除非必要时，因法律或监管要求而被要求公开。
+        1. Information We Collect
 
-### 用户删除功能
-为了保护您的隐私，您可以随时点击删除您在我们服务器上存储的数据信息。我们保证您的数据信息会在您点击删除后立即被从我们的服务器中真实删除。您的数据信息默认**最多保留 365 天**，如果过期，系统会自动删除。
+        1.1 Personal Information: We may collect personal information such as your name, email address, and contact
+        details when you register for an account or communicate with us.
 
-### 安全保障
-如果用户30天内未登录系统，为了隐私安全，我们会向用户发送邮件提醒，并**删除**用户的隐私数据。该邮件将会提醒用户使用账户登录我们的系统或点击删除，以保护他们的隐私。在此期间，用户的账户信息将被保留。
+        1.2 Usage Information: We automatically collect certain information about your usage of our services, including
+        your IP address, browser type, device information, and operating system.
 
+        1.3 Cookies and Similar Technologies: We may use cookies and similar technologies to collect information about
+        your browsing activities on our website. These technologies help us analyze trends, administer the site, track
+        users&apos; movements, and gather demographic information.
 
-### 如果您对我们的隐私政策有任何问题或疑虑，请联系我们的客户服务部门，我们将竭诚为您提供帮助。
+        2. How We Use Your Information
 
-### 本隐私政策自2023年4月11日起生效，abandon.chat 保留对本隐私政策的修改权利。`
-        }
+        2.1 Provide and Improve Services: We use your information to provide and improve our services, personalize your
+        experience, and respond to your inquiries and requests.
+
+        2.2 Communication: We may use your contact information to send you important updates, newsletters, and
+        promotional materials. You can opt-out of receiving these communications at any time.
+
+        2.3 Analytics and Research: We may use your information for analytical purposes, such as analyzing user
+        behavior, trends, and preferences to improve our services and develop new features.
+
+        2.4 Legal Compliance: We may use your information to comply with applicable laws, regulations, legal processes,
+        or enforceable governmental requests.
+
+        3. Information Sharing and Disclosure
+
+        3.1 Service Providers: We may share your information with trusted third-party service providers who assist us in
+        operating our website, conducting our business, or providing services to you. These service providers are
+        obligated to keep your information confidential and secure.
+
+        3.2 Legal Requirements: We may disclose your information if required to do so by law or in response to valid
+        requests by public authorities (e.g., court orders, government agencies).
+
+        3.3 Business Transfers: In the event of a merger, acquisition, or sale of all or a portion of our assets, your
+        information may be transferred as part of the transaction. We will notify you via email or prominent notice on
+        our website before your information is transferred and becomes subject to a different privacy policy.
+
+        4. Data Security
+
+        We implement appropriate security measures to protect your information from unauthorized access, alteration,
+        disclosure, or destruction. However, no method of transmission over the internet or electronic storage is 100%
+        secure, and we cannot guarantee absolute security.
+
+        5. Your Choices
+
+        You have the right to access, update, or delete your personal information. You can also opt-out of receiving
+        promotional communications from us. Please contact us at [insert contact information] to exercise these rights.
+
+        6. Children&apos;s Privacy
+
+        Our services are not intended for individuals under the age of 13. We do not knowingly collect personal
+        information from children. If you believe we have inadvertently collected information from a child, please
+        contact us immediately.
+
+        7. Changes to this Privacy Policy
+
+        We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new
+        Privacy Policy on this page. It is your responsibility to review this Privacy Policy periodically for any
+        updates.
+
+        8. Contact Us
+
+        If you have any questions or concerns about this Privacy Policy, please contact us at support@abandon.ai.
+
+        By using our services, you agree to the collection, use, and disclosure of your information as described in this
+        Privacy Policy.
       </ReactMarkdown>
     </div>
   )

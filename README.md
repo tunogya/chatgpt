@@ -1,4 +1,4 @@
-# abandon.chat
+# Abandon AI
 
 A free conversational AI system that listens, learns, and challenges. Powered by OpenAI API.
 

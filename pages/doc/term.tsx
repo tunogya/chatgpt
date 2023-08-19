@@ -4,35 +4,67 @@ const Term = () => {
   return (
     <div className={'px-2 py-2 dark:text-white'}>
       <ReactMarkdown className={'markdown prose w-full break-words dark:prose-invert light'}>
-        {
-          `## 欢迎使用abandon.chat，本服务提供基础的ChatGPT服务。在使用本服务之前，请务必先阅读并同意以下条款：
+        Terms of Service
 
-### 服务说明：
-本服务为基础的ChatGPT服务，旨在为用户提供文本聊天服务。
+        Welcome to ChatGPT! These Terms of Service (&quot;Terms&quot;) govern your use of the ChatGPT service (&quot;Service&quot;) provided
+        by ABANDON INC. (&quot;ABANDON,&quot; &quot;we,&quot; or &quot;us&quot;). By accessing or using the Service, you agree to be bound by these
+        Terms. If you do not agree to these Terms, please do not use the Service.
 
-### 使用限制：
-用户使用本服务时，必须遵守相关法律法规，不得违反公序良俗和社会道德风尚。同时，不得利用本服务从事任何违法违规、侵犯第三方权益或损害他人利益的行为，包括但不限于诽谤、侵犯隐私、发布垃圾信息等。
+        1. Description of Service
+        ChatGPT is an AI-powered language model that provides conversational responses based on the input it receives.
+        The Service allows users to interact with ChatGPT through a text-based interface.
 
-### 服务费用：
-本服务目前为付费服务。
+        2. Use of the Service
+        2.1 Eligibility
+        You must be at least 18 years old to use the Service. By using the Service, you represent and warrant that you
+        are at least 18 years old.
 
-### 用户资料：
-用户在使用本服务时，需提供真实准确的个人信息。用户应保证其提供的信息真实、准确、完整和合法。用户应提供有效的联系方式，如电话号码、电子邮件等，以便本服务部门与用户联系。
+        2.2 User Responsibilities
+        You are responsible for your use of the Service and for any content you generate or transmit through the
+        Service. You agree not to use the Service for any illegal, harmful, or unauthorized purposes. You also agree not
+        to engage in any activity that may interfere with or disrupt the Service or its servers.
 
-### 服务中断或终止：
-如因发生不可抗力事件（包括但不限于战争、网络故障、通讯线路中断等）或其他原因导致本服务中断或终止，本服务将尽力维护用户利益，但对于用户因此遭受的直接或间接损失，本服务不承担任何责任。
+        2.3 Prohibited Uses
+        You agree not to use the Service to:
+        - Violate any applicable laws or regulations
+        - Infringe upon the rights of others
+        - Transmit any viruses, malware, or other harmful code
+        - Engage in any fraudulent or deceptive activities
+        - Collect or store personal information of others without their consent
+        - Impersonate any person or entity
 
-### 免责声明：
-本服务不对用户所发出的信息的删除或储存失败负责。本服务有权判断用户的行为是否符合本服务使用条款的要求，如果用户违反了本服务使用条款的规定，本服务有权取消用户的服务帐号，而不承担任何责任。
+        3. Intellectual Property
+        ABANDON retains all rights, title, and interest in and to the Service, including all intellectual property
+        rights. You acknowledge that the Service and its underlying technology may be protected by copyright, trademark,
+        patent, trade secret, and other laws.
 
-### 法律适用：
-本服务条款的订立和解释均适用中华人民共和国法律。若本服务条款与中华人民共和国法律相抵触时，则本条款将完全按照中华人民共和国法律规定执行。
+        4. Privacy
+        Our Privacy Policy explains how we collect, use, and disclose information from users of the Service. By using
+        the Service, you consent to our collection, use, and disclosure practices as described in the Privacy Policy.
 
-### 条款修改：
-本服务条款可能因国家政策、技术更新等原因进行修改。本服务将在条款修改后重新发布，并在网站公告中通知用户。如用户不同意修改后的服务条款，用户应立即停止使用本服务。如果用户仍在使用本服务，则视为用户已经接受修改后的服务条款。
+        5. Limitation of Liability
+        To the maximum extent permitted by law, ABANDON shall not be liable for any indirect, incidental, special,
+        consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly,
+        arising out of your use of the Service.
 
-### 在使用abandon.chat服务前，请您务必认真阅读本服务条款并同意全部内容。如果您有任何疑问或意见，请随时联系我们。`
-        }
+        6. Termination
+        ABANDON may terminate or suspend your access to the Service at any time, without prior notice or liability, for
+        any reason whatsoever, including if you breach these Terms.
+
+        7. Modifications to the Terms
+        ABANDON reserves the right to modify or replace these Terms at any time. Any changes will be effective
+        immediately upon posting the revised Terms on the ABANDON website. Your continued use of the Service after any
+        such changes constitutes your acceptance of the new Terms.
+
+        8. Governing Law
+        These Terms shall be governed by and construed in accordance with the laws of the State of California, United
+        States, without regard to its conflict of laws principles.
+
+        9. Entire Agreement
+        These Terms constitute the entire agreement between you and ABANDON regarding the Service and supersede all prior
+        agreements and understandings, whether written or oral.
+
+        If you have any questions or concerns about these Terms, please contact us at support@abandon.ai.
       </ReactMarkdown>
     </div>
   )
