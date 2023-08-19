@@ -19,6 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'checkout.session.completed':
         const checkoutSessionCompleted = event.data.object;
         const { metadata, payment_status} =  checkoutSessionCompleted;
+        console.log(metadata,  payment_status)
         // payment_status - paid, unpaid, refunded
         if (payment_status === 'paid') {
           if (metadata) {
