@@ -1,11 +1,9 @@
 import auth0Management from "@/utils/auth0Management";
 import {NextApiRequest, NextApiResponse} from "next";
-import Stripe from 'stripe';
+import Stripe from "stripe";
+import stripeClient from "@/utils/stripeClient";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2022-11-15',
-  });
   const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET!;
 
   if (req.method === 'POST') {
@@ -14,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
       const body = await buffer(req);
-      event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+      event = stripeClient.webhooks.constructEvent(body, sig, webhookSecret);
     } catch (err: any) {
       // On error, log and return the error message
       console.log(`❌ Error message: ${err.message}`);

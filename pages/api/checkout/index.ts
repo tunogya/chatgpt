@@ -1,16 +1,12 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import Stripe from "stripe";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2022-11-15',
-});
+import stripeClient from "@/utils/stripeClient";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const {line_items, mode, customer_email, metadata} = req.body;
     try {
       // Create Checkout Sessions from body params.
-      const session = await stripe.checkout.sessions.create({
+      const session = await stripeClient.checkout.sessions.create({
         line_items: line_items,
         mode: mode,
         success_url: `${req.headers.origin}/?success=true`,
