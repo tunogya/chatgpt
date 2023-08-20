@@ -73,21 +73,22 @@ export default function App({Component, pageProps}: AppProps) {
           <link rel='icon' href={'/favicon.png'} type='image/png'/>
           <link rel='apple-touch-icon' href={'/apple-touch-icon.png'} sizes={'180x180'} type='image/png'/>
           <link rel='mask-icon' href={'favicon.svg'} color='#343541' type='image/svg+xml'/>
-          <Script type="module" crossOrigin={"anonymous"} async src={"https://www.kwikembed.com/socialproof.js"}
-                  id="kwiksocialproof"
-                  data-account="acct_1MagF9FPpv8QfieY"></Script>
-          <Script src={'https://www.googletagmanager.com/gtag/js?id=G-EDPQ3K7EN8'}/>
-          <Script id='google-tag-manager' strategy='afterInteractive'>
-            {`
+        </Head>
+        <Script type="module" crossOrigin={"anonymous"} async src={"https://www.kwikembed.com/socialproof.js"}
+                id="kwiksocialproof"
+                data-account="acct_1MagF9FPpv8QfieY"></Script>
+        <Script src={'https://www.googletagmanager.com/gtag/js?id=G-EDPQ3K7EN8'}/>
+        <Script id='google-tag-manager' strategy='afterInteractive'>
+          {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
                 
                 gtag('config', 'G-EDPQ3K7EN8');
               `}
-          </Script>
-          <Script id={'sw'}>
-            {`
+        </Script>
+        <Script id={'sw'}>
+          {`
                 if ('serviceWorker' in navigator) {
                   window.addEventListener('load', function() {
                     navigator.serviceWorker.register('/sw.js').then(function(registration) {
@@ -98,8 +99,7 @@ export default function App({Component, pageProps}: AppProps) {
                   });
                 }
         `}
-          </Script>
-        </Head>
+        </Script>
         <UserProvider>
           <Component {...pageProps} />
         </UserProvider>
