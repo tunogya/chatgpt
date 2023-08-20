@@ -9,8 +9,8 @@ export const CHATGPT_MEMBERSHIP = {
   PLUS: {
     id: 'chatgpt_plus',
     name: 'ChatGPT Plus',
-    price: 'price_1NgrqLFPpv8QfieYlpImgUry',
-    description: '$20/mo',
+    price: 'price_1NhHk7FPpv8QfieYqldss0sL',
+    description: '$25/mo',
   },
 }
 
