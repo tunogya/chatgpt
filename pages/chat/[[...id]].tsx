@@ -804,6 +804,7 @@ const Chat = ({user}: any) => {
                               </div>
                               <button
                                 className="btn relative btn-primary border-none py-3 font-semibold !bg-brand-purple"
+                                disabled={true}
                                 onClick={async () => {
                                   const session = await checkoutSession(CHATGPT_MEMBERSHIP.PLUS.price)
                                   await router.push(session.url)
