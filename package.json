@@ -17,7 +17,6 @@
     "@emotion/styled": "^11.10.5",
     "@fortaine/openai": "^5.3.1",
     "@headlessui/react": "^1.7.14",
-    "@lingui/react": "^4.4.0",
     "@notionhq/client": "^2.2.5",
     "@reduxjs/toolkit": "^1.9.5",
     "@stripe/react-stripe-js": "^2.1.2",
@@ -54,8 +53,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.10",
-    "@lingui/cli": "^4.4.0",
-    "@lingui/macro": "^4.4.0",
     "@types/auth0": "^3.3.3",
     "@types/node": "18.13.0",
     "@types/react": "18.0.27",

@@ -31,7 +31,6 @@ import DataIcon from "@/components/SVG/DataIcon";
 import OptionIcon from "@/components/SVG/OptionIcon";
 import StopIcon from "@/components/SVG/StopIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
-import LinkOutIcon from "@/components/SVG/LinkOutIcon";
 import ScrollToBottom from "react-scroll-to-bottom";
 import {CHATGPT_MEMBERSHIP, OPENAI_MODELS} from "@/const/misc";
 import {loadStripe} from "@stripe/stripe-js";
