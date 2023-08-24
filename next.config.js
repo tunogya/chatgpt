@@ -21,8 +21,8 @@ const nextConfig = {
     DATABASE_URL: process.env.DATABASE_URL,
   },
   i18n: {
-    locales: ['en-US', 'fr', 'nl-NL'],
-    defaultLocale: 'en-US',
+    locales: ['en', 'zh'],
+    defaultLocale: 'en',
   },
   images: {
     remotePatterns: [
