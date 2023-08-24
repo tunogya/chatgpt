@@ -515,7 +515,7 @@ const Chat = ({user}: any) => {
                     {/*    }}>*/}
                     {/*      <div className="flex w-full items-center justify-center gap-2">*/}
                     {/*        <ReIcon/>*/}
-                    {/*        重新生成对话*/}
+                    {/*        Regenerate*/}
                     {/*      </div>*/}
                     {/*    </button>*/}
                     {/*  )*/}
@@ -669,7 +669,7 @@ const Chat = ({user}: any) => {
                                     //   @ts-ignore
                                     window.gtag('event', 'custom_button_click', {
                                       'event_category': 'button',
-                                      'event_label': '主题',
+                                      'event_label': 'theme',
                                       'value': e.target.value
                                     })
                                   }}
@@ -817,7 +817,7 @@ const Chat = ({user}: any) => {
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>A safe way to pay in US</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>A safe way to pay in OpenAI</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
