@@ -811,23 +811,21 @@ const Chat = ({user}: any) => {
                               >
                                 <div className="flex w-full gap-2 items-center justify-center">
                                   <div
-                                    className="inline-block text-white">Subscribe
+                                    className="inline-block text-white">Get a digital card
                                   </div>
                                 </div>
                               </button>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>GPT-4 with rate limit</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>A safe way to pay in US</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>Faster response speed</div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Only for ChatGPT Plus</div>
                               </div>
                               <div className="gap-2 flex flex-row justify-start items-center text-xs">
                                 <OptionIcon className={"h-5 w-5 text-green-700"}/>
-                                <div className={'text-gray-800 dark:text-gray-200'}>Exclusive access to beta features
-                                  like Browsing, Plugins, and Code Interpreter
-                                </div>
+                                <div className={'text-gray-800 dark:text-gray-200'}>Automatic monthly debit</div>
                               </div>
                             </div>
                           </div>

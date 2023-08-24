@@ -11,7 +11,6 @@ import {useEffect} from "react";
 import "tailwindcss/tailwind.css";
 import "@/styles/index.css";
 
-
 const persistor = persistStore(store);
 
 const AutoTheme = () => {
@@ -48,25 +47,25 @@ export default function App({Component, pageProps}: AppProps) {
       <AutoTheme/>
       <PersistGate persistor={persistor} loading={<div className={'pt-4'}><LoadingIcon/></div>}>
         <Head>
-          <title>ChatGPT</title>
+          <title>Abandon AI</title>
           <meta
             name='description'
-            content='全球通用的ChatGPT工具，超低月费，性能稳定不封号，生产效率直翻倍。限时免费试用3天，助你早日实现AI自由。'
+            content='Abandon AI'
           />
           <meta name='viewport'
                 content='width=device-width, initial-scale=1, shrink-to-fit=no,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no'/>
           <meta name={'apple-mobile-web-app-capable'} content={'yes'}/>
           <meta name={'mobile-web-app-capable'} content={'yes'}/>
           <meta name={'apple-mobile-web-app-status-bar-style'} content={'black'}/>
-          <meta name={'apple-mobile-web-app-title'} content={'ChatGPT | Abandon.Chat'}/>
+          <meta name={'apple-mobile-web-app-title'} content={'Abandon AI'}/>
           <meta name={'format-detection'} content={'telephone=no'}/>
           <meta name={'format-detection'} content={'email=no'}/>
           <meta name='theme-color' content='#202123'/>
           <meta property='og:image' content='/apple-touch-icon.png'/>
           <meta property='og:title' content='ChatGPT'/>
           <meta property='og:description'
-                content='全球通用的ChatGPT工具，超低月费，性能稳定不封号，生产效率直翻倍。限时免费试用3天，助你早日实现AI自由。'/>
-          <meta property='og:url' content='https://www.abandon.chat'/>
+                content='Abandon AI'/>
+          <meta property='og:url' content='https://chat.abandon.ai'/>
           <link rel="manifest" href={"manifest.json"}/>
           <link rel='icon' href='/favicon.ico'/>
           <link rel='icon' href={'/favicon.svg'} type='image/svg+xml'/>
