@@ -20,10 +20,6 @@ const nextConfig = {
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
   },
-  i18n: {
-    locales: ['en', 'zh'],
-    defaultLocale: 'en',
-  },
   images: {
     remotePatterns: [
       {
