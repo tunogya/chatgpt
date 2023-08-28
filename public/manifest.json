@@ -6,14 +6,11 @@
     {
       "src": "/favicon.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ],
-  "background_color": "#fff",
   "theme_color": "#202123",
-  "display": "standalone",
+  "background_color": "#ffffff",
   "orientation": "portrait",
-  "start_url": "/",
-  "scope": "/"
+  "display": "standalone"
 }
