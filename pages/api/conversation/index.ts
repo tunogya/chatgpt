@@ -90,7 +90,7 @@ export default withApiAuthRequired(async function handler(
       }
     } else {
       // Get the old conversation. We can cache the data in the future.
-      const old_conversation = await ddbDocClient.send(new GetCommand({
+      const {Item} = await ddbDocClient.send(new GetCommand({
         TableName: 'abandonai-prod',
         Key: {
           PK: user_id,
@@ -99,10 +99,10 @@ export default withApiAuthRequired(async function handler(
       }));
       conversation = {
         ...conversation,
-        id: old_conversation.Item?.SK,
-        title: old_conversation.Item?.title?.slice(0, 20),
-        created: old_conversation.Item?.created,
-        mapping: old_conversation.Item?.mapping,
+        id: Item?.SK,
+        title: Item?.title?.slice(0, 20),
+        created: Item?.created,
+        mapping: Item?.mapping,
       }
     }
     // add new user message to mapping
@@ -338,7 +338,7 @@ export default withApiAuthRequired(async function handler(
           Item: {
             PK: user_id,
             SK: conversation.id,
-            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
+            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
             ...conversation,
           }
         }));
@@ -387,7 +387,7 @@ export default withApiAuthRequired(async function handler(
           Item: {
             PK: user_id,
             SK: conversation.id,
-            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
+            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
             ...conversation,
           }
         }));
