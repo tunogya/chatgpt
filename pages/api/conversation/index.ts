@@ -21,7 +21,7 @@ export default withApiAuthRequired(async function handler(
     const offset = Number(req.query?.offset || 0);
     const limit = Number(req.query?.limit || 20);
     const conversations = await ddbDocClient.send(new QueryCommand({
-      TableName: 'wizardingpay',
+      TableName: 'abandonai-prod',
       KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :sk)',
       ExpressionAttributeNames: {
         '#pk': 'PK',
@@ -91,7 +91,7 @@ export default withApiAuthRequired(async function handler(
     } else {
       // Get the old conversation. We can cache the data in the future.
       const old_conversation = await ddbDocClient.send(new GetCommand({
-        TableName: 'wizardingpay',
+        TableName: 'abandonai-prod',
         Key: {
           PK: user_id,
           SK: req.body?.conversation_id,
@@ -149,7 +149,7 @@ export default withApiAuthRequired(async function handler(
     const full_old_messages = [] as { role: string, content: string }[];
     if (parent_message_id !== '00000000-0000-0000-0000-000000000000') {
       const old_conversation = await ddbDocClient.send(new GetCommand({
-        TableName: 'wizardingpay',
+        TableName: 'abandonai-prod',
         Key: {
           PK: user_id,
           SK: conversation.id,
@@ -334,7 +334,7 @@ export default withApiAuthRequired(async function handler(
           }
         }
         await ddbDocClient.send(new PutCommand({
-          TableName: 'wizardingpay',
+          TableName: 'abandonai-prod',
           Item: {
             PK: user_id,
             SK: conversation.id,
@@ -383,7 +383,7 @@ export default withApiAuthRequired(async function handler(
           }
         }
         ddbDocClient.send(new PutCommand({
-          TableName: 'wizardingpay',
+          TableName: 'abandonai-prod',
           Item: {
             PK: user_id,
             SK: conversation.id,
@@ -404,7 +404,7 @@ export default withApiAuthRequired(async function handler(
     try {
       await ddbDocClient.send(new BatchWriteCommand({
         RequestItems: {
-          'wizardingpay': ids?.slice(0, 25).map((id: string) => ({
+          'abandonai-prod': ids?.slice(0, 25).map((id: string) => ({
             DeleteRequest: {
               Key: {
                 PK: user_id,

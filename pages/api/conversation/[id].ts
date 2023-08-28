@@ -14,7 +14,7 @@ export default withApiAuthRequired(async function handler(
     const {id} = req.query
     try {
       const conversationRes = await ddbDocClient.send(new GetCommand({
-        TableName: 'wizardingpay',
+        TableName: 'abandonai-prod',
         Key: {
           PK: user_id,
           SK: `CONVERSATION#${id}`,
@@ -26,7 +26,7 @@ export default withApiAuthRequired(async function handler(
           return
         }
         const messagesRes = await ddbDocClient.send(new QueryCommand({
-          TableName: 'wizardingpay',
+          TableName: 'abandonai-prod',
           KeyConditionExpression: '#pk = :pk',
           ExpressionAttributeValues: {
             ':pk': conversationRes.Item.SK,
@@ -58,7 +58,7 @@ export default withApiAuthRequired(async function handler(
     })
     try {
       await ddbDocClient.send(new UpdateCommand({
-        TableName: 'wizardingpay',
+        TableName: 'abandonai-prod',
         Key: {
           PK: user_id,
           SK: `CONVERSATION#${id}`,
@@ -76,7 +76,7 @@ export default withApiAuthRequired(async function handler(
     const {id} = req.query
     try {
       await ddbDocClient.send(new DeleteCommand({
-        TableName: 'wizardingpay',
+        TableName: 'abandonai-prod',
         Key: {
           PK: user_id,
           SK: `CONVERSATION#${id}`,
