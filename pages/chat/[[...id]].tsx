@@ -33,11 +33,6 @@ import StopIcon from "@/components/SVG/StopIcon";
 import AbandonIcon from "@/components/SVG/AbandonIcon";
 import ScrollToBottom from "react-scroll-to-bottom";
 import {CHATGPT_MEMBERSHIP, OPENAI_MODELS} from "@/const/misc";
-import {loadStripe} from "@stripe/stripe-js";
-
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-);
 
 const Chat = ({user}: any) => {
   const dispatch = useDispatch();
