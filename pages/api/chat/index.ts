@@ -20,7 +20,7 @@ export default withApiAuthRequired(async function handler(
   if (req.method === 'GET') {
     const offset = Number(req.query?.offset || 0);
     const limit = Number(req.query?.limit || 20);
-    const conversations = await ddbDocClient.send(new QueryCommand({
+    const {Items, Count} = await ddbDocClient.send(new QueryCommand({
       TableName: 'abandonai-prod',
       KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :sk)',
       ExpressionAttributeNames: {
@@ -36,22 +36,22 @@ export default withApiAuthRequired(async function handler(
       Limit: limit,
     }));
     res.status(200).json({
-      items: conversations.Items?.map((item: any) => ({
+      items: Items?.map((item: any) => ({
         id: item.SK,
         title: item.title?.slice(0, 20),
         create_time: item?.created ? new Date(item.created * 1000)?.toLocaleString() : null,
       })),
-      total: conversations.Count,
+      total: Count,
       limit,
       offset,
     });
   } else if (req.method === 'POST') {
     let {action, messages, model, parent_message_id} = req.body;
-    const userMetadata = await auth0Management.getUser({
+    const {app_metadata} = await auth0Management.getUser({
       id: user_id,
     })
-    const chatgpt_standard = userMetadata?.app_metadata?.chatgpt_standard ?? undefined
-    const chatgpt_plus = userMetadata?.app_metadata?.chatgpt_plus ?? undefined
+    const chatgpt_standard = app_metadata?.chatgpt_standard ?? undefined
+    const chatgpt_plus = app_metadata?.chatgpt_plus ?? undefined
     if (model === OPENAI_MODELS.GPT4.model) {
       if (!chatgpt_plus || new Date(chatgpt_plus) < new Date()) {
         res.status(400).json({error: 'Chatgpt plus membership is not valid.'})
@@ -148,14 +148,7 @@ export default withApiAuthRequired(async function handler(
     }
     const full_old_messages = [] as { role: string, content: string }[];
     if (parent_message_id !== '00000000-0000-0000-0000-000000000000') {
-      const old_conversation = await ddbDocClient.send(new GetCommand({
-        TableName: 'abandonai-prod',
-        Key: {
-          PK: user_id,
-          SK: chat.id,
-        }
-      }));
-      const old_mapping = old_conversation.Item?.mapping ?? {};
+      const old_mapping = chat?.mapping ?? {};
       const parent_ids = [parent_message_id];
       let current_parent_id = parent_message_id;
       while (current_parent_id !== '00000000-0000-0000-0000-000000000000') {
