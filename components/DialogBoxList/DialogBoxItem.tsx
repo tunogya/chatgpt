@@ -1,9 +1,8 @@
-import {FC, useCallback, useEffect, useMemo, useState} from "react";
-// import Edit2Icon from "@/components/SVG/Edit2Icon";
+import {FC, useEffect, useMemo, useState} from "react";
 import LikeIcon from "@/components/SVG/LikeIcon";
 import UnLikeIcon from "@/components/SVG/UnLikeIcon";
 import {useDispatch, useSelector} from "react-redux";
-import {updateCurrentNodeId, setBlockComplete} from "@/store/session";
+import {updateCurrentNodeId} from "@/store/session";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -14,7 +13,6 @@ import Image from "next/image";
 import CopyIcon from "@/components/SVG/CopyIcon";
 import copy from "copy-to-clipboard";
 import OpenAIIcon from "@/components/SVG/OpenAIIcon";
-import {useRouter} from "next/router";
 import {OPENAI_MODELS} from "@/const/misc";
 
 export type Message = {
@@ -41,74 +39,11 @@ export type BaseDialogBoxItemProps = {
 const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNodeId, isWaitComplete}) => {
   const {user} = useUser();
   const [editMode, setEditMode] = useState(false);
-  const [blocked, setBlocked] = useState(false);
-  const [flagged, setFlagged] = useState(false);
-  const router = useRouter();
-  const conversation_id = router.query.id?.[0] || undefined;
-  const dispatch = useDispatch();
   const model = useSelector((state: any) => state.session.session.model);
 
   const showStreaming = useMemo(() => {
     return currentNodeId === id && isWaitComplete
   }, [currentNodeId, id, isWaitComplete])
-
-  const moderator = useCallback(async () => {
-    if (!message || !message?.content?.parts?.[0]) {
-      return
-    }
-    if (isWaitComplete && message.role === 'assistant') {
-      return
-    }
-    const input = message.content.parts[0]
-    try {
-      const res = await fetch('/api/moderations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          input: input.slice(0, 500),
-        })
-      });
-      if (res.status === 200) {
-        const data = await res.json();
-        if (data?.blocked) {
-          setBlocked(true)
-        }
-        if (data?.flagged) {
-          setFlagged(true)
-        }
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }, [message, isWaitComplete])
-
-  useEffect(() => {
-    moderator()
-  }, [moderator])
-
-  const handleBlocked = useCallback(() => {
-    if (!blocked) {
-      return
-    }
-    dispatch(setBlockComplete(true))
-    if (!conversation_id) {
-      return
-    }
-    fetch(`/api/chat/${conversation_id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    }).catch((e) => {
-      console.log(e)
-    })
-  }, [blocked, conversation_id])
-
-  useEffect(() => {
-    handleBlocked()
-  }, [handleBlocked])
 
   if (message === null || message?.role === 'system') {
     return <></>
@@ -126,31 +61,17 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
                 <Image src={user?.picture || ""} alt={user?.name || "avatar"} width={30} height={30} quality={80}
                        priority/>
               </div>
-              {
-                flagged && (
-                  <div
-                    className="absolute w-4 h-4 rounded-full text-[10px] flex justify-center items-center right-0 top-[20px] -mr-2 border border-white bg-orange-500 text-white">
-                    <div>!</div>
-                  </div>
-                )
-              }
             </div>
           </div>
           <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
             {
               editMode ? (
                 <div className="flex flex-grow flex-col gap-3">
-                  {
-                    blocked ? (
-                      <div/>
-                    ) : (
-                      <textarea
-                        className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
-                        style={{height: '24px', overflowY: 'hidden'}}>
+                  <textarea
+                    className="m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0"
+                    style={{height: '24px', overflowY: 'hidden'}}>
                     {message?.content?.parts?.[0]}
                   </textarea>
-                    )
-                  }
                   <div className="text-center mt-2 flex justify-center">
                     <button className="btn relative btn-primary mr-2" onClick={() => {
                       // TODO: update message
@@ -168,38 +89,18 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
                 <>
                   <div className="flex flex-grow flex-col gap-3">
                     <div
-                      className={`min-h-[20px] flex flex-col items-start gap-4 ${flagged ? 'text-orange-500' : ''}`}>
-                      {
-                        blocked ? (
-                          <div/>
-                        ) : (
-                          <ReactMarkdown
-                            remarkPlugins={[remarkGfm, remarkMath]}
-                            rehypePlugins={[rehypeKatex]}
-                            components={{
-                              code({...props}) {
-                                return <CodeFormat {...props} />
-                              }
-                            }}
-                            className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                            {message?.content?.parts?.[0] || '...'}
-                          </ReactMarkdown>
-                        )
-                      }
-
-                      {flagged && (
-                        <div
-                          className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
-                          This content may violate our<a
-                          rel={'noreferrer'} className={'underline'} href={'/doc/term'}
-                          target={'_blank'}>content policy</a>. If you think this is wrong, please<a
-                          rel={'noreferrer'}
-                          className={'underline'}
-                          href={'https://support.qq.com/products/566478'}
-                          target={'_blank'}>submit your feedback</a>Repeated violations will result in your account
-                          being banned.
-                        </div>
-                      )}
+                      className={`min-h-[20px] flex flex-col items-start gap-4`}>
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm, remarkMath]}
+                        rehypePlugins={[rehypeKatex]}
+                        components={{
+                          code({...props}) {
+                            return <CodeFormat {...props} />
+                          }
+                        }}
+                        className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
+                        {message?.content?.parts?.[0] || '...'}
+                      </ReactMarkdown>
                     </div>
                   </div>
                   {/*<div*/}
@@ -232,53 +133,26 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
           <div
             className={`relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center ${model === OPENAI_MODELS.GPT4.model ? '!bg-brand-purple' : '!bg-brand-green'}`}>
             <OpenAIIcon width={'30'}/>
-            {
-              flagged && (
-                <div
-                  className="absolute w-4 h-4 rounded-full text-[10px] flex justify-center items-center right-0 top-[20px] -mr-2 border border-white bg-orange-500 text-white">
-                  <div>!</div>
-                </div>
-              )
-            }
           </div>
         </div>
         <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
           <div className="flex flex-grow flex-col gap-3">
             <div className="min-h-[20px] flex flex-col items-start gap-4">
-              {
-                blocked ? (
-                  <div/>
-                ) : (
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm, remarkMath]}
-                    rehypePlugins={[rehypeKatex]}
-                    components={{
-                      code({...props}) {
-                        return <CodeFormat {...props} />
-                      }
-                    }}
-                    className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
-                    {message?.content?.parts?.[0] || '...'}
-                  </ReactMarkdown>
-                )
-              }
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeKatex]}
+                components={{
+                  code({...props}) {
+                    return <CodeFormat {...props} />
+                  }
+                }}
+                className={`${!!showStreaming ? "result-streaming" : ""} markdown prose w-full break-words dark:prose-invert light`}>
+                {message?.content?.parts?.[0] || '...'}
+              </ReactMarkdown>
               {!message?.content?.parts?.[0] && (
                 <div
                   className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
                   Sorry, it&apos;s not your fault. The server failed to respond, please try again later.
-                </div>
-              )}
-              {flagged && (
-                <div
-                  className="py-2 px-3 border text-gray-600 rounded-md text-sm dark:text-gray-100 border-orange-500 bg-orange-500/10">
-                  This content may violate our<a
-                  rel={'noreferrer'} className={'underline'} href={'/doc/term'}
-                  target={'_blank'}>content policy</a>. If you think this is wrong, please<a
-                  rel={'noreferrer'}
-                  className={'underline'}
-                  href={'https://support.qq.com/products/566478'}
-                  target={'_blank'}>submit your feedback</a>Repeated violations will result in your account being
-                  banned.
                 </div>
               )}
             </div>
