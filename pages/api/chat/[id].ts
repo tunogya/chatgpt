@@ -17,12 +17,12 @@ export default withApiAuthRequired(async function handler(
         TableName: 'abandonai-prod',
         Key: {
           PK: user_id,
-          SK: `CONVERSATION#${id}`,
+          SK: `CHAT#${id}`,
         },
       }))
       if (Item) {
         if (Item.is_visible === false) {
-          res.status(401).json({error: 'You are not allowed to view this conversation'})
+          res.status(401).json({error: 'You are not allowed to view this chat'})
           return
         }
         const messagesRes = await ddbDocClient.send(new QueryCommand({
@@ -38,10 +38,10 @@ export default withApiAuthRequired(async function handler(
         Item.messages = messagesRes.Items
         res.status(200).json(Item)
       } else {
-        res.status(404).json({error: 'No conversation found'})
+        res.status(404).json({error: 'No chat found'})
       }
     } catch (e) {
-      res.status(500).json({error: 'No conversation found'})
+      res.status(500).json({error: 'No chat found'})
     }
   } else if (req.method === 'PATCH') {
     const {id} = req.query
@@ -60,7 +60,7 @@ export default withApiAuthRequired(async function handler(
         TableName: 'abandonai-prod',
         Key: {
           PK: user_id,
-          SK: `CONVERSATION#${id}`,
+          SK: `CHAT#${id}`,
         },
         UpdateExpression: `SET ${UpdateExpression}`,
         ExpressionAttributeNames,
@@ -77,7 +77,7 @@ export default withApiAuthRequired(async function handler(
         TableName: 'abandonai-prod',
         Key: {
           PK: user_id,
-          SK: `CONVERSATION#${id}`,
+          SK: `CHAT#${id}`,
         },
       }))
       res.status(200).json({success: true})

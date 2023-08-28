@@ -22,11 +22,11 @@ export type Message = {
 export const index = createSlice({
   name: 'session',
   initialState: {
-    // session is used to store the current conversation
+    // session is used to store the current chat
     session: {
-      id: null, // conversation id
-      title: 'New chat', // conversation title
-      create_time: "", // conversation create time
+      id: null, // chat id
+      title: 'New chat', // chat title
+      create_time: "", // chat create time
       mapping: {} as { // mapping used to store messages in a tree structure
         [key: string]: { // message id
           children: string[], // children message id array

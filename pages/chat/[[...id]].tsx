@@ -55,12 +55,12 @@ const Chat = ({user}: any) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isOpenPayment, setIsOpenPayment] = useState(false);
   const controllerRef = useRef(null);
-  const conversation_id = router.query.id?.[0] || undefined;
+  const chat_id = router.query.id?.[0] || undefined;
 
   const {
     data,
     isLoading
-  } = useSWR(conversation_id ? `/api/conversation/${conversation_id}` : null, (url: string) => fetch(url).then((res) => res.json()))
+  } = useSWR(chat_id ? `/api/chat/${chat_id}` : null, (url: string) => fetch(url).then((res) => res.json()))
 
   const updateStoreSession = useCallback(async () => {
     if (data) {
@@ -82,7 +82,7 @@ const Chat = ({user}: any) => {
     data: conversationData,
     isLoading: isConversationLoading,
     mutate: mutateConversation
-  } = useSWR('/api/conversation', (url: string) => fetch(url).then((res) => res.json()))
+  } = useSWR('/api/chat', (url: string) => fetch(url).then((res) => res.json()))
 
   const handleSubmit = async () => {
     if (input === '' || isWaitComplete || isBlockComplete) return;
@@ -120,7 +120,7 @@ const Chat = ({user}: any) => {
       parent: currentNodeId,
     }))
     try {
-      const res = await fetch('/api/conversation', {
+      const res = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -305,7 +305,7 @@ const Chat = ({user}: any) => {
       return
     }
     if (conversationData.items.length > 0) {
-      await fetch('/api/conversation', {
+      await fetch('/api/chat', {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

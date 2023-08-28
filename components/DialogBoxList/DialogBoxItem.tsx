@@ -96,7 +96,7 @@ const BaseDialogBoxItem: FC<BaseDialogBoxItemProps> = ({id, message, currentNode
     if (!conversation_id) {
       return
     }
-    fetch(`/api/conversation/${conversation_id}`, {
+    fetch(`/api/chat/${conversation_id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

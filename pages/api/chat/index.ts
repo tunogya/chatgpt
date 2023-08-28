@@ -29,7 +29,7 @@ export default withApiAuthRequired(async function handler(
       },
       ExpressionAttributeValues: {
         ':pk': user_id,
-        ':sk': 'CONVERSATION#',
+        ':sk': 'CHAT#',
       },
       ScanIndexForward: false,
       ProjectionExpression: 'PK, SK, title, created',
@@ -69,7 +69,7 @@ export default withApiAuthRequired(async function handler(
       return
     }
     // https://platform.openai.com/docs/api-reference/chat
-    let conversation: {
+    let chat: {
       id: null | string, title: null | string, created: null | number, mapping: {
         [key: string]: any
       }, model: string,
@@ -80,16 +80,16 @@ export default withApiAuthRequired(async function handler(
       mapping: {},
       model: model,
     }
-    if (!conversation.id) {
-      // This is a new conversation, create a new conversation id use uuidv4.
-      conversation = {
-        ...conversation,
-        id: `CONVERSATION#${uidClient.getUniqueID().toString()}`,
+    if (!chat.id) {
+      // This is a new chat, create a new chat id use uuidv4.
+      chat = {
+        ...chat,
+        id: `CHAT#${uidClient.getUniqueID().toString()}`,
         title: messages[0].content.parts[0]?.slice(0, 20),
         created: Math.floor(Date.now() / 1000),
       }
     } else {
-      // Get the old conversation. We can cache the data in the future.
+      // Get the old chat. We can cache the data in the future.
       const {Item} = await ddbDocClient.send(new GetCommand({
         TableName: 'abandonai-prod',
         Key: {
@@ -97,8 +97,8 @@ export default withApiAuthRequired(async function handler(
           SK: req.body?.conversation_id,
         },
       }));
-      conversation = {
-        ...conversation,
+      chat = {
+        ...chat,
         id: Item?.SK,
         title: Item?.title?.slice(0, 20),
         created: Item?.created,
@@ -106,10 +106,10 @@ export default withApiAuthRequired(async function handler(
       }
     }
     // add new user message to mapping
-    conversation = {
-      ...conversation,
+    chat = {
+      ...chat,
       mapping: {
-        ...conversation.mapping,
+        ...chat.mapping,
         [messages[0].id]: {
           id: messages[0].id,
           message: messages[0],
@@ -119,10 +119,10 @@ export default withApiAuthRequired(async function handler(
       }
     }
     if (parent_message_id === '00000000-0000-0000-0000-000000000000') {
-      conversation = {
-        ...conversation,
+      chat = {
+        ...chat,
         mapping: {
-          ...conversation.mapping,
+          ...chat.mapping,
           ["00000000-0000-0000-0000-000000000000"]: {
             id: "00000000-0000-0000-0000-000000000000",
             message: null,
@@ -132,14 +132,14 @@ export default withApiAuthRequired(async function handler(
         }
       }
     } else {
-      conversation = {
-        ...conversation,
+      chat = {
+        ...chat,
         mapping: {
-          ...conversation.mapping,
+          ...chat.mapping,
           [parent_message_id]: {
-            ...conversation.mapping[parent_message_id],
+            ...chat.mapping[parent_message_id],
             children: [
-              ...conversation.mapping[parent_message_id].children,
+              ...chat.mapping[parent_message_id].children,
               messages[0].id,
             ]
           }
@@ -152,7 +152,7 @@ export default withApiAuthRequired(async function handler(
         TableName: 'abandonai-prod',
         Key: {
           PK: user_id,
-          SK: conversation.id,
+          SK: chat.id,
         }
       }));
       const old_mapping = old_conversation.Item?.mapping ?? {};
@@ -281,7 +281,7 @@ export default withApiAuthRequired(async function handler(
                 },
               }
               res.write(`data: ${JSON.stringify({
-                id: conversation.id,
+                id: chat.id,
                 title: messages[0].content.parts[0].slice(0, 20),
                 messages: [
                   {
@@ -313,11 +313,11 @@ export default withApiAuthRequired(async function handler(
         }
         tokens_count += encode(full_callback_message.content.parts[0]).length;
         console.log(user.sub, new Date().toISOString(), model, 'tokens:', tokens_count)
-        // add ai callback message to conversation and add to user children
-        conversation = {
-          ...conversation,
+        // add ai callback message to chat and add to user children
+        chat = {
+          ...chat,
           mapping: {
-            ...conversation.mapping,
+            ...chat.mapping,
             [message_id]: {
               id: message_id,
               message: full_callback_message,
@@ -325,9 +325,9 @@ export default withApiAuthRequired(async function handler(
               children: []
             },
             [messages[0].id]: {
-              ...conversation.mapping[messages[0].id],
+              ...chat.mapping[messages[0].id],
               children: [
-                ...conversation.mapping[messages[0].id].children,
+                ...chat.mapping[messages[0].id].children,
                 message_id,
               ]
             }
@@ -337,9 +337,9 @@ export default withApiAuthRequired(async function handler(
           TableName: 'abandonai-prod',
           Item: {
             PK: user_id,
-            SK: conversation.id,
+            SK: chat.id,
             TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
-            ...conversation,
+            ...chat,
           }
         }));
         saved = true;
@@ -363,10 +363,10 @@ export default withApiAuthRequired(async function handler(
           res.status(501).end();
           return;
         }
-        conversation = {
-          ...conversation,
+        chat = {
+          ...chat,
           mapping: {
-            ...conversation.mapping,
+            ...chat.mapping,
             [message_id]: {
               id: message_id,
               message: full_callback_message,
@@ -374,9 +374,9 @@ export default withApiAuthRequired(async function handler(
               children: []
             },
             [messages[0].id]: {
-              ...conversation.mapping[messages[0].id],
+              ...chat.mapping[messages[0].id],
               children: [
-                ...conversation.mapping[messages[0].id].children,
+                ...chat.mapping[messages[0].id].children,
                 message_id,
               ]
             }
@@ -386,9 +386,9 @@ export default withApiAuthRequired(async function handler(
           TableName: 'abandonai-prod',
           Item: {
             PK: user_id,
-            SK: conversation.id,
+            SK: chat.id,
             TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
-            ...conversation,
+            ...chat,
           }
         }));
         res.status(200).end();

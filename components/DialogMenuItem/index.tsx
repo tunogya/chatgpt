@@ -24,7 +24,7 @@ const DialogMenuItem: FC<DialogMenuItemProps> = ({...props}) => {
 
   const deleteConversationByIdItem = async () => {
     try {
-      await fetch(`/api/conversation/${props.id.split('#').pop()}`, {
+      await fetch(`/api/chat/${props.id.split('#').pop()}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const DialogMenuItem: FC<DialogMenuItemProps> = ({...props}) => {
       return
     }
     try {
-      await fetch(`/api/conversation/${props.id.split('#').pop()}`, {
+      await fetch(`/api/chat/${props.id.split('#').pop()}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
