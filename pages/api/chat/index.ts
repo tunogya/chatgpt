@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import ddbDocClient from "@/utils/ddbDocClient";
-import {BatchWriteCommand, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
+import {BatchWriteCommand, GetCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {Readable} from "stream";
 import uidClient from "@/utils/uidClient";
 import {v4 as uuidv4} from 'uuid';
@@ -168,7 +168,7 @@ export default withApiAuthRequired(async function handler(
       })
     }
     // keep all messages in full_messages
-    let tokens_count = 0, limit = 0;
+    let prompt_tokens = 0, limit = 0;
     if (model === OPENAI_MODELS.GPT3_5.model) {
       full_old_messages.slice(-4);
       limit = 2048 - encode(messages[0].content.parts[0]).length;
@@ -178,12 +178,12 @@ export default withApiAuthRequired(async function handler(
     }
     for (let i = full_old_messages.length - 1; i >= 0; i--) {
       // To find more previous messages, we need to encode the message to get the token count.
-      // Make sure total tokens count is less than limit.
-      tokens_count += encode(full_old_messages[i].content).length;
-      if (tokens_count > limit) {
+      // Make sure the total tokens count is less than the limit.
+      if (prompt_tokens + encode(full_old_messages[i].content).length > limit) {
         full_old_messages.splice(0, i);
         break;
       }
+      prompt_tokens += encode(full_old_messages[i].content).length;
     }
 
     // // add system message to full_messages
@@ -304,9 +304,9 @@ export default withApiAuthRequired(async function handler(
           res.status(200).end();
           return;
         }
-        tokens_count += encode(full_callback_message.content.parts[0]).length;
-        console.log(user.sub, new Date().toISOString(), model, 'tokens:', tokens_count)
-        // add ai callback message to chat and add to user children
+        const completion_tokens = encode(full_callback_message.content.parts[0]).length;
+        console.log('stream end', user.sub, new Date().toISOString(), model, 'prompt_tokens:', prompt_tokens,  'completion_tokens:', completion_tokens)
+        // add a callback message to chat and add to user children
         chat = {
           ...chat,
           mapping: {
@@ -326,13 +326,39 @@ export default withApiAuthRequired(async function handler(
             }
           }
         }
-        await ddbDocClient.send(new PutCommand({
-          TableName: 'abandonai-prod',
-          Item: {
-            PK: user_id,
-            SK: chat.id,
-            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
-            ...chat,
+        await ddbDocClient.send(new BatchWriteCommand({
+          RequestItems: {
+            'abandonai-prod': [
+              {
+                PutRequest: {
+                  Item: {
+                    PK: user_id,
+                    SK: chat.id,
+                    TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
+                    ...chat,
+                  }
+                }
+              },
+              {
+                PutRequest: {
+                  Item: {
+                    PK: `USAGE#${new Date().toISOString().slice(0, 10)}`,
+                    SK: new Date().toISOString(),
+                    customer: {
+                      id: user.sub,
+                      email: user.email,
+                    },
+                    model: model,
+                    usage: {
+                      prompt_tokens: prompt_tokens,
+                      completion_tokens: completion_tokens,
+                      total_tokens: prompt_tokens + completion_tokens,
+                    },
+                    TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 180,
+                  }
+                }
+              },
+            ]
           }
         }));
         saved = true;
@@ -345,7 +371,7 @@ export default withApiAuthRequired(async function handler(
         res.status(500).end();
         return;
       });
-      req.socket.on('close', () => {
+      req.socket.on('close', async () => {
         if (saved) {
           return;
         }
@@ -356,6 +382,8 @@ export default withApiAuthRequired(async function handler(
           res.status(501).end();
           return;
         }
+        const completion_tokens = encode(full_callback_message.content.parts[0]).length;
+        console.log('socket close:', user.sub, new Date().toISOString(), model, 'prompt_tokens:', prompt_tokens,  'completion_tokens:', completion_tokens)
         chat = {
           ...chat,
           mapping: {
@@ -375,19 +403,44 @@ export default withApiAuthRequired(async function handler(
             }
           }
         }
-        ddbDocClient.send(new PutCommand({
-          TableName: 'abandonai-prod',
-          Item: {
-            PK: user_id,
-            SK: chat.id,
-            TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
-            ...chat,
+        await ddbDocClient.send(new BatchWriteCommand({
+          RequestItems: {
+            'abandonai-prod': [
+              {
+                PutRequest: {
+                  Item: {
+                    PK: user_id,
+                    SK: chat.id,
+                    TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
+                    ...chat,
+                  }
+                }
+              },
+              {
+                PutRequest: {
+                  Item: {
+                    PK: `USAGE#${new Date().toISOString().slice(0, 10)}`,
+                    SK: new Date().toISOString(),
+                    customer: {
+                      id: user.sub,
+                      email: user.email,
+                    },
+                    model: model,
+                    usage: {
+                      prompt_tokens: prompt_tokens,
+                      completion_tokens: completion_tokens,
+                      total_tokens: prompt_tokens + completion_tokens,
+                    },
+                    TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 180,
+                  }
+                }
+              },
+            ]
           }
         }));
         res.status(200).end();
       })
     } catch (e) {
-      console.log(e)
       abortController.abort();
       res.status(500).json({error: "Error"})
       return
@@ -409,7 +462,6 @@ export default withApiAuthRequired(async function handler(
       }));
       res.status(200).json({success: true})
     } catch (e) {
-      console.log(e)
       res.status(500).json({error: "Error"})
       return
     }
