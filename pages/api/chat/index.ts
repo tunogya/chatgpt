@@ -358,7 +358,6 @@ export default withApiAuthRequired(async function handler(
         res.status(200).end();
       });
       stream.on('error', (error: any) => {
-        console.log(error);
         res.write('data: [DONE]\n\n');
         res.status(500).end();
         return;
