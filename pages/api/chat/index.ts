@@ -168,13 +168,13 @@ export default withApiAuthRequired(async function handler(
       })
     }
     // keep all messages in full_messages
-    let prompt_tokens = 0, limit = 0;
+    let prompt_tokens = encode(messages[0].content.parts[0]).length, limit = 0;
     if (model === OPENAI_MODELS.GPT3_5.model) {
       full_old_messages.slice(-4);
-      limit = 2048 - encode(messages[0].content.parts[0]).length;
+      limit = 2048 - prompt_tokens;
     } else if (model === OPENAI_MODELS.GPT4.model) {
       full_old_messages.slice(-4);
-      limit = 2048 - encode(messages[0].content.parts[0]).length;
+      limit = 2048 - prompt_tokens;
     }
     for (let i = full_old_messages.length - 1; i >= 0; i--) {
       // To find more previous messages, we need to encode the message to get the token count.
@@ -185,14 +185,6 @@ export default withApiAuthRequired(async function handler(
       }
       prompt_tokens += encode(full_old_messages[i].content).length;
     }
-
-    // // add system message to full_messages
-    // if (full_old_messages.length === 0 || full_old_messages[0].role !== 'system') {
-    //   full_old_messages.splice(0, 0, {
-    //     role: 'system',
-    //     content: `You are a friendly AI assistant.`,
-    //   })
-    // }
 
     // put current messages to full_messages
     full_old_messages.push(...messages.map((message: any) => ({
