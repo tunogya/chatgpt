@@ -72,13 +72,13 @@ export default withApiAuthRequired(async function handler(
     let chat: {
       id: null | string, title: null | string, created: null | number, mapping: {
         [key: string]: any
-      }, model: string,
+      }, last_model: string,
     } = {
       id: req.body?.conversation_id ?? null,
       title: null,
       created: null,
       mapping: {},
-      model: model,
+      last_model: model,
     }
     if (!chat.id) {
       // This is a new chat, create a new chat id use uuidv4.
