@@ -331,25 +331,25 @@ export default withApiAuthRequired(async function handler(
                   }
                 }
               },
-              {
-                PutRequest: {
-                  Item: {
-                    PK: `USAGE#${new Date().toISOString().slice(0, 10)}`,
-                    SK: new Date().toISOString(),
-                    customer: {
-                      id: user.sub,
-                      email: user.email,
-                    },
-                    model: model,
-                    usage: {
-                      prompt_tokens: prompt_tokens,
-                      completion_tokens: completion_tokens,
-                      total_tokens: prompt_tokens + completion_tokens,
-                    },
-                    TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 180,
-                  }
-                }
-              },
+              // {
+              //   PutRequest: {
+              //     Item: {
+              //       PK: `USAGE#${new Date().toISOString().slice(0, 10)}`,
+              //       SK: new Date().toISOString(),
+              //       customer: {
+              //         id: user.sub,
+              //         email: user.email,
+              //       },
+              //       model: model,
+              //       usage: {
+              //         prompt_tokens: prompt_tokens,
+              //         completion_tokens: completion_tokens,
+              //         total_tokens: prompt_tokens + completion_tokens,
+              //       },
+              //       TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 180,
+              //     }
+              //   }
+              // },
             ]
           }
         }));
@@ -407,25 +407,25 @@ export default withApiAuthRequired(async function handler(
                   }
                 }
               },
-              {
-                PutRequest: {
-                  Item: {
-                    PK: `USAGE#${new Date().toISOString().slice(0, 10)}`,
-                    SK: new Date().toISOString(),
-                    customer: {
-                      id: user.sub,
-                      email: user.email,
-                    },
-                    model: model,
-                    usage: {
-                      prompt_tokens: prompt_tokens,
-                      completion_tokens: completion_tokens,
-                      total_tokens: prompt_tokens + completion_tokens,
-                    },
-                    TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 180,
-                  }
-                }
-              },
+              // {
+              //   PutRequest: {
+              //     Item: {
+              //       PK: `USAGE#${new Date().toISOString().slice(0, 10)}`,
+              //       SK: new Date().toISOString(),
+              //       customer: {
+              //         id: user.sub,
+              //         email: user.email,
+              //       },
+              //       model: model,
+              //       usage: {
+              //         prompt_tokens: prompt_tokens,
+              //         completion_tokens: completion_tokens,
+              //         total_tokens: prompt_tokens + completion_tokens,
+              //       },
+              //       TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 180,
+              //     }
+              //   }
+              // },
             ]
           }
         }));
