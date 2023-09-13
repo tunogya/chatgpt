@@ -1,5 +1,4 @@
 import {ManagementClient} from "auth0"
-import * as process from "process";
 
 const auth0Management = new ManagementClient({
   clientId: process.env.AUTH0_MANAGEMENT_CLIENT_ID,

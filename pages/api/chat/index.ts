@@ -8,7 +8,6 @@ import {getSession, withApiAuthRequired} from "@auth0/nextjs-auth0";
 import {encode} from "gpt-3-encoder";
 import {OPENAI_MODELS} from "@/const/misc";
 import auth0Management from "@/utils/auth0Management";
-import * as process from "process";
 
 export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
