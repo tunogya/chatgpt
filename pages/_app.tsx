@@ -47,7 +47,7 @@ export default function App({Component, pageProps}: AppProps) {
       <AutoTheme/>
       <PersistGate persistor={persistor} loading={<div className={'pt-4'}><LoadingIcon/></div>}>
         <Head>
-          <title>AbandonAI</title>
+          <title>ChatGPT</title>
           <meta
             name='description'
             content='AbandonAI'
@@ -57,14 +57,14 @@ export default function App({Component, pageProps}: AppProps) {
           <meta name={'apple-mobile-web-app-capable'} content={'yes'}/>
           <meta name={'mobile-web-app-capable'} content={'yes'}/>
           <meta name={'apple-mobile-web-app-status-bar-style'} content={'black'}/>
-          <meta name={'apple-mobile-web-app-title'} content={'AbandonAI'}/>
+          <meta name={'apple-mobile-web-app-title'} content={'ChatGPT'}/>
           <meta name={'format-detection'} content={'telephone=no'}/>
           <meta name={'format-detection'} content={'email=no'}/>
           <meta name='theme-color' content='#202123'/>
           <meta property='og:image' content='/apple-touch-icon.png'/>
           <meta property='og:title' content='ChatGPT'/>
           <meta property='og:description'
-                content='AbandonAI'/>
+                content='ChatGPT'/>
           <meta property='og:url' content='https://chat.abandon.ai'/>
           <link rel="manifest" href={"manifest.json"}/>
           <link rel='icon' href='/favicon.ico'/>
