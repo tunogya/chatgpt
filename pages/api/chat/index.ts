@@ -27,7 +27,7 @@ export default withApiAuthRequired(async function handler(
         '#sk': 'SK',
       },
       ExpressionAttributeValues: {
-        ':pk': user_id,
+        ':pk': `USER#${user_id}`,
         ':sk': 'CHAT#',
       },
       ScanIndexForward: false,
@@ -92,7 +92,7 @@ export default withApiAuthRequired(async function handler(
       const {Item} = await ddbDocClient.send(new GetCommand({
         TableName: 'abandonai-prod',
         Key: {
-          PK: user_id,
+          ':pk': `USER#${user_id}`,
           SK: req.body?.conversation_id,
         },
       }));
@@ -323,7 +323,7 @@ export default withApiAuthRequired(async function handler(
               {
                 PutRequest: {
                   Item: {
-                    PK: user_id,
+                    PK: `USER#${user_id}`,
                     SK: chat.id,
                     TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
                     ...chat,
@@ -399,7 +399,7 @@ export default withApiAuthRequired(async function handler(
               {
                 PutRequest: {
                   Item: {
-                    PK: user_id,
+                    PK: `USER#${user_id}`,
                     SK: chat.id,
                     TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
                     ...chat,
@@ -443,7 +443,7 @@ export default withApiAuthRequired(async function handler(
           'abandonai-prod': ids?.slice(0, 25).map((id: string) => ({
             DeleteRequest: {
               Key: {
-                PK: user_id,
+                PK: `USER#${user_id}`,
                 SK: id,
               }
             }

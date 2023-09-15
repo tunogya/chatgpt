@@ -16,7 +16,7 @@ export default withApiAuthRequired(async function handler(
       const {Item} = await ddbDocClient.send(new GetCommand({
         TableName: 'abandonai-prod',
         Key: {
-          PK: user_id,
+          PK: `USER#${user_id}`,
           SK: `CHAT#${id}`,
         },
       }))
@@ -59,7 +59,7 @@ export default withApiAuthRequired(async function handler(
       await ddbDocClient.send(new UpdateCommand({
         TableName: 'abandonai-prod',
         Key: {
-          PK: user_id,
+          PK: `USER#${user_id}`,
           SK: `CHAT#${id}`,
         },
         UpdateExpression: `SET ${UpdateExpression}`,
@@ -76,7 +76,7 @@ export default withApiAuthRequired(async function handler(
       await ddbDocClient.send(new DeleteCommand({
         TableName: 'abandonai-prod',
         Key: {
-          PK: user_id,
+          PK: `USER#${user_id}`,
           SK: `CHAT#${id}`,
         },
       }))
