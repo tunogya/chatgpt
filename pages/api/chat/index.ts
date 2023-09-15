@@ -92,7 +92,7 @@ export default withApiAuthRequired(async function handler(
       const {Item} = await ddbDocClient.send(new GetCommand({
         TableName: 'abandonai-prod',
         Key: {
-          ':pk': `USER#${user_id}`,
+          PK: `USER#${user_id}`,
           SK: req.body?.conversation_id,
         },
       }));
