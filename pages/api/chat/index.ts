@@ -69,21 +69,21 @@ export default withApiAuthRequired(async function handler(
     }
     // https://platform.openai.com/docs/api-reference/chat
     let chat: {
-      id: null | string, title: null | string, created: null | number, mapping: {
+      chat_id: null | string, title: null | string, created: null | number, mapping: {
         [key: string]: any
       }, last_model: string,
     } = {
-      id: req.body?.conversation_id ?? null,
+      chat_id: req.body?.conversation_id ?? null,
       title: null,
       created: null,
       mapping: {},
       last_model: model,
     }
-    if (!chat.id) {
+    if (!chat.chat_id) {
       // This is a new chat, create a new chat id use uuidv4.
       chat = {
         ...chat,
-        id: `CHAT#${uidClient.getUniqueID().toString()}`,
+        chat_id: `CHAT#${uidClient.getUniqueID().toString()}`,
         title: messages[0].content.parts[0]?.slice(0, 20),
         created: Math.floor(Date.now() / 1000),
       }
@@ -98,7 +98,7 @@ export default withApiAuthRequired(async function handler(
       }));
       chat = {
         ...chat,
-        id: Item?.SK,
+        chat_id: Item?.SK,
         title: Item?.title?.slice(0, 20),
         created: Item?.created,
         mapping: Item?.mapping,
@@ -265,7 +265,7 @@ export default withApiAuthRequired(async function handler(
                 },
               }
               res.write(`data: ${JSON.stringify({
-                id: chat.id,
+                id: chat.chat_id,
                 title: messages[0].content.parts[0].slice(0, 20),
                 messages: [
                   {
@@ -324,7 +324,7 @@ export default withApiAuthRequired(async function handler(
                 PutRequest: {
                   Item: {
                     PK: `USER#${user_id}`,
-                    SK: chat.id,
+                    SK: chat.chat_id,
                     TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
                     ...chat,
                   }
@@ -400,7 +400,7 @@ export default withApiAuthRequired(async function handler(
                 PutRequest: {
                   Item: {
                     PK: `USER#${user_id}`,
-                    SK: chat.id,
+                    SK: chat.chat_id,
                     TTL: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
                     ...chat,
                   }
